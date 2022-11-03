@@ -1,0 +1,28 @@
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@100;200;300;400;500;600;700&family=Odibee+Sans&family=Roboto:wght@100;300;400;500;700;900&family=Smooch+Sans:wght@100;200;300;400;500;600;700&display=swap');
+
+
+* {
+  margin: 0;
+  padding: 0%;
+  box-sizing: border-box;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+body {
+  background-color: #000000;
+  /* overflow: hidden; */
+  width: 100vw;
+  height: 100vh;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}

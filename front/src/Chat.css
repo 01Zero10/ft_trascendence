@@ -1,0 +1,486 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;500&display=swap');
+
+/**{*/
+/*  height: 100vh;*/
+/*  max-height: -webkit-fill-available;*/
+/*  width: 100vw;*/
+/*  max-width: -webkit-fill-available;*/
+/*  !*eight: 100vh;*!*/
+/*}*/
+* {
+    margin: 0;
+    font-family: 'Smooch Sans', sans-serif;
+    overflow-anchor: none;
+}
+
+.chat-dashboard {
+    display: flex;
+    height: calc(100vh - 90px) !important;
+    width: 100vw;
+    margin-top: 90px;
+    /* position: relative; */
+    background-color: #FAFBFF;
+}
+
+.chat-nav {
+    /* float: left; */
+    /* border: 10px; */
+    /* border: blueviolet; */
+    border-width: 10px;
+    background-color: #FAFBFF;
+    /* margin-top: auto; */
+    width: 25%;
+    /* width: 20vw; */
+    /* position: absolute; */
+    height: 100%;
+}
+
+/********************* SEARCH BAR ****************************/
+
+.chat-search {
+    width: auto;
+    height: auto;
+    background-color: #BE4BDB;
+    padding: 15px 15px 0 15px;
+}
+
+.search-bar {
+    width: 100%;
+    height: 30px;
+}
+
+.search-tab {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    gap: 20px;
+    justify-content: center;
+}
+
+.search-bar-form {
+    display: flex;
+    margin-top: 15px;
+}
+
+/********************* END SEARCH BAR ****************************/
+
+/* .chat-selection {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    background-color: #FAFBFF;
+} */
+
+
+.chat-selection {
+    overflow: scroll;
+    overflow-x: hidden;
+    padding-top: 5px;
+    position: relative;
+    width: 100%;
+    height: 75%;
+    background-color: #FAFBFF;
+}
+
+.channel-selection {
+    position: relative;
+    width: 95%;
+    margin: 0 auto 5px auto;
+    /* margin-top: 13px; */
+    /* margin-left: auto; */
+    height: 5%;
+    background-color: #555;
+}
+
+.button-holder {
+    padding-top: 5%;
+}
+
+.chat-selection::-webkit-scrollbar {
+    background-color: #e6f3f3;
+    scrollbar-width: thin;
+}
+
+.chat-selection::-webkit-scrollbar-thumb {
+    background: rgb(155, 0, 130);
+    scrollbar-width: thin;
+}
+
+
+.chat-select {
+    display: inline-flex;
+    position: relative;
+    background-color: rgba(200, 90, 255, 0.9);
+    /* margin: 10px 5px 0px 5px; */
+    /* padding-top: 10px; */
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-weight: bolder;
+}
+
+input[type="search"] {
+    background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E%3C/svg%3E") no-repeat 13px center;
+}
+
+.chat-body {
+    overflow: hidden;
+    background-color: #FAFBFF;
+    /* min-width: 430px;
+    max-width: 570px; */
+    height: 100%;
+    width: 100%;
+    /* max-height: 1470px; */
+
+}
+
+.user-img {
+    margin: 30px auto;
+    height: 50%;
+    width: 20%;
+    border-radius: 50%;
+}
+
+p {
+    font-weight: bolder;
+    letter-spacing: 5px;
+    text-align: center;
+}
+
+/**/
+.test {
+    float: left;
+}
+
+/**************** CHANNEL BODY ****************/
+
+.channel-body {
+    /* position: absolute; */
+    /* display: flex; */
+    width: 50%;
+    height: 100%;
+    background: #D64FD8;
+    background: linear-gradient(to bottom, #D64FD8 0%, #803FEF 100%, #803FEF 100%);
+}
+
+.channel-body-nav {
+    position: relative;
+    background-color: rgb(154, 28, 154);
+    width: 100%;
+    /* height: 10%; */
+    height: auto;
+    text-align: center;
+}
+
+.channel-body-nav>h2 {
+    min-height: fit-content;
+    font-family: 'Roboto', sans-serif;
+    color: #FAFBFF;
+    text-align: center;
+    text-shadow: #555;
+    font-size: large;
+    font-weight: 500;
+    letter-spacing: 2px;
+}
+
+
+.body-message {
+    display: flex;
+    width: 100%;
+    height: 70%;
+    overflow: auto;
+}
+
+.body-message::-webkit-scrollbar {
+    background-color: #e6f3f3;
+    scrollbar-width: thin;
+}
+
+.body-message::-webkit-scrollbar-thumb {
+    background: rgb(155, 0, 130);
+    scrollbar-width: thin;
+}
+
+/**************** MESSAGGI *****************/
+
+.message-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.single-message-container {
+    width: 100%;
+    height: 10%;
+}
+
+.message {
+    border-style: solid;
+    border-width: 1px;
+    background-color: white;
+    width: 85%;
+    height: 20%;
+    white-space: pre-line;
+}
+
+.photo-div {
+    width: 20%;
+    height: auto;
+}
+
+.photo-div-left {
+    float: left;
+    width: 15%;
+    height: 20%;
+}
+
+.photo-div-right {
+    width: 15%;
+    height: 20%;
+    float: right;
+}
+
+/* * colui che manda mex * */
+.assistent {
+    border-radius: 10px 10px 10px 0;
+    border-color: rgb(203, 52, 52);
+    float: left;
+    height: auto;
+    width: 80%;
+    margin: 2% 2% 2% 5%;
+    padding: 1%;
+}
+
+/* * colui che riceve mex * */
+.user {
+    border-radius: 10px 10px 0 10px;
+    border-color: rgb(32, 124, 178);
+    float: right;
+    height: auto;
+    width: 80%;
+    margin: 2% 5% 2% 2%;
+    padding: 1%;
+}
+
+.channel-photo-left {
+    clear: both;
+    float: left;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    margin-top: 1%;
+    /* margin-bottom: 1%; */
+    margin-left: 2.5%;
+}
+
+.channel-photo-right {
+    clear: both;
+    float: right;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    margin-top: 1%;
+    margin-right: 2%;
+}
+
+/**************** CHANNEL INPUT *******************/
+
+.channel-input {
+    display: flex;
+    width: 100%;
+    height: 20%;
+    align-items: flex-end;
+}
+
+.channel-input-text {
+    height: 60%;
+    width: 70%;
+    font-weight: 400;
+    font-size: large;
+    letter-spacing: 3px;
+    resize: none;
+}
+
+.channel-input-button {
+    /* justify-content:flex-end; */
+    /* position:inherit; */
+    /* float: right; */
+    border-style: solid;
+    border-width: 0;
+    background-color: rgb(165, 10, 173);
+    color: white;
+    cursor: pointer;
+    transition: 0s;
+    position: inherit;
+    width: 30%;
+    height: 60%;
+    float: right;
+    font-weight: 400;
+    font-size: larger;
+    letter-spacing: 7px;
+}
+
+.channel-input-button:hover {
+    background-color: rgb(148, 146, 146);
+}
+
+
+/**************** END CHANNEL INPUT *******************/
+/**************** CHANNEL STATUS *******************/
+
+.channel-user-list {
+    background-color: #FAFBFF;
+    /* float: right; */
+    width: 25%;
+    height: 100%;
+}
+
+#user-list {
+    position: relative;
+    height: 35%;
+
+}
+
+#user-list.open {
+    height: 100%;
+}
+
+#user-list>li {
+    list-style: none;
+    /* list-style-type: "👑"; */
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+
+}
+
+#user-list>ul {
+    list-style: none;
+
+    /* align-items: center; */
+    text-align: center;
+    /* list-style-type: "👑"; */
+
+}
+
+.name-box {
+    padding: 10px;
+    text-align: center;
+    font-weight: 400;
+    letter-spacing: 4px;
+    background-color: rgb(154, 28, 154);
+    color: white;
+
+}
+
+.plus-admin {
+    height: 50%;
+}
+
+.admin-panel {
+    background-color: #8c351a;
+    height: 50%;
+}
+
+/**************** END CHANNEL BODY ****************/
+
+input[type="search"] {
+    background: white;
+    margin: 0;
+    padding: 7px 8px;
+    font-size: 14px;
+    color: inherit;
+    border: 1px solid transparent;
+    border-radius: inherit;
+}
+
+input[type="search"]::placeholder {
+    color: #bbb;
+}
+
+button[type="submit"] {
+    text-indent: -999px;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    border: 1px solid transparent;
+    border-radius: inherit;
+    background: white url("./img/lente_piccola.svg") no-repeat center;
+    cursor: pointer;
+    opacity: 0.7;
+    height: 30px;
+    width: 30px;
+}
+
+button[type="submit"]:hover {
+    opacity: 1;
+}
+
+button[type="submit"]:focus,
+input[type="search"]:focus {
+    box-shadow: 0 0 3px 0 #1183d6;
+    border-color: #1183d6;
+    outline: none;
+}
+
+form.nosubmit {
+    border: none;
+    padding: 0;
+}
+
+input.nosubmit {
+    border: 1px solid #555;
+    width: 100%;
+    padding: 9px 4px 9px 40px;
+    background: transparent url("./img/lente.svg") no-repeat 13px center;
+}
+
+.owner-panel {
+    height: 70%;
+    position: relative;
+    border-width: 1px;
+    border-color: black;
+}
+
+.mute-ban-text {
+    text-align: center;
+    letter-spacing: 2px;
+    font-weight: 600;
+    padding: 10px;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*_______________ TODO: ELIMINARE DOPO DEBUG___________________*/
+input[type="radio"].rd {
+    display: flex;
+}

@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://postgres:mysecretpassword@postgres:5432/nestjs
+      NODE_ENV: development
+      PORT: 3001
+    ports:
+      - "3001:3001"
+
+  postgres:
+    image: postgres:latest
+    container_name: database
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: nestjs
+    env_file:
+      - .env_old

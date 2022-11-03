@@ -1,0 +1,216 @@
+ .box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.welcome {
+  position: absolute;
+  color: white;
+	font-family: 'Odibee Sans', sans-serif;
+	letter-spacing: 0.2em;
+	font-size: 350%;
+	margin-bottom: 15rem;
+  text-align: center;
+}
+.button_login, .button_login::after {
+  width: 380px;
+  height: 86px;
+  font-size: 36px;
+  font-family:'Smooch Sans', sans-serif;
+  background:  #BA30F0 5%;
+  align-items: center;
+  border-radius: 6px;
+  /* background: linear-gradient(45deg, transparent 5%, #BA30F0 5%); */
+  border: 0;
+  color: #fff;
+  letter-spacing: 0.10em;
+  font-weight: 430;
+  /* line-height: 88px; */
+  /* box-shadow: 6px 0px 0px #6494AA; */
+  outline: transparent;
+  /* display: inline-block; */
+  position: relative;
+  cursor:pointer;
+  -webkit-animation: pulse 1.5s infinite;
+}
+
+.button_login::after {
+  --slice-0: inset(50% 50% 50% 50%);
+  --slice-1: inset(80% -6px 0 0);
+  --slice-2: inset(50% -6px 30% 0);
+  --slice-3: inset(10% -6px 85% 0);
+  --slice-4: inset(40% -6px 43% 0);
+  --slice-5: inset(80% -6px 5% 0);
+  
+  content: 'Sign In';
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 3%, #6494AA 3%, #8F62CD 5%, #BA30F0 5%);
+  text-shadow: -3px -3px 0px #8F62CD, 3px 3px 0px #6494AA;
+  clip-path: var(--slice-0);
+}
+
+.button_login:hover::after {
+  animation: 1s glitch;
+  animation-timing-function: steps(2, end);
+}
+
+@keyframes glitch {
+  0% {
+    clip-path: var(--slice-1);
+    transform: translate(-20px, -10px);
+  }
+  10% {
+    clip-path: var(--slice-3);
+    transform: translate(10px, 10px);
+  }
+  20% {
+    clip-path: var(--slice-1);
+    transform: translate(-10px, 10px);
+  }
+  30% {
+    clip-path: var(--slice-3);
+    transform: translate(0px, 5px);
+  }
+  40% {
+    clip-path: var(--slice-2);
+    transform: translate(-5px, 0px);
+  }
+  50% {
+    clip-path: var(--slice-3);
+    transform: translate(5px, 0px);
+  }
+  60% {
+    clip-path: var(--slice-4);
+    transform: translate(5px, 10px);
+  }
+  70% {
+    clip-path: var(--slice-2);
+    transform: translate(-10px, 10px);
+  }
+  80% {
+    clip-path: var(--slice-5);
+    transform: translate(20px, -10px);
+  }
+  90% {
+    clip-path: var(--slice-1);
+    transform: translate(-10px, 0px);
+  }
+  100% {
+    clip-path: var(--slice-1);
+    transform: translate(0);
+  }
+}
+
+.button_login:active{
+	transform: scale(0.9);
+	box-shadow: 0 2px 25px #0000;
+  }
+
+
+/* .login-box {
+    width: 28rem;
+    align-items: center;
+    justify-content: center;
+    display: block;
+    height: 35rem;
+    background: #2E2E2E;
+    margin: 150px auto;
+     border-radius: 25px;
+    box-shadow: 5px 5px 10px black, -5px -5px 10px black;
+  }
+  
+  img {
+    width: 30%;
+    height: 30%;
+    position: relative;
+     left: 35%;
+    border-radius: 20%;
+  }
+  
+  h2 {
+    padding: 8%;
+    text-align: center;
+    font-family: 'Smooch Sans', sans-serif;
+    font-weight: 200;
+    letter-spacing: 0.10em;
+    color: white;
+  }
+
+  .nickname{
+    padding-bottom: 3%;
+  }
+  
+  form {
+    position: relative;
+    width: auto;
+    align-items: center;
+    margin:  0 auto;
+    justify-content: center;
+  }
+  
+  input {
+    padding: 3% 5%;
+    margin: auto 9%;
+    width: 80%;
+    border: solid 0.1px white;
+    outline: none;
+    font-family: 'Smooch Sans', sans-serif;
+    letter-spacing: 0.10em;
+    font-weight: 600;
+    background: transparent;
+    font-size: 1rem;
+    border-radius: 25px;
+  }
+  
+  button {
+    width: 80%;
+    border: none;
+    margin: 5% 9%;
+    height: 3.5rem;
+    border-radius: 25px;
+    background: #BA30F0;
+    color: white;
+    font-family: 'Smooch Sans', sans-serif;
+    font-weight: 800;
+    letter-spacing: 0.10em;
+    font-size: 145%;
+    cursor: pointer;
+    outline: none;
+    transition: transform ease-in 0.1s, box-shadow ease-in 0.25s;
+  }
+  
+  button:active {
+	transform: scale(0.9);
+	background-color: #BA30F0;
+	box-shadow: 0 2px 25px #0000;
+  }
+
+
+  
+  .checkbox{
+    margin-left: 32%;
+    position: absolute;
+    margin-left: 8%;
+    width: 80%;
+  }
+
+.box-check {
+    margin:0 3%;
+    width: 15px !important;
+    height: 16px !important;
+} 
+
+  label {
+    color: white;
+    font-size: 1rem;
+    font-family: 'Smooch Sans', sans-serif;
+    letter-spacing: 0.11em;
+    font-weight: 300;
+  } */

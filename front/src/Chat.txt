@@ -1,0 +1,391 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;500&display=swap');
+
+/**{*/
+/*  height: 100vh;*/
+/*  max-height: -webkit-fill-available;*/
+/*  width: 100vw;*/
+/*  max-width: -webkit-fill-available;*/
+/*  !*eight: 100vh;*!*/
+/*}*/
+
+.chat-dashboard {
+    background-color:yellow;
+    /* width: 500px;
+    height: 2000px; */
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+
+    /* display: flex;
+    justify-content: flex-end; */
+}
+
+.chat-nav{
+    float: left;
+    /*border: 10px;*/
+    /*border: blueviolet;*/
+    border-width: 10px;
+    background-color: #FAFBFF;
+    
+    width: 35%;
+    min-width: 350px;
+    max-width: 500px;
+
+    /* width: 20vw; */
+    /*position: absolute;*/
+    height: 100vh;
+    /* max-height: 1470px;
+    min-width: 430px;
+    max-width: 570px; */
+}
+
+/********************* SEARCH BAR ****************************/
+
+.chat-search {
+    width: auto;
+    height: auto;
+    background-color: rgb(39, 142, 216);
+    padding: 15px;
+}
+
+.search-bar {
+    width: 100%;
+    height: 30px;
+}
+
+.search-tab{
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    gap: 20px;
+    justify-content: center;
+}
+
+.search-bar-form {
+    display: flex;
+    margin-top: 15px;
+}
+
+/********************* END SEARCH BAR ****************************/
+
+.chat-selection {
+    width: auto;
+    height: 100vh;
+    background-color: #FAFBFF;
+}
+
+.chat-select {
+    margin: 15px 5px 0px 5px;
+    /* margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 25px; */
+    border: none;
+    border-radius: 5px;
+    font-weight: bolder;
+    width: auto; 
+    height: 40px;
+    text-align: center;
+    background-color: rgba(75, 141, 234, 0.900);    
+}
+
+/* .all-label{
+    text-align: center;
+    min-width: 107px;
+    max-width: 143px;
+    width: 100px;
+    float: left;
+    padding-top: 5%;
+    border-width: 10px;
+    border-color: black;
+} */
+
+
+input[type="search"]{
+    background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E%3C/svg%3E") no-repeat 13px center;
+}
+
+.chat-body {
+    overflow: hidden;
+    background-color: rgb(249, 233, 4);
+    /* min-width: 430px;
+    max-width: 570px; */
+    height: 100vh;
+    width: 100vw;
+    /* max-height: 1470px; */
+
+}
+
+.user-img{
+    margin:30px auto;
+    height: 50%;
+    width: 20%;
+    border-radius: 50%;
+}
+
+p {
+    font-weight: bolder;
+    letter-spacing: 5px;
+    text-align: center;
+}
+
+/**/
+.test{
+    float: left;
+}
+
+/*.chat{*/
+/*  width: 200px;*/
+/*  height: 200px;*/
+/*}*/
+
+/**************** CHANNEL BODY ****************/
+
+.channel-body {
+    /*todo: controllare se meglio contents o flex*/
+    /*display: contents;*/
+    width: 65%;
+    height: 100%;
+    
+    background: #D64FD8;
+    background: -moz-linear-gradient(top, #D64FD8 0%, #803FEF 100%, #803FEF 100%);
+    background: -webkit-linear-gradient(top, #D64FD8 0%, #803FEF 100%, #803FEF 100%);
+    background: linear-gradient(to bottom, #D64FD8 0%, #803FEF 100%, #803FEF 100%);
+    }
+
+/* .channel-name {
+    padding: 8px;
+    letter-spacing: 3px;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size:large
+} */
+
+.channel-body-nav {
+    display: flex;
+    background-color: rgb(140, 117, 140);
+    width: 100%;
+    height: 10%;
+    text-align: center;
+    padding: 1%;
+}
+
+
+.body-message{
+    display: flex;
+    width: 100%;
+    height: 70%;
+    overflow: auto;
+    /* overflow-y: auto;
+    overflow-x: hidden; */
+}
+
+.body-message::-webkit-scrollbar {
+    background-color: #e6f3f3;
+    scrollbar-width: thin;
+}
+
+.body-message::-webkit-scrollbar-thumb {
+    background: rgb(155, 0, 130);
+    scrollbar-width: thin;
+}
+/**************** MESSAGGI *****************/
+
+.message-container{
+    width: 100%;
+    height: 100%;
+}
+
+.single-message-container {
+    width: 100%;
+    height: 10%;
+}
+
+.message {
+    border-style: solid;
+    border-width: 1px;
+    background-color: white;
+    width: 85%;
+    height: 20%;
+    /* word-break: break-word; */
+}
+
+.photo-div {
+    width: 20%;
+    height: auto;
+}
+.photo-div-left {
+    float:left;
+    width: 15%;
+    height: 20%;
+}
+.photo-div-right {
+    width: 15%;
+    height: 20%;
+    float: right;
+}
+/* * colui che manda mex * */
+.assistent {
+    /* clear:both; */
+    border-radius: 10px 10px 10px 0;
+    border-color: rgb(203, 52, 52);
+    float: left;
+    height: auto;
+    width: 80%;
+    margin: 2% 2% 2% 5%;
+    padding: 1%;
+}
+
+/* * colui che riceve mex * */
+.user {
+    /* clear:both; */
+    border-radius: 10px 10px 0 10px;
+    border-color: rgb(32, 124, 178);
+    float:right;
+    height: auto;
+    width: 80%;
+    margin: 2% 5% 2% 2%;
+    /* margin-top: 1%;
+    margin-bottom: 1%; */
+    padding: 1%;
+}
+
+
+.channel-photo-left {
+    /* align-content: flex-start; */
+    clear:both;
+    float: left;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    margin-right: 0%;
+    padding: 5px;
+}
+
+.channel-photo-right {
+    /* align-content:flex-end; */
+    clear:both;
+    float: right;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    margin-left: 0%;
+    padding: 5px;
+
+}
+
+/**************** CHANNEL INPUT *******************/
+
+.channel-input{
+    display: flex;
+    width: 100%;
+    height: 20%;
+}
+
+.channel-input-text {
+    height: 50%;
+    width: 70%;
+}
+
+.channel-input-button {
+    /* justify-content:flex-end; */
+    /* position:inherit; */
+    /* float: right; */
+    border-style: solid;
+    border-width: 0;
+    background-color: rgb(165, 10, 173);
+    color: white;
+    cursor: pointer;
+    transition: 0s;
+    position: inherit;
+    width: 30%;
+    height: 50%;
+    float: right;
+}
+
+.channel-input-button:hover {
+    background-color: rgb(148, 146, 146);
+}
+
+
+/**************** END CHANNEL INPUT *******************/
+/**************** CHANNEL STATUS *******************/
+.channel-user-list{
+    background-color: orange;
+    float:right;
+    width: 30%;
+    height: 100%;
+    min-width: 350px;
+    max-width: 500px;
+}
+
+.user-list{
+    height: 50%;
+}
+
+.plus-admin{
+    height: 50%;
+}
+
+.admin-panel{
+    background-color: #8c351a;
+    height: 50%;
+}
+
+/**************** END CHANNEL BODY ****************/
+
+input[type="search"] {
+    background: white;
+    margin: 0;
+    padding: 7px 8px;
+    font-size: 14px;
+    color: inherit;
+    border: 1px solid transparent;
+    border-radius: inherit;
+}
+
+input[type="search"]::placeholder {
+    color: #bbb;
+}
+
+button[type="submit"] {
+    text-indent: -999px;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    border: 1px solid transparent;
+    border-radius: inherit;
+    background: white url("./img/lente_piccola.svg") no-repeat center;
+    cursor: pointer;
+    opacity: 0.7;
+    height: 30px;
+    width: 30px;
+}
+
+button[type="submit"]:hover {
+    opacity: 1;
+}
+
+button[type="submit"]:focus,
+input[type="search"]:focus {
+    box-shadow: 0 0 3px 0 #1183d6;
+    border-color: #1183d6;
+    outline: none;
+}
+
+form.nosubmit {
+    border: none;
+    padding: 0;
+}
+
+input.nosubmit {
+    border: 1px solid #555;
+    width: 100%;
+    padding: 9px 4px 9px 40px;
+    background: transparent url("./img/lente.svg") no-repeat 13px center;
+}
+

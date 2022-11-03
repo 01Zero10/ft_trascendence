@@ -1,0 +1,480 @@
+/* .profile-card-inf {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: flex-start;
+} */
+
+.wrapper {
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  align-content: center;
+}
+
+.profile-card {
+  box-sizing: border-box;
+  width: 100vw;
+  height: 100vh;
+  max-width: 50%;
+  max-height: 55%;
+  margin: auto;
+  background-color: #fff;
+  /* border: 4px solid #781C9C; */
+  /* border-radius: 15px; */
+  position: relative;
+  display: block;
+  align-items: center;
+  align-content: center;
+  -webkit-box-shadow: 5px 5px 15px 5px #000000, 43px 50px 23px -25px #000000;
+  box-shadow: 5px 5px 15px 5px #000000, 43px 50px 23px -25px #000000;
+}
+
+.container-account {
+  width: 100vw;
+  max-height: 30vh;
+  height: auto;
+}
+
+.avatar__img-account {
+  /* z-index: 5; */
+  margin: auto;
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 155px;
+  height: 155px;
+}
+
+.avatar__img-account img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  margin: 5% 9%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid #781C9C;
+  transform: translateY(10%);
+  /* -webkit-box-shadow: 5px 5px 15px 5px #000000; 
+  box-shadow: 2px 2px 10px 2px #000000; */
+}
+
+.txt_container_account {
+  position: absolute;
+  top: 15%;
+  height: auto;
+  width: 100%;
+  height: 30%;
+}
+
+.txt-account {
+  position: absolute;
+  left: 35%;
+  font-family: 'Smooch Sans', sans-serif;
+  font-size: 2.3vw;
+  color: #000000;
+  letter-spacing: 0.1rem;
+  /* text-transform: uppercase; */
+  word-spacing: 0.5rem;
+  font-weight: 530;
+  text-align: center;
+}
+
+.txt-account-strong {
+  color: #781C9C;
+  font-family: 'Smooch Sans', sans-serif;
+  letter-spacing: 0.1rem;
+  font-weight: 620;
+}
+
+.score__txt {
+  margin-top: 0.5vw;
+  font-family: 'Smooch Sans', sans-serif;
+  font-size: 3.3vw;
+  letter-spacing: 0.2rem;
+  font-weight: 450;
+}
+
+.rank-txt {
+  position: absolute;
+  right: 6%;
+  color: #000000;
+  font-weight: 300;
+  font-family: 'Smooch Sans', sans-serif;
+  font-size: 3vw;
+  letter-spacing: 0.2rem;
+  text-align: center;
+}
+
+.no-rank {
+  color: #000000;
+  font-weight: 500;
+  font-family: 'Smooch Sans', sans-serif;
+  font-size: 4vw;
+  letter-spacing: 0.2rem;
+}
+
+.box-item {
+  position: absolute;
+  bottom: 5%;
+  width: 100%;
+  text-align: center;
+  right: 7%;
+}
+
+.inf-account {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+/* .avatar__img-account img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}*/
+
+.profile-card-inf__title {
+  font-family: 'Odibee Sans', sans-serif;
+  font-size: 1.3vw;
+  letter-spacing: 0.1rem;
+}
+
+.profile-card-inf__txt {
+  font-family: 'Smooch Sans', sans-serif;
+  font-size: 1.5vw;
+  font-weight: 500;
+  letter-spacing: 0.1rem;
+}
+
+.profile-card-inf__item {
+  padding: 2.3rem 2.3rem;
+}
+
+/***** ACCOUNT DECORATION        *****/
+
+.account_decoration .account_decor_top {
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 68%;
+  height: auto;
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  z-index: 0;
+}
+
+.account_decoration .account_decor_down {
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 68%;
+  height: auto;
+  position: absolute;
+  top: 40%;
+  right: 5%;
+  z-index: 0;
+
+}
+
+/****************** MODAL ***********************/
+.b_account {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Smooch Sans', sans-serif;
+  letter-spacing: 0.1rem;
+  font-size: 1.3rem;
+  color: #781C9C;
+  object-fit: contain;
+}
+
+.modal-overlay {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  animation: fadein 0.5s;
+}
+
+.modal-box {
+  display: block;
+  background: white;
+  width: 50%;
+  height: 50%;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.modal_close_button {
+  transition: opacity 0.4s ease 0.1s, color 0.2s, transform 0.2s;
+  border: none;
+  color: #781C9C;
+  background: none;
+  font-size: 2rem;
+  cursor: pointer;
+  position: fixed;
+  right: 25%;
+  margin-right: 3%;
+  margin-top: 1%;
+}
+
+.close-modal {
+  animation: fadeout 0.5s;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeout {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.table_dashboard {
+  position: relative;
+  top: 13%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-prv {
+  display: flex;
+  align-content: center;
+  justify-items: center;
+  align-items: center;
+  justify-content: center;
+}
+
+/************* *****************/
+
+.css-1c0y7i7 {
+  flex-wrap: nowrap !important;
+  flex-direction: row !important;
+}
+
+/******* buttons *******/
+
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  margin-bottom: 10%;
+
+}
+
+.noselect {
+  width: 4.3rem;
+  height: 4.3rem;
+  cursor: pointer;
+  background-color: #781C9C;
+  background-image: #781C9C;
+  border: none;
+  border-radius: 50%;
+  transition: 200ms;
+  box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.363);
+}
+
+.noselect svg {
+  fill: white;
+  width: 2.3rem;
+  height: 2.3rem;
+  position: absolute;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.noselect:before {
+  position: absolute;
+  display: block;
+  transform: translateX(-50%) translateY(45px);
+  font-size: 15px;
+  transition: 200ms;
+  color: transparent;
+  font-weight: bold;
+}
+
+/* .noselect:hover {
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+  width: 5vw;
+  height: 8vh;
+} */
+
+.noselect:active {
+  animation: press 0.2s 1 linear;
+}
+
+@keyframes press {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.88);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+.noselect:hover::before {
+  color: #fff;
+}
+
+.noselect:hover svg {
+  animation: bounce 2s infinite linear;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateX(-50%) translateY(-50%)
+  }
+
+  25% {
+    transform: translateX(-50%) translateY(-65%)
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(-50%)
+  }
+
+  75% {
+    transform: translateX(-50%) translateY(-35%)
+  }
+
+  100% {
+    transform: translateX(-50%) translateY(-50%)
+  }
+}
+
+.noselect:focus {
+  outline: none;
+}
+
+/***** Friend request ****/
+
+.friend-request {
+  position: absolute;
+  left: 10%;
+  bottom: -1%;
+}
+
+/* .div_Notification {
+  padding: 2px;
+   grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+} */
+
+.column {
+  width: 35%;
+  float: left;
+  padding: 2.3rem 2.3rem;
+
+}
+
+.txt-request {
+  font-family: 'Smooch Sans', sans-serif;
+  color: #000000;
+  font-size: 1.2vw;
+  letter-spacing: 0.1rem;
+  font-weight: 500;
+  text-align: left;
+  margin-bottom: -5px;
+}
+
+/****************** RESPONSIVE **************/
+
+@media screen and (max-width: 1030px) {
+
+  .avatar__img-account {
+    max-width: 120px;
+    max-height: 120px;
+  }
+
+  .profile-card-inf__item {
+    letter-spacing: 0.1rem;
+    font-size: 2rem;
+  }
+
+  .b_account {
+    font-size: 1rem;
+  }
+
+  .profile-card-inf__item {
+    padding: 1rem 1rem;
+  }
+
+  .account_decoration .account_decor {
+    opacity: 0;
+  }
+
+  .txt_container_account {
+    left: 25%;
+    text-align: center;
+
+  }
+
+  .rank-txt {
+    left: 10%;
+    top: 45%;
+  }
+
+  .profile-card-inf__title {
+    font-size: 1.3vw;
+    letter-spacing: 0.1rem;
+  }
+
+  .profile-card-inf__txt {
+    font-size: 1.5vw;
+    font-weight: 500;
+    letter-spacing: 0.1rem;
+  }
+
+  .noselect {
+    width: 7vw;
+    height: 5vh;
+  }
+
+  .noselect svg {
+    fill: white;
+  }
+}
+
+/***** FRIEND LIST *****/
+
+.p_friendlist {
+  font-family: 'Smooch Sans', sans-serif;
+  color: #000000;
+  font-size: 1.2vw;
+  letter-spacing: 0.1rem;
+  font-weight: 500;
+  margin: 0 2vw;
+}

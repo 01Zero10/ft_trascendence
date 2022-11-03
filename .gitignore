@@ -1,0 +1,10 @@
+back/dist/
+back/node_modules/
+front/node_modules/
+front/dist/
+*/.env
+*.DS_Store*
+front/package-lock.json
+front/.env
+back/.env
+*env

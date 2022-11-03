@@ -1,0 +1,62 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <script src="http://localhost:3000/socket.io/socket.io.js"></script>  
+</head>
+
+<body>
+
+  <div class="container">
+    <br>
+    User history: <br>
+    <div id="user_history"> 
+    </div>
+
+    <div class="jumbotron">
+      <h1 class="display-4">Join A Chat Room</h1>
+      <br>
+      <button id="JoinRed" class="btn btn-success" > join Red room </button>
+      <br><br>
+      <div id="RoomStatus">  Room Status: <br>
+      </div>
+      <br>
+      <button id="QuitRoom" class="btn btn-success" > quit Red room </button>
+    </div>
+
+    <div class="jumbotron">
+        <h1 class="display-4">Send ChatRoom Message</h1>
+        <br>
+        <input id="client_name" class="form-control" placeholder="Your User Name">
+        <br>
+        <textarea id="client_message" class="form-control" placeholder="Message to Chat Room"></textarea>
+        <br>
+        <button id="client_send" class="btn btn-success" > Send </button>
+    </div>
+    
+    Message history: <br>
+    <div id="display_Red_messages"> 
+    </div>
+
+    <div class="jumbotron">
+      <h1 class="display-4">Send Private Message</h1>
+      <br>
+      <input id="private_name" class="form-control" placeholder="User Name of the Receiver">
+      <br>
+      <textarea id="private_message" class="form-control" placeholder="Private Message"></textarea>
+      <br>
+      <button id="private_send" class="btn btn-success" > Send </button>
+    </div>
+
+    Message history: <br>
+    <div id="display_Private_messages"> 
+    </div>
+
+  </div>
+
+  <script src="./chat-socket.js"></script>
+
+</body>
+
+</html>

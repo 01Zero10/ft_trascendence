@@ -1,0 +1,97 @@
+import React, { useContext, useEffect, useState, } from "react"
+import "./Chat.css"
+import ChannelBody from "./chat_comp/ChannelBody"
+import ChatMenu from "./chat_comp/ChatMenu"
+import { Rooms, Student } from "./App"
+import ChannelStatus from "./chat_comp/ChannelStatus";
+import { io, Socket } from "socket.io-client"
+import ChannelBodyStatus from "./chat_comp/ChannelBodyStatus"
+
+export default function Chat(props: any) {
+
+	const student = useContext(Student);
+	const [room, setRoom] = useState<Rooms>({ name: "", type: "", builder: { username: "" } })
+	const [chOptions, setChOptions] = useState<Rooms | null>(null)
+	const [input, setInput] = useState('');
+	const [opened, setOpened] = useState("")
+	const [createChan, setCreateChan] = useState(false)
+
+	async function SetRoomName(client: string, target: string) {
+
+		const API_TARGET = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/checkTarget/${target}`
+		const checkTarget = await fetch(API_TARGET, {
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+		})
+			.then((response) => response.json());
+		if (checkTarget) {
+			if (client < target) {
+				setRoom((prevRoom) => { return ({ ...prevRoom, name: client + target, type: 'direct' }) });
+				return (client + target);
+			}
+			else {
+				setRoom((prevRoom) => { return ({ ...prevRoom, name: target + client, type: 'direct' }) });
+				return (target + client);
+			}
+		}
+		else {
+			const API_GET_CHANNEL = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getChannel/${target}`
+			const fetchRoom = await fetch(API_GET_CHANNEL, {
+				credentials: 'include',
+				headers: { 'Content-Type': 'application/json' },
+			})
+				.then((response) => response.json())
+			setRoom({ name: fetchRoom.name, type: fetchRoom.type, builder: { ...fetchRoom.builder } });
+			return target;
+		}
+	}
+
+	const joinRoom = async (roomName: string) => {
+
+		const room = await SetRoomName(student.username, roomName);
+		props.socket?.emit('joinRoom', { client: student.username, room: room });
+	}
+
+	const handleSend = (e?: React.FormEvent<HTMLFormElement>) => {
+		if (e)
+			e.preventDefault();
+		if (input !== '') {
+			props.socket?.emit(
+				'msgToServer',
+				{ room: room.name, username: student.username, message: input, avatar: student.avatar }
+			);
+			setInput('');
+		}
+	};
+
+	return (
+		<div className="chat-dashboard">
+			<ChatMenu
+				setCreateChan={setCreateChan}
+				createChan={createChan}
+				className="test"
+				student={student}
+				room={room.name}
+				chOptions={chOptions}
+				setRoom={joinRoom}
+				socket={props?.socket}
+				setOpened={setOpened}
+				setChOptions={setChOptions}
+			/>
+			<ChannelBodyStatus
+				setRoom={setRoom}
+				createChan={createChan}
+				opened={opened}
+				setOpened={setOpened}
+				setChOptions={setChOptions}
+				chOptions={chOptions}
+				room={room}
+				handleSend={handleSend}
+				setInput={setInput}
+				input={input}
+				socket={props.socket}
+				setCreateChan={setCreateChan}
+			/>
+		</div>
+	)
+}
