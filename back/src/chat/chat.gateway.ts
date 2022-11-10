@@ -100,33 +100,26 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   @SubscribeMessage('onPress')
   handleKeyPress(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {key: string, side: string, playRoom: string}): any {
-    // console.log('press', data.key);
     if (data.key)
     this.server.to(data.playRoom).emit('onPress', data.key, data.side);
   }
 
   @SubscribeMessage('onRelease')
   handleKeyRelease(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {key: string, side: string, playRoom: string}): any {
-    // console.log('release', data.key);
     this.server.to(data.playRoom).emit('onRelease', data.key, data.side);
   }
 
   @SubscribeMessage('connectToGame')
   async handleClientSide(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {username: string, avatar: string}): Promise<any> {
-    // console.log('richiesta connessione ', data.username);
     const ret = await this.gameService.createOrJoinPlayRoom(data.username, data.avatar)
-    // console.log(ret);
     clientSocket.join(ret.namePlayRoom);
     this.server.to(clientSocket.id).emit('connectedToGame', ret.namePlayRoom, ret.side)
   }
 
   @SubscribeMessage('requestOpponent') //RIPRENDERE DA QUI
-  async handleJoinPlayRoom(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, side: string}): Promise<any> {
-    const playRoom = await this.gameService.getPlayRoomByName(data.namePlayRoom);
-    const roomInMap = await this.gameService.generateBallDirection(data.namePlayRoom);
-    this.server.to(data.namePlayRoom).emit('ready', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
-    //this.server.to(data.namePlayRoom).emit('ready', playRoom.leftSide, playRoom.rightSide)
-    //this.server.to(data.namePlayRoom).emit('ready', playRoom.leftSide, playRoom.rightSide, char, dir_y);
+  handleJoinPlayRoom(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, side: string}): any {
+    console.log("socket = ", clientSocket.id);
+    this.server.to(data.namePlayRoom).emit('ready', data.namePlayRoom)
   }
 
   @SubscribeMessage('gol_right')
@@ -137,6 +130,15 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   @SubscribeMessage('gol_left')
   handleGol_left(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {name: string}){
     this.server.to(data.name).emit('restart', true)
+  }
+
+  @SubscribeMessage('setStart')
+  async handleSetStart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string}){
+    console.log("socket start = ", clientSocket.id);
+    const playRoom = await this.gameService.getPlayRoomByName(data.namePlayRoom);
+    const roomInMap = await this.gameService.generateBallDirection(data.namePlayRoom);
+    console.log("romminmap ", roomInMap);
+    this.server.to(clientSocket.id).emit('start', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
   }
 
   //--------

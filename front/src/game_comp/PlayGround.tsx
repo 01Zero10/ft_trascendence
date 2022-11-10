@@ -48,24 +48,16 @@ function PlayGround(props: any) {
     const [ballDirection, setBallDirection] = useState<"l" | "r" | null>(null)
     const [dir_y, setDir_y] = useState<-3 | 3 | null>(null);
 
-    if (clientSide.side === '')
-        props.socket.emit('connectToGame', { username: contextData.username, avatar: contextData.avatar });
+    useEffect(() => {
+        if (clientSide.side === '') {
+            console.log("stampa npme")
+            props.socket.emit('connectToGame', { username: contextData.username, avatar: contextData.avatar });
+        }
+    }, [])
 
 
     useEffect(() => {
-        // props.socket.on('ready', (leftOpponent: string, rightOpponent: string, direction: 'l' | 'r', dir_y: -3 | 3) => {
-        //     if (contextData.username === leftOpponent)
-        //         setOpponentSide({ name: rightOpponent, side: 'right', playRoom: clientSide.playRoom })
-        //     else
-        //         setOpponentSide({ name: leftOpponent, side: 'left', playRoom: clientSide.playRoom })
-        //     setBallDirection(direction);
-        //     setDir_y(dir_y);
-        //     setLoader(false);
-        // })
-        // props.socket.on('ready', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
-
-        // })
-        props.socket.on('connectedToGame', (namePlayRoom: string, side: string) => {
+        props.socket.once('connectedToGame', (namePlayRoom: string, side: string) => {
             setClientSide((prevState) => { return ({ ...prevState, side: side, playRoom: namePlayRoom }) })
             console.log("SIDE ", side);
             if (side === 'right')

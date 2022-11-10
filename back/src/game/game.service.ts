@@ -36,11 +36,12 @@ const array_dir_y: Array<number> = [-3, 3];
 
 @Injectable()
 export class GameService{
+    private mapPlRoom: Map<string, plRoom>
     constructor(
         @InjectRepository(Match) private matchRepository: Repository<Match>,
         @InjectRepository(RunningMatch) private runningMatches: Repository<RunningMatch>,
-        ){}
-        private mapPlRoom = new Map<string, plRoom>()
+        ){this.mapPlRoom = new Map<string, plRoom>()}
+        
 
     async getMatches(client: string){
         return await this.matchRepository.find({ where : [{ player1: client}, {player2: client} ]})
@@ -55,7 +56,9 @@ export class GameService{
         if (playRoom === null){
             playRoom = this.runningMatches.create({playRoom: 'heldBy' + client, player1: client, leftSide: client, avatar1: avatar});
             this.runningMatches.save(playRoom);
-            this.mapPlRoom.set('heldBy' + client, {leftPlayer: {...defaultPlayer}, rightPlayer:{...defaultPlayer}, 
+            this.mapPlRoom.set('heldBy' + client, {
+                leftPlayer: {...defaultPlayer, y: canvasHeight / 2 - defaultPlayer.height / 2}, 
+                rightPlayer:{...defaultPlayer, x: canvasWidth - defaultPlayer.width, y: canvasHeight / 2 - defaultPlayer.height / 2}, 
                 ball: {...defaultBall}})
             return {namePlayRoom: 'heldBy' + client, side: 'left'};
         }
@@ -67,6 +70,7 @@ export class GameService{
     }
 
     async generateBallDirection(namePlayRoom: string){
+        console.log('gnereat ', namePlayRoom);
         this.mapPlRoom.get(namePlayRoom).ball.dy= array_dir_y[Math.round(Math.random())];
         this.mapPlRoom.get(namePlayRoom).ball.direction = dir[Math.round(Math.random())] as "l" | "r";
         if (this.mapPlRoom.get(namePlayRoom).ball.direction === 'r')

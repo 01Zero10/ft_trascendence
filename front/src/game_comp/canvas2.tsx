@@ -10,7 +10,6 @@ import { Paddle } from "./PlayGround";
 type CanvasProps = {
   socket: Socket;
   clientPaddle: Paddle;
-  //setLoader: React.Dispatch<React.SetStateAction<boolean>>;
   opponentPaddle: Paddle;
   dir_y: -3 | 3;
   point: any;
@@ -75,6 +74,11 @@ export default function Canvas(props: CanvasProps) {
     context.closePath()
   }
 
+  function startGame(ball: Ball, left: Player, right: Player) {
+    drawPlayer(context!, left);
+    drawPlayer(context!, right);
+    drawBall(context!, ball);
+  }
 
   function restart() {
     rightPlayer.y = (props.canvasHeight / 2) - (defaultPlayer.height / 2)
@@ -157,33 +161,21 @@ export default function Canvas(props: CanvasProps) {
     }
   }
 
-  useLayoutEffect(() => {
-    if (canvasRef.current)
-      context = canvasRef.current.getContext("2d");
-    startBall().then()
-    setInterval(() => {
-      //console.log(ball.x)
-      draw(context)
-    }, 10)
-  }, []
-  )
+  // useEffect(() => {
+  //   if (canvasRef.current)
+  //     context = canvasRef.current.getContext("2d");
+  //   startBall().then()
+  //   setInterval(() => {
+  //     //console.log(ball.x)
+  //     draw(context)
+  //   }, 10)
+  // }, [loader]
+  // )
 
   const handlePlayerMove = (player: Player, direction: number) => {
     player.y = direction > 0 ? Math.min(player.y + direction, props.canvasHeight - player.height) :
       Math.max(player.y + direction, 0)
   }
-
-  // useLayoutEffect(() => {
-  //   if (moveKey.s)
-  //     handlePlayerMove(leftPlayer, 5)
-  //   if (moveKey.w)
-  //     handlePlayerMove(leftPlayer, -5)
-  //   if (moveKey.ArrowDown)
-  //     handlePlayerMove(rightPlayer, 5)
-  //   if (moveKey.ArrowUp)
-  //     handlePlayerMove(rightPlayer, -5)
-  // },)
-
 
   const handleKeyPress = (e: KeyboardEvent) => {
     if (moveKey.hasOwnProperty(e.key))
@@ -205,12 +197,19 @@ export default function Canvas(props: CanvasProps) {
       }
       restart()
     })
-    props.socket.on('ready', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
+    props.socket.once('ready', (namePlayRoom: string) => {
+      console.log("ricevuto ready ");
       setLoader(false);
-      drawPlayer(context!, leftPlayer);
-      drawPlayer(context!, rightPlayer);
-      drawBall(context!, ball);
-      //props.setLoader(false);
+      props.socket.emit('setStart', { namePlayRoom: namePlayRoom });
+    })
+    props.socket.once('start', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
+      if (canvasRef.current)
+        context = canvasRef.current.getContext("2d");
+      // console.log('loader = ', loader);
+      // console.log('ball = ', ball);
+      // console.log('left = ', leftPlayer);
+      // console.log('right = ', rightPlayer);
+      startGame(ball, leftPlayer, rightPlayer);
     })
     props.socket.on('onPress', (key: string, side: string) => {
       const up: 'ArrowUp' | 'w' = (side === 'left') ? 'w' : 'ArrowUp';
