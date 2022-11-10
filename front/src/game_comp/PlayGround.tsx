@@ -58,6 +58,7 @@ function PlayGround(props: any) {
 
     useEffect(() => {
         props.socket.once('connectedToGame', (namePlayRoom: string, side: string) => {
+            console.log("once ", side, namePlayRoom)
             setClientSide((prevState) => { return ({ ...prevState, side: side, playRoom: namePlayRoom }) })
             console.log("SIDE ", side);
             if (side === 'right')

@@ -100,19 +100,28 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   @SubscribeMessage('onPress')
   handleKeyPress(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {key: string, side: string, playRoom: string}): any {
-    if (data.key)
-    this.server.to(data.playRoom).emit('onPress', data.key, data.side);
+    console.log("pllll", data.playRoom)
+    //if (data.key) 
+    //this.server.to(data.playRoom).emit('onPress', data.key, data.side);
+    if(data.key === 'w' || data.key === 'ArrowUp' )
+      this.gameService.setKeysPlayer(data.playRoom, data.side)
+    if (data.key === 's' || data.key === 'ArrowDown' )
+      this.gameService.setKeysPlayer(data.playRoom, data.side, -1)
   }
 
   @SubscribeMessage('onRelease')
   handleKeyRelease(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {key: string, side: string, playRoom: string}): any {
-    this.server.to(data.playRoom).emit('onRelease', data.key, data.side);
+    if(data.key === 'w' || data.key === 'ArrowUp' )
+      this.gameService.setKeysPlayer(data.playRoom, data.side)
+    if (data.key === 's' || data.key === 'ArrowDown' )
+      this.gameService.setKeysPlayer(data.playRoom, data.side, -1)
   }
 
   @SubscribeMessage('connectToGame')
   async handleClientSide(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {username: string, avatar: string}): Promise<any> {
     const ret = await this.gameService.createOrJoinPlayRoom(data.username, data.avatar)
     clientSocket.join(ret.namePlayRoom);
+    console.log("reeeet = ", ret);
     this.server.to(clientSocket.id).emit('connectedToGame', ret.namePlayRoom, ret.side)
   }
 
@@ -139,8 +148,16 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
     const roomInMap = await this.gameService.generateBallDirection(data.namePlayRoom);
     console.log("romminmap ", roomInMap);
     this.server.to(clientSocket.id).emit('start', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
+    //this.gameService.startTick(namePlayRoom);
   }
 
+
+  startTick(namePlayRoom: string) {
+    setInterval(async () => {
+      const roomInMap = await this.gameService.updatePlayer(namePlayRoom);
+      this.server.to(namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
+    }, 10)
+  }
   //--------
 
   afterInit(server: Server) {

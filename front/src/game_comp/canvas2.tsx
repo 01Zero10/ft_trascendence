@@ -51,7 +51,7 @@ export default function Canvas(props: CanvasProps) {
   let context: CanvasRenderingContext2D | null = null;
   const [loader, setLoader] = useState<boolean>(true);
 
-
+  console.log("racchetta ", props.clientPaddle);
   let moveKey: MoveKey = { s: false, w: false, ArrowUp: false, ArrowDown: false }
 
   const rightPlayer = {
@@ -66,7 +66,7 @@ export default function Canvas(props: CanvasProps) {
     x: defaultPlayer.x
   }
 
-  let ball: Ball = { ...defaultBall }
+  // let ball: Ball = { ...defaultBall }
 
   const drawPlayer = (context: CanvasRenderingContext2D, player: Player) => {
     context.beginPath()
@@ -75,9 +75,11 @@ export default function Canvas(props: CanvasProps) {
   }
 
   function startGame(ball: Ball, left: Player, right: Player) {
-    drawPlayer(context!, left);
-    drawPlayer(context!, right);
-    drawBall(context!, ball);
+    draw(context, ball, left, right)
+  }
+
+  function update(context: CanvasRenderingContext2D, ball: Ball, left: Player, right: Player) {
+    draw(context, ball, left, right);
   }
 
   function restart() {
@@ -85,12 +87,13 @@ export default function Canvas(props: CanvasProps) {
     rightPlayer.x = props.canvasWidth - (defaultPlayer.width)
     leftPlayer.y = (props.canvasHeight / 2) - (defaultPlayer.height / 2)
     leftPlayer.x = defaultPlayer.x
-    ball = { ...defaultBall }
+    // ball = { ...defaultBall }
     //TODO: modifiocare angolo verso e angolo a seconda di chi fa gol
-    startBall()
+    //startBall()
   }
 
   const drawBall = (context: CanvasRenderingContext2D, ball: Ball) => {
+    console.log("drawball", ball)
     context.beginPath()
     context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
     context.closePath()
@@ -126,7 +129,7 @@ export default function Canvas(props: CanvasProps) {
   }
 
   // draw
-  const draw = (context: CanvasRenderingContext2D | null) => {
+  const draw = (context: CanvasRenderingContext2D | null, ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
     if (context) {
       context.clearRect(0, 0, props.canvasWidth, props.canvasHeight)
       drawPlayer(context, leftPlayer)
@@ -148,18 +151,18 @@ export default function Canvas(props: CanvasProps) {
     await new Promise(f => setTimeout(f, time * 1000));
   }
 
-  async function startBall() {
-    //let dir_y: Array<number> = [-3, 3]
-    await sleep(3)
-    if (ball.direction === "r") {
-      ball.dx += 3
-      ball.dy += props.dir_y//dir_y[Math.round(Math.random())]
-    }
-    else {
-      ball.dx -= 3
-      ball.dy += props.dir_y//dir_y[Math.round(Math.random())]
-    }
-  }
+  // async function startBall() {
+  //   //let dir_y: Array<number> = [-3, 3]
+  //   await sleep(3)
+  //   if (ball.direction === "r") {
+  //     ball.dx += 3
+  //     ball.dy += props.dir_y//dir_y[Math.round(Math.random())]
+  //   }
+  //   else {
+  //     ball.dx -= 3
+  //     ball.dy += props.dir_y//dir_y[Math.round(Math.random())]
+  //   }
+  // }
 
   // useEffect(() => {
   //   if (canvasRef.current)
@@ -177,17 +180,26 @@ export default function Canvas(props: CanvasProps) {
       Math.max(player.y + direction, 0)
   }
 
-  const handleKeyPress = (e: KeyboardEvent) => {
-    if (moveKey.hasOwnProperty(e.key))
-      props.socket.emit('onPress', { key: e.key, side: props.clientPaddle.side, playRoom: props.clientPaddle.playRoom });
+  function handleKeyPress(e: KeyboardEvent, padd: any) {
+    console.log(props.clientPaddle)
+    console.log("paddle", padd)
+    if (moveKey.hasOwnProperty(e.key)) {
+      e.preventDefault();
+      props.socket.emit('onPress', { key: e.key, side: padd.side, playRoom: padd.playRoom });
+    }
   }
 
-  const handleKeyRelease = (e: KeyboardEvent) => {
-    if (moveKey.hasOwnProperty(e.key))
-      props.socket.emit('onRelease', { key: e.key, side: props.clientPaddle.side, playRoom: props.clientPaddle.playRoom });
+  function handleKeyRelease(e: KeyboardEvent, padd: any) {
+    if (moveKey.hasOwnProperty(e.key)) {
+      e.preventDefault()
+      props.socket.emit('onRelease', { key: e.key, side: padd.side, playRoom: padd.playRoom });
+    }
   }
 
   useEffect(() => {
+    props.socket.on('update', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
+      update(context!, ball, leftPlayer, rightPlayer);
+    })
     props.socket.on("restart", (left: boolean) => {
       if (left) {
         props.setPoint((prevState: any) => { return { ...prevState, left: prevState.left + 1 } })
@@ -205,10 +217,6 @@ export default function Canvas(props: CanvasProps) {
     props.socket.once('start', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
       if (canvasRef.current)
         context = canvasRef.current.getContext("2d");
-      // console.log('loader = ', loader);
-      // console.log('ball = ', ball);
-      // console.log('left = ', leftPlayer);
-      // console.log('right = ', rightPlayer);
       startGame(ball, leftPlayer, rightPlayer);
     })
     props.socket.on('onPress', (key: string, side: string) => {
@@ -235,11 +243,11 @@ export default function Canvas(props: CanvasProps) {
   // add event listener on canvas for mouse position
 
   useLayoutEffect(() => {
-    document.addEventListener("keydown", handleKeyPress)
-    document.addEventListener("keyup", handleKeyRelease)
+    document.addEventListener("keydown", (e) => handleKeyPress(e, props.clientPaddle))
+    document.addEventListener("keyup", (e) => handleKeyRelease(e, props.clientPaddle))
     return () => {
-      document.removeEventListener("keydown", handleKeyPress)
-      document.removeEventListener("keyup", handleKeyRelease)
+      document.removeEventListener("keydown", (e) => handleKeyPress(e, props.clientPaddle))
+      document.removeEventListener("keyup", (e) => handleKeyRelease(e, props.clientPaddle))
     }
   }, [context])
 

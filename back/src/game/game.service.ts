@@ -9,6 +9,8 @@ type Player = {
     y: number
     height: number
     width: number
+    up: boolean;
+    down: boolean;
 }
 
 type Ball = {
@@ -29,7 +31,7 @@ interface plRoom {
 
 const canvasHeight = 750
 const canvasWidth = 1500
-const defaultPlayer = { x: 0, y: 0, height: 150, width: 20 }
+const defaultPlayer = { x: 0, y: 0, height: 150, width: 20, up: false, down: false }
 const defaultBall = { x: canvasWidth / 2, y: canvasHeight / 2, radius: 20, dx: 0, dy: 0, direction: "" }
 const dir: Array<string> = ["l", "r"];
 const array_dir_y: Array<number> = [-3, 3];
@@ -52,10 +54,9 @@ export class GameService{
         .createQueryBuilder('runningMatch')
         .where({player2: ''})
         .getOne()
-        //console.log("playrooomn ==== ", playRoom);
         if (playRoom === null){
             playRoom = this.runningMatches.create({playRoom: 'heldBy' + client, player1: client, leftSide: client, avatar1: avatar});
-            this.runningMatches.save(playRoom);
+            await this.runningMatches.save(playRoom);
             this.mapPlRoom.set('heldBy' + client, {
                 leftPlayer: {...defaultPlayer, y: canvasHeight / 2 - defaultPlayer.height / 2}, 
                 rightPlayer:{...defaultPlayer, x: canvasWidth - defaultPlayer.width, y: canvasHeight / 2 - defaultPlayer.height / 2}, 
@@ -65,7 +66,7 @@ export class GameService{
         playRoom.player2 = client;
         playRoom.avatar2 = avatar;
         playRoom.rightSide = client;
-        this.runningMatches.save(playRoom);
+        await this.runningMatches.save(playRoom);
         return {namePlayRoom: playRoom.playRoom, side: 'right'};
     }
 
@@ -101,4 +102,39 @@ export class GameService{
     async getPlayRoomByName(playRoom: string){
         return this.runningMatches.findOne({where: {playRoom: playRoom}});
     }
+
+    async setKeysPlayer(namePlayRoom: string, side: string, dir: number=1){
+        console.log("set keys ", this.mapPlRoom.get(namePlayRoom));
+        if (side === 'left'){
+            if (dir > 0)
+                this.mapPlRoom.get(namePlayRoom).leftPlayer.up = !this.mapPlRoom.get(namePlayRoom).leftPlayer.up;
+            else
+                this.mapPlRoom.get(namePlayRoom).leftPlayer.down = !this.mapPlRoom.get(namePlayRoom).leftPlayer.down;
+        }
+        else {
+            if (dir > 0)
+                this.mapPlRoom.get(namePlayRoom).rightPlayer.up = !this.mapPlRoom.get(namePlayRoom).rightPlayer.up;
+            else
+                this.mapPlRoom.get(namePlayRoom).rightPlayer.down = !this.mapPlRoom.get(namePlayRoom).rightPlayer.down;
+        }
+    }
+
+    async updatePlayer(namePlayRoom: string){
+        if (this.mapPlRoom.get(namePlayRoom).leftPlayer.up)
+            this.mapPlRoom.get(namePlayRoom).leftPlayer.y += 5;
+        if (this.mapPlRoom.get(namePlayRoom).leftPlayer.up)
+            this.mapPlRoom.get(namePlayRoom).leftPlayer.y += -5;
+
+        if (this.mapPlRoom.get(namePlayRoom).rightPlayer.up)
+            this.mapPlRoom.get(namePlayRoom).rightPlayer.y += 5;
+        if (this.mapPlRoom.get(namePlayRoom).rightPlayer.up)
+            this.mapPlRoom.get(namePlayRoom).rightPlayer.y += -5;
+            
+        return(this.mapPlRoom.get(namePlayRoom))
+    }
+
+    // async startTick(namePlayRoom: string){
+    //     const playRoom = this.mapPlRoom.get(namePlayRoom);
+
+    // }
 }
