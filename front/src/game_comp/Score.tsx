@@ -20,9 +20,9 @@ class Score extends React.Component<ScoreProps> {
  
     render() {
        return (
-          <div style={{color: "white" }} className={this.props.position}>
-             <h2 style={{color: "white" }}>Player {this.props.player}</h2>
-             <h2 style={{color: "white" }}>{this.props.total}</h2>
+          <div  className={this.props.position}>
+            <h2>Player {this.props.player}</h2>
+            <h2 >{this.props.total}</h2>
           </div>
        );
     }

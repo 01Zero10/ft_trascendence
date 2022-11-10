@@ -6,9 +6,6 @@ import { In, Repository } from 'typeorm';
 import { RoomMessages } from './roomsMessages.entity';
 import { Rooms } from './rooms.entity';
 import { PrivateMessages } from './privateMessages.entity';
-import { Friendship } from 'src/user/friendship.entity';
-import { ChatGateWay } from './chat.gateway';
-import { Limited } from './chat.controller';
 import { BanOrMute } from './banOrMute.entity';
 import { createCipheriv, scrypt } from 'crypto';
 import { promisify } from 'util';
@@ -42,7 +39,7 @@ export class ChatService {
         .where({type: 'public'})
         .select(['room.name', 'room.type', 'builder.username'])
         .getMany()
-        console.log("publicissimo", Rooms);
+        //console.log("publicissimo", Rooms);
         return Rooms;
     }
 
@@ -53,7 +50,7 @@ export class ChatService {
         .where({type: 'private'})
         .select(['room.name', 'room.type', 'builder.username'])
         .getMany()
-        console.log(Rooms);
+        //console.log(Rooms);
         return Rooms;
     }
 
@@ -64,7 +61,7 @@ export class ChatService {
         .where({type: 'protected'})
         .select(['room.name', 'room.type', 'builder.username'])
         .getMany()
-        console.log(Rooms);
+        //console.log(Rooms);
         return Rooms;
     }
 
@@ -77,7 +74,7 @@ export class ChatService {
         .where({name: channelName})
         .select(['room.name', 'room.type', 'builder.username'])
         .getOne()
-        console.log(Rooms);
+        //console.log(Rooms);
         return Room;
 
         //return Room;
@@ -107,7 +104,7 @@ export class ChatService {
 
     async getFriendsRooms(client: string){
         const arrayFriends = (await this.userRepository.findOne({ where: { username: client } })).friends;
-        console.log(arrayFriends);
+        //console.log(arrayFriends);
         const response: {name: string, type: string, builder: {username: string}}[] = [];
         if (arrayFriends)
         {
@@ -138,7 +135,7 @@ export class ChatService {
         const options: string[] = [];
         const usersOnChannel = await this.getChatMembers(channelName);
         const adminsOnChannel = await this.getRoomAdmins(channelName);
-        console.log("aaadmins", adminsOnChannel);
+        //console.log("aaadmins", adminsOnChannel);
         await Promise.all(await usersOnChannel.map(async (element) => {
             if (adminsOnChannel.findIndex( x => x.username == element.username) === -1)
             //{
@@ -153,17 +150,17 @@ export class ChatService {
         const limitedUsers = (mode === 'ban') ? await this.getBannedUsers(channelName) : await this.getMutedUsers(channelName);
         //const oppositeLimited = (mode === 'mute') ? await this.getBannedUsers(channelName) : await this.getMutedUsers(channelName);
         //const emoticon = (mode === 'ban') ? '🚫' : '🔇';
-        console.log(limitedUsers);
-        console.log("questo", options);
-        console.log(mode);
-        console.log(limitedUsers);
+        //console.log(limitedUsers);
+        //console.log("questo", options);
+        //console.log(mode);
+        //console.log(limitedUsers);
         await Promise.all(await limitedUsers.map(async (element) => {
             const index = options.findIndex( x => x === element)
-            console.log("index = ", index, "element = ", element)
+            //console.log("index = ", index, "element = ", element)
             if (index > -1)
                 options.splice(index, 1);
         }))
-        console.log('options = ', options)
+        //console.log('options = ', options)
         return options;
     }
 
@@ -211,7 +208,7 @@ export class ChatService {
     //da gestire anche i bannati?
     async getAddMembersOptions(channelName: string, client: string){
         const clientFriends = (await this.userRepository.findOne({where: {username: client}})).friends;
-        console.log("adiadi = ", channelName);
+        //console.log("adiadi = ", channelName);
         const chatMembers = await this.getChatMembers(channelName);
         const addMembersOptions : string[] = [];
         await Promise.all(await clientFriends.map(async (element) => {
@@ -316,7 +313,7 @@ export class ChatService {
         const updatingMembers = await this.getChatMembers(nameChannel);
         const index = updatingMembers.findIndex(x => x.username === oldUser);
         updatingMembers.splice(index, 1);
-        console.log("lunghezza = ", updatingMembers.length)
+        //console.log("lunghezza = ", updatingMembers.length)
         if (updatingMembers.length)
         {
             room.members = updatingMembers;
@@ -327,7 +324,7 @@ export class ChatService {
     }
     
     async leaveChannel(nameChannel: string, exMember: string){
-        console.log(nameChannel, exMember);
+        //console.log(nameChannel, exMember);
         //se Owner -> removeOwner
         const owner = await this.getRoomOwner(nameChannel);
         const admins = await this.getRoomAdmins(nameChannel);
@@ -343,7 +340,7 @@ export class ChatService {
 
     async kickUsers(users: string[], channelName: string){
         await Promise.all(await users.map(async (element) => {
-            console.log(element);
+            //console.log(element);
             this.leaveChannel(channelName, element);
         }));
     }
@@ -356,12 +353,12 @@ export class ChatService {
         .andWhere("banOrMute.channelName = :channel", {channel})
         .getMany();
         for (const element of rows) {
-            console.log("--------")
-            console.log(element);
+            //console.log("--------")
+            //console.log(element);
             const channel = await this.getRoomByName(element.channelName);
             const arrayToSplice = (element.status === 'ban') ? channel.bannedUsers : channel.mutedUsers;
             const index = arrayToSplice.findIndex(x => x === element.username);
-            console.log("index = ", index);
+            //console.log("index = ", index);
             if (index > -1)
                 arrayToSplice.splice(index, 1);
             if (element.status === 'ban')
@@ -390,7 +387,7 @@ export class ChatService {
                 channel.mutedUsers = arrayToSplice;
             await this.roomsRepository.save(channel);
         }
-        console.log(row);
+        //console.log(row);
         await this.banOrMuteRepository.remove(row);
     }
 
@@ -497,7 +494,7 @@ export class ChatService {
     //Setters
 
     async editChannel(channelName: string, type: string, password?: string, newName?: string){
-        console.log("chname =", channelName, type, password, newName)
+        //console.log("chname =", channelName, type, password, newName)
         const room = await this.getRoomByName(channelName);
         //da gestire un eventuale room null?
         if (newName)
@@ -524,10 +521,10 @@ export class ChatService {
     }
 
     async editUsersOnChannel(admins: {value: string, label: string}[], members: {value: string, label: string}[], channelName: string){
-        console.log("1", admins);
-        console.log("2", members);
+        //console.log("1", admins);
+        //console.log("2", members);
         const room = await this.roomsRepository.findOne({where : {name: channelName}});
-        console.log(room);
+        //console.log(room);
         let updatingAdmins: User[] = [(await this.getRoomOwner(channelName))];
         await Promise.all(await admins.map(async (element) => {
             updatingAdmins.push(await this.userRepository.findOne({ where : { username: element.value} }))
@@ -537,7 +534,7 @@ export class ChatService {
     }
 
     async setJoin(client: string, channelName: string, joined: boolean){
-        console.log("joined = ", joined);
+        //console.log("joined = ", joined);
         if (joined)
             await this.leaveChannel(channelName, client);
         else
@@ -573,7 +570,7 @@ export class ChatService {
         //update rows phase
         Promise.all(await rowsToUpdate.map(async (element) => {
             let index = await this.banOrMuteRepository.findOne({ where: [{channelName: channelName}, {username: element}]});
-            console.log(index)
+            //console.log(index)
             index.status = mode,
             index.reason = reason;
             index.expireDate = expirationDate;
@@ -600,7 +597,7 @@ export class ChatService {
     }
 
     async checkJoined(client: string, channelName: string) {
-        console.log(client, channelName);
+        //console.log(client, channelName);
         const index = (await this.userRepository.createQueryBuilder('user')
         .leftJoinAndSelect("user.rooms", "rooms")
         .where({id: client})
@@ -610,9 +607,10 @@ export class ChatService {
     // ???
 
     async updateUserSocket(userID: string, userSocket: string){
-        console.log("attenzione");
-        console.log(userID, userSocket);
-        await this.userRepository.update(userID, {socket_id: userSocket})
+        //console.log("attenzione");
+        //console.log(userID, userSocket);
+        if (userID)
+            await this.userRepository.update(userID, {socket_id: userSocket})
     }
 
     async checkProtectedPassword(input: string, channel: string){

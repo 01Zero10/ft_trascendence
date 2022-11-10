@@ -13,7 +13,6 @@
 import React from "react";
 import "./Game.css"
 import GameMenu from "./game_comp/GameMenu";
-import Paddle from "./game_comp/Paddle";
 import PlayGround from "./game_comp/PlayGround";
 
 
@@ -54,7 +53,7 @@ import PlayGround from "./game_comp/PlayGround";
 
 // }
 
-export default function Game() {
+export default function Game(props: any) {
 
     return (
         <div className="game_container">
@@ -66,7 +65,7 @@ export default function Game() {
             */}
             </div>
             <div className="playground">
-                <PlayGround></PlayGround>
+                <PlayGround socket={props.socket}></PlayGround>
             </div>
         </div>
     )

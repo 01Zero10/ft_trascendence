@@ -4,11 +4,15 @@ import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSo
 import {RoomMessages} from "./roomsMessages.entity"
 import { Server, Socket } from "socket.io";
 import { ChatService } from "./chat.service";
+import { UserService } from "src/user/user.service";
+import { GameService } from "src/game/game.service";
 
 @WebSocketGateway({ cors: true })
 @Injectable()
 export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-  constructor(private chatService: ChatService){}
+  constructor(private chatService: ChatService,
+            private userService: UserService,
+            private gameService: GameService){}
 
   private logger: Logger = new Logger('ChatGateway');
 
@@ -66,21 +70,21 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   @SubscribeMessage('expiredMuteOrBan')
   async checkExpiredMuteOrBan(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {channelName: string}): Promise<any> {
-    console.log("[expiredMuteOrBan] ", data.channelName);
+    // console.log("[expiredMuteOrBan] ", data.channelName);
     await this.chatService.expiredMuteOrBan(data.channelName);
     //this.server.emit('update', data.type);
   }
 
   @SubscribeMessage('singleMuteOrBanRemove')
   async singleMuteOrBanRemove(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {channelName: string, client: string, status: string}): Promise<any> {
-    console.log("[dataaaaaa] ", data.channelName, data.client, data.status);
+    // console.log("[dataaaaaa] ", data.channelName, data.client, data.status);
     await this.chatService.singleMuteOrBanRemove(data.channelName, data.client, data.status);
     //this.server.emit('update', data.type);
   }
 
   @SubscribeMessage('updateList')
   handleUpdateListChannel(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {type: string}): any {
-    console.log("no, vabbe, dai", data.type);
+    // console.log("no, vabbe, dai", data.type);
     this.server.emit('update', data.type);
     return data.type;
   }
@@ -89,21 +93,67 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   handleLeaveRoom(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {room: string}): any {
     clientSocket.leave(data.room);
     clientSocket.emit('leftRoom', data.room);
-    //console.log(`Client ${clientSocket.id} has left the chatroom.`);
     return data.room;
   }
+
+  //Game-----
+
+  @SubscribeMessage('onPress')
+  handleKeyPress(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {key: string, side: string, playRoom: string}): any {
+    // console.log('press', data.key);
+    if (data.key)
+    this.server.to(data.playRoom).emit('onPress', data.key, data.side);
+  }
+
+  @SubscribeMessage('onRelease')
+  handleKeyRelease(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {key: string, side: string, playRoom: string}): any {
+    // console.log('release', data.key);
+    this.server.to(data.playRoom).emit('onRelease', data.key, data.side);
+  }
+
+  @SubscribeMessage('connectToGame')
+  async handleClientSide(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {username: string, avatar: string}): Promise<any> {
+    // console.log('richiesta connessione ', data.username);
+    const ret = await this.gameService.createOrJoinPlayRoom(data.username, data.avatar)
+    // console.log(ret);
+    clientSocket.join(ret.namePlayRoom);
+    this.server.to(clientSocket.id).emit('connectedToGame', ret.namePlayRoom, ret.side)
+  }
+
+  @SubscribeMessage('requestOpponent') //RIPRENDERE DA QUI
+  async handleJoinPlayRoom(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, side: string}): Promise<any> {
+    const playRoom = await this.gameService.getPlayRoomByName(data.namePlayRoom);
+    const roomInMap = await this.gameService.generateBallDirection(data.namePlayRoom);
+    this.server.to(data.namePlayRoom).emit('ready', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
+    //this.server.to(data.namePlayRoom).emit('ready', playRoom.leftSide, playRoom.rightSide)
+    //this.server.to(data.namePlayRoom).emit('ready', playRoom.leftSide, playRoom.rightSide, char, dir_y);
+  }
+
+  @SubscribeMessage('gol_right')
+  handleGol_right(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {name: string}){
+    this.server.to(data.name).emit('restart', false)
+  }
+
+  @SubscribeMessage('gol_left')
+  handleGol_left(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {name: string}){
+    this.server.to(data.name).emit('restart', true)
+  }
+
+  //--------
 
   afterInit(server: Server) {
     this.logger.log('Init');
     //join memberships rooms;
   }
 
-  handleConnection(clientSocket: Socket) {
-    this.chatService.updateUserSocket(String(clientSocket.handshake.query.userID), clientSocket.id);
+  async handleConnection(clientSocket: Socket) {
+    await this.chatService.updateUserSocket(String(clientSocket.handshake.query.userID), clientSocket.id);
+    //await this.userService.setOnlineStatus(String(clientSocket.handshake.query.userID));
     this.logger.log(`Client connected: ${clientSocket.id}`);
   }
 
-  handleDisconnect(clientSocket: Socket) {
-    this.logger.log(`clientSocket disconnected: ${clientSocket.id}`)
+  async handleDisconnect(clientSocket: Socket) {
+    await this.userService.setOfflineStatus(String(clientSocket.handshake.query.userID));
+    this.logger.log(`clientSocket disconnected: ${clientSocket.id}`);
   }
 }

@@ -8,7 +8,6 @@ import { Student } from './App';
 import { Avatar, Box, List } from '@mantine/core';
 import MenuIcon from '@mui/icons-material/Menu';
 
-
 interface userNavBar {
   username: string,
   nickname: string,
@@ -36,7 +35,7 @@ const ListSearch = () => {
       })
     }
     getUserNavBar();
-    console.log(options);
+    //console.log(options);
   }, []) //[] ?
 
   const searchChange = (e: { target: { value: string; }; }) => {
@@ -55,7 +54,7 @@ const ListSearch = () => {
   return (
     <div className='filter-search-bar'>
       <div className="search-box">
-        <button className="btn-search"><i className="fas fa-search"><SearchIcon sx={{ fontSize: 30, color: '#000' }} /></i></button>
+        <button className="btn-search"><i className="fas fa-search"><SearchIcon sx={{ fontSize: 30, color: 'linear-gradient(to right bottom, #FD297B, #FF5864, #FF655B' }} /></i></button>
         <input className='input-search' placeholder="Type an username" type="text" value={search.query} onChange={searchChange} />
         <ul className="filter-search-results">
           {(search.query === '' ? "" : !search.list.length ? <li className="filter-search-results-item"><h3 className='err_msg'>Your query did not return any results</h3></li> : search.list.map(option => {
@@ -103,7 +102,7 @@ function Navigation() {
       <List>
         <NavLink to="/home">
           <ListItem disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
+            <ListItemButton sx={{ textAlign: 'center', color: '#000' }}>
               <ListItemText primary='HOME' />
             </ListItemButton>
           </ListItem>
@@ -111,7 +110,7 @@ function Navigation() {
 
         <NavLink to="/game">
           <ListItem disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
+            <ListItemButton sx={{ textAlign: 'center', color: '#000' }}>
               <ListItemText primary='GAME' />
             </ListItemButton>
           </ListItem>
@@ -119,7 +118,7 @@ function Navigation() {
 
         <NavLink to="/leaderboard">
           <ListItem disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
+            <ListItemButton sx={{ textAlign: 'center', color: '#000' }}>
               <ListItemText primary='LEADERBOARD' />
             </ListItemButton>
           </ListItem>
@@ -127,7 +126,7 @@ function Navigation() {
 
         <NavLink to="/chat">
           <ListItem disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
+            <ListItemButton sx={{ textAlign: 'center', color: '#000' }}>
               <ListItemText primary='CHAT' />
             </ListItemButton>
           </ListItem>
@@ -151,7 +150,7 @@ function Navigation() {
 
   return (
     <>
-      <AppBar component='nav'>
+      <AppBar sx={{ bgcolor: 'transparent', color: '#fff', width: '100%' }} component='nav'>
         <Toolbar>
           <IconButton
 
@@ -160,7 +159,7 @@ function Navigation() {
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { md: 'none' } }}
           >
-            <MenuIcon />
+            <MenuIcon sx={{ color: '#fff' }} />
           </IconButton>
           <Typography
             component="div"
@@ -241,14 +240,14 @@ function Navigation() {
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
               >
                 <Link to={`/users/${contextData.username}`}>
-                  <MenuItem>
+                  <MenuItem sx={{ color: '#000' }}>
                     <Avatar src={contextData.avatar} radius="xl" size="sm" sx={{ marginRight: "5%" }} />My account
                     {/* <Avatar src={element.avatar}/> My account */}
                   </MenuItem>
                 </Link>
                 <Divider />
                 <Link to={`/users/settings`}>
-                  <MenuItem>
+                  <MenuItem sx={{ color: '#000' }}>
                     <ListItemIcon>
                       <Settings fontSize="small" />
                     </ListItemIcon>
@@ -256,7 +255,7 @@ function Navigation() {
                   </MenuItem>
                 </Link>
                 <Link to={`/logout`}>
-                  <MenuItem>
+                  <MenuItem sx={{ color: '#000' }}>
                     <ListItemIcon>
                       <Logout fontSize="small" />
                     </ListItemIcon>
@@ -273,7 +272,6 @@ function Navigation() {
 
       <Box component="nav">
         <Drawer
-
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
@@ -281,6 +279,7 @@ function Navigation() {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
+
             display: { xs: 'block', md: 'none' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}

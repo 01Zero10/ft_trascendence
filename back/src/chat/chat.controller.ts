@@ -94,7 +94,7 @@ export class ChatController {
 
     @Get('admins/:roomName')
     async GetRoomAdmins(@Param('roomName') roomName: string): Promise<User[]>{
-        console.log("startRoomAdmins");
+        //console.log("startRoomAdmins");
         const owner = await this.chatService.getRoomOwner(roomName);
         const admins = await this.chatService.getRoomAdmins(roomName);
         const index = admins.findIndex(x => x.username === owner.username);
@@ -158,9 +158,9 @@ export class ChatController {
 
     @Post('getMyState')
     async GetMyState(@Body('channelName') channelName: string, @Body('client') client: string){
-        console.log("[@GMS]");
-        console.log(client);
-        console.log(channelName);
+        //console.log("[@GMS]");
+        //console.log(client);
+        //console.log(channelName);
         return this.chatService.getMyState(channelName, client);
     }
 
@@ -208,11 +208,11 @@ export class ChatController {
     @Body('members') members: string[],
     @Body('type') type: string,
     @Body('password') password: string){
-        console.log("builder", builder);
-        console.log("nameGroup", nameGroup);
-        console.log("members", members);
-        console.log("type", type);
-        console.log("pwd", password);
+        //console.log("builder", builder);
+        //console.log("nameGroup", nameGroup);
+        //console.log("members", members);
+        //console.log("type", type);
+        //console.log("pwd", password);
         const room = await this.chatService.createGroupChat2(builder, nameGroup, members, type, password);
         return room;
     }
@@ -220,7 +220,7 @@ export class ChatController {
     //fatto con socket emit... non dovrebbe servire
     // @Get('expiredMuteOrBan/:channelName')
     // async ExpiredMuteOrBan(@Param('channelName') channelName: string){
-    //     console.log("canalisssimo = ", channelName);
+    //     //console.log("canalisssimo = ", channelName);
     //     await this.chatService.expiredMuteOrBan(channelName);
     // }
 
@@ -255,7 +255,7 @@ export class ChatController {
         @Body('time') time: number,
         @Body('reason') reason: string,
     ){
-        console.log("ahahaha, entratio")
+        //console.log("ahahaha, entratio")
         if (mode === 'kick')
             return await this.chatService.kickUsers(limited[0], channelName);
         const room = await this.chatService.getRoomByName(channelName);
@@ -272,7 +272,7 @@ export class ChatController {
             cleanLimited.push(element.value);
         }))
 
-        console.log("opposite = ", oppositeLimited);
+        //console.log("opposite = ", oppositeLimited);
 
         await Promise.all(await cleanLimited.map(async (element) => {
             const index = oppositeLimited.findIndex(x => x === element);
@@ -295,18 +295,18 @@ export class ChatController {
                 rowsToDelete.push(element);
         }))
 
-        console.log("rowsToUpdate = ", rowsToUpdate);
-        console.log("rowsToDelete = ", rowsToDelete);
-        console.log("rowstoAdd = ", rowsToAdd);
-        console.log("");
+        //console.log("rowsToUpdate = ", rowsToUpdate);
+        //console.log("rowsToDelete = ", rowsToDelete);
+        //console.log("rowstoAdd = ", rowsToAdd);
+        //console.log("");
         const expDate = new Date();
-        console.log(expDate)
+        //console.log(expDate)
         expDate.setSeconds(expDate.getSeconds() + time);
-        console.log(expDate)
-        console.log(rowsToAdd)
-        console.log(rowsToDelete)
-        console.log(rowsToUpdate)
-        console.log(mode)
+        //console.log(expDate)
+        //console.log(rowsToAdd)
+        //console.log(rowsToDelete)
+        //console.log(rowsToUpdate)
+        //console.log(mode)
         await this.chatService.updateMuteBanTable(channelName, rowsToDelete, rowsToUpdate, rowsToAdd, mode, reason, expDate);
         await this.chatService.handleMuteBan(room, mode, cleanLimited, oppositeLimited);
     }
@@ -340,22 +340,22 @@ export class ChatController {
         // console.log(process.env.BUFFER_IV)
         //console.log(Buffer.from(process.env.BUFFER_IV, 'base64'))
         const iv = Buffer.from(process.env.BUFFER_IV, 'base64')
-        console.log('IV');
-        console.log(iv);
-        console.log('');
+        //console.log('IV');
+        //console.log(iv);
+        //console.log('');
         const key = (await promisify(scrypt)(process.env.PASS_TO_ENCRYPT, 'salt', 32)) as Buffer;
-        console.log('KEY')
-        console.log(key);
-        console.log('');
-        console.log('CIPHER');
+        //console.log('KEY')
+        //console.log(key);
+        //console.log('');
+        //console.log('CIPHER');
         const cipher = createCipheriv(process.env.ALGORITHM_TO_ENCRYPT, key, iv);
         let crypted = cipher.update('Bop Bop Bop', 'utf-8', 'hex') + cipher.final('hex');    
-        console.log("encrypted ", crypted)
-        console.log('');
-        console.log('DECIPHER');
+        //console.log("encrypted ", crypted)
+        //console.log('');
+        //console.log('DECIPHER');
         const decipher = createDecipheriv(process.env.ALGORITHM_TO_ENCRYPT, key, iv);
         let decrypted = decipher.update(crypted, 'hex', 'utf-8') + decipher.final('utf-8');
-        console.log("decrypted = ", decrypted);
+        //console.log("decrypted = ", decrypted);
         
         //this.chatService.saveEntityProtectedChannel('ciao', iv, key);
         

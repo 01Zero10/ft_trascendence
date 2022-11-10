@@ -14,21 +14,9 @@
 	justify-content: flex-end;
 	align-items: center;
 	align-content: center;
-	background-color: #fff;
+	/* background-color: #000; */
+	background-color: transparent;
 	width: 100%;
-}
-
-.css-11b3ww9-MuiPaper-root-MuiAppBar-root {
-	/* position: fixed;
-    display: flex;
-    
-    justify-content: flex-end; */
-	/* align-items: center;
-    align-content: center; */
-
-	background-color: #fff !important;
-
-	/* width: 100%; */
 }
 
 .css-hyum1k-MuiToolbar-root {
@@ -38,18 +26,16 @@
 
 .css-10hburv-MuiTypography-root {
 	font-family: 'Smooch Sans', sans-serif !important;
-	font-size: 1.5rem !important;
+	font-size: 1.4rem !important;
 	letter-spacing: 0.15em !important;
-	font-weight: 400 !important;
+	font-weight: 500 !important;
 }
 
-.css-1d4vqq0-MuiButtonBase-root-MuiListItemButton-root:hover,
-.Mui-focusVisible {
-	background-color: #ba30f010 !important;
+.css-1d4vqq0-MuiButtonBase-root-MuiListItemButton-root:hover {
+	background-color: #b700ff63 !important;
 }
 
 a:-webkit-any-link {
-	color: #000;
 	cursor: pointer;
 	text-decoration: none;
 }
@@ -58,7 +44,7 @@ a:-webkit-any-link {
 	position: relative;
 	display: table-cell;
 	text-align: center;
-	color: #000;
+	color: #fff;
 	text-decoration: none;
 	font-family: 'Smooch Sans', sans-serif;
 	letter-spacing: 0.15em;
@@ -83,10 +69,11 @@ nav {
 	position: relative;
 	display: table-cell;
 	text-align: center;
-	color: #000;
+	color: #fff;
 	text-decoration: none;
 	font-family: 'Smooch Sans', sans-serif;
 	letter-spacing: 0.15em;
+	font-weight: 500;
 	font-size: 25px;
 	transition: 0.2s ease color;
 	margin: 0 2rem;
@@ -117,11 +104,11 @@ nav {
 }
 
 .navigation .nav-link:nth-child(1):before {
-	background-color: #B830F0;
+	background-color: #6626ee;
 }
 
 .navigation .nav-link:nth-child(1):after {
-	background-color: #4104bd;
+	background-color: #e91e63;
 }
 
 .navigation .nav-link:nth-child(2):before {
@@ -155,13 +142,14 @@ nav {
 	width: 56px;
 	cursor: pointer;
 	height: 3px;
-	background-color: #B830F0;
+	background-color: transparent;
+	/* #6626ee;*/
 	border-radius: 5px;
 	transition: 0.2s ease left;
 }
 
 .navigation .nav-link:hover {
-	color: #BA30F0;
+	color: #e91e63;
 }
 
 .navigation .nav-link:hover:before,
@@ -170,7 +158,7 @@ nav {
 }
 
 .navigation .nav-link:nth-child(1):hover~.indicator {
-	background: linear-gradient(130deg, #B830F0, #4104bd);
+	background: linear-gradient(130deg, #6626ee, #e91e63);
 }
 
 .navigation .nav-link:nth-child(2):hover~.indicator {
@@ -188,7 +176,7 @@ nav {
 .navigation .nav-link:nth-child(4):hover~.indicator {
 	left: 85%;
 	width: 50px;
-	background: linear-gradient(130deg, rgb(226, 39, 226), rgb(202, 123, 32));
+	background: linear-gradient(130deg, rgb(29, 101, 164), rgb(234, 187, 35));
 }
 
 /********** Search **********/
@@ -212,16 +200,16 @@ nav {
 	outline: none;
 	border-radius: 25px;
 	transition: all .5s ease-in-out;
-	background-color: #fff;
+	background-color: transparent;
 	padding-right: 40px;
 	font-family: 'Smooch Sans', sans-serif;
 	letter-spacing: 0.15em;
 	font-size: 1.5rem;
-	color: #000;
+	color: #fff;
 }
 
 .input-search::placeholder {
-	color: rgba(0, 0, 0, 0.493);
+	color: rgba(255, 255, 255, 0.493);
 	font-size: 1.5rem;
 	letter-spacing: 0.15em;
 	font-weight: 400;
@@ -238,7 +226,7 @@ nav {
 	border-radius: 50%;
 	position: absolute;
 	right: 0px;
-	color: #000;
+	color: #fff;
 	background-color: transparent;
 	pointer-events: painted;
 }
@@ -247,7 +235,7 @@ nav {
 	width: 300px;
 	border-radius: 0px;
 	background-color: transparent;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.397);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.397);
 	transition: all 500ms cubic-bezier(0, 0.110, 0.35, 2);
 }
 
@@ -255,7 +243,7 @@ nav {
 	width: 300px;
 	border-radius: 0px;
 	background-color: transparent;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.397);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.397);
 	transition: all 500ms cubic-bezier(0, 0.110, 0.35, 2);
 }
 

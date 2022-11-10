@@ -2,15 +2,10 @@ import React, { ReactNode, useContext, useEffect, useState } from "react";
 import './Account.css'
 import { student, Student } from "./App";
 
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
-import GroupIcon from '@mui/icons-material/Group';
-import CoffeeIcon from '@mui/icons-material/Coffee';
-
-import { Avatar, Badge, Box, Divider, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemText, styled, Typography } from "@mui/material";
+import { Avatar, Badge, Divider, Fab, Grid, IconButton, List, ListItem, ListItemText, styled, Tab } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { AddCircle, CheckCircle, Close, Done, EmojiEvents, HourglassTop, NoAccounts, PersonAddAlt1, PersonRemove } from "@mui/icons-material";
-import { Center } from "@mantine/core";
+import { AddCircle, CheckCircle, Close, Done, EmojiEvents, HourglassTop, PersonAddAlt1, PersonRemove } from "@mui/icons-material";
+import Tabs from '@mui/material/Tabs';
 import { red } from "@mui/material/colors";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -42,7 +37,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-//Modal 
+//Modal
 
 interface ModalType {
   children?: ReactNode;
@@ -105,7 +100,7 @@ function useModal() {
 
 //fill table
 interface Match {
-  id: number, //con Number rompe le scatole / si potrebbe mettere any 
+  id: number, //con Number rompe le scatole / si potrebbe mettere any
   player1: string;
   player2: string;
   avatar1: string;
@@ -114,6 +109,35 @@ interface Match {
   points2: number,
 }
 
+// Vertical Table
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`vertical-tabpanel-${index}`}
+      aria-labelledby={`vertical-tab-${index}`}
+      {...other}
+      style={{ width: '100%' }}
+    >
+      {value === index && (
+        <div className="table-tabs">{children}</div>
+        // <Box sx={{ p: 5 }}>
+        //   <Typography>{children}</Typography>
+        // </Box>
+      )}
+    </div>
+  );
+}
 
 function Scoreboard(props: any) {
   //const contextData = useContext(Student);
@@ -126,7 +150,7 @@ function Scoreboard(props: any) {
 
   useEffect(() => {
     async function getMatches() {
-      console.log(MATCH_API);
+      //console.log(MATCH_API);
       let response = await fetch(MATCH_API);
       let data = await response.json();
       let fetchMatches: Match[] = [];
@@ -139,57 +163,37 @@ function Scoreboard(props: any) {
     }
     getMatches();
   }, [props.client])
-  console.log(matches);
+  //console.log(matches);
 
 
   return (
     <>
-      <Grid item xs={3}>
-        <button /*className="b_account"*/ className="noselect" onClick={toggle}>
-          <SportsEsportsIcon fontSize="large" /></button>
-        <div className="profile-card-inf__title"></div>
-        <div className="profile-card-inf__txt">MATCHES</div>
-
-      </Grid>
-
-      <Modal isOpen={isOpen} toggle={toggle}>
-        <button className="modal_close_button" type="button" onClick={handleClose}>X</button>
-        <div className="table_dashboard">
-          <Box sx={{
-            display: "flex",
-            flexDirection: "column",
-            width: '85%',
-            maxHeight: 390,
-            overflow: "hidden",
-            overflowY: "auto",
-          }}>
-            {matches.map((p) => (
-              <List sx={{ width: '100%', bgcolor: 'background.paper' }} key={p.id}>
-                <div className="table-prv">
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar alt="username" src={p.avatar1} />
-                      <ListItemText primary={p.player1} />
-                    </ListItemAvatar>
-                  </ListItem>
-                  <ListItem >
-                    <ListItemText primary={p.points1} />
-                    <ListItemText primary=' - ' />
-                    <ListItemText primary={p.points2} />
-                  </ListItem>
-                  <ListItem sx={{ justifyContent: 'center' }}>
-                    <ListItemAvatar>
-                      <Avatar alt="username" src={p.avatar2} />
-                      <ListItemText primary={p.player2} />
-                    </ListItemAvatar>
-                  </ListItem>
-                </div>
-                <Divider variant="middle" component="li" />
-              </List>
-            ))}
-          </Box>
-        </div>
-      </Modal>
+      <div className="table_dashboard">
+        {matches.map((p) => (
+          <List sx={{ width: '100%', bgcolor: 'transparent', display: 'flex' }} key={p.id}>
+            <ListItem>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Avatar sx={{ width: 56, height: 56 }} src={p.avatar1} />
+                <ListItemText primary={p.player1} />
+              </div>
+            </ListItem>
+            <ListItem>
+              <p style={{ fontSize: '1.5vw', fontWeight: '500' }}>{p.points1}</p>
+              <p style={{ fontFamily: 'Odibee Sans, sans-serif', fontSize: '2.8vw', padding: '0 4rem', color: '#781C9C' }}> VS </p>
+              <p style={{ fontSize: '1.5vw', fontWeight: '500' }}>{p.points2}</p>
+              {/* <ListItemText primary={p.points1} />
+          <ListItemText primary=' VS ' />
+          <ListItemText primary={p.points2} /> */}
+            </ListItem>
+            <ListItem>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Avatar sx={{ width: 56, height: 56 }} src={p.avatar2} />
+                <ListItemText primary={p.player2} />
+              </div>
+            </ListItem>
+          </List>
+        ))}
+      </div>
     </>
   );
 }
@@ -215,7 +219,7 @@ function Account() {
   const { user_id } = useParams();
 
   useEffect(() => {
-    console.log('user_id: ', user_id);
+    //console.log('user_id: ', user_id);
   }, [user_id])
 
   useEffect(() => {
@@ -226,7 +230,7 @@ function Account() {
       })
         .then((response) => response.json())
         .then((result) => {
-          console.log(result);
+          //console.log(result);
           setClient({
             id: result.id,
             username: result.username,
@@ -273,9 +277,9 @@ function Account() {
 
   /* prende l'object intero */
   /*   const ciao = useParams<"user_id">();
-  
+
     useEffect(() => {
-      console.log(ciao);
+      //console.log(ciao);
     }, [ciao]) */
 
   //PROVA ALERT PER RICHIESTA
@@ -286,7 +290,7 @@ function Account() {
     const { isOpen, toggle, handleClose } = useModal();
 
     const [friendsUser, setFriendsUser] = useState<FriendshipsUser[]>([]);
-    console.log("qui", friendsUser);
+    //console.log("qui", friendsUser);
 
     useEffect(() => {
       const API_URL_GET_FRIENDS = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/getFriends`;
@@ -301,14 +305,16 @@ function Account() {
           .then(async (result) => {
             const fetchFriends: FriendshipsUser[] = [];
             await Promise.all(await result.map(async (element: any) => {
-              let iFriend: FriendshipsUser = {
-                username: element.username,
-                nickname: element.nickname,
-                avatar: element.avatar,
-                position: element.position,
-                friendship: element.friendship,
+              if (element.username !== contextData.username) {
+                let iFriend: FriendshipsUser = {
+                  username: element.username,
+                  nickname: element.nickname,
+                  avatar: element.avatar,
+                  position: element.position,
+                  friendship: element.friendship,
+                }
+                fetchFriends.push(iFriend);
               }
-              fetchFriends.push(iFriend);
             }))
             setFriendsUser(fetchFriends);
           }
@@ -319,67 +325,51 @@ function Account() {
 
     return (
       <>
-        <Grid item xs={3}>
-          <button className="noselect" onClick={toggle}>
-            <GroupIcon fontSize="large" /> </button>
-          <div className="profile-card-inf__title"></div>
-          <div className="profile-card-inf__txt">FRIENDS</div>
-        </Grid>
-
-        <Modal isOpen={isOpen} toggle={toggle}>
-          <button className="modal_close_button" type="button" onClick={handleClose}>X</button>
-          <div className="table_dashboard">
-            <Box sx={{
-              display: "flex",
-              flexDirection: "column",
-              width: '85%',
-              maxHeight: 390,
-              overflow: "hidden",
-              overflowY: "auto",
-            }}>
-              {/*contextData.username == user_id ||*/ friendsUser.map((f) => (
-                <List sx={{ width: '100%', minWidth: 360, bgcolor: 'background.paper' }}>
-                  <ListItem sx={{ width: '100%', minWidth: 360 }}>
-                    <Avatar alt="username" sx={{ width: 65, height: 65 }} src={f.avatar} />
-                    <p className="p_friendlist">{f.username}<br />{f.nickname}</p>
-                    <EmojiEvents fontSize="large" />
-                    <ListItemText /* primary={`#${f.position}`} */ primary={
-                      <React.Fragment>
-                        <Typography
-                          // sx={{ display: 'inline' }}
-                          // component="span"
-                          // variant="body2"
-                          // color="text.primary"
-                          variant="h2"
-                        >
-
-                        </Typography>
-                        {`#${f.position}`}
-                      </React.Fragment>
-                    } />
-                    {user_id === contextData.username ? '' :
-                      (f.friendship && f.friendship.friendship === 'pending') ?
-                        <Pending_b_small /> : (f.friendship && f.friendship.friendship === 'friends') ? <div style={{ textAlign: 'center' }} ><CheckCircle /><p className="p_friendlist" /> FRIEND</div> : <Add_b_small />
-                      /* <Remove_b_small /> : <Add_b_small />*/
-                    }
-                  </ListItem>
-                  <Divider variant="middle" component="li" />
-                </List>
-              ))}
-            </Box>
-          </div>
-        </Modal>
+        {/* <Modal isOpen={isOpen} toggle={toggle}>
+          <button className="modal_close_button" type="button" onClick={handleClose}>X</button> */}
+        <div className="table_dashboard">
+          {friendsUser.map((f) => (
+            <List sx={{ width: '100%', bgcolor: 'transparent', display: 'flex', alignItems: 'center' }} key={f.username}>
+              <ListItem>
+                <Avatar sx={{ width: 56, height: 56 }} src={f.avatar} />
+                <ListItemText primary={f.username} secondary={f.nickname} />
+              </ListItem>
+              <ListItem>
+                <div style={{ textAlign: 'center' }}>
+                  <EmojiEvents sx={{ width: 40, height: 40 }} />
+                  <p className="p_friendlist"> {`#${f.position}`}</p>
+                </div>
+              </ListItem>
+              <ListItem>
+                {user_id === contextData.username && f.username === user_id ? 'nope' :
+                  (f.friendship && f.friendship.friendship === 'pending') ?
+                    <Pending_b_small username={f.username} /> : (f.friendship && f.friendship.friendship === 'friends') ?
+                      <div style={{ textAlign: 'center' }} ><CheckCircle style={{ color: 'green' }} />
+                        <p className="p_friendlist" /> FRIEND</div> :
+                      <div style={{ textAlign: 'center' }} ><IconButton sx={{ color: red[500] }} component="label"
+                        onClick={() => addFriend(f.username!)}>
+                        <AddCircle fontSize="medium" />
+                      </IconButton>
+                        <p className="p_friendlist" />ADD FRIEND</div>
+                  /* <Remove_b_small /> : <Add_b_small />*/
+                }
+              </ListItem>
+              <Divider variant="middle" />
+            </List>
+          ))}
+        </div>
+        {/* </Modal> */}
       </>
     )
   }
 
   /*****Per Lista amici pulsanti****/
-  function Pending_b_small() {
+  function Pending_b_small(props: any) {
     return (
       <div className="profile-card-inf__item">
         <Grid item xs={3}>
           <IconButton color="secondary" component="label"
-            onClick={deleteRequestOrFriendship}>
+            onClick={() => deleteRequestOrFriendship(props.username)}>
             <HourglassTop fontSize="medium" />
           </IconButton>
           <div className="profile-card-inf__title"></div>
@@ -389,97 +379,78 @@ function Account() {
     )
   }
 
-  function Remove_b_small() {
-    return (
-      <div className="">
-        <Grid item xs={3}>
-          <button className="b_listfriends"
-            onClick={deleteRequestOrFriendship}>
-            <PersonRemove fontSize="small" /></button>
-          <div className="profile-card-inf__title"></div>
-          <div className="p_friendlist">REMOVE <br />FRIEND</div>
-        </Grid>
-      </div>
-    )
-  }
-
-  function Add_b_small() {
-    return (
-      <div className="">
-        <Grid item xs={3}>
-          <IconButton sx={{ color: red[500] }} component="label"
-            onClick={addFriend}>
-            <AddCircle fontSize="medium" />
-          </IconButton>
-          <div className="profile-card-inf__title"></div>
-          <div className="" style={{ textAlign: 'center' }}>ADD <br />FRIEND</div>
-        </Grid>
-      </div>
-    )
-  }
+  // function Add_b_small() {
+  //   return (
+  //     <div className="">
+  //       <Grid item xs={3}>
+  //         <IconButton sx={{ color: red[500] }} component="label"
+  //           onClick={addFriend}>
+  //           <AddCircle fontSize="medium" />
+  //         </IconButton>
+  //         <div className="profile-card-inf__title"></div>
+  //         <div className="" style={{ textAlign: 'center' }}>ADD <br />FRIEND</div>
+  //       </Grid>
+  //     </div>
+  //   )
+  // }
   /******* FINE *******/
 
-  async function deleteRequestOrFriendship() {
+  async function deleteRequestOrFriendship(userToDelete: string) {
     const API_DELETE_REQ_OR_FRIEND = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/deleteRequestOrFriendship`
     await fetch(API_DELETE_REQ_OR_FRIEND, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ client: contextData.username, profileUser: user_id })
+      body: JSON.stringify({ client: contextData.username, profileUser: userToDelete })
     })
     setFriendship("nope");
   }
 
   function Pending_b() {
     return (
-      <div className="profile-card-inf__item">
-        <Grid item xs={3}>
-          <button className="noselect"
-            onClick={deleteRequestOrFriendship}>
-            <HourglassTop fontSize="large" /></button>
-          <div className="profile-card-inf__title"></div>
-          <div className="profile-card-inf__txt">PENDING</div>
-        </Grid>
+      <div style={{ textAlign: 'center' }}>
+        <h2 style={{ padding: '1.5rem' }}>Pending request</h2>
+        <Fab color="secondary" aria-label="user" onClick={() => deleteRequestOrFriendship(user_id!)}>
+          <HourglassTop fontSize="large" />
+        </Fab>
+        <h3 style={{ fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', fontSize: '1.4vw', padding: '10px' }}>PENDING</h3>
       </div>
     )
   }
 
   function Remove_b() {
     return (
-      <div className="profile-card-inf__item">
-        <Grid item xs={3}>
-          <button className="noselect"
-            onClick={deleteRequestOrFriendship}>
-            <PersonRemove fontSize="large" /></button>
-          <div className="profile-card-inf__title"></div>
-          <div className="profile-card-inf__txt">REMOVE <br />FRIEND</div>
-        </Grid>
+      <div style={{ textAlign: 'center' }}>
+        <h3 style={{ fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', padding: '1.5rem', fontSize: '1.4vw' }}>Remove <strong className="txt-account-strong"> {client.username}</strong> as a friend?</h3>
+        <Fab color="secondary" aria-label="user" onClick={() => deleteRequestOrFriendship(user_id!)}>
+          <PersonRemove fontSize="large" />
+        </Fab>
+        {/* <h3 style={{fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', fontSize: '1.4vw', padding: '10px' }}>REMOVE<br/>FRIEND</h3> */}
       </div>
     )
   }
 
 
-  async function addFriend() {
+  async function addFriend(userToSend: string) {
     const API_ADDFRIEND = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/addFriend`
     await fetch(API_ADDFRIEND, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ client: contextData.username, profileUser: user_id })
+      body: JSON.stringify({ client: contextData.username, profileUser: userToSend })
     })
-    setFriendship("pending");
+    if (userToSend === user_id)
+      setFriendship("pending");
   }
 
   function Add_b() {
     return (
-      <div className="profile-card-inf__item">
-        <Grid item xs={3}>
-          <button className="noselect"
-            onClick={addFriend}>
-            <PersonAddAlt1 fontSize="large" /></button>
-          <div className="profile-card-inf__title"></div>
-          <div className="profile-card-inf__txt">ADD <br />FRIEND</div>
-        </Grid>
+      <div style={{ textAlign: 'center' }}>
+        <h3 style={{ fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', padding: '1.5rem', fontSize: '1.4vw' }}>Add <strong className="txt-account-strong"> {client.username}</strong> as a friend?</h3>
+        <Fab color="secondary" aria-label="user" onClick={() => addFriend(user_id!)}>
+          <PersonAddAlt1 fontSize="large" />
+        </Fab>
+        {/* <h3 style={{fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', fontSize: '1.4vw', padding: '10px' }}>REMOVE<br/>FRIEND</h3> */}
       </div>
     )
   }
@@ -499,34 +470,60 @@ function Account() {
 
     return (
       <>
-        <div className="div_Notification">
-          <h1 className="txt-request"><strong>{client.username}</strong> sent you<br /> a friend request</h1>
-          <div className="column">
-            <button id="accept" className="noselect" onClick={yepHandler} >
-              <Done fontSize="large" />
-            </button>
-            <div className="profile-card-inf__title"></div>
-            <div className="profile-card-inf__txt">ACCEPT</div>
-          </div>
-
-          <div className="column">
-            <button className="noselect" onClick={deleteRequestOrFriendship}>
-              <Close fontSize="large" />
-            </button>
-            <div className="profile-card-inf__title"></div>
-            <div className="profile-card-inf__txt">DECLINE</div>
+        <div style={{ textAlign: 'center' }}>
+          <h3 style={{ fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', padding: '1.5rem', fontSize: '1.4vw' }}><strong className="txt-account-strong"> {client.username}</strong> sent you a friend request</h3>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ margin: '0.5rem 4rem' }}>
+              <Fab color="secondary" aria-label="user" onClick={yepHandler}>
+                <Done fontSize="large" />
+              </Fab>
+              <h3 style={{ fontFamily: 'Smooch Sans, sans-serif', marginTop: '0.5rem', letterSpacing: '0.2rem', fontSize: '1.4vw' }}>ACCEPT</h3>
+            </div>
+            <div style={{ margin: '0.5rem 4rem' }}>
+              <Fab color="secondary" aria-label="user" onClick={() => deleteRequestOrFriendship(user_id!)}>
+                <Close fontSize="large" />
+              </Fab>
+              <h3 style={{ fontFamily: 'Smooch Sans, sans-serif', marginTop: '0.5rem', letterSpacing: '0.2rem', fontSize: '1.4vw' }}>DECLINE</h3>
+            </div>
           </div>
         </div>
       </>
     )
   }
+  function a11yProps(index: number) {
+    return {
+      id: `vertical-tab-${index}`,
+      'aria-controls': `vertical-tabpanel-${index}`,
+    };
+  }
+
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
 
   return (
     <>
-      <div className="wrapper">
-        <div className="profile-card">
-          <div className="container-account">
-            <div className="account_decoration">
+      <div className="wrap">
+
+        <div className="request">
+          <div>
+            <h1 style={{ textAlign: 'center', padding: '5%', fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', fontSize: '2.5vw' }}>Friendship</h1>
+            {user_id === contextData.username ? '' :
+              friendship === 'pending' ?
+                <Pending_b /> : friendship === 'toReply' ?
+                  <SendNotification /> : friendship === 'friends' ?
+                    <Remove_b /> : <Add_b />}
+          </div>
+        </div>
+
+        <div className="main">
+          <div className="account_decoration">
+            <div className="avatar__img-account">
+              <img src={client.avatar}></img>
+            </div>
+            <div style={{ float: 'right', width: '70%', alignItems: 'center', justifyContent: 'center' }}>
               <img className="account_decor_top" src="/account_decoration_top.svg" alt="img_account" />
               <div className="txt_container_account">
                 <h1 className="txt-account">Player<strong className="txt-account-strong"> {client.username}</strong>
@@ -536,49 +533,38 @@ function Account() {
               <img className="account_decor_down" src="/account_decoration_down.svg" alt="img_account" />
             </div>
           </div>
-          <div className="avatar__img-account">
-            <img src={client.avatar}></img>
-          </div>
-          <div className="box-item">
-            <div className="inf-account">
-              <div className="friend-request">
-                {user_id === contextData.username ? '' :
-                  friendship === 'pending' ?
-                    <Pending_b /> : friendship === 'toReply' ?
-                      <SendNotification /> : friendship === 'friends' ?
-                        <Remove_b /> : <Add_b />}
-              </div>
+        </div>
 
-              {/* MATCHES */}
-              <div className="profile-card-inf__item">
-                <Scoreboard client={client} />
-              </div>
-              {/* FRIENDS */}
-              <div className="profile-card-inf__item">
-                <Friends_b />
-              </div>
-              {/* BLOCK FRIEND */}
-              <div className="profile-card-inf__item">
-                <Grid item xs={3}>
-                  <button className="noselect">
-                    <NoAccounts fontSize="large" />
-                  </button>
-                  {/* <div className="profile-card-inf__title">85</div> */}
-                  <div className="profile-card-inf__txt">BLOCK</div>
-                </Grid>
-              </div>
-              {/* AWARD*/}
-              <div className="profile-card-inf__item">
-                <Grid item xs={3}>
-                  <button className="noselect">
-                    <EmojiEventsIcon fontSize="large" />
-                  </button>
-                  {/* <div className="profile-card-inf__title">85</div> */}
-                  <div className="profile-card-inf__txt">AWARD</div>
-                </Grid>
-              </div>
+        <div className="box-item">
+          {/* <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: 224 }}> */}
+          {/* MATCHES */}
+
+          <Tabs
+            orientation="vertical"
+            variant="scrollable"
+            value={value}
+            onChange={handleChange}
+            aria-label="Vertical tabs"
+            sx={{ borderRight: 1, borderColor: 'divider', width: '15vw' }}
+          >
+            <Tab sx={{ fontFamily: 'Smooch Sans, sans-serif', fontWeight: '600', fontSize: '1.5vw' }} label="Matches" {...a11yProps(0)} />
+            <Tab sx={{ fontFamily: 'Smooch Sans, sans-serif', fontWeight: '600', fontSize: '1.5vw' }} label="Friends" {...a11yProps(1)} />
+            <Tab sx={{ fontFamily: 'Smooch Sans, sans-serif', fontWeight: '600', fontSize: '1.5vw' }} label="Award" {...a11yProps(2)} />
+
+          </Tabs>
+          <TabPanel value={value} index={0}>
+            <div className="">
+              <Scoreboard client={client} />
             </div>
-          </div>
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <div className="">
+              <Friends_b />
+            </div>
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            Item Three
+          </TabPanel>
         </div>
       </div>
     </>

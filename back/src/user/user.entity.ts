@@ -5,8 +5,10 @@ import {
   JoinTable,
   ManyToMany,
   OneToMany,
+  OneToOne,
   PrimaryColumn,
 } from "typeorm";
+import { Online } from "./online.entity";
 
 @Entity("users")
 export class User {
@@ -37,6 +39,9 @@ export class User {
   @ManyToMany(() => Rooms, (rooms) => rooms.admins) //non impostato ancora
   @JoinTable()
   managedRooms: Rooms[];
+
+  @OneToOne(() => Online, (online) => online.user)
+  status: Online
 
   @Column({ nullable: true })
   socket_id: string;

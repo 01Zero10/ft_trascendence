@@ -7,12 +7,13 @@ import Navigation from './Navigation';
 import Game from './Game';
 import Logout from './Logout';
 import Login from './Login';
-import Account from './Account';
+//import Account from './Account';
 import Settings from './Settings';
 import Chat from './Chat';
 import Chat2 from './About';
 import Loader from './components/Loader';
 import { io, Socket } from 'socket.io-client';
+import Account from './Account';
 
 export interface Rooms {
   name: string;
@@ -130,7 +131,7 @@ function App() {
                 <Route path={`/users/:user_id`} element={<Account />} />
                 <Route path="/leaderbord" />
                 <Route path="/logout" element={<Logout />} />
-                <Route path="/game" element={<Game />} />
+                <Route path="/game" element={<Game socket={socket} />} />
                 <Route path="/users/settings" element={<Settings />} />
                 <Route path="/chat" element={<Chat socket={socket} />} />
               </Routes>

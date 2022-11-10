@@ -6,9 +6,8 @@ import fetch from 'node-fetch';
 import { User } from "./user.entity";
 import { CreateUserDto } from "./utils/user.dto";
 import { JwtService } from "@nestjs/jwt";
-import { Rooms } from "src/chat/rooms.entity";
-import { Match } from "src/game/match.entity";
 import { Friendship } from "./friendship.entity";
+import { Online } from "./online.entity";
 
 export interface FriendListItem {
   username: string;
@@ -23,11 +22,12 @@ export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Friendship) private friendShipRepository: Repository<Friendship>,
+    @InjectRepository(Online) private onlineRepository: Repository<Online>,
     private readonly jwt: JwtService,
   ) {}
 
   async getById(id_p : number): Promise<User> {
-    return this.userRepository.findOne({ where: { id: id_p } });
+    return await this.userRepository.findOne({ where: { id: id_p } });
   }
 
   async getByUsername(login: string): Promise<User> {
@@ -155,8 +155,8 @@ export class UserService {
         User.blockedUsers.splice(index, 1);
     else
         User.blockedUsers.push(userToBlock);
-    console.log
-    console.log(User.blockedUsers);
+    //console.log
+    //console.log(User.blockedUsers);
     await this.userRepository.save(User)
   }
 
@@ -173,7 +173,7 @@ export class UserService {
       };
     const param1 = (client1 < client2) ? client1 : client2;
     const param2 = (param1 == client1) ? client2 : client1;
-    console.log("param", param1, param2)
+    //console.log("param", param1, param2)
     const response = await this.friendShipRepository
     .createQueryBuilder("friend")
     .where("friend.user1 = :param1", { param1 })
@@ -181,7 +181,7 @@ export class UserService {
     .select(['friend.friendship', 'friend.sender'])
     .getOne()
     .catch(() => { //pare non faccia niente
-      console.log("dentro no friend")
+      //console.log("dentro no friend")
      return nofriend;
     });
     if (response == null) 
@@ -193,7 +193,7 @@ export class UserService {
   async addFriend(client: string, profileUser: string){
     const friend1: string = (client < profileUser) ? client : profileUser;
     const friend2: string = (client == friend1) ? profileUser : client;
-    console.log(friend1, friend2, client);
+    //console.log(friend1, friend2, client);
     
     return this.friendShipRepository.save({
       user1: friend1,
@@ -248,7 +248,7 @@ export class UserService {
     userProfileUser.friends.push(client)
     await this.userRepository.save(userClient);
     await this.userRepository.save(userProfileUser);
-    console.log("friend", userClient.friends);
+    //console.log("friend", userClient.friends);
     await this.friendShipRepository.save(request);
   }
 
@@ -259,13 +259,13 @@ export class UserService {
 
   async getFriends(client: string, profileUser: string){
     const arrayFriends = (await this.getByUsername(profileUser)).friends;
-    console.log(arrayFriends);
+    //console.log(arrayFriends);
     const response: FriendListItem[] = [];
     if (arrayFriends && arrayFriends.length > 0)
     {
       await Promise.all(await arrayFriends.map(async (element) => {
         const player = await this.getByUsername(element);
-        console.log((await this.checkFriendship(client, player.username)).friendship);
+        //console.log((await this.checkFriendship(client, player.username)).friendship);
         const item: FriendListItem = { 
           username: player.username,
           nickname: player.nickname,
@@ -281,7 +281,7 @@ export class UserService {
 
   async getListFriends(client: string){
     const arrayFriends = (await this.getByUsername(client)).friends;
-    console.log(arrayFriends);
+    //console.log(arrayFriends);
     const response: string[] = [];
     if (arrayFriends)
     {
@@ -291,4 +291,41 @@ export class UserService {
     }
     return response;
   }
+
+  async setOnlineStatus(userID: string){
+    const client = await this.getById(Number(userID));
+    await this.setOfflineStatus(userID);
+    if (client){
+    const newbie = this.onlineRepository.create();
+    newbie.status = 'online'
+    newbie.user = client;
+    return await this.onlineRepository.save(newbie);
+    }
+  }
+
+  async setOfflineStatus(userID: string){
+    const toSetOffline = await this.onlineRepository.createQueryBuilder("online")
+    .leftJoinAndSelect("online.user", "user")
+    .where("user.id = :userID", {userID})
+    .getOne()
+    .catch(() => {return null});
+    //console.log(toSetOffline);
+    if (toSetOffline)
+      await this.onlineRepository.remove(toSetOffline);
+  }
+
+  async getOnlineFriends(client: string){
+    const clientFriends = (await this.getById(Number(client))).friends;
+    const onlineFriends = await this.onlineRepository
+    .createQueryBuilder('online')
+    .leftJoinAndSelect('online.user', 'user')
+    .where('user.username IN (:...clientFriends)', {clientFriends: clientFriends})
+    .andWhere("online.status = :online", {online: 'online'})
+    .select(['online.id', 'user.username', 'user.nickname', 'user.avatar'])
+    .getMany()
+    //.catch(() => {return null});
+    //console.log(onlineFriends);
+    return onlineFriends;
+  }
+  
 }

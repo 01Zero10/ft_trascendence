@@ -40,15 +40,15 @@ export class UsersController {
 
   @Post('blockUser')
   async blockUser(@Body('client') client: string, @Body('userToBlock')userToBlock: string){
-    console.log(["___blockUser"]);
-    console.log("client = ", client, "userToBlock = ", userToBlock);
+    //console.log(["___blockUser"]);
+    //console.log("client = ", client, "userToBlock = ", userToBlock);
     await this.userService.blockUser(client, userToBlock);
     //return ();
   }
 
   @Post('checkFriendship')
   async checkFriendship(@Body('client1') client1: string, @Body('client2')client2: string){
-    console.log("[__checkFriendship]");
+    //console.log("[__checkFriendship]");
     return await this.userService.checkFriendship(client1, client2);
     //return ()
   }
@@ -81,6 +81,11 @@ export class UsersController {
   @Get('getListFriends/:client')
   async GetListFriends(@Param('client') client: string){
     return await this.userService.getListFriends(client);
+  }
+
+  @Get('getOnlineFriends/:client')
+  async GetOnlineFriends(@Param('client') client: string){
+    return await this.userService.getOnlineFriends(client);
   }
 
   /*@Put("create/:username") //da aggiungere qualcosa qui???

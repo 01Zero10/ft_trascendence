@@ -8,3 +8,4 @@ front/package-lock.json
 front/.env
 back/.env
 *env
+*/package-lock.json

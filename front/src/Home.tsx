@@ -12,7 +12,7 @@ mettere il wrapper (componente) così rimane la Navbar ma la pagina cambia */
 // background = addEventListener('move', handleMove)
 
 // const function handleMove() {
-//   console.log("ao")
+//   //console.log("ao")
 // }
 // $(background).mousemove(function(event) {
 //   windowWidth = $(window).width();
@@ -29,16 +29,19 @@ function Home() {
   const contextData = useContext(Student);
 
   return (
-    <div className='homeContainer'>
-      {/* <div className='radial-gradient'> */}
-      <div className='Title'>
-        <h1 className='h1_title'>FT_TRANSCENDENCE</h1>
-        <h3 className='h3_title'>Progetto realizzato dal team: {process.env.REACT_APP_IP_ADDR} </h3>
-        <Link to="/game">
-          <button className='myButton'>Play Now</button>
-        </Link>
+    <>
 
-        {/* <ul>
+      <div className='homeContainer'>
+
+        {/* <div className='radial-gradient'> */}
+        <div className='Title'>
+          <h1 className='h1_title'>FT_TRANSCENDENCE</h1>
+          <h3 className='h3_title'>Progetto realizzato dal team: {process.env.REACT_APP_IP_ADDR} </h3>
+          <Link to="/game">
+            <button className='myButton'>Play Now</button>
+          </Link>
+
+          {/* <ul>
           {data.hits.map((item:any) => (
             <li key={item.username}>
               <a href={item.url}>{item.title}</a>
@@ -46,14 +49,15 @@ function Home() {
           ))}
         </ul>  */}
 
-      </div>
-      {/*       <div className='Chip'>
+        </div>
+        {/*       <div className='Chip'>
           <img src="chip.svg" alt="img" />
         </div> */}
-      <Holder />
-      {/* </div> */}
-    </div>
-
+        <Holder />
+        {/* </div> */}
+      </div>
+      <div className='_prv_'></div>
+    </>
   );
 
 }
