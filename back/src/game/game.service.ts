@@ -103,32 +103,64 @@ export class GameService{
         return this.runningMatches.findOne({where: {playRoom: playRoom}});
     }
 
-    async setKeysPlayer(namePlayRoom: string, side: string, dir: number=1){
+    // async setKeysPlayer(namePlayRoom: string, side: string, dir: number=1){
+    //     console.log("set keys ", this.mapPlRoom.get(namePlayRoom));
+    //     if (side === 'left'){
+    //         if (dir > 0)
+    //             this.mapPlRoom.get(namePlayRoom).leftPlayer.up = !this.mapPlRoom.get(namePlayRoom).leftPlayer.up;
+    //         else
+    //             this.mapPlRoom.get(namePlayRoom).leftPlayer.down = !this.mapPlRoom.get(namePlayRoom).leftPlayer.down;
+    //     }
+    //     else {
+    //         if (dir > 0)
+    //             this.mapPlRoom.get(namePlayRoom).rightPlayer.up = !this.mapPlRoom.get(namePlayRoom).rightPlayer.up;
+    //         else
+    //             this.mapPlRoom.get(namePlayRoom).rightPlayer.down = !this.mapPlRoom.get(namePlayRoom).rightPlayer.down;
+    //     }
+    // }
+
+    async setKeysPlayerPress(namePlayRoom: string, side: string, dir: number=1){
         console.log("set keys ", this.mapPlRoom.get(namePlayRoom));
         if (side === 'left'){
             if (dir > 0)
-                this.mapPlRoom.get(namePlayRoom).leftPlayer.up = !this.mapPlRoom.get(namePlayRoom).leftPlayer.up;
+                this.mapPlRoom.get(namePlayRoom).leftPlayer.up = true;
             else
-                this.mapPlRoom.get(namePlayRoom).leftPlayer.down = !this.mapPlRoom.get(namePlayRoom).leftPlayer.down;
+                this.mapPlRoom.get(namePlayRoom).leftPlayer.down = true;
         }
         else {
             if (dir > 0)
-                this.mapPlRoom.get(namePlayRoom).rightPlayer.up = !this.mapPlRoom.get(namePlayRoom).rightPlayer.up;
+                this.mapPlRoom.get(namePlayRoom).rightPlayer.up = true;
             else
-                this.mapPlRoom.get(namePlayRoom).rightPlayer.down = !this.mapPlRoom.get(namePlayRoom).rightPlayer.down;
+                this.mapPlRoom.get(namePlayRoom).rightPlayer.down = true;
+        }
+    }
+
+    async setKeysPlayerRelease(namePlayRoom: string, side: string, dir: number=1){
+        console.log("set keys ", this.mapPlRoom.get(namePlayRoom));
+        if (side === 'left'){
+            if (dir > 0)
+                this.mapPlRoom.get(namePlayRoom).leftPlayer.up = false;
+            else
+                this.mapPlRoom.get(namePlayRoom).leftPlayer.down = false;
+        }
+        else {
+            if (dir > 0)
+                this.mapPlRoom.get(namePlayRoom).rightPlayer.up = false;
+            else
+                this.mapPlRoom.get(namePlayRoom).rightPlayer.down = false;
         }
     }
 
     async updatePlayer(namePlayRoom: string){
         //console.log('entrato update player')
-        if (this.mapPlRoom.get(namePlayRoom).leftPlayer.up)
+        if (this.mapPlRoom.get(namePlayRoom).leftPlayer.up && this.mapPlRoom.get(namePlayRoom).leftPlayer.y >= 5 )
             this.mapPlRoom.get(namePlayRoom).leftPlayer.y += -5;
-        if (this.mapPlRoom.get(namePlayRoom).leftPlayer.down)
+        if (this.mapPlRoom.get(namePlayRoom).leftPlayer.down && this.mapPlRoom.get(namePlayRoom).leftPlayer.y <= canvasHeight - defaultPlayer.height)
             this.mapPlRoom.get(namePlayRoom).leftPlayer.y += +5;
 
-        if (this.mapPlRoom.get(namePlayRoom).rightPlayer.up)
+        if (this.mapPlRoom.get(namePlayRoom).rightPlayer.up && this.mapPlRoom.get(namePlayRoom).rightPlayer.y >= 5)
             this.mapPlRoom.get(namePlayRoom).rightPlayer.y += -5;
-        if (this.mapPlRoom.get(namePlayRoom).rightPlayer.down)
+        if (this.mapPlRoom.get(namePlayRoom).rightPlayer.down && this.mapPlRoom.get(namePlayRoom).rightPlayer.y <= canvasHeight - defaultPlayer.height)
             this.mapPlRoom.get(namePlayRoom).rightPlayer.y += +5;
             
         return(this.mapPlRoom.get(namePlayRoom))

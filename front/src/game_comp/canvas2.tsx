@@ -79,7 +79,7 @@ export default function Canvas(props: CanvasProps) {
   }
 
   function update(context: CanvasRenderingContext2D, ball: Ball, left: Player, right: Player) {
-    console.log("players", left, right);
+    //console.log("players", left, right);
     draw(context, ball, left, right);
   }
 
@@ -182,7 +182,7 @@ export default function Canvas(props: CanvasProps) {
   }
 
   function handleKeyPress(e: KeyboardEvent) {
-    console.log(props.clientPaddle)
+    console.log(e.key)
     if (moveKey.hasOwnProperty(e.key)) {
       e.preventDefault();
       props.socket.emit('onPress', { key: e.key, side: props.clientPaddle.side, playRoom: props.clientPaddle.playRoom });
