@@ -149,13 +149,31 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
     console.log("romminmap ", roomInMap);
     this.server.to(data.namePlayRoom).emit('start', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
     this.startTick(data.namePlayRoom);
+    //await this.sleep(3);
+    //this.gameService.updateIdInterval(data.namePlayRoom, this.startTick(data.namePlayRoom));
+    //console.log(typeof(id));
+  }
+
+  @SubscribeMessage('restart')
+  async handleRestart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string}){
+    console.log(clientSocket.id)
+    console.log('loooooog', data)
+    this.startTick(data.namePlayRoom);
   }
 
   startTick(namePlayRoom: string) {
-    setInterval(async () => {
-      await this.gameService.updateBall(namePlayRoom);
-      const roomInMap = await this.gameService.updatePlayer(namePlayRoom);
-      this.server.to(namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
+    var id = setInterval(async () => {
+      let roomInMap = await this.gameService.updatePlayer(namePlayRoom);
+      const restart = await this.gameService.updateBall(namePlayRoom);
+      if (restart){
+        roomInMap = await this.gameService.restart(namePlayRoom);
+        console.log(roomInMap.ball);
+        this.server.to(namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
+        this.server.to(namePlayRoom).emit('goal', namePlayRoom, 'brygonza');
+        clearInterval(id);
+      }
+      else
+        this.server.to(namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
     }, 10)
   }
   //--------
@@ -174,5 +192,9 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   async handleDisconnect(clientSocket: Socket) {
     await this.userService.setOfflineStatus(String(clientSocket.handshake.query.userID));
     this.logger.log(`clientSocket disconnected: ${clientSocket.id}`);
+  }
+
+  async sleep(time: number) {
+    await new Promise(f => setTimeout(f, time * 1000));
   }
 }

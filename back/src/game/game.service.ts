@@ -27,6 +27,7 @@ interface plRoom {
     leftPlayer: Player;
     rightPlayer: Player;
     ball: Ball;
+    idInterval?: object;
 }
 
 const canvasHeight = 750
@@ -71,7 +72,6 @@ export class GameService{
     }
 
     async generateBallDirection(namePlayRoom: string){
-        console.log('gnereat ', namePlayRoom);
         this.mapPlRoom.get(namePlayRoom).ball.dy= array_dir_y[Math.round(Math.random())];
         this.mapPlRoom.get(namePlayRoom).ball.direction = dir[Math.round(Math.random())] as "l" | "r";
         if (this.mapPlRoom.get(namePlayRoom).ball.direction === 'r')
@@ -92,12 +92,11 @@ export class GameService{
     }
 
     async restart(namePlayRoom: string){
-        this.mapPlRoom.get(namePlayRoom).leftPlayer = {...defaultPlayer}
-        this.mapPlRoom.get(namePlayRoom).rightPlayer = {...defaultPlayer}
+        this.mapPlRoom.get(namePlayRoom).leftPlayer = {...defaultPlayer, y: canvasHeight / 2 - defaultPlayer.height / 2},
+        this.mapPlRoom.get(namePlayRoom).rightPlayer = {...defaultPlayer, x: canvasWidth - defaultPlayer.width, y: canvasHeight / 2 - defaultPlayer.height / 2}
         this.ballDirectionAtRestart(namePlayRoom)
         return this.mapPlRoom.get(namePlayRoom);
     }
-
 
     async getPlayRoomByName(playRoom: string){
         return this.runningMatches.findOne({where: {playRoom: playRoom}});
@@ -120,7 +119,6 @@ export class GameService{
     // }
 
     async setKeysPlayerPress(namePlayRoom: string, side: string, dir: number=1){
-        console.log("set keys ", this.mapPlRoom.get(namePlayRoom));
         if (side === 'left'){
             if (dir > 0)
                 this.mapPlRoom.get(namePlayRoom).leftPlayer.up = true;
@@ -136,7 +134,6 @@ export class GameService{
     }
 
     async setKeysPlayerRelease(namePlayRoom: string, side: string, dir: number=1){
-        console.log("set keys ", this.mapPlRoom.get(namePlayRoom));
         if (side === 'left'){
             if (dir > 0)
                 this.mapPlRoom.get(namePlayRoom).leftPlayer.up = false;
@@ -149,6 +146,10 @@ export class GameService{
             else
                 this.mapPlRoom.get(namePlayRoom).rightPlayer.down = false;
         }
+    }
+
+    updateIdInterval(namePlayRoom: string, id: object){
+        this.mapPlRoom.get(namePlayRoom).idInterval = id;
     }
 
     async updatePlayer(namePlayRoom: string){
@@ -177,6 +178,7 @@ export class GameService{
             else {
             this.mapPlRoom.get(namePlayRoom).ball.dx = 0
             this.mapPlRoom.get(namePlayRoom).ball.dy = 0
+            return 1;
             //props.socket.emit("gol_right", { name: props.clientPaddle.playRoom })
             // startBall() reset
             }
@@ -187,13 +189,19 @@ export class GameService{
             else {
             this.mapPlRoom.get(namePlayRoom).ball.dx = 0
             this.mapPlRoom.get(namePlayRoom).ball.dy = 0
+            return 1;
             //props.socket.emit("gol_left", { name: props.clientPaddle.playRoom })
             // startBall() reset
             }
         }
         this.mapPlRoom.get(namePlayRoom).ball.x += this.mapPlRoom.get(namePlayRoom).ball.dx
         this.mapPlRoom.get(namePlayRoom).ball.y += this.mapPlRoom.get(namePlayRoom).ball.dy
+        return 0;
     }
+
+    async sleep(time: number) {
+        await new Promise(f => setTimeout(f, time * 1000));
+      }
 
     // async startTick(namePlayRoom: string){
     //     const playRoom = this.mapPlRoom.get(namePlayRoom);

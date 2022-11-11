@@ -10,7 +10,6 @@ import Login from './Login';
 //import Account from './Account';
 import Settings from './Settings';
 import Chat from './Chat';
-import Chat2 from './About';
 import Loader from './components/Loader';
 import { io, Socket } from 'socket.io-client';
 import Account from './Account';
@@ -123,7 +122,7 @@ function App() {
           <>
             <Student.Provider value={contextData}>
               {currPath !== "/" && <><Navigation /></>}
-              {currPath !== "/" && <><Chat2 /></>}
+              {/* {currPath !== "/" && <><Chat2 /></>} */}
 
               <Routes>
                 <Route path="/" element={<Login />} />
