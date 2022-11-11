@@ -197,17 +197,18 @@ export default function Canvas(props: CanvasProps) {
   }
 
   useEffect(() => {
-    props.socket.on('goal', (namePlayRoom: string, rightPlayer: string) => {
-
-      //sleep(3);
+    //const funz = async () => {
+    props.socket.on('goal', async (namePlayRoom: string, rightPlayer: string) => {
+      await sleep(3);
       if (props.clientPaddle.name === rightPlayer) {
         console.log('reeeestart0', namePlayRoom);
         props.socket.emit('restart', { namePlayRoom: namePlayRoom });
       }
     })
-    props.socket.on('update', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
-      update(context!, ball, leftPlayer, rightPlayer);
-    })
+    //}
+  }, [])
+
+  useEffect(() => {
     // props.socket.on("restart", (left: boolean) => {
     //   if (left) {
     //     props.setPoint((prevState: any) => { return { ...prevState, left: prevState.left + 1 } })
@@ -217,6 +218,9 @@ export default function Canvas(props: CanvasProps) {
     //   }
     //   restart()
     // })
+    props.socket.on('update', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
+      update(context!, ball, leftPlayer, rightPlayer);
+    })
     props.socket.once('ready', (namePlayRoom: string) => {
       console.log("ricevuto ready ");
       setLoader(false);
