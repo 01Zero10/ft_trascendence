@@ -145,16 +145,15 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   @SubscribeMessage('setStart')
   async handleSetStart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string}){
     console.log("socket start = ", clientSocket.id);
-    const playRoom = await this.gameService.getPlayRoomByName(data.namePlayRoom);
     const roomInMap = await this.gameService.generateBallDirection(data.namePlayRoom);
     console.log("romminmap ", roomInMap);
-    this.server.to(clientSocket.id).emit('start', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
+    this.server.to(data.namePlayRoom).emit('start', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
     this.startTick(data.namePlayRoom);
   }
 
-
   startTick(namePlayRoom: string) {
     setInterval(async () => {
+      await this.gameService.updateBall(namePlayRoom);
       const roomInMap = await this.gameService.updatePlayer(namePlayRoom);
       this.server.to(namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
     }, 10)

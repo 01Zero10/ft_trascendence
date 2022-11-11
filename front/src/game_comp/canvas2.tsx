@@ -212,7 +212,10 @@ export default function Canvas(props: CanvasProps) {
     props.socket.once('ready', (namePlayRoom: string) => {
       console.log("ricevuto ready ");
       setLoader(false);
-      props.socket.emit('setStart', { namePlayRoom: namePlayRoom });
+      console.log(props.clientPaddle)
+      console.log("re-e-eady ", (props.clientPaddle.side === 'right'))
+      if (props.clientPaddle.side === 'right')
+        props.socket.emit('setStart', { namePlayRoom: namePlayRoom });
     })
     props.socket.once('start', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
       if (canvasRef.current)
@@ -237,7 +240,7 @@ export default function Canvas(props: CanvasProps) {
     //     moveKey[down] = false;
     //   //moveKey[key as 'ArrowUp' | 'ArrowDown' | 's' | 'w'] = false
     // })
-  }, [props.socket])
+  }, [props.socket, props.clientPaddle])
 
 
   // add event listener on canvas for mouse position
