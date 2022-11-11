@@ -100,6 +100,7 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   @SubscribeMessage('onPress')
   handleKeyPress(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {key: string, side: string, playRoom: string}): any {
+    console.log(data);
     console.log("pllll", data.playRoom)
     //if (data.key) 
     //this.server.to(data.playRoom).emit('onPress', data.key, data.side);
@@ -148,7 +149,7 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
     const roomInMap = await this.gameService.generateBallDirection(data.namePlayRoom);
     console.log("romminmap ", roomInMap);
     this.server.to(clientSocket.id).emit('start', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
-    //this.gameService.startTick(namePlayRoom);
+    this.startTick(data.namePlayRoom);
   }
 
 

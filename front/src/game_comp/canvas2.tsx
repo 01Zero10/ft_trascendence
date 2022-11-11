@@ -79,6 +79,7 @@ export default function Canvas(props: CanvasProps) {
   }
 
   function update(context: CanvasRenderingContext2D, ball: Ball, left: Player, right: Player) {
+    console.log("players", left, right);
     draw(context, ball, left, right);
   }
 
@@ -93,7 +94,7 @@ export default function Canvas(props: CanvasProps) {
   }
 
   const drawBall = (context: CanvasRenderingContext2D, ball: Ball) => {
-    console.log("drawball", ball)
+    //console.log("drawball", ball)
     context.beginPath()
     context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
     context.closePath()
@@ -180,19 +181,18 @@ export default function Canvas(props: CanvasProps) {
       Math.max(player.y + direction, 0)
   }
 
-  function handleKeyPress(e: KeyboardEvent, padd: any) {
+  function handleKeyPress(e: KeyboardEvent) {
     console.log(props.clientPaddle)
-    console.log("paddle", padd)
     if (moveKey.hasOwnProperty(e.key)) {
       e.preventDefault();
-      props.socket.emit('onPress', { key: e.key, side: padd.side, playRoom: padd.playRoom });
+      props.socket.emit('onPress', { key: e.key, side: props.clientPaddle.side, playRoom: props.clientPaddle.playRoom });
     }
   }
 
-  function handleKeyRelease(e: KeyboardEvent, padd: any) {
+  function handleKeyRelease(e: KeyboardEvent) {
     if (moveKey.hasOwnProperty(e.key)) {
       e.preventDefault()
-      props.socket.emit('onRelease', { key: e.key, side: padd.side, playRoom: padd.playRoom });
+      props.socket.emit('onRelease', { key: e.key, side: props.clientPaddle.side, playRoom: props.clientPaddle.playRoom });
     }
   }
 
@@ -219,37 +219,43 @@ export default function Canvas(props: CanvasProps) {
         context = canvasRef.current.getContext("2d");
       startGame(ball, leftPlayer, rightPlayer);
     })
-    props.socket.on('onPress', (key: string, side: string) => {
-      const up: 'ArrowUp' | 'w' = (side === 'left') ? 'w' : 'ArrowUp';
-      const down: 'ArrowDown' | 's' = (side === 'left') ? 's' : 'ArrowDown';
-      if (key === 'ArrowUp' || key === 'w')
-        moveKey[up] = true;
-      else
-        moveKey[down] = true;
-      //moveKey[key as 'ArrowUp' | 'ArrowDown' | 's' | 'w'] = true
-    })
-    props.socket.on('onRelease', (key: string, side: string) => {
-      const up: 'ArrowUp' | 'w' = (side === 'left') ? 'w' : 'ArrowUp';
-      const down: 'ArrowDown' | 's' = (side === 'left') ? 's' : 'ArrowDown';
-      if (key === 'ArrowUp' || key === 'w')
-        moveKey[up] = false;
-      else
-        moveKey[down] = false;
-      //moveKey[key as 'ArrowUp' | 'ArrowDown' | 's' | 'w'] = false
-    })
+    // props.socket.on('onPress', (key: string, side: string) => {
+    //   const up: 'ArrowUp' | 'w' = (side === 'left') ? 'w' : 'ArrowUp';
+    //   const down: 'ArrowDown' | 's' = (side === 'left') ? 's' : 'ArrowDown';
+    //   if (key === 'ArrowUp' || key === 'w')
+    //     moveKey[up] = true;
+    //   else
+    //     moveKey[down] = true;
+    //   //moveKey[key as 'ArrowUp' | 'ArrowDown' | 's' | 'w'] = true
+    // })
+    // props.socket.on('onRelease', (key: string, side: string) => {
+    //   const up: 'ArrowUp' | 'w' = (side === 'left') ? 'w' : 'ArrowUp';
+    //   const down: 'ArrowDown' | 's' = (side === 'left') ? 's' : 'ArrowDown';
+    //   if (key === 'ArrowUp' || key === 'w')
+    //     moveKey[up] = false;
+    //   else
+    //     moveKey[down] = false;
+    //   //moveKey[key as 'ArrowUp' | 'ArrowDown' | 's' | 'w'] = false
+    // })
   }, [props.socket])
 
 
   // add event listener on canvas for mouse position
 
   useLayoutEffect(() => {
-    document.addEventListener("keydown", (e) => handleKeyPress(e, props.clientPaddle))
-    document.addEventListener("keyup", (e) => handleKeyRelease(e, props.clientPaddle))
+    // document.addEventListener("keydown", (e) => handleKeyPress(e, props.clientPaddle))
+    // document.addEventListener("keyup", (e) => handleKeyRelease(e, props.clientPaddle))
+    // return () => {
+    //   document.removeEventListener("keydown", (e) => handleKeyPress(e, props.clientPaddle))
+    //   document.removeEventListener("keyup", (e) => handleKeyRelease(e, props.clientPaddle))
+    // }
+    document.addEventListener("keydown", handleKeyPress)
+    document.addEventListener("keyup", handleKeyRelease)
     return () => {
-      document.removeEventListener("keydown", (e) => handleKeyPress(e, props.clientPaddle))
-      document.removeEventListener("keyup", (e) => handleKeyRelease(e, props.clientPaddle))
+      document.removeEventListener("keydown", handleKeyPress)
+      document.removeEventListener("keyup", handleKeyRelease)
     }
-  }, [context])
+  }, [props.clientPaddle]) // !!! levato context e messo clientPaddle
 
   return (
     <div>

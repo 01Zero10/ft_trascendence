@@ -120,14 +120,15 @@ export class GameService{
     }
 
     async updatePlayer(namePlayRoom: string){
+        //console.log('entrato update player')
         if (this.mapPlRoom.get(namePlayRoom).leftPlayer.up)
             this.mapPlRoom.get(namePlayRoom).leftPlayer.y += 5;
-        if (this.mapPlRoom.get(namePlayRoom).leftPlayer.up)
+        if (this.mapPlRoom.get(namePlayRoom).leftPlayer.down)
             this.mapPlRoom.get(namePlayRoom).leftPlayer.y += -5;
 
         if (this.mapPlRoom.get(namePlayRoom).rightPlayer.up)
             this.mapPlRoom.get(namePlayRoom).rightPlayer.y += 5;
-        if (this.mapPlRoom.get(namePlayRoom).rightPlayer.up)
+        if (this.mapPlRoom.get(namePlayRoom).rightPlayer.down)
             this.mapPlRoom.get(namePlayRoom).rightPlayer.y += -5;
             
         return(this.mapPlRoom.get(namePlayRoom))
