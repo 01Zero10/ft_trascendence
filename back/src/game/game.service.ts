@@ -173,23 +173,33 @@ export class GameService{
             this.mapPlRoom.get(namePlayRoom).ball.dy = -this.mapPlRoom.get(namePlayRoom).ball.dy
         }
         if (this.mapPlRoom.get(namePlayRoom).ball.x + this.mapPlRoom.get(namePlayRoom).ball.dx < this.mapPlRoom.get(namePlayRoom).ball.radius) {
-            if (this.mapPlRoom.get(namePlayRoom).ball.y > this.mapPlRoom.get(namePlayRoom).leftPlayer.y + this.mapPlRoom.get(namePlayRoom).leftPlayer.width && this.mapPlRoom.get(namePlayRoom).ball.y < (this.mapPlRoom.get(namePlayRoom).leftPlayer.y + this.mapPlRoom.get(namePlayRoom).leftPlayer.height) + this.mapPlRoom.get(namePlayRoom).leftPlayer.width)
-            this.mapPlRoom.get(namePlayRoom).ball.dx = -this.mapPlRoom.get(namePlayRoom).ball.dx + 0.25
+            if (this.mapPlRoom.get(namePlayRoom).ball.y > this.mapPlRoom.get(namePlayRoom).leftPlayer.y + this.mapPlRoom.get(namePlayRoom).leftPlayer.width && 
+                this.mapPlRoom.get(namePlayRoom).ball.y < (this.mapPlRoom.get(namePlayRoom).leftPlayer.y + this.mapPlRoom.get(namePlayRoom).leftPlayer.height) + this.mapPlRoom.get(namePlayRoom).leftPlayer.width){
+                this.mapPlRoom.get(namePlayRoom).ball.dx = -this.mapPlRoom.get(namePlayRoom).ball.dx + 0.25
+                if (this.mapPlRoom.get(namePlayRoom).ball.dx > 20){
+                    this.mapPlRoom.get(namePlayRoom).ball.dx = 20
+                }
+            }
             else {
-            this.mapPlRoom.get(namePlayRoom).ball.dx = 0
-            this.mapPlRoom.get(namePlayRoom).ball.dy = 0
-            return 1;
+                this.mapPlRoom.get(namePlayRoom).ball.dx = 0
+                this.mapPlRoom.get(namePlayRoom).ball.dy = 0
+                return 1;
             //props.socket.emit("gol_right", { name: props.clientPaddle.playRoom })
             // startBall() reset
             }
         }
         if (this.mapPlRoom.get(namePlayRoom).ball.x + this.mapPlRoom.get(namePlayRoom).ball.dy > canvasWidth - this.mapPlRoom.get(namePlayRoom).ball.radius) {
-            if (this.mapPlRoom.get(namePlayRoom).ball.y > this.mapPlRoom.get(namePlayRoom).rightPlayer.y + this.mapPlRoom.get(namePlayRoom).rightPlayer.width && this.mapPlRoom.get(namePlayRoom).ball.y < (this.mapPlRoom.get(namePlayRoom).rightPlayer.y + this.mapPlRoom.get(namePlayRoom).rightPlayer.height) + this.mapPlRoom.get(namePlayRoom).rightPlayer.width)
-            this.mapPlRoom.get(namePlayRoom).ball.dx = -this.mapPlRoom.get(namePlayRoom).ball.dx + 0.25
+            if (this.mapPlRoom.get(namePlayRoom).ball.y > this.mapPlRoom.get(namePlayRoom).rightPlayer.y + this.mapPlRoom.get(namePlayRoom).rightPlayer.width && 
+                this.mapPlRoom.get(namePlayRoom).ball.y < (this.mapPlRoom.get(namePlayRoom).rightPlayer.y + this.mapPlRoom.get(namePlayRoom).rightPlayer.height) + this.mapPlRoom.get(namePlayRoom).rightPlayer.width){
+                this.mapPlRoom.get(namePlayRoom).ball.dx = -this.mapPlRoom.get(namePlayRoom).ball.dx - 0.25
+                if (this.mapPlRoom.get(namePlayRoom).ball.dx < -20){
+                    this.mapPlRoom.get(namePlayRoom).ball.dx = -20
+                }
+            }
             else {
-            this.mapPlRoom.get(namePlayRoom).ball.dx = 0
-            this.mapPlRoom.get(namePlayRoom).ball.dy = 0
-            return 1;
+                this.mapPlRoom.get(namePlayRoom).ball.dx = 0
+                this.mapPlRoom.get(namePlayRoom).ball.dy = 0
+                return 1;
             //props.socket.emit("gol_left", { name: props.clientPaddle.playRoom })
             // startBall() reset
             }
