@@ -198,17 +198,14 @@ export default function Canvas(props: CanvasProps) {
 
   useEffect(() => {
     //const funz = async () => {
-    props.socket.on('goal', async (data: {namePlayRoom: string, leftPlayer: string,  rightPlayer: string}) => {
-      console.log("Right Player ==== ", data.rightPlayer);
-      console.log("Right paddle ==== ", props.clientPaddle.name);
+    props.socket.on('goal', async (data: { namePlayRoom: string, rightPlayer: string, leftPlayer: string }) => {
+      console.log('reeeestart0', data);
+      // console.log("Right Player ==== ", data.rightPlayer);
+      // console.log("left paddle ==== ", data.leftPlayer)
+      //console.log("Right paddle ==== ", data.leftPlayer);
       await sleep(3);
       if (props.clientPaddle.name === data.rightPlayer) {
-        console.log('reeeestart0', data);
-        props.socket.emit('restart', {
-          namePlayRoom: data.namePlayRoom,
-          right: data.rightPlayer,
-          left: data.leftPlayer
-        });
+        props.socket.emit('restart', data);
       }
     })
     //}
@@ -240,8 +237,8 @@ export default function Canvas(props: CanvasProps) {
     props.socket.on('update', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
       update(context!, ball, leftPlayer, rightPlayer);
     })
-    props.socket.once('ready', (namePlayRoom: string) => {
-      //console.log("ricevuto ready ");
+    props.socket.once('ready', (namePlayRoom: string, leftClient: string, rightClient: string) => {
+      console.log("ricevuto ready ", leftClient, rightClient);
       setLoader(false);
       //console.log(props.clientPaddle)
       //console.log("re-e-eady ", (props.clientPaddle.side === 'right'))
@@ -254,8 +251,8 @@ export default function Canvas(props: CanvasProps) {
       if (props.clientPaddle.side === 'right')
         props.socket.emit('setStart', {
           namePlayRoom: namePlayRoom,
-          right: props.clientPaddle.name,
-          left: props.opponentPaddle.name
+          rightPlayer: rightClient,
+          leftPlayer: leftClient
         });
     })
     props.socket.once('start', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {

@@ -127,9 +127,10 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   @SubscribeMessage('requestOpponent') //RIPRENDERE DA QUI
-  handleJoinPlayRoom(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, side: string}): any {
+  async handleJoinPlayRoom(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, side: string}): Promise<any> {
     //console.log("socket = ", clientSocket.id);
-    this.server.to(data.namePlayRoom).emit('ready', data.namePlayRoom)
+    const playRoom = await this.gameService.getPlayRoomByName(data.namePlayRoom);
+    this.server.to(data.namePlayRoom).emit('ready', data.namePlayRoom, playRoom.leftSide, playRoom.rightSide)
   }
 
   @SubscribeMessage('gol_right')
@@ -143,8 +144,8 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   @SubscribeMessage('setStart')
-  async handleSetStart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, right: string, left: string}){
-    //console.log("socket start = ", clientSocket.id);
+  async handleSetStart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, rightPlayer: string, leftPlayer: string}){
+    console.log("start = ", data);
     const roomInMap = await this.gameService.generateBallDirection(data.namePlayRoom);
     //console.log("romminmap ", roomInMap);
     this.server.to(data.namePlayRoom).emit('start', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
@@ -155,27 +156,29 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   @SubscribeMessage('restart')
-  async handleRestart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, right: string, left: string}){
+  async handleRestart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, rightPlayer: string, leftPlayer: string}){
     //console.log(clientSocket.id)
     console.log('loooooog', data)
     this.startTick(data);
   }
 
-  startTick(data: {namePlayRoom: string, right: string, left: string}) {
+  startTick(data: {namePlayRoom: string, rightPlayer: string, leftPlayer: string}) {
     var id = setInterval(async () => {
       let roomInMap = await this.gameService.updatePlayer(data.namePlayRoom);
       const restart = await this.gameService.updateBall(data.namePlayRoom);
       if (restart){
+        console.log("dataTick ", data);
         roomInMap = await this.gameService.restart(data.namePlayRoom);
         //console.log(roomInMap.ball);
         this.server.to(data.namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
-        console.log(data.right)
+        // console.log(data.rightPlayer)
+        this.server.to(data.namePlayRoom).emit('goal', data);
         clearInterval(id);
-        this.server.to(data.namePlayRoom).emit('goal', {namePlayroom: data.namePlayRoom, leftPlayer: data.left, rightPlayer: data.right});
       }
       else
         this.server.to(data.namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
     }, 10)
+    console.log(id);
   }
   //--------
 
