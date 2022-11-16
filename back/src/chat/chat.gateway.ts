@@ -158,22 +158,22 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   async handleRestart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string}){
     console.log(clientSocket.id)
     console.log('loooooog', data)
-    this.startTick(data.namePlayRoom);
+    this.startTick(data);
   }
 
-  startTick(namePlayRoom: string) {
+  startTick(data: {namePlayRoom: string}) {
     var id = setInterval(async () => {
-      let roomInMap = await this.gameService.updatePlayer(namePlayRoom);
-      const restart = await this.gameService.updateBall(namePlayRoom);
+      let roomInMap = await this.gameService.updatePlayer(data.namePlayRoom);
+      const restart = await this.gameService.updateBall(data.namePlayRoom);
       if (restart){
-        roomInMap = await this.gameService.restart(namePlayRoom);
+        roomInMap = await this.gameService.restart(data.namePlayRoom);
         console.log(roomInMap.ball);
-        this.server.to(namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
-        this.server.to(namePlayRoom).emit('goal', namePlayRoom, 'brygonza');
+        this.server.to(data.namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
+        this.server.to(data.namePlayRoom).emit('goal', data.namePlayRoom, );
         clearInterval(id);
       }
       else
-        this.server.to(namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
+        this.server.to(data.namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
     }, 10)
   }
   //--------

@@ -174,7 +174,7 @@ export class GameService{
         }
         if (this.mapPlRoom.get(namePlayRoom).ball.x + this.mapPlRoom.get(namePlayRoom).ball.dx < this.mapPlRoom.get(namePlayRoom).ball.radius) {
             if (this.mapPlRoom.get(namePlayRoom).ball.y > this.mapPlRoom.get(namePlayRoom).leftPlayer.y + this.mapPlRoom.get(namePlayRoom).leftPlayer.width && this.mapPlRoom.get(namePlayRoom).ball.y < (this.mapPlRoom.get(namePlayRoom).leftPlayer.y + this.mapPlRoom.get(namePlayRoom).leftPlayer.height) + this.mapPlRoom.get(namePlayRoom).leftPlayer.width)
-            this.mapPlRoom.get(namePlayRoom).ball.dx = -this.mapPlRoom.get(namePlayRoom).ball.dx
+            this.mapPlRoom.get(namePlayRoom).ball.dx = -this.mapPlRoom.get(namePlayRoom).ball.dx + 0.25
             else {
             this.mapPlRoom.get(namePlayRoom).ball.dx = 0
             this.mapPlRoom.get(namePlayRoom).ball.dy = 0
@@ -185,7 +185,7 @@ export class GameService{
         }
         if (this.mapPlRoom.get(namePlayRoom).ball.x + this.mapPlRoom.get(namePlayRoom).ball.dy > canvasWidth - this.mapPlRoom.get(namePlayRoom).ball.radius) {
             if (this.mapPlRoom.get(namePlayRoom).ball.y > this.mapPlRoom.get(namePlayRoom).rightPlayer.y + this.mapPlRoom.get(namePlayRoom).rightPlayer.width && this.mapPlRoom.get(namePlayRoom).ball.y < (this.mapPlRoom.get(namePlayRoom).rightPlayer.y + this.mapPlRoom.get(namePlayRoom).rightPlayer.height) + this.mapPlRoom.get(namePlayRoom).rightPlayer.width)
-            this.mapPlRoom.get(namePlayRoom).ball.dx = -this.mapPlRoom.get(namePlayRoom).ball.dx
+            this.mapPlRoom.get(namePlayRoom).ball.dx = -this.mapPlRoom.get(namePlayRoom).ball.dx + 0.25
             else {
             this.mapPlRoom.get(namePlayRoom).ball.dx = 0
             this.mapPlRoom.get(namePlayRoom).ball.dy = 0
