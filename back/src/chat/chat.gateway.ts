@@ -148,7 +148,7 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
     const roomInMap = await this.gameService.generateBallDirection(data.namePlayRoom);
     console.log("romminmap ", roomInMap);
     this.server.to(data.namePlayRoom).emit('start', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
-    this.startTick(data.namePlayRoom);
+    this.startTick(data);
     //await this.sleep(3);
     //this.gameService.updateIdInterval(data.namePlayRoom, this.startTick(data.namePlayRoom));
     //console.log(typeof(id));
