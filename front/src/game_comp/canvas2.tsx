@@ -199,13 +199,31 @@ export default function Canvas(props: CanvasProps) {
   useEffect(() => {
     //const funz = async () => {
     props.socket.on('goal', async (namePlayRoom: string, rightPlayer: string) => {
+      console.log("Right Player ==== ", rightPlayer);
       await sleep(3);
       if (props.clientPaddle.name === rightPlayer) {
         console.log('reeeestart0', namePlayRoom);
-        props.socket.emit('restart', { namePlayRoom: namePlayRoom });
+        props.socket.emit('restart', {
+          namePlayRoom: namePlayRoom,
+          right: (props.clientPaddle.side === 'right') ? props.clientPaddle.name : props.opponentPaddle.name,
+          left: (props.clientPaddle.side === 'left') ? props.clientPaddle.name : props.opponentPaddle.name,
+        });
       }
     })
     //}
+
+    // props.socket.once('ready', (namePlayRoom: string) => {
+    //   console.log("ricevuto ready ");
+    //   setLoader(false);
+    //   console.log(props.clientPaddle)
+    //   console.log("re-e-eady ", (props.clientPaddle.side === 'right'))
+    //   if (props.clientPaddle.side === 'right')
+    //     props.socket.emit('setStart', {
+    //       namePlayRoom: namePlayRoom,
+    //       right: props.clientPaddle.name,
+    //       left: props.opponentPaddle.name
+    //     });
+    // })
   }, [])
 
   useEffect(() => {
@@ -226,8 +244,18 @@ export default function Canvas(props: CanvasProps) {
       setLoader(false);
       console.log(props.clientPaddle)
       console.log("re-e-eady ", (props.clientPaddle.side === 'right'))
+      // if (props.clientPaddle.side === 'right')
+      //   props.socket.emit('setStart', {
+      //     namePlayRoom: namePlayRoom,
+      //     right: (props.clientPaddle.side === 'right') ? props.clientPaddle.name : props.opponentPaddle.name,
+      //     left: (props.clientPaddle.side === 'left') ? props.clientPaddle.name : props.opponentPaddle.name
+      //   });
       if (props.clientPaddle.side === 'right')
-        props.socket.emit('setStart', { namePlayRoom: namePlayRoom });
+        props.socket.emit('setStart', {
+          namePlayRoom: namePlayRoom,
+          right: props.clientPaddle.name,
+          left: props.opponentPaddle.name
+        });
     })
     props.socket.once('start', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
       if (canvasRef.current)
