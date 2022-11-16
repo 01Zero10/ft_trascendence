@@ -51,7 +51,7 @@ export default function Canvas(props: CanvasProps) {
   let context: CanvasRenderingContext2D | null = null;
   const [loader, setLoader] = useState<boolean>(true);
 
-  console.log("racchetta ", props.clientPaddle);
+  //console.log("racchetta ", props.clientPaddle);
   let moveKey: MoveKey = { s: false, w: false, ArrowUp: false, ArrowDown: false }
 
   const rightPlayer = {
@@ -182,7 +182,7 @@ export default function Canvas(props: CanvasProps) {
   }
 
   function handleKeyPress(e: KeyboardEvent) {
-    console.log(e.key)
+    //console.log(e.key)
     if (moveKey.hasOwnProperty(e.key)) {
       e.preventDefault();
       props.socket.emit('onPress', { key: e.key, side: props.clientPaddle.side, playRoom: props.clientPaddle.playRoom });
@@ -199,10 +199,10 @@ export default function Canvas(props: CanvasProps) {
   useEffect(() => {
     //const funz = async () => {
     props.socket.on('goal', async (namePlayRoom: string, rightPlayer: string) => {
-      console.log("Right Player ==== ", rightPlayer);
+      //console.log("Right Player ==== ", rightPlayer);
       await sleep(3);
       if (props.clientPaddle.name === rightPlayer) {
-        console.log('reeeestart0', namePlayRoom);
+        //console.log('reeeestart0', namePlayRoom);
         props.socket.emit('restart', {
           namePlayRoom: namePlayRoom,
           right: (props.clientPaddle.side === 'right') ? props.clientPaddle.name : props.opponentPaddle.name,
@@ -213,10 +213,10 @@ export default function Canvas(props: CanvasProps) {
     //}
 
     // props.socket.once('ready', (namePlayRoom: string) => {
-    //   console.log("ricevuto ready ");
+    //   //console.log("ricevuto ready ");
     //   setLoader(false);
-    //   console.log(props.clientPaddle)
-    //   console.log("re-e-eady ", (props.clientPaddle.side === 'right'))
+    //   //console.log(props.clientPaddle)
+    //   //console.log("re-e-eady ", (props.clientPaddle.side === 'right'))
     //   if (props.clientPaddle.side === 'right')
     //     props.socket.emit('setStart', {
     //       namePlayRoom: namePlayRoom,
@@ -240,10 +240,10 @@ export default function Canvas(props: CanvasProps) {
       update(context!, ball, leftPlayer, rightPlayer);
     })
     props.socket.once('ready', (namePlayRoom: string) => {
-      console.log("ricevuto ready ");
+      //console.log("ricevuto ready ");
       setLoader(false);
-      console.log(props.clientPaddle)
-      console.log("re-e-eady ", (props.clientPaddle.side === 'right'))
+      //console.log(props.clientPaddle)
+      //console.log("re-e-eady ", (props.clientPaddle.side === 'right'))
       // if (props.clientPaddle.side === 'right')
       //   props.socket.emit('setStart', {
       //     namePlayRoom: namePlayRoom,

@@ -50,7 +50,7 @@ function PlayGround(props: any) {
 
     useEffect(() => {
         if (clientSide.side === '') {
-            console.log("stampa npme")
+            //console.log("stampa npme")
             props.socket.emit('connectToGame', { username: contextData.username, avatar: contextData.avatar });
         }
     }, [])
@@ -58,9 +58,9 @@ function PlayGround(props: any) {
 
     useEffect(() => {
         props.socket.once('connectedToGame', (namePlayRoom: string, side: string) => {
-            console.log("once ", side, namePlayRoom)
+            //console.log("once ", side, namePlayRoom)
             setClientSide((prevState) => { return ({ ...prevState, side: side, playRoom: namePlayRoom }) })
-            console.log("SIDE ", side);
+            //console.log("SIDE ", side);
             if (side === 'right')
                 props.socket.emit('requestOpponent', { namePlayRoom: namePlayRoom, side: side })
             //props.socket.emit('joinPlayRoom', { namePlayRoom: namePlayRoom, side: side });

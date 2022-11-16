@@ -100,8 +100,8 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   @SubscribeMessage('onPress')
   handleKeyPress(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {key: string, side: string, playRoom: string}): any {
-    console.log(data);
-    console.log("pllll", data.playRoom)
+    //console.log(data);
+    //console.log("pllll", data.playRoom)
     //if (data.key) 
     //this.server.to(data.playRoom).emit('onPress', data.key, data.side);
     if(data.key === 'w' || data.key === 'ArrowUp' )
@@ -122,13 +122,13 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   async handleClientSide(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {username: string, avatar: string}): Promise<any> {
     const ret = await this.gameService.createOrJoinPlayRoom(data.username, data.avatar)
     clientSocket.join(ret.namePlayRoom);
-    console.log("reeeet = ", ret);
+    //console.log("reeeet = ", ret);
     this.server.to(clientSocket.id).emit('connectedToGame', ret.namePlayRoom, ret.side)
   }
 
   @SubscribeMessage('requestOpponent') //RIPRENDERE DA QUI
   handleJoinPlayRoom(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, side: string}): any {
-    console.log("socket = ", clientSocket.id);
+    //console.log("socket = ", clientSocket.id);
     this.server.to(data.namePlayRoom).emit('ready', data.namePlayRoom)
   }
 
@@ -144,9 +144,9 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   @SubscribeMessage('setStart')
   async handleSetStart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, right: string, left: string}){
-    console.log("socket start = ", clientSocket.id);
+    //console.log("socket start = ", clientSocket.id);
     const roomInMap = await this.gameService.generateBallDirection(data.namePlayRoom);
-    console.log("romminmap ", roomInMap);
+    //console.log("romminmap ", roomInMap);
     this.server.to(data.namePlayRoom).emit('start', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
     await this.sleep(3);
     this.startTick(data);
@@ -156,8 +156,8 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   @SubscribeMessage('restart')
   async handleRestart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, right: string, left: string}){
-    console.log(clientSocket.id)
-    console.log('loooooog', data)
+    //console.log(clientSocket.id)
+    //console.log('loooooog', data)
     this.startTick(data);
   }
 
@@ -167,7 +167,7 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
       const restart = await this.gameService.updateBall(data.namePlayRoom);
       if (restart){
         roomInMap = await this.gameService.restart(data.namePlayRoom);
-        console.log(roomInMap.ball);
+        //console.log(roomInMap.ball);
         this.server.to(data.namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
         this.server.to(data.namePlayRoom).emit('goal', {namePlayroom: data.namePlayRoom, rightPlayer: data.right});
         clearInterval(id);
@@ -179,7 +179,7 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   //--------
 
   afterInit(server: Server) {
-    this.logger.log('Init');
+    this.logger.log('Init')
     //join memberships rooms;
   }
 
