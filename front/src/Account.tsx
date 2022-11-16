@@ -150,7 +150,7 @@ function Scoreboard(props: any) {
 
   useEffect(() => {
     async function getMatches() {
-      //console.log(MATCH_API);
+      console.log(MATCH_API);
       let response = await fetch(MATCH_API);
       let data = await response.json();
       let fetchMatches: Match[] = [];
@@ -163,7 +163,7 @@ function Scoreboard(props: any) {
     }
     getMatches();
   }, [props.client])
-  //console.log(matches);
+  console.log(matches);
 
 
   return (
@@ -174,13 +174,13 @@ function Scoreboard(props: any) {
             <ListItem>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Avatar sx={{ width: 56, height: 56 }} src={p.avatar1} />
-                <ListItemText primary={p.player1} />
+                <ListItemText sx={{ color: '#fff' }} primary={p.player1} />
               </div>
             </ListItem>
             <ListItem>
-              <p style={{ fontSize: '1.5vw', fontWeight: '500' }}>{p.points1}</p>
-              <p style={{ fontFamily: 'Odibee Sans, sans-serif', fontSize: '2.8vw', padding: '0 4rem', color: '#781C9C' }}> VS </p>
-              <p style={{ fontSize: '1.5vw', fontWeight: '500' }}>{p.points2}</p>
+              <p style={{ fontSize: '1.5vw', fontWeight: '500', color: '#fff' }}>{p.points1}</p>
+              <p className="VS"> VS </p>
+              <p style={{ fontSize: '1.5vw', fontWeight: '500', color: '#fff' }}>{p.points2}</p>
               {/* <ListItemText primary={p.points1} />
           <ListItemText primary=' VS ' />
           <ListItemText primary={p.points2} /> */}
@@ -188,7 +188,7 @@ function Scoreboard(props: any) {
             <ListItem>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Avatar sx={{ width: 56, height: 56 }} src={p.avatar2} />
-                <ListItemText primary={p.player2} />
+                <ListItemText sx={{ color: '#fff' }} primary={p.player2} />
               </div>
             </ListItem>
           </List>
@@ -219,7 +219,7 @@ function Account() {
   const { user_id } = useParams();
 
   useEffect(() => {
-    //console.log('user_id: ', user_id);
+    console.log('user_id: ', user_id);
   }, [user_id])
 
   useEffect(() => {
@@ -230,7 +230,7 @@ function Account() {
       })
         .then((response) => response.json())
         .then((result) => {
-          //console.log(result);
+          console.log(result);
           setClient({
             id: result.id,
             username: result.username,
@@ -279,7 +279,7 @@ function Account() {
   /*   const ciao = useParams<"user_id">();
 
     useEffect(() => {
-      //console.log(ciao);
+      console.log(ciao);
     }, [ciao]) */
 
   //PROVA ALERT PER RICHIESTA
@@ -290,7 +290,7 @@ function Account() {
     const { isOpen, toggle, handleClose } = useModal();
 
     const [friendsUser, setFriendsUser] = useState<FriendshipsUser[]>([]);
-    //console.log("qui", friendsUser);
+    console.log("qui", friendsUser);
 
     useEffect(() => {
       const API_URL_GET_FRIENDS = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/getFriends`;
@@ -332,7 +332,7 @@ function Account() {
             <List sx={{ width: '100%', bgcolor: 'transparent', display: 'flex', alignItems: 'center' }} key={f.username}>
               <ListItem>
                 <Avatar sx={{ width: 56, height: 56 }} src={f.avatar} />
-                <ListItemText primary={f.username} secondary={f.nickname} />
+                <ListItemText primary={f.username} secondary={f.nickname} sx={{ color: '#fff' }} />
               </ListItem>
               <ListItem>
                 <div style={{ textAlign: 'center' }}>
@@ -344,9 +344,9 @@ function Account() {
                 {user_id === contextData.username && f.username === user_id ? 'nope' :
                   (f.friendship && f.friendship.friendship === 'pending') ?
                     <Pending_b_small username={f.username} /> : (f.friendship && f.friendship.friendship === 'friends') ?
-                      <div style={{ textAlign: 'center' }} ><CheckCircle style={{ color: 'green' }} />
+                      <div style={{ textAlign: 'center', color: '#fff' }} ><CheckCircle sx={{ color: '#6626ee', paddingBottom: '5%' }} />
                         <p className="p_friendlist" /> FRIEND</div> :
-                      <div style={{ textAlign: 'center' }} ><IconButton sx={{ color: red[500] }} component="label"
+                      <div style={{ textAlign: 'center', color: '#fff' }} ><IconButton sx={{ color: '#e91e63', paddingBottom: '5%' }} component="label"
                         onClick={() => addFriend(f.username!)}>
                         <AddCircle fontSize="medium" />
                       </IconButton>
@@ -354,7 +354,6 @@ function Account() {
                   /* <Remove_b_small /> : <Add_b_small />*/
                 }
               </ListItem>
-              <Divider variant="middle" />
             </List>
           ))}
         </div>
@@ -509,7 +508,7 @@ function Account() {
 
         <div className="request">
           <div>
-            <h1 style={{ textAlign: 'center', padding: '5%', fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', fontSize: '2.5vw' }}>Friendship</h1>
+            <h1 style={{ textAlign: 'center', padding: '3%', fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', fontSize: '2.5vw', color: '#fff' }}>Friendship</h1>
             {user_id === contextData.username ? '' :
               friendship === 'pending' ?
                 <Pending_b /> : friendship === 'toReply' ?
@@ -547,9 +546,9 @@ function Account() {
             aria-label="Vertical tabs"
             sx={{ borderRight: 1, borderColor: 'divider', width: '15vw' }}
           >
-            <Tab sx={{ fontFamily: 'Smooch Sans, sans-serif', fontWeight: '600', fontSize: '1.5vw' }} label="Matches" {...a11yProps(0)} />
-            <Tab sx={{ fontFamily: 'Smooch Sans, sans-serif', fontWeight: '600', fontSize: '1.5vw' }} label="Friends" {...a11yProps(1)} />
-            <Tab sx={{ fontFamily: 'Smooch Sans, sans-serif', fontWeight: '600', fontSize: '1.5vw' }} label="Award" {...a11yProps(2)} />
+            <Tab sx={{ fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.1rem', fontWeight: '600', fontSize: '1.5vw', color: '#fff' }} label="Matches" {...a11yProps(0)} />
+            <Tab sx={{ fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.1rem', fontWeight: '600', fontSize: '1.5vw', color: '#fff' }} label="Friends" {...a11yProps(1)} />
+            <Tab sx={{ fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.1rem', fontWeight: '600', fontSize: '1.5vw', color: '#fff' }} label="Award" {...a11yProps(2)} />
 
           </Tabs>
           <TabPanel value={value} index={0}>
@@ -567,6 +566,7 @@ function Account() {
           </TabPanel>
         </div>
       </div>
+      <div className='_prv_'></div>
     </>
   )
 }

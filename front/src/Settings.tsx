@@ -1,4 +1,4 @@
-import { Box, Fab, Fade, IconButton, Modal, Popover, Switch, TextField } from '@mui/material';
+import { Avatar, Badge, Box, Fab, Fade, IconButton, InputAdornment, Modal, Popover, Switch, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import EditIcon from '@mui/icons-material/Edit';
@@ -8,9 +8,9 @@ import './Settings.css'
 
 
 const style2 = {
-  position: 'absolute' as 'absolute',
-  right: '15%',
-  bottom: '12%',
+  position: 'relative',
+  right: '1%',
+  bottom: '1%',
   color: '#781C9C',
 };
 
@@ -19,12 +19,12 @@ const style_badge = {
   right: '38%',
   top: '25%',
   color: '#fff',
-  bgcolor: '#781C9C',
+  bgcolor: 'rgba(102,38,238,1)',
 }
 
 const style_edit = {
   color: '#fff',
-  bgcolor: '#781C9C',
+  bgcolor: 'rgba(102,38,238,1)',
   left: '4%',
   height: '35px',
   width: '35px ',
@@ -267,12 +267,26 @@ function Settings() {
       contextData.username = name
       // fetchUser();
     }
+
     return (
       <>
-        <TextField label={`${contextData.username}`} value={name} type="text" onChange={testOnChange} inputProps={{ maxLength: 15, minLength: 1, }} />
-        <IconButton sx={style2} onClick={(event) => { fetchUser(event) }} disabled={name.length !== 0 && 2 ? false : true}>
+        <TextField value={name} type="text" onChange={testOnChange} inputProps={{ maxLength: 15, minLength: 1, }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton sx={{ color: 'rgba(102,38,238,1)' }}
+                  onClick={(event) => { fetchUser(event) }}
+                  disabled={name.length !== 0 && 2 ? false : true}
+                  edge="end"
+                ><SendIcon />
+                </IconButton>
+              </InputAdornment>
+            )
+
+          }} />
+        {/* <IconButton sx={style2} onClick={(event) => { fetchUser(event) }} disabled={name.length !== 0 && 2 ? false : true}>
           <SendIcon />
-        </IconButton>
+        </IconButton> */}
       </>
     )
   }
@@ -293,11 +307,23 @@ function Settings() {
               onChange={loadFile}
             //value={selectedImage}
             />
+            <Badge
+              overlap="circular"
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              badgeContent={
+                <Fab size="small" sx={style_badge} onClick={fileUpload}>
+                  <PhotoCameraIcon />
+                </Fab>
+              }
+            >
+              <img src={contextData.avatar} />
+              {/* <Avatar  alt="Travis Howard" src={contextData.avatar} /> */}
+            </Badge>
 
-            <Fab size="small" sx={style_badge} onClick={fileUpload}>
+            {/* <Fab size="small" sx={style_badge} onClick={fileUpload}>
               <PhotoCameraIcon />
             </Fab>
-            <img id="output" src={contextData.avatar}></img>
+            <img id="output" src={contextData.avatar}></img> */}
           </div>
 
           <div className="profile-card__cnt">
@@ -325,15 +351,17 @@ function Settings() {
               </Popover>
             </div>
             <div className="profile-card-ctr">
-              <div className="switch">Two factor auth</div>
+              <div className="switch">Two factor auth
+                <Switch checked={checked} onClick={handleOpen} onChange={() => { }} /></div>
               < SimpleFade />
               <div id='profile-card-ctr_switch'>
-                <Switch checked={checked} onClick={handleOpen} onChange={() => { }} />
+                {/* <Switch checked={checked} onClick={handleOpen} onChange={() => { }} /> */}
               </div>
             </div>
           </div>
         </div>
       </div>
+      <div className='_prv_'></div>
     </>
   );
 }

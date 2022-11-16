@@ -1,23 +1,24 @@
 .table_dashboard::-webkit-scrollbar {
   width: 13px;
+  display: none;
 }
 
-/* Track */
+/* Track 
 .table_dashboard::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 5vw;
-}
+}*/
 
-/* Handle */
+/* Handle 
 .table_dashboard::-webkit-scrollbar-thumb {
   background-color: #a5a5a5;
   border-radius: 5vw;
-}
+}*/
 
-/* Handle on hover */
+/* Handle on hover 
 .table_dashboard::-webkit-scrollbar-thumb:hover {
-  background: #838383;
-}
+  background: #838383; 
+}*/
 
 .wrap {
   position: relative;
@@ -25,31 +26,55 @@
   height: 85vh;
   margin: 5%;
   display: grid;
-  grid-template-columns: 0.8fr 0.4fr;
+  grid-template-columns: 0.9fr 0.6fr;
   grid-template-rows: 0.7fr 1.3fr;
   gap: 30px 30px;
   grid-auto-flow: row;
   grid-template-areas:
     "main request"
-    "box-item request";
+    "box-item box-item";
+
 }
 
 .request {
-  background: #fff;
+  /* background: #fff; */
   grid-area: request;
-  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  background-image: radial-gradient(circle at 100% 100%, transparent 13px, #ff555e 13px, #ff555e 15px, transparent 15px), linear-gradient(to right, #ff555e, #6626ee), radial-gradient(circle at 0% 100%, transparent 13px, #6626ee 13px, #6626ee 15px, transparent 15px), linear-gradient(to bottom, #6626ee, #6626ee), radial-gradient(circle at 0% 0%, transparent 13px, #6626ee 13px, #6626ee 15px, transparent 15px), linear-gradient(to left, #6626ee, #ff555e), radial-gradient(circle at 100% 0%, transparent 13px, #ff555e 13px, #ff555e 15px, transparent 15px), linear-gradient(to top, #ff555e, #ff555e);
+  background-size: 15px 15px, calc(100% - 30px) 2px, 15px 15px, 2px calc(100% - 30px);
+  background-position: top left, top center, top right, center right, bottom right, bottom center, bottom left, center left;
+  background-repeat: no-repeat;
 }
 
 .main {
   grid-area: main;
-  background: #fff;
-  border-radius: 15px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  background-image: radial-gradient(circle at 100% 100%, transparent 13px, #ff555e 13px, #ff555e 15px, transparent 15px), linear-gradient(to right, #ff555e, #6626ee), radial-gradient(circle at 0% 100%, transparent 13px, #6626ee 13px, #6626ee 15px, transparent 15px), linear-gradient(to bottom, #6626ee, #6626ee), radial-gradient(circle at 0% 0%, transparent 13px, #6626ee 13px, #6626ee 15px, transparent 15px), linear-gradient(to left, #6626ee, #ff555e), radial-gradient(circle at 100% 0%, transparent 13px, #ff555e 13px, #ff555e 15px, transparent 15px), linear-gradient(to top, #ff555e, #ff555e);
+  background-size: 15px 15px, calc(100% - 30px) 2px, 15px 15px, 2px calc(100% - 30px);
+  background-position: top left, top center, top right, center right, bottom right, bottom center, bottom left, center left;
+  background-repeat: no-repeat;
+
 }
 
 .box-item {
   grid-area: box-item;
-  background: #fff;
-  border-radius: 15px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  background-image: radial-gradient(circle at 100% 100%, transparent 13px, #ff555e 13px, #ff555e 15px, transparent 15px), linear-gradient(to right, #ff555e, #6626ee), radial-gradient(circle at 0% 100%, transparent 13px, #6626ee 13px, #6626ee 15px, transparent 15px), linear-gradient(to bottom, #6626ee, #6626ee), radial-gradient(circle at 0% 0%, transparent 13px, #6626ee 13px, #6626ee 15px, transparent 15px), linear-gradient(to left, #6626ee, #ff555e), radial-gradient(circle at 100% 0%, transparent 13px, #ff555e 13px, #ff555e 15px, transparent 15px), linear-gradient(to top, #ff555e, #ff555e);
+  background-size: 15px 15px, calc(100% - 30px) 2px, 15px 15px, 2px calc(100% - 30px);
+  background-position: top left, top center, top right, center right, bottom right, bottom center, bottom left, center left;
+  background-repeat: no-repeat;
   display: flex;
   justify-content: space-between;
 }
@@ -65,24 +90,27 @@
   align-items: center;
 }
 
-.account_decor_top {
+/* .account_decor_top {
   background-size: cover;
   background-repeat: no-repeat;
   width: 90%;
   height: auto;
   position: relative;
-  /* top: 5%;
-  right: 5%; */
   z-index: 0;
 }
-
-.account_decor_down {
+ .account_decor_down {
   background-size: cover;
   background-repeat: no-repeat;
   width: 90%;
   height: auto;
   position: relative;
   z-index: 0;
+} */
+
+.account_decor_down_ {
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 120%;
 }
 
 .txt_container_account {
@@ -96,7 +124,7 @@
   position: relative;
   font-family: 'Smooch Sans', sans-serif;
   font-size: 2vw;
-  color: #000000;
+  color: #fff;
   letter-spacing: 0.1rem;
   word-spacing: 0.5rem;
   font-weight: 530;
@@ -104,10 +132,13 @@
 }
 
 .txt-account-strong {
-  color: #781C9C;
-  font-family: 'Smooch Sans', sans-serif;
-  letter-spacing: 0.1rem;
-  font-weight: 620;
+  background: linear-gradient(90deg, rgba(255, 85, 94, 1) 0%, rgba(102, 38, 238, 1) 100%);
+  font-family: 'Odibee Sans', sans-serif;
+  /* font-family: 'Smooch Sans', sans-serif; */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.2rem;
+  font-weight: 700;
 }
 
 .score__txt {
@@ -119,7 +150,7 @@
 }
 
 .rank-txt {
-  color: #000000;
+  color: #fff;
   font-weight: 300;
   font-family: 'Smooch Sans', sans-serif;
   font-size: 3vw;
@@ -128,7 +159,7 @@
 }
 
 .no-rank {
-  color: #000000;
+  color: #fff;
   font-weight: 500;
   font-family: 'Smooch Sans', sans-serif;
   font-size: 4vw;
@@ -151,7 +182,7 @@
   display: block;
   object-fit: cover;
   border-radius: 50%;
-  border: 4px solid #781C9C;
+  border: 2px solid rgb(255, 85, 94);
   /* border: 4px solid transparent;
   background: linear-gradient(45deg, #781C9C, #B830F0);
   transform: translateY(10%);
@@ -164,12 +195,22 @@
   top: 1%;
 }
 
-.css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
-  color: #781C9C !important;
-}
 
 .css-10d9dml-MuiTabs-indicator {
-  background-color: #781C9C !important;
+  /* background: linear-gradient(180deg, rgba(255,85,94,1) 0%, rgba(102,38,238,1) 110%) !important; */
+  background: rgba(255, 85, 94, 1) !important;
+}
+
+.css-13imhw-MuiButtonBase-root-MuiTab-root.Mui-selected {
+  background: linear-gradient(-90deg, #6626ee, #e91e63) !important;
+  font-family: 'Smooch Sans', sans-serif !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  font-weight: 700 !important;
+}
+
+.MuiListItemText-secondary {
+  color: #fff;
 }
 
 .css-1p823my-MuiListItem-root {
@@ -180,16 +221,8 @@
   justify-content: center !important;
 }
 
-.css-8zpgeo-MuiButtonBase-root-MuiTab-root.Mui-selected {
-  color: #781C9C !important;
-}
-
 .css-1b46qz1-MuiList-root:nth-child(even) {
-  background-color: rgba(235, 233, 247, 1);
-}
-
-.css-967ry0-MuiList-root:nth-child(even) {
-  background-color: rgba(235, 233, 247, 1);
+  /* background:  linear-gradient(90deg, rgba(255,85,94,0.1) 0%, rgba(102,38,238,0.1) 110%); */
 }
 
 .table_dashboard {
@@ -204,9 +237,22 @@
   /* background-color: rgba(235, 233, 247, 1); */
 }
 
+.VS {
+  font-family: 'Odibee Sans', sans-serif;
+  font-size: 3.8vw;
+  padding: 0 4rem;
+  background: -webkit-linear-gradient(0deg, rgba(255, 85, 94, 1) 0%, rgba(102, 38, 238, 1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 /******* buttons *******/
 
-.noselect {
+.css-kznubb-MuiButtonBase-root-MuiFab-root {
+  background: rgba(102, 38, 238, 1) !important;
+}
+
+/* .noselect {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -222,8 +268,8 @@
   width: 4vw;
   height: 5vh;
   cursor: pointer;
-  background-color: #781C9C;
-  background-image: #781C9C;
+  background-color: linear-gradient(90deg, rgba(255,85,94,1) 0%, rgba(102,38,238,1) 100%);
+  background-image: linear-gradient(90deg, rgba(255,85,94,1) 0%, rgba(102,38,238,1) 100%);
   border: none;
   border-radius: 50%;
   transition: 200ms;
@@ -294,6 +340,10 @@
   100% {
     transform: translateX(-50%) translateY(-50%)
   }
+} */
+
+h3 {
+  color: #fff;
 }
 
 .noselect:focus {
@@ -538,11 +588,27 @@
   }
 }
 
+/**** LAPTOP ****/
+
+@media screen and (max-width: 1366px) {
+  .wrap {
+    top: 8vh;
+  }
+}
+
+/*** TABLET ***/
+@media screen and (max-width: 480px) {
+  .wrap {
+    top: 10vh;
+  }
+
+}
+
 /***** FRIEND LIST *****/
 
 .p_friendlist {
   font-family: 'Smooch Sans', sans-serif;
-  color: #000000;
+  color: #fff;
   font-size: 1.5vw;
   letter-spacing: 0.1rem;
   font-weight: 800;
