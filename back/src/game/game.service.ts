@@ -84,10 +84,14 @@ export class GameService{
     async ballDirectionAtRestart(namePlayRoom: string){
         const prevDir = this.mapPlRoom.get(namePlayRoom).ball.direction
         this.mapPlRoom.get(namePlayRoom).ball = {...defaultBall}
-        if (prevDir === "r")
+        if (prevDir === "r"){
+            this.mapPlRoom.get(namePlayRoom).ball.direction = "l"
             this.mapPlRoom.get(namePlayRoom).ball.dx -= 3;
-        else
+        }
+        else{
+            this.mapPlRoom.get(namePlayRoom).ball.direction = "r"
             this.mapPlRoom.get(namePlayRoom).ball.dx += 3;
+        }
         this.mapPlRoom.get(namePlayRoom).ball.dy= array_dir_y[Math.round(Math.random())];
     }
 
@@ -153,6 +157,8 @@ export class GameService{
     }
 
     async updatePlayer(namePlayRoom: string){
+        // console.log(namePlayRoom)
+        // console.log(this.mapPlRoom.get(namePlayRoom))
         //console.log('entrato update player')
         if (this.mapPlRoom.get(namePlayRoom).leftPlayer.up && this.mapPlRoom.get(namePlayRoom).leftPlayer.y >= 5 )
             this.mapPlRoom.get(namePlayRoom).leftPlayer.y += -5;

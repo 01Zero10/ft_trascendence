@@ -83,15 +83,15 @@ export default function Canvas(props: CanvasProps) {
     draw(context, ball, left, right);
   }
 
-  function restart() {
-    rightPlayer.y = (props.canvasHeight / 2) - (defaultPlayer.height / 2)
-    rightPlayer.x = props.canvasWidth - (defaultPlayer.width)
-    leftPlayer.y = (props.canvasHeight / 2) - (defaultPlayer.height / 2)
-    leftPlayer.x = defaultPlayer.x
-    // ball = { ...defaultBall }
-    //TODO: modifiocare angolo verso e angolo a seconda di chi fa gol
-    //startBall()
-  }
+  // function restart() {
+  //   rightPlayer.y = (props.canvasHeight / 2) - (defaultPlayer.height / 2)
+  //   rightPlayer.x = props.canvasWidth - (defaultPlayer.width)
+  //   leftPlayer.y = (props.canvasHeight / 2) - (defaultPlayer.height / 2)
+  //   leftPlayer.x = defaultPlayer.x
+  //   // ball = { ...defaultBall }
+  //   //TODO: modifiocare angolo verso e angolo a seconda di chi fa gol
+  //   //startBall()
+  // }
 
   const drawBall = (context: CanvasRenderingContext2D, ball: Ball) => {
     //console.log("drawball", ball)
@@ -198,15 +198,16 @@ export default function Canvas(props: CanvasProps) {
 
   useEffect(() => {
     //const funz = async () => {
-    props.socket.on('goal', async (namePlayRoom: string, rightPlayer: string) => {
-      //console.log("Right Player ==== ", rightPlayer);
+    props.socket.on('goal', async (data: {namePlayRoom: string, leftPlayer: string,  rightPlayer: string}) => {
+      console.log("Right Player ==== ", data.rightPlayer);
+      console.log("Right paddle ==== ", props.clientPaddle.name);
       await sleep(3);
-      if (props.clientPaddle.name === rightPlayer) {
-        //console.log('reeeestart0', namePlayRoom);
+      if (props.clientPaddle.name === data.rightPlayer) {
+        console.log('reeeestart0', data);
         props.socket.emit('restart', {
-          namePlayRoom: namePlayRoom,
-          right: (props.clientPaddle.side === 'right') ? props.clientPaddle.name : props.opponentPaddle.name,
-          left: (props.clientPaddle.side === 'left') ? props.clientPaddle.name : props.opponentPaddle.name,
+          namePlayRoom: data.namePlayRoom,
+          right: data.rightPlayer,
+          left: data.leftPlayer
         });
       }
     })

@@ -157,7 +157,7 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   @SubscribeMessage('restart')
   async handleRestart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, right: string, left: string}){
     //console.log(clientSocket.id)
-    //console.log('loooooog', data)
+    console.log('loooooog', data)
     this.startTick(data);
   }
 
@@ -169,8 +169,9 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
         roomInMap = await this.gameService.restart(data.namePlayRoom);
         //console.log(roomInMap.ball);
         this.server.to(data.namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
-        this.server.to(data.namePlayRoom).emit('goal', {namePlayroom: data.namePlayRoom, rightPlayer: data.right});
+        console.log(data.right)
         clearInterval(id);
+        this.server.to(data.namePlayRoom).emit('goal', {namePlayroom: data.namePlayRoom, leftPlayer: data.left, rightPlayer: data.right});
       }
       else
         this.server.to(data.namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
