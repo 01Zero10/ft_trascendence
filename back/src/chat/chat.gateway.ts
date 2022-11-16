@@ -171,10 +171,13 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
         roomInMap = await this.gameService.restart(data.namePlayRoom);
         //console.log(roomInMap.ball);
         this.server.to(data.namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
-        if (roomInMap.leftPoint !== 3 || roomInMap.rightPoint !== 3)
+        if (roomInMap.leftPoint !== 3 && roomInMap.rightPoint !== 3)
           this.server.to(data.namePlayRoom).emit('goal', data, restart);
         else
+        {
+          await this.gameService.saveMatch(data.namePlayRoom, roomInMap.leftPoint, roomInMap.rightPoint);
           this.server.to(data.namePlayRoom).emit('endGame', roomInMap.leftPoint === 3 ? "left" : "right");
+        }
         clearInterval(id);
       }
       else

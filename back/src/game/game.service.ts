@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { User } from "src/user";
 import { Repository } from "typeorm";
 import { Match } from "./match.entity";
 import { RunningMatch } from "./runningMatch.entity";
@@ -45,6 +46,7 @@ export class GameService{
     constructor(
         @InjectRepository(Match) private matchRepository: Repository<Match>,
         @InjectRepository(RunningMatch) private runningMatches: Repository<RunningMatch>,
+        @InjectRepository(User) private userRepository: Repository<User>
         ){this.mapPlRoom = new Map<string, plRoom>()}
         
 
@@ -218,6 +220,19 @@ export class GameService{
         this.mapPlRoom.get(namePlayRoom).ball.x += this.mapPlRoom.get(namePlayRoom).ball.dx
         this.mapPlRoom.get(namePlayRoom).ball.y += this.mapPlRoom.get(namePlayRoom).ball.dy
         return 0;
+    }
+
+    async saveMatch(namePlayRoom: string, leftPoints: number, rightPoints: number){
+        const roomToSave = await this.getPlayRoomByName(namePlayRoom);
+        const roomSaved = await this.matchRepository.save({player1: roomToSave.player1,
+            avatar1: roomToSave.avatar1,
+            player2: roomToSave.player2,
+            avatar2: roomToSave.avatar2,
+            points1: leftPoints,
+            points2: rightPoints,
+        })
+        await this.runningMatches.remove(roomToSave);
+        //delete this.mapPlRoom[namePlayRoom];
     }
 
     async sleep(time: number) {
