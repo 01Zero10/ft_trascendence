@@ -143,25 +143,25 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   @SubscribeMessage('setStart')
-  async handleSetStart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string}){
+  async handleSetStart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, right: string, left: string}){
     console.log("socket start = ", clientSocket.id);
     const roomInMap = await this.gameService.generateBallDirection(data.namePlayRoom);
     console.log("romminmap ", roomInMap);
     this.server.to(data.namePlayRoom).emit('start', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
+    await this.sleep(3);
     this.startTick(data);
-    //await this.sleep(3);
     //this.gameService.updateIdInterval(data.namePlayRoom, this.startTick(data.namePlayRoom));
     //console.log(typeof(id));
   }
 
   @SubscribeMessage('restart')
-  async handleRestart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string}){
+  async handleRestart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, right: string, left: string}){
     console.log(clientSocket.id)
     console.log('loooooog', data)
     this.startTick(data);
   }
 
-  startTick(data: {namePlayRoom: string}) {
+  startTick(data: {namePlayRoom: string, right: string, left: string}) {
     var id = setInterval(async () => {
       let roomInMap = await this.gameService.updatePlayer(data.namePlayRoom);
       const restart = await this.gameService.updateBall(data.namePlayRoom);
@@ -169,7 +169,7 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
         roomInMap = await this.gameService.restart(data.namePlayRoom);
         console.log(roomInMap.ball);
         this.server.to(data.namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
-        this.server.to(data.namePlayRoom).emit('goal', data.namePlayRoom, );
+        this.server.to(data.namePlayRoom).emit('goal', {namePlayroom: data.namePlayRoom, rightPlayer: data.right});
         clearInterval(id);
       }
       else
