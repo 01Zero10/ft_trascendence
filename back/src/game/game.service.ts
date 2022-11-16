@@ -27,6 +27,8 @@ interface plRoom {
     leftPlayer: Player;
     rightPlayer: Player;
     ball: Ball;
+    leftPoint: number
+    rightPoint: number
     idInterval?: object;
 }
 
@@ -61,7 +63,8 @@ export class GameService{
             this.mapPlRoom.set('heldBy' + client, {
                 leftPlayer: {...defaultPlayer, y: canvasHeight / 2 - defaultPlayer.height / 2}, 
                 rightPlayer:{...defaultPlayer, x: canvasWidth - defaultPlayer.width, y: canvasHeight / 2 - defaultPlayer.height / 2}, 
-                ball: {...defaultBall}})
+                ball: {...defaultBall}, leftPoint: 0, rightPoint: 0}
+                )
             return {namePlayRoom: 'heldBy' + client, side: 'left'};
         }
         playRoom.player2 = client;
@@ -189,6 +192,7 @@ export class GameService{
             else {
                 this.mapPlRoom.get(namePlayRoom).ball.dx = 0
                 this.mapPlRoom.get(namePlayRoom).ball.dy = 0
+                this.mapPlRoom.get(namePlayRoom).rightPoint += 1
                 return 1;
             //props.socket.emit("gol_right", { name: props.clientPaddle.playRoom })
             // startBall() reset
@@ -205,7 +209,8 @@ export class GameService{
             else {
                 this.mapPlRoom.get(namePlayRoom).ball.dx = 0
                 this.mapPlRoom.get(namePlayRoom).ball.dy = 0
-                return 1;
+                this.mapPlRoom.get(namePlayRoom).leftPoint += 1
+                return 2;
             //props.socket.emit("gol_left", { name: props.clientPaddle.playRoom })
             // startBall() reset
             }

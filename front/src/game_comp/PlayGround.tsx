@@ -1,3 +1,4 @@
+import { Modal } from "@mantine/core"
 import { positions } from "@mui/system"
 import { useContext, useEffect, useLayoutEffect, useState } from "react"
 import { Student } from "../App"
@@ -42,6 +43,7 @@ function PlayGround(props: any) {
         left: 0,
         right: 0
     })
+    const [winner, setWinner] = useState("")
     //const dir: Array<string> = ["l", "r"]
     const [lastPoint, setLastPoint] = useState<"l" | "r" | null>(null)
     //const [ballDirection, setBallDirection] = useState<"l" | "r" >(dir[Math.round(Math.random())] as "l" | "r")
@@ -65,6 +67,9 @@ function PlayGround(props: any) {
                 props.socket.emit('requestOpponent', { namePlayRoom: namePlayRoom, side: side })
             //props.socket.emit('joinPlayRoom', { namePlayRoom: namePlayRoom, side: side });
         })
+        props.socket.once('endGame', (chi: string) => {
+            setWinner(clientSide.side === chi ? clientSide.name : opponentSide.name)
+        })
     }, [props.socket])
 
     useLayoutEffect(() => {
@@ -79,12 +84,7 @@ function PlayGround(props: any) {
 
     return (
         <div>
-            {/* <div>
-                <Score position={"left"} player={"player1"} total={point.left}></Score>
-                <Score position={"right"} player={"player2"} total={point.right}></Score>
-            </div> */}
-            {/* {loader ? <Loader /> : */}
-            <>
+            {winner ? <Modal onClose={() => console.log("si cazzo!!!!!")} opened={winner?true:false}>winner</Modal> :
                 <Canvas
                     socket={props.socket}
                     clientPaddle={clientSide}
@@ -95,9 +95,9 @@ function PlayGround(props: any) {
                     canvasWidth={1500}
                     setPoint={setPoint}
                     ballDirection={ballDirection}
+                    setOpponentSide={setOpponentSide}
                     setLastpoint={setLastPoint}></Canvas>
-            </>
-            {/* } */}
+            }
         </div>
     )
 

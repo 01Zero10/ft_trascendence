@@ -133,15 +133,15 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
     this.server.to(data.namePlayRoom).emit('ready', data.namePlayRoom, playRoom.leftSide, playRoom.rightSide)
   }
 
-  @SubscribeMessage('gol_right')
-  handleGol_right(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {name: string}){
-    this.server.to(data.name).emit('restart', false)
-  }
+  // @SubscribeMessage('gol_right')
+  // handleGol_right(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {name: string}){
+  //   this.server.to(data.name).emit('restart', false)
+  // }
 
-  @SubscribeMessage('gol_left')
-  handleGol_left(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {name: string}){
-    this.server.to(data.name).emit('restart', true)
-  }
+  // @SubscribeMessage('gol_left')
+  // handleGol_left(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {name: string}){
+  //   this.server.to(data.name).emit('restart', true)
+  // }
 
   @SubscribeMessage('setStart')
   async handleSetStart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, rightPlayer: string, leftPlayer: string}){
@@ -171,8 +171,10 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
         roomInMap = await this.gameService.restart(data.namePlayRoom);
         //console.log(roomInMap.ball);
         this.server.to(data.namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
-        // console.log(data.rightPlayer)
-        this.server.to(data.namePlayRoom).emit('goal', data);
+        if (roomInMap.leftPoint !== 3 || roomInMap.rightPoint !== 3)
+          this.server.to(data.namePlayRoom).emit('goal', data, restart);
+        else
+          this.server.to(data.namePlayRoom).emit('endGame', roomInMap.leftPoint === 3 ? "left" : "right");
         clearInterval(id);
       }
       else

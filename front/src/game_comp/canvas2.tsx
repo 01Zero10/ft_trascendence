@@ -16,6 +16,7 @@ type CanvasProps = {
   canvasWidth: number;
   canvasHeight: number;
   setPoint: React.Dispatch<React.SetStateAction<any>>
+  setOpponentSide: React.Dispatch<React.SetStateAction<Paddle>>
   ballDirection: string | null
   setLastpoint: React.Dispatch<React.SetStateAction<any>>
 };
@@ -198,8 +199,12 @@ export default function Canvas(props: CanvasProps) {
 
   useEffect(() => {
     //const funz = async () => {
-    props.socket.on('goal', async (data: { namePlayRoom: string, rightPlayer: string, leftPlayer: string }) => {
+    props.socket.on('goal', async (data: { namePlayRoom: string, rightPlayer: string, leftPlayer: string }, point: number) => {
       console.log('reeeestart0', data);
+      if (point === 1)
+        props.setPoint((prevState: any) => {return {...prevState, right: ++prevState.right}})
+      else
+      props.setPoint((prevState: any) => {return {...prevState, left: ++prevState.left}})
       // console.log("Right Player ==== ", data.rightPlayer);
       // console.log("left paddle ==== ", data.leftPlayer)
       //console.log("Right paddle ==== ", data.leftPlayer);
@@ -238,6 +243,10 @@ export default function Canvas(props: CanvasProps) {
       update(context!, ball, leftPlayer, rightPlayer);
     })
     props.socket.once('ready', (namePlayRoom: string, leftClient: string, rightClient: string) => {
+      if (props.clientPaddle.side === 'right')
+        props.setOpponentSide({name:leftClient, side: "left", playRoom: namePlayRoom })
+      else
+        props.setOpponentSide({name:rightClient, side: "right", playRoom: namePlayRoom })
       console.log("ricevuto ready ", leftClient, rightClient);
       setLoader(false);
       //console.log(props.clientPaddle)
