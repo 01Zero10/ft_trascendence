@@ -1,0 +1,111 @@
+.container{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    margin: 0;
+}
+
+.card_text_container{
+    margin: 3% auto 0;
+}
+
+.card_2{
+    margin-left: 5%;
+}
+
+.card_1{
+    margin-right: 5%;
+}
+.card {
+    position: relative;
+    width: 100%;
+    border: 1px solid red;
+    border-radius: 15px;
+}
+
+.game_text_style{
+    margin-top: 5%;
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+    font-size: xx-large;
+}
+
+/*
+.card{
+    position: relative;
+    width: 100%;
+    background: linear-gradient(0deg, black, rgb(44,43,43));
+    border-radius: 15px;
+}
+
+.card::before , .card::after {
+    content: '';
+    position: absolute;
+    left: -2px;
+    top:-2px;
+    background: linear-gradient(45deg, #e6fb04, #ff6600, #00ff66, #00ffff, #ff00ff, #ff0099, #6e0dd0, #ff3300, #099fff);
+    border-radius: 15px;
+    background-size: 400%;
+    width: calc(100% + 5px);
+    height: calc(100% + 5px);
+    z-index: -1;
+    animation: animate 20s linear infinite;
+}
+
+
+@keyframes animate {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
+}
+
+.card::after {
+    filter: blur(20px);
+    opacity: 0.80;
+}
+
+/************** MODAL RBG RING { MANTINE } **************/
+/*
+#rgb_modal-body{
+    position: relative;
+    width: 100%;
+    background: linear-gradient(0deg, black, rgb(44,43,43));
+    border-radius: 15px;
+}
+
+#rgb_modal-body::before , #rgb_modal-body::after {
+    content: '';
+    position: absolute;
+    left: -2px;
+    top:-2px;
+    background: linear-gradient(45deg, #e6fb04, #ff6600, #00ff66, #00ffff, #ff00ff, #ff0099, #6e0dd0, #ff3300, #099fff);
+    border-radius: 15px;
+    background-size: 400%;
+    width: calc(100% + 5px);
+    height: calc(100% + 5px);
+    z-index: -1;
+    animation: modal_animate 20s linear infinite;
+}
+
+
+@keyframes modal_animate {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
+}
+
+
+
+/********************************************************/
+
+#rgb_modal-body::after {
+    filter: blur(20px);
+    opacity: 0.80;
+}
+
+@media screen and (max-width: 900px) {
+    .container{
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,69 @@
+.title_container{
+    text-align: center;
+    width: 100%;
+    margin: 0;
+}
+
+.P{
+    --i:1;
+}
+.O{
+    --i:2;
+}
+.N{
+    --i:3;
+}
+.G{
+    --i:4;
+}
+
+.glowing_page_title {
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+    font-size: 8vw;
+    color: transparent;
+    margin: 2% auto 0;
+}
+
+.glowing_page_title span {
+    animation: glow 8s linear infinite;
+    animation-delay: calc(0.3s * var(--i));
+}
+
+@keyframes glow {
+    0% {
+        color: #fff;
+        filter: blur(1px) hue-rotate(0deg);
+        text-shadow: 
+        0 0 10px #00b3ff,
+        0 0 20px #00b3ff,
+        0 0 40px #00b3ff,
+        0 0 80px #00b3ff,
+        0 0 120px #00b3ff,
+        0 0 200px #00b3ff,
+        0 0 300px #00b3ff,
+        0 0 400px #00b3ff;
+    }
+    30%, 70% {
+        color: #fff;
+        filter: blur(1px) hue-rotate(360deg);
+        text-shadow: 
+        0 0 10px #00b3ff,
+        0 0 20px #00b3ff,
+        0 0 40px #00b3ff,
+        0 0 80px #00b3ff,
+        0 0 120px #00b3ff,
+        0 0 200px #00b3ff;
+    }
+    100% {
+        color: transparent;
+        box-shadow: none;
+        filter: blur(1px) hue-rotate(0deg);
+    }
+}
+
+@media screen and (max-width: 900px) {
+    h1{
+        font-size: 20vw;
+    }
+}
