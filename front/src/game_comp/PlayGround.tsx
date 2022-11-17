@@ -1,4 +1,4 @@
-import { Modal } from "@mantine/core"
+import { Button, Modal } from "@mantine/core"
 import { positions } from "@mui/system"
 import { useContext, useEffect, useLayoutEffect, useState } from "react"
 import { Student } from "../App"
@@ -88,8 +88,34 @@ function PlayGround(props: any) {
                             onClose={() => console.log("si cazzo!!!!!")} 
                             opened={winner ? true : false}
                             transitionDuration={600}
+                            style={{backgroundColor:"black", zIndex:"5", }}
+                            centered
+                            withCloseButton={false}
+                            size="lg"
                             >
-                            You Won! 🥳
+                            <div>
+                                <h1 id='text-modal h1'>You Won! 🥳</h1>
+                            </div>
+                            <div style={{alignItems:"center"}}>
+                                <Button
+                                        radius="xl"
+                                        size="sm"
+                                        variant="gradient"
+                                        gradient={{ from: 'black', to: 'grape', deg: 55 }}
+                                        // onClick={console.log("pipo")}
+                                        >
+                                        Back to home
+                                </Button>
+                                <Button
+                                        radius="xl"
+                                        size="sm"
+                                        variant="gradient"
+                                        gradient={{ from: 'black', to: 'pink', deg: 55 }}
+                                        // onClick={console.log("pipo")}
+                                        >
+                                        Rematch
+                                </Button>
+                            </div>
                         </Modal> :
                 <Canvas
                     socket={props.socket}
