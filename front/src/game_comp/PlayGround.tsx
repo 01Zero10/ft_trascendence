@@ -3,7 +3,7 @@ import { positions } from "@mui/system"
 import { useContext, useEffect, useLayoutEffect, useState } from "react"
 import { Student } from "../App"
 import Loader from "../components/Loader"
-import Canvas from "./canvas2"
+import Canvas from "./Canvas"
 import Score from "./Score"
 
 type Ball = {
@@ -84,7 +84,13 @@ function PlayGround(props: any) {
 
     return (
         <div>
-            {winner ? <Modal onClose={() => console.log("si cazzo!!!!!")} opened={winner ? true : false}>winner</Modal> :
+            {winner ?   <Modal 
+                            onClose={() => console.log("si cazzo!!!!!")} 
+                            opened={winner ? true : false}
+                            transitionDuration={600}
+                            >
+                            You Won! 🥳
+                        </Modal> :
                 <Canvas
                     socket={props.socket}
                     clientPaddle={clientSide}
@@ -100,7 +106,6 @@ function PlayGround(props: any) {
             }
         </div>
     )
-
 }
 
 export default PlayGround;
