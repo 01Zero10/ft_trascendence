@@ -1,12 +1,15 @@
 import { Logout, Settings } from '@mui/icons-material';
 import SearchIcon from '@mui/icons-material/Search';
-import { AppBar, Divider, Drawer, IconButton, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, styled, Toolbar, Tooltip, Typography } from '@mui/material';
+import { AppBar, Divider, Drawer, IconButton, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, styled, SvgIcon, Toolbar, Tooltip, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, NavLink, Route, Routes } from 'react-router-dom';
 import './Navigation.css';
 import { Student } from './App';
-import { Avatar, Box, List } from '@mantine/core';
+import { ActionIcon, Avatar, Box, Button, List } from '@mantine/core';
 import MenuIcon from '@mui/icons-material/Menu';
+import { IconBell, IconBellRinging } from '@tabler/icons';
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,600,1,200" />
 
 interface userNavBar {
   username: string,
@@ -147,11 +150,11 @@ function Navigation() {
     bgcolor: '#fff',
     width: '100%',
   }))
-
   return (
     <>
       <AppBar sx={{ bgcolor: 'transparent', color: '#fff', width: '100%' }} component='nav'>
         <Toolbar>
+          <ActionIcon variant="transparent"><IconBell color='white'></IconBell></ActionIcon>
           <IconButton
 
             aria-label="open drawer"
@@ -183,7 +186,9 @@ function Navigation() {
 
             </div>
           </Typography>
+          <div >
 
+          </div>
           <div className='search-avatar'>
             <ListSearch />
             <Box sx={{ flexGrow: 0 }}>
