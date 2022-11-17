@@ -7,7 +7,7 @@ import { RoomMessages } from './roomsMessages.entity';
 import { Rooms } from './rooms.entity';
 import { PrivateMessages } from './privateMessages.entity';
 import { BanOrMute } from './banOrMute.entity';
-import { createCipheriv, scrypt } from 'crypto';
+import { createCipheriv, scrypt, randomBytes} from 'crypto';
 import { promisify } from 'util';
 
 @Injectable()
@@ -435,15 +435,17 @@ export class ChatService {
     }
 
     async buildCipherPass(pass: string){
-        const iv = Buffer.from(process.env.BUFFER_IV, 'base64');
-        const key = (await promisify(scrypt)(process.env.PASS_TO_ENCRYPT, 'salt', 32)) as Buffer;
-        const cipher = createCipheriv(process.env.ALGORITHM_TO_ENCRYPT, key, iv);
+        // const iv = Buffer.from(process.env.BUFFER_IV, 'base64');
+        const iv = randomBytes(16);
+        const key = (await promisify(scrypt)("process.env.PASS_TO_ENCRYPT", 'salt', 32)) as Buffer;
+        const cipher = createCipheriv("aes-256-gcm", key, iv);
         let crypted = cipher.update(pass, 'utf-8', 'hex') + cipher.final('hex');
         return crypted;
     }
 
     async createRoom2(client: string, roomName: string, type: string, password: string){
         //const user = await this.userRepository.findOne({where: {username: client}});
+        console.log(client, roomName, type, password)
         const room = await this.roomsRepository.findOne({where: {name: roomName}});
         if (!room){
             const newRoom = await this.roomsRepository.create({name: roomName});
@@ -453,7 +455,7 @@ export class ChatService {
             return newRoom;
         }
         else {
-                //decidere quando fare controllo nome chat
+                //TODO:decidere quando fare controllo nome chat
             }
         }
 

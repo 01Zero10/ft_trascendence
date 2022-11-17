@@ -47,7 +47,6 @@ export default function Chat(props: any) {
 	}
 
 	const joinRoom = async (roomName: string) => {
-
 		const room = await SetRoomName(student.username, roomName);
 		props.socket?.emit('joinRoom', { client: student.username, room: room });
 	}

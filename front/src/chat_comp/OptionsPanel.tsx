@@ -27,7 +27,7 @@ export default function OptionsPanel(props: any) {
 					{ label: 'Owner panel', value: 'owner' },
 					{ label: 'Admin panel', value: 'admin' }]}
 			/>}
-			{props.opened === "owner" && <OwnerPanel chOptions={props.chOptions} />}
+			{props.opened === "owner" && <OwnerPanel chOptions={props.chOptions} setOpened={props.setOpened}/>}
 			{/* {props.opened === "admin" && <AdminPanel room={props.room}/>} */}
 			{props.opened === "admin" && <AdminPanel room={props.chOptions ? props.chOptions : props.room} socket={props.socket} />}
 		</>

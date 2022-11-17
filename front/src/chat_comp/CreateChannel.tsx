@@ -92,10 +92,10 @@ export default function CreateChannel(props: any) {
     }
 
     function checkProtectedChannel() {
-        if (newOption.type == 'protected' && newOption.confirmPass == '') {
+        if (newOption.type === 'protected' && newOption.confirmPass === '') {
             return false;
         }
-        else if (newOption.type == 'protected' && newOption.confirmPass != '' && newOption.confirmPass != newOption.password)
+        else if (newOption.type === 'protected' && newOption.confirmPass !== '' && newOption.confirmPass !== newOption.password)
             return false;
         else
             return true;

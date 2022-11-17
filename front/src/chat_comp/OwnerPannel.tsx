@@ -14,11 +14,14 @@ const initialValues: TransferListData = [
 
 export default function OwnerPanel(props: any) {
 	const [data, setData] = useState<TransferListData>(initialValues)
+	const [oldData, setOldData] = useState<TransferListData>(initialValues)
 	const [password, setPassword] = useState("")
 	const [confPassword, setConfPassword] = useState("")
 	const [change, setChange] = useState(false)
 	const [newOption, setNewOption] = useState({ ...props.chOptions });
 
+	const [dataAdminLen, setdataAdminLen] = useState(data[0].length)
+	
 	const [members, setMembers] = useState<{
 		value: string;
 		label: string;
@@ -82,7 +85,10 @@ export default function OwnerPanel(props: any) {
 	}
 
 	function checkChange(){
-
+		if(data[0].length === dataAdminLen)
+			setChange(true)
+		else
+			setChange(false)
 	}
 
 	useLayoutEffect(() => {
@@ -92,6 +98,7 @@ export default function OwnerPanel(props: any) {
 
 	useLayoutEffect(() => {
 		setData([admins, members])
+		setOldData([admins, members])
 	}, [admins, members])
 
 
@@ -136,7 +143,35 @@ export default function OwnerPanel(props: any) {
 			body: JSON.stringify({ data: data, channelName: props.chOptions?.name })
 		})
 		setChange(false)
-		props.setOwnerPanelOpen(false)
+		props.setOpened(false)
+	}
+
+	function handleTransferListChange(data: any){
+		let n = 0
+		let ch = 0
+		console.log(ch)
+		console.log(data)
+		console.log(oldData)
+		for(let i of data){
+			if (i.length === 0)
+			{
+				if (oldData[n].length === 0)
+					continue
+				else
+					ch = 1
+			}
+			else
+			{
+				for(let ii of i)
+					if(oldData[n].indexOf(ii) === -1)
+						ch = 1
+			}
+			++n
+		}
+		if (ch !== 0)
+			setChange(true)
+		else
+			setChange(false)
 	}
 
 	return (
@@ -180,7 +215,7 @@ export default function OwnerPanel(props: any) {
 				searchPlaceholder="Search..."
 				titles={['Admin', 'User']}
 				breakpoint="sm"
-				onChange={setData}
+				onChange={(data: any) => {handleTransferListChange(data); setData(data)}}
 				radius={"md"}
 			/>
 			{<Button disabled={!change ||
