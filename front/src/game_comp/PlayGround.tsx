@@ -92,19 +92,20 @@ function PlayGround(props: any) {
                             textAlign: 'center',
                             },
                             })}
-                            onClose={() => console.log("si cazzo!!!!!")} 
-                            opened={winner ? true : false}
-                            transitionDuration={600}
-                            style={{backgroundColor:"black", zIndex:"5", }}
-                            centered
-                            withCloseButton={false}
-                            size="lg"
-                            
+                                onClose={() => console.log("si cazzo!!!!!")} 
+                                opened={winner ? true : false}
+                                transitionDuration={600}
+                                style={{backgroundColor:"black", zIndex:"5", }}
+                                centered
+                                withCloseButton={false}
+                                size="lg"
+                                overlayOpacity={0.50}
+                                overlayBlur={5}
                             >
-                                {/* style={{width:"100%", height:"100%", textAlign:"center", display:"flex", justifyContent:"center", alignContent:"center"}} */}
                             <div>
                                 <div className="inner1">
-                                    <h1 style={{padding:"5%"}}>You Won! 🥳</h1>
+                                    { contextData.username === winner ? <h1 style={{padding:"5%"}}>You Won! 🥳</h1> : 
+                                        <h1 style={{padding:"5%"}}>You Lost.. 😭</h1> }
                                 </div>
                                 {/* style={{width:"50%", display:"flex", justifyContent:"center"}} */}
                                 <div className="inner2">
