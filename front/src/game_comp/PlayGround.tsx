@@ -45,7 +45,7 @@ function PlayGround(props: any) {
         left: 0,
         right: 0
     })
-    const [winner, setWinner] = useState("mobrycki")
+    const [winner, setWinner] = useState("")
     //const dir: Array<string> = ["l", "r"]
     const [lastPoint, setLastPoint] = useState<"l" | "r" | null>(null)
     //const [ballDirection, setBallDirection] = useState<"l" | "r" >(dir[Math.round(Math.random())] as "l" | "r")
