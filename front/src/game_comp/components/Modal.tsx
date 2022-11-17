@@ -3,7 +3,7 @@
 import React, { ReactHTMLElement, useContext, useEffect, useState } from "react"
 import './ModalGrid.css'
 import { forwardRef } from 'react';
-import { Group, Avatar, Text, Select } from '@mantine/core';
+import { Group, Avatar, Text, Select, Button } from '@mantine/core';
 import { Student } from "../../App";
 
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
@@ -65,25 +65,30 @@ function Demo(props: any) {
   // }
 
   return (
-    <Select
-      placeholder="Pick one"
-      variant='unstyled'
-      transition={"scale-y"}
-      transitionDuration={200}
-      data={friendsOnline}
-      itemComponent={SelectItem}
-      onChange={(e) => console.log(e)}
-      maxDropdownHeight={400}
-      nothingFound="Nobody here"
-      styles={() => ({
-        item: {
-          '&[data-hovered]': {
-            backgroundColor: 'darkgrey',
-            color: 'black'
-          },
-        }
-      })}
-    />
+    <div style={{display:"flex", justifyContent:"center", alignContent:"center"}}>
+      <Select
+        placeholder="Pick one"
+        variant='unstyled'
+        transition={"scale-y"}
+        transitionDuration={200}
+        data={friendsOnline}
+        itemComponent={SelectItem}
+        onChange={(e) => console.log(e)}
+        maxDropdownHeight={400}
+        nothingFound="Nobody here"
+        styles={() => ({
+          item: {
+            '&[data-hovered]': {
+              backgroundColor: 'darkgrey',
+              color: 'black'
+            },
+          }
+        })}
+      />
+      <Button>
+        Confirm
+      </Button>
+    </div>
   );
 }
 
