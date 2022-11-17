@@ -295,27 +295,27 @@ export class UserService {
   async setOnlineStatus(userID: string){
     const client = await this.getById(Number(userID));
     await this.setOfflineStatus(userID);
+    console.log(userID);
     if (client){
     const newbie = this.onlineRepository.create();
+    newbie.id = Number(userID)
     newbie.status = 'online'
     newbie.user = client;
+    console.log("toSetOnline", newbie);
     return await this.onlineRepository.save(newbie);
     }
   }
 
   async setOfflineStatus(userID: string){
-    const toSetOffline = await this.onlineRepository.createQueryBuilder("online")
-    .leftJoinAndSelect("online.user", "user")
-    .where("user.id = :userID", {userID})
-    .getOne()
-    .catch(() => {return null});
-    //console.log(toSetOffline);
+    const toSetOffline = await this.onlineRepository.findOne({ where : { id: Number(userID)} })
+    console.log("toSetOffline", toSetOffline);
     if (toSetOffline)
       await this.onlineRepository.remove(toSetOffline);
   }
 
   async getOnlineFriends(client: string){
-    const clientFriends = (await this.getById(Number(client))).friends;
+    console.log("help", client)
+    const clientFriends = (await this.getByUsername(client)).friends;
     const onlineFriends = await this.onlineRepository
     .createQueryBuilder('online')
     .leftJoinAndSelect('online.user', 'user')
@@ -323,8 +323,8 @@ export class UserService {
     .andWhere("online.status = :online", {online: 'online'})
     .select(['online.id', 'user.username', 'user.nickname', 'user.avatar'])
     .getMany()
-    //.catch(() => {return null});
-    //console.log(onlineFriends);
+    .catch(() => {return null});
+    //console.log("onlineFriends", onlineFriends);
     return onlineFriends;
   }
   

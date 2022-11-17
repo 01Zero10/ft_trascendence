@@ -1,31 +1,115 @@
-import React from 'react'
+//import React from 'react'
 /*import './Modal.css'*/
+import React, { ReactHTMLElement, useContext, useEffect, useState } from "react"
 import './ModalGrid.css'
 import { forwardRef } from 'react';
 import { Group, Avatar, Text, Select } from '@mantine/core';
+import { Student } from "../../App";
 
+interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
+  image: string;
+  label: string;
+}
+
+const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
+  ({ image, label, ...others }: ItemProps, ref) => (
+    <div ref={ref} {...others}>
+      <Group noWrap>
+        <Avatar src={image} />
+
+        <div>
+          <Text size="sm">{label}</Text>
+        </div>
+      </Group>
+    </div>
+  )
+);
+
+function Demo(props: any) {
+
+  const [friendsOnline, setFriendsOnline] = useState<{
+    image: string;
+    label: string;
+    value: string;
+  }[]>([])
+
+  useEffect(() => {
+    async function getFriensOnline() {
+      let response = await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/users/getOnlineFriends/${props.client}`)
+      let data = await response.json();
+      console.log(data);
+      let fetchFriendsOnline: {
+        image: string;
+        label: string;
+        value: string;
+      }[] = [];
+      await Promise.all(await data?.map(async (element: any) => {
+        let iFriendsOnline: {
+          image: string;
+          label: string;
+          value: string;
+        } = {
+          image: element.user.avatar,
+          label: element.user.nickname,
+          value: element.user.username,
+        }
+        fetchFriendsOnline.push(iFriendsOnline);
+      }))
+      setFriendsOnline(fetchFriendsOnline);
+    }
+    getFriensOnline();
+  }, [])
+
+  // function test2(e: React.RefAttributes<HTMLInputElement>) {
+  //   console.log(e)
+  // }
+
+  return (
+    <Select
+      placeholder="Pick one"
+      variant='unstyled'
+      transition={"scale-y"}
+      transitionDuration={200}
+      data={friendsOnline}
+      itemComponent={SelectItem}
+      onChange={(e) => console.log(e)}
+      maxDropdownHeight={400}
+      nothingFound="Nobody here"
+      styles={() => ({
+        item: {
+          '&[data-hovered]': {
+            backgroundColor: 'darkgrey',
+            color: 'black'
+          },
+        }
+      })}
+    />
+  );
+}
 
 export function ClassicModal(props: any) {
 
+  const contextData = useContext(Student)
 
-	return (
-	  <div className="classic_grid_container">
+  return (
+    <div className="classic_grid_container">
       <div className="grid_item_1" onClick={() => props.setPlay(true)}>
         <div className="logo_holder">
           <p className="logo">Matchmaking</p>
         </div>
       </div>
       <div className="grid_item_2">
-        </div>
+      </div>
       <div className="grid_item_3">Lista Partite in corso</div>
-	  </div>
-	)
+      <Demo client={contextData.username} setGameOptions={props.setGameOptions} />
+    </div>
+  )
 }
 
 export function AvancedModal(props: any) {
   return (
-	<div className='advanced_grid_container'>
-  </div>
+    <div className='advanced_grid_container'>
+    </div>
   )
 }
 
@@ -79,9 +163,9 @@ function Demo() {
   return (
     <Select
       placeholder="Pick one"
-	    variant='unstyled'
-	    transition={"scale-y"}
-	    transitionDuration={200}
+      variant='unstyled'
+      transition={"scale-y"}
+      transitionDuration={200}
       data={data}
       itemComponent={SelectItem}
       maxDropdownHeight={400}
@@ -99,9 +183,9 @@ function Demo() {
 }
 /*
 export function ClassicModal() {
-	return (
-	  <div className="classic_modal_container">
-		  <div className="random_game_container text">
+  return (
+    <div className="classic_modal_container">
+      <div className="random_game_container text">
         <p className='random_game_logo'>
           <span className='logo_span_letter'>L</span>
           <span className='logo_span_letter'>e</span>
@@ -115,17 +199,17 @@ export function ClassicModal() {
         </p>
         <a href="#" className='play_button_logo'>Click Me</a>
       </div>
-		  {Demo()}
-		  /*<div className='select_friend_game text' >SFIDA UN AMICO</div>
-	  </div>
-	)
+      {Demo()}
+      /*<div className='select_friend_game text' >SFIDA UN AMICO</div>
+    </div>
+  )
 }
 
 export function AvancedModal() {
   return (
-	<div className='advanced_modal_container'>
+  <div className='advanced_modal_container'>
     <div className="random_game text">ADVANCED: RICERCA GIOCATORE</div>
-		<div className='select_friend_game text'>SFIDA UN AMICO</div>
+    <div className='select_friend_game text'>SFIDA UN AMICO</div>
   </div>
   )
 }
@@ -134,23 +218,23 @@ export function AvancedModal() {
 
 /*
 function Demo() {
-	return (
-	  <Select
-		variant="unstyled"
-		placeholder='Pick a friend ...'
-		rightSection={<></>}
-		size="xl"
-		transition={"scale-y"}
-		transitionDuration={200}
-		
-		data={[
-		  { value: 'react', label: 'React' },
-		  { value: 'ng', label: 'Angular' },
-		  { value: 'svelte', label: 'Svelte' },
-		  { value: 'vue', label: 'Vue' },
-		]}
-	  />
-	);
+  return (
+    <Select
+    variant="unstyled"
+    placeholder='Pick a friend ...'
+    rightSection={<></>}
+    size="xl"
+    transition={"scale-y"}
+    transitionDuration={200}
+  	
+    data={[
+      { value: 'react', label: 'React' },
+      { value: 'ng', label: 'Angular' },
+      { value: 'svelte', label: 'Svelte' },
+      { value: 'vue', label: 'Vue' },
+    ]}
+    />
+  );
   }
 
 */
