@@ -55,6 +55,7 @@ export function LeadGrid(props: any) {
           padding={0}
           id='rgb_modal'
           radius={15}
+          centered
           overlayOpacity={0.50}
           overlayBlur={5}>
           <ClassicModal setPlay={props.setPlay} setGameOptions={setGameOptions} />
@@ -67,6 +68,7 @@ export function LeadGrid(props: any) {
           padding={0}
           id='rgb_modal'
           radius={15}
+          centered
           overlayOpacity={0.50}
           overlayBlur={5}>
           <AvancedModal setPlay={props.setPlay} setGameOptions={setGameOptions} />
