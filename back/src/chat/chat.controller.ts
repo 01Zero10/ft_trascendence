@@ -208,11 +208,11 @@ export class ChatController {
     @Body('members') members: string[],
     @Body('type') type: string,
     @Body('password') password: string){
-        //console.log("builder", builder);
-        //console.log("nameGroup", nameGroup);
-        //console.log("members", members);
-        //console.log("type", type);
-        //console.log("pwd", password);
+        console.log("builder", builder);
+        console.log("nameGroup", nameGroup);
+        console.log("members", members);
+        console.log("type", type);
+        console.log("pwd", password);
         const room = await this.chatService.createGroupChat2(builder, nameGroup, members, type, password);
         return room;
     }

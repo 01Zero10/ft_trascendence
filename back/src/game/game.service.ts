@@ -232,7 +232,10 @@ export class GameService{
             points2: rightPoints,
         })
         await this.runningMatches.remove(roomToSave);
-        //delete this.mapPlRoom[namePlayRoom];
+        delete this.mapPlRoom[namePlayRoom];
+        if (roomSaved.points1 > roomSaved.points2)
+            return roomSaved.player1;
+        return roomSaved.player2;
     }
 
     async sleep(time: number) {

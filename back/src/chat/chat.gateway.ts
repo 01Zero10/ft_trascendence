@@ -16,9 +16,6 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   private logger: Logger = new Logger('ChatGateway');
 
-  private UserDatabase = new Map();
-
-
   @WebSocketServer()
   server: Server; // Nest.js will populate server with the server for the gateway
 
@@ -36,55 +33,32 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
     @ConnectedSocket() clientSocket: Socket, 
     @MessageBody() data: {room: string, username: string, message: string, avatar: string}):
     Promise<WsResponse<{room: string, username: string, message: string, avatar: string}>> { 
-    //console.log("");
-    //console.log("[handleMessage?]")
-    //console.log(data.room);
-    //console.log(data.message);
-    //const packMessage: RoomMessages = {...data, id: 1, userSocket: clientSocket.id, createdAt: new Date};
     const packMessage = await this.chatService.createMessage({...data, clientSocket})
     this.server.to(data.room).emit('msgToClient', packMessage);
     return {event:"msgToServer", data: data}; // equivalent to clientSocket.emit(data);
   }
 
-  @SubscribeMessage('msgPrivateToServer')
-  handlePrivateMessage(@MessageBody() data: {name: string, message: string}): 
-    WsResponse<{name: string, message: string}> {
-    //console.log("");
-    //console.log("[handelPrivateMessage]");
-    this.server.to(this.UserDatabase.get(data.name)).emit('msgPrivateToClient', data);
-    return {event:"msgToServer", data: data}; 
-}
 
-  @SubscribeMessage('joinRoom') //RIPRENDERE DA QUI
+  @SubscribeMessage('joinRoom')
   async handleJoinRoom(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {client: string, room: string}): Promise<any> {
-    //console.log("");
-    //console.log("[joinRoom]")
-    //console.log("client:", data.client);
-    //console.log("room:", data.room);
     await this.chatService.createRoom(data.client, data.room);
     clientSocket.join(data.room);
     clientSocket.emit('joinedRoom', data.room);
-    //console.log(`Client ${clientSocket.id} has joined the chatroom ${data.room}.`);
     return data.room;
   }
 
   @SubscribeMessage('expiredMuteOrBan')
   async checkExpiredMuteOrBan(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {channelName: string}): Promise<any> {
-    // console.log("[expiredMuteOrBan] ", data.channelName);
     await this.chatService.expiredMuteOrBan(data.channelName);
-    //this.server.emit('update', data.type);
   }
 
   @SubscribeMessage('singleMuteOrBanRemove')
   async singleMuteOrBanRemove(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {channelName: string, client: string, status: string}): Promise<any> {
-    // console.log("[dataaaaaa] ", data.channelName, data.client, data.status);
     await this.chatService.singleMuteOrBanRemove(data.channelName, data.client, data.status);
-    //this.server.emit('update', data.type);
   }
 
   @SubscribeMessage('updateList')
   handleUpdateListChannel(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {type: string}): any {
-    // console.log("no, vabbe, dai", data.type);
     this.server.emit('update', data.type);
     return data.type;
   }
@@ -175,8 +149,8 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
           this.server.to(data.namePlayRoom).emit('goal', data, restart);
         else
         {
-          await this.gameService.saveMatch(data.namePlayRoom, roomInMap.leftPoint, roomInMap.rightPoint);
-          this.server.to(data.namePlayRoom).emit('endGame', roomInMap.leftPoint === 3 ? "left" : "right");
+          const winner = await this.gameService.saveMatch(data.namePlayRoom, roomInMap.leftPoint, roomInMap.rightPoint);
+          this.server.to(data.namePlayRoom).emit('endGame', winner);
         }
         clearInterval(id);
       }

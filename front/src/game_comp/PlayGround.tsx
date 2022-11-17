@@ -67,8 +67,8 @@ function PlayGround(props: any) {
                 props.socket.emit('requestOpponent', { namePlayRoom: namePlayRoom, side: side })
             //props.socket.emit('joinPlayRoom', { namePlayRoom: namePlayRoom, side: side });
         })
-        props.socket.once('endGame', (chi: string) => {
-            setWinner(clientSide.side === chi ? clientSide.name : opponentSide.name)
+        props.socket.once('endGame', (winner: string) => {
+            setWinner(winner)
         })
     }, [props.socket])
 
@@ -84,7 +84,7 @@ function PlayGround(props: any) {
 
     return (
         <div>
-            {winner ? <Modal onClose={() => console.log("si cazzo!!!!!")} opened={winner?true:false}>winner</Modal> :
+            {winner ? <Modal onClose={() => console.log("si cazzo!!!!!")} opened={winner ? true : false}>winner</Modal> :
                 <Canvas
                     socket={props.socket}
                     clientPaddle={clientSide}
