@@ -1,6 +1,6 @@
 //import React from 'react'
 /*import './Modal.css'*/
-import React, { useContext, useEffect, useState } from "react"
+import React, { ReactHTMLElement, useContext, useEffect, useState } from "react"
 import './ModalGrid.css'
 import { forwardRef } from 'react';
 import { Group, Avatar, Text, Select } from '@mantine/core';
@@ -25,7 +25,7 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
   )
 );
 
-function Demo(client: string) {
+function Demo(props: any) {
 
   const [friendsOnline, setFriendsOnline] = useState<{
     image: string;
@@ -35,7 +35,7 @@ function Demo(client: string) {
 
   useEffect(() => {
     async function getFriensOnline() {
-      let response = await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/users/getOnlineFriends/${client}`)
+      let response = await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/users/getOnlineFriends/${props.client}`)
       let data = await response.json();
       console.log(data);
       let fetchFriendsOnline: {
@@ -60,6 +60,10 @@ function Demo(client: string) {
     getFriensOnline();
   }, [])
 
+  // function test2(e: React.RefAttributes<HTMLInputElement>) {
+  //   console.log(e)
+  // }
+
   return (
     <Select
       placeholder="Pick one"
@@ -68,6 +72,7 @@ function Demo(client: string) {
       transitionDuration={200}
       data={friendsOnline}
       itemComponent={SelectItem}
+      onChange={(e) => console.log(e)}
       maxDropdownHeight={400}
       nothingFound="Nobody here"
       styles={() => ({
@@ -96,7 +101,7 @@ export function ClassicModal(props: any) {
       <div className="grid_item_2">
       </div>
       <div className="grid_item_3">Lista Partite in corso</div>
-      {Demo(contextData.username)}
+      <Demo client={contextData.username} setGameOptions={props.setGameOptions} />
     </div>
   )
 }

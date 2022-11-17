@@ -1,5 +1,5 @@
 import './LeadGrid.css'
-import { createStyles, Card, Image, Text,  Modal, useMantineTheme ,AspectRatio } from '@mantine/core';
+import { createStyles, Card, Image, Text, Modal, useMantineTheme, AspectRatio } from '@mantine/core';
 import { Center } from '@mantine/core';
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { ClassicModal, AvancedModal } from './Modal';
@@ -12,7 +12,7 @@ import { stringify } from 'querystring';
 
 
 function useHover<T>(): [MutableRefObject<T>, boolean] {
-  const [value, setValue] = useState<boolean>(false); 
+  const [value, setValue] = useState<boolean>(false);
   const ref: any = useRef<T | null>(null);
   const handleMouseOver = (): void => setValue(true);
   const handleMouseOut = (): void => setValue(false);
@@ -42,14 +42,14 @@ export function LeadGrid(props: any) {
   const [opened_classic, setOpened_classic] = useState(false);
   const [opened_advanced, setOpened_advanced] = useState(false);
 
-  const [gameOptions, setGameOptions] = useState<{type: string, opponent?: string}>({type: ""})
+  const [gameOptions, setGameOptions] = useState<{ type: string, opponent?: string }>({ type: "" })
 
   return (
     <Center>
       <div className='container'>
         <Modal
           opened={opened_classic}
-          onClose={() => { setGameOptions({type: ""}); setOpened_classic(false)}}
+          onClose={() => { setGameOptions({ type: "" }); setOpened_classic(false) }}
           withCloseButton={false}
           size="40%"
           padding={0}
@@ -57,11 +57,11 @@ export function LeadGrid(props: any) {
           radius={15}
           overlayOpacity={0.50}
           overlayBlur={5}>
-            <ClassicModal setPlay={props.setPlay} setGameOptions={setGameOptions}/>
+          <ClassicModal setPlay={props.setPlay} setGameOptions={setGameOptions} />
         </Modal>
         <Modal
           opened={opened_advanced}
-          onClose={() => { setGameOptions({type: ""}); setOpened_advanced(false)}}
+          onClose={() => { setGameOptions({ type: "" }); setOpened_advanced(false) }}
           withCloseButton={false}
           size="40%"
           padding={0}
@@ -69,40 +69,40 @@ export function LeadGrid(props: any) {
           radius={15}
           overlayOpacity={0.50}
           overlayBlur={5}>
-            <AvancedModal setPlay={props.setPlay} setGameOptions={setGameOptions}/>
+          <AvancedModal setPlay={props.setPlay} setGameOptions={setGameOptions} />
         </Modal>
-          <div className='card_text_container card_1'>
-            <div className='card classic_card' ref={hoverRef} onClick={() => {setGameOptions({type: "classic"}); setOpened_classic(true)}}>
-              <Card  shadow="sm" p="lg" radius={15}>
-                <Card.Section>
-                  {isHovered ?
-                    <Image src={classic_gif} height={"100%"} />
-                  :
-                    <Image src={classic_logo} height={"100%"} />
-                  }
-                </Card.Section>
-              </Card>
-            </div>
-              <Text className='game_text_style' align="center" color="white" >
-                Classic Pong
-              </Text>
-          </div>
-          <div className='card_text_container card_2'>
-            <div className='card advanced_card' ref={hoverRef_2} onClick={() => {setGameOptions({type: "advance"}); setOpened_advanced(true)}}>
-              <Card  shadow="sm" p="lg" radius={15}>
+        <div className='card_text_container card_1'>
+          <div className='card classic_card' ref={hoverRef} onClick={() => { setGameOptions({ type: "classic" }); setOpened_classic(true) }}>
+            <Card shadow="sm" p="lg" radius={15}>
               <Card.Section>
-                  {isHovered_2 ?
-                    <Image src={advanced_gif} height={"100%"} />
+                {isHovered ?
+                  <Image src={classic_gif} height={"100%"} />
                   :
-                    <Image src={advanced_logo} height={"100%"} />
-                  }
-                </Card.Section>
-              </Card>
-            </div>
-              <Text className='game_text_style' align="center" color="white">
-                Advanced Pong
-              </Text>
-            </div>
+                  <Image src={classic_logo} height={"100%"} />
+                }
+              </Card.Section>
+            </Card>
+          </div>
+          <Text className='game_text_style' align="center" color="white" >
+            Classic Pong
+          </Text>
+        </div>
+        <div className='card_text_container card_2'>
+          <div className='card advanced_card' ref={hoverRef_2} onClick={() => { setGameOptions({ type: "advance" }); setOpened_advanced(true) }}>
+            <Card shadow="sm" p="lg" radius={15}>
+              <Card.Section>
+                {isHovered_2 ?
+                  <Image src={advanced_gif} height={"100%"} />
+                  :
+                  <Image src={advanced_logo} height={"100%"} />
+                }
+              </Card.Section>
+            </Card>
+          </div>
+          <Text className='game_text_style' align="center" color="white">
+            Advanced Pong
+          </Text>
+        </div>
       </div>
     </Center>
   );
