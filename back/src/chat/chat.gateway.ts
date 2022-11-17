@@ -167,9 +167,13 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   async handleConnection(clientSocket: Socket) {
-    await this.chatService.updateUserSocket(String(clientSocket.handshake.query.userID), clientSocket.id);
-    //await this.userService.setOnlineStatus(String(clientSocket.handshake.query.userID));
-    this.logger.log(`Client connected: ${clientSocket.id}`);
+    //console.log(String(clientSocket.handshake.query.userID));
+    if (String(clientSocket.handshake.query.userID) !== '0')
+    {
+      await this.chatService.updateUserSocket(String(clientSocket.handshake.query.userID), clientSocket.id);
+      await this.userService.setOnlineStatus(String(clientSocket.handshake.query.userID));
+      this.logger.log(`Client connected: ${clientSocket.id}`);
+    }
   }
 
   async handleDisconnect(clientSocket: Socket) {

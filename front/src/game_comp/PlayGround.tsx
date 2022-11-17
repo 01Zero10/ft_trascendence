@@ -70,6 +70,7 @@ function PlayGround(props: any) {
             //props.socket.emit('joinPlayRoom', { namePlayRoom: namePlayRoom, side: side });
         })
         props.socket.once('endGame', (winner: string) => {
+            console.log(winner);
             setWinner(winner)
         })
     }, [props.socket])
@@ -86,52 +87,52 @@ function PlayGround(props: any) {
 
     return (
         <div>
-            {winner ?   <Modal styles={(root) => ({
-                            body: {
-                            backgroundColor: '#fff',
-                            textAlign: 'center',
-                            },
-                            })}
-                                onClose={() => console.log("si cazzo!!!!!")} 
-                                opened={winner ? true : false}
-                                transitionDuration={600}
-                                style={{backgroundColor:"black", zIndex:"5", }}
-                                centered
-                                withCloseButton={false}
-                                size="lg"
-                                overlayOpacity={0.50}
-                                overlayBlur={5}
-                            >
-                            <div>
-                                <div className="inner1">
-                                    { contextData.username === winner ? <h1 style={{padding:"5%"}}>You Won! 🥳</h1> : 
-                                        <h1 style={{padding:"5%"}}>You Lost.. 😭</h1> }
-                                </div>
-                                {/* style={{width:"50%", display:"flex", justifyContent:"center"}} */}
-                                <div className="inner2">
-                                    <Button
-                                            style={{margin:"1%"}}
-                                            radius="lg"
-                                            size="md"
-                                            variant="gradient"
-                                            gradient={{ from: 'black', to: 'grape', deg: 55 }}
-                                            onClick={() => navigate('/home')}
-                                            >
-                                            Back to home
-                                    </Button>
-                                    <Button
-                                            style={{margin:"1%"}}
-                                            radius="lg"
-                                            size="md"
-                                            variant="gradient"
-                                            gradient={{ from: 'black', to: 'pink', deg: 55 }}
-                                            // onClick={console.log("pipo")}
-                                            >
-                                            Rematch
-                                    </Button>
-                                </div>
-                            </div>
-                        </Modal> :
+            {winner ? <Modal styles={(root) => ({
+                body: {
+                    backgroundColor: '#fff',
+                    textAlign: 'center',
+                },
+            })}
+                onClose={() => console.log("si cazzo!!!!!")}
+                opened={winner ? true : false}
+                transitionDuration={600}
+                style={{ backgroundColor: "black", zIndex: "5", }}
+                centered
+                withCloseButton={false}
+                size="lg"
+                overlayOpacity={0.50}
+                overlayBlur={5}
+            >
+                <div>
+                    <div className="inner1">
+                        {contextData.username === winner ? <h1 style={{ padding: "5%" }}>You Won! 🥳</h1> :
+                            <h1 style={{ padding: "5%" }}>You Lost.. 😭</h1>}
+                    </div>
+                    {/* style={{width:"50%", display:"flex", justifyContent:"center"}} */}
+                    <div className="inner2">
+                        <Button
+                            style={{ margin: "1%" }}
+                            radius="lg"
+                            size="md"
+                            variant="gradient"
+                            gradient={{ from: 'black', to: 'grape', deg: 55 }}
+                            onClick={() => navigate('/home')}
+                        >
+                            Back to home
+                        </Button>
+                        <Button
+                            style={{ margin: "1%" }}
+                            radius="lg"
+                            size="md"
+                            variant="gradient"
+                            gradient={{ from: 'black', to: 'pink', deg: 55 }}
+                        // onClick={console.log("pipo")}
+                        >
+                            Rematch
+                        </Button>
+                    </div>
+                </div>
+            </Modal> :
                 <Canvas
                     socket={props.socket}
                     clientPaddle={clientSide}
