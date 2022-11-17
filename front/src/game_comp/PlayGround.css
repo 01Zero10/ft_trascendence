@@ -1,37 +1,13 @@
-.mantine-Select-wrapper{
-	height: 5vh;
-	margin : 2.5vh auto 0;
-	border: 1.5px solid lightgray;
-	border-radius: 15px;
-}
 
-.mantine-Select-dropdown{
-	max-width: 95%;
-	border:1px solid lightgray;
-	background-color: black;
-}
-.mantine-Select-item{
-	color: darkgrey;
-	/*border: 2px solid darkgray;*/
-	margin: 1% auto 0;
-}
+#inner1 {
+	float:left;
+	text-align: center;
+ }
+ 
+ #inner2{
+	float:left; 
+	clear: left;
+	align-items: center;
+ }
 
-.mantine-Select-input{
-	height: 100%;
-	font-size: 0.8em;
-	color: lightgray;
-}
 
-.mantine-l553vn {
-    text-align: center;
-}
-
-.text-modal h1 {
-    text-align: center;
-    font-size: 70px;
-    font-weight: 600;
-    background-image: linear-gradient(to left, #553c9a, #b393d3);
-    color: transparent;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }

@@ -1,6 +1,7 @@
-import { Button, Modal } from "@mantine/core"
+import { Button, Center, Modal } from "@mantine/core"
 import { positions } from "@mui/system"
 import { useContext, useEffect, useLayoutEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { Student } from "../App"
 import Loader from "../components/Loader"
 import Canvas from "./Canvas"
@@ -35,6 +36,7 @@ export type Paddle = {
 }
 
 function PlayGround(props: any) {
+    const navigate = useNavigate()
     const contextData = useContext(Student)
     // const [loader, setLoader] = useState<boolean>(true);
     const [clientSide, setClientSide] = useState<Paddle>({ name: contextData.username, side: '', playRoom: '' });
@@ -43,7 +45,7 @@ function PlayGround(props: any) {
         left: 0,
         right: 0
     })
-    const [winner, setWinner] = useState("")
+    const [winner, setWinner] = useState("mobrycki")
     //const dir: Array<string> = ["l", "r"]
     const [lastPoint, setLastPoint] = useState<"l" | "r" | null>(null)
     //const [ballDirection, setBallDirection] = useState<"l" | "r" >(dir[Math.round(Math.random())] as "l" | "r")
@@ -84,7 +86,12 @@ function PlayGround(props: any) {
 
     return (
         <div>
-            {winner ?   <Modal 
+            {winner ?   <Modal styles={(root) => ({
+                            body: {
+                            backgroundColor: '#fff',
+                            textAlign: 'center',
+                            },
+                            })}
                             onClose={() => console.log("si cazzo!!!!!")} 
                             opened={winner ? true : false}
                             transitionDuration={600}
@@ -92,29 +99,36 @@ function PlayGround(props: any) {
                             centered
                             withCloseButton={false}
                             size="lg"
+                            
                             >
+                                {/* style={{width:"100%", height:"100%", textAlign:"center", display:"flex", justifyContent:"center", alignContent:"center"}} */}
                             <div>
-                                <h1 id='text-modal h1'>You Won! 🥳</h1>
-                            </div>
-                            <div style={{alignItems:"center"}}>
-                                <Button
-                                        radius="xl"
-                                        size="sm"
-                                        variant="gradient"
-                                        gradient={{ from: 'black', to: 'grape', deg: 55 }}
-                                        // onClick={console.log("pipo")}
-                                        >
-                                        Back to home
-                                </Button>
-                                <Button
-                                        radius="xl"
-                                        size="sm"
-                                        variant="gradient"
-                                        gradient={{ from: 'black', to: 'pink', deg: 55 }}
-                                        // onClick={console.log("pipo")}
-                                        >
-                                        Rematch
-                                </Button>
+                                <div className="inner1">
+                                    <h1 style={{padding:"5%"}}>You Won! 🥳</h1>
+                                </div>
+                                {/* style={{width:"50%", display:"flex", justifyContent:"center"}} */}
+                                <div className="inner2">
+                                    <Button
+                                            style={{margin:"1%"}}
+                                            radius="lg"
+                                            size="md"
+                                            variant="gradient"
+                                            gradient={{ from: 'black', to: 'grape', deg: 55 }}
+                                            onClick={() => navigate('/home')}
+                                            >
+                                            Back to home
+                                    </Button>
+                                    <Button
+                                            style={{margin:"1%"}}
+                                            radius="lg"
+                                            size="md"
+                                            variant="gradient"
+                                            gradient={{ from: 'black', to: 'pink', deg: 55 }}
+                                            // onClick={console.log("pipo")}
+                                            >
+                                            Rematch
+                                    </Button>
+                                </div>
                             </div>
                         </Modal> :
                 <Canvas
