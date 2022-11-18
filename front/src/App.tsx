@@ -93,21 +93,16 @@ function App() {
 
   const [socket, setSocket] = useState<Socket | null>(null);
   useLayoutEffect(() => {
+    if (contextData.id !== 0){
     const url = `http://${process.env.REACT_APP_IP_ADDR}:3001`;
-    //const newSocket: Socket = io(url, { autoConnect: false, query: { userID: String(contextData.id) } });
-    //const socket: Socket = io(url, { autoConnect: false });
     const newSocket = io(`http://${process.env.REACT_APP_IP_ADDR}:3001`, { query: { userID: String(contextData.id) } });
     newSocket.on('connect', () => {
-      setSocket(newSocket);
-      contextData.socket_id = newSocket.id;
-      //console.log(newSocket.id);
-      //console.log(contextData.socket_id);
-    })
-    //setSocket(newSocket);
-    //console.log(newSocket.id);
-    //socket?.connect();
-    //getUsersOnDB();
-  }, [contextData]);
+        setSocket(newSocket);
+        contextData.socket_id = newSocket.id;
+        }
+      )
+    }
+  }, [contextData.id]);
 
   const [currPath, setCurrPath] = useState(window.location.pathname)
 
