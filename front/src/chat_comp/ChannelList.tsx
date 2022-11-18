@@ -5,15 +5,12 @@ import { IconSettings } from "@tabler/icons";
 
 export default function ChannelList(props: any) {
 	const [channelList, setChannelList] = useState<object[]>([])
-
 	const student = useContext(Student)
 
-	//console.log(channelList);
 	async function getChannels() {
 		let response = await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/chat/get${props.card}`);
 		let data = await response.json();
 		let options_: Rooms[] = [];
-
 		await Promise.all(await data.map(async (element: any) => {
 			if (options_.findIndex(x => x.name === element.name) === -1)
 				options_.push(element);
@@ -26,12 +23,11 @@ export default function ChannelList(props: any) {
 	}, [props.card]);
 
 	useEffect(() => {
-		props.socket?.on('update', async (card: string) => {
-			//console.log("porco");
-			//if (props.card === card)
-			await getChannels();
+		props.socket?.on('update', async (type: string) => {
+			if (props.card === type)
+				await getChannels();
 		});
-	}, [props?.socket])
+	}, [])
 
 	function setChOpt(channel: Rooms) {
 		if (props.chOptions?.name === channel.name) {
@@ -43,6 +39,8 @@ export default function ChannelList(props: any) {
 		props.setOpened("owner")
 	}
 	
+
+
 	return (
 		<div className="chat-selection">
 			{channelList.map(function (element: any, id: number) {
@@ -59,7 +57,8 @@ export default function ChannelList(props: any) {
 							</div>
 						</div> :
 						null)
-			})}
+				}
+			)}
 		</div>
 	)
 }

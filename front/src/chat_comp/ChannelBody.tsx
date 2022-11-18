@@ -171,7 +171,7 @@ export default function ChannelBody(props: any) {
 			setMessages([]);
 	}
 
-	useEffect(() => console.log("controllo del proprio stato e"))
+	// useEffect(() => console.log("controllo del proprio stato e"))
 
 	useEffect(() => {
 		getChatMessages();

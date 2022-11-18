@@ -14,7 +14,7 @@ export default function ChatMenu(props: any) {
 	function search(e: React.ChangeEvent<HTMLInputElement>) {
 		setSrc(e.target.value)
 	}
-
+	// console.log(card)
 	return (
 		<div className="chat-nav">
 			<div className="chat-search">
@@ -31,14 +31,9 @@ export default function ChatMenu(props: any) {
 					</form>
 					<div style={{ display: "flex", width: "100%", height: "10%", marginTop: "7px", justifyContent: "center", alignItems: "center" }}>
 						<div style={{display: "flex", }}>
-							{/* <div style={{ width: "17%" }}></div> */}
 							<div style={{ backgroundColor: "white", borderRadius: "5px 5px 0 0" }}>
-								<Tabs variant="default" color="white" defaultValue="my_channel">
+								<Tabs variant="default" color="white" defaultValue="public" value={card}>
 									<Tabs.List position="center">
-										{/* <Tabs.Tab value={`membership/${contextData.id}`} color="grape" onClick={() => setCard(`membership/${contextData.id}`)}>My Channels</Tabs.Tab>
-										<Tabs.Tab value="public" color="grape" onClick={() => setCard("public")}>Public</Tabs.Tab>
-										<Tabs.Tab value="protected" color="grape" onClick={() => setCard("protected")}>Protected</Tabs.Tab>
-										<Tabs.Tab value="uod" color="grape" onClick={() => setCard("uod")}>DM's</Tabs.Tab> */}
 										<Tabs.Tab value={`membership/${contextData.id}`} icon={<IconUser size={14} />} color="grape" onClick={() => setCard(`membership/${contextData.id}`)}>My Channels</Tabs.Tab>
 										<Tabs.Tab value="public" color="grape" icon={<IconUsers size={14} />} onClick={() => setCard("public")}>Public</Tabs.Tab>
 										<Tabs.Tab value="protected" color="grape" icon={<IconShield size={14} />} onClick={() => setCard("protected")}>Protected</Tabs.Tab>
@@ -46,7 +41,6 @@ export default function ChatMenu(props: any) {
 									</Tabs.List>
 								</Tabs>
 							</div>
-							{/* <div style={{ width: "17%" }}></div> */}
 						</div>
 					</div>
 				</div>

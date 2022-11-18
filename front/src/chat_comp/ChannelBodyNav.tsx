@@ -26,17 +26,10 @@ export default function ChannelBodyNav(props: any) {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ client: student.username, channelName: props.room?.name, joined: props.joined }),
 		})
-	  //console.log(props.joined)
 		props.setJoined((prevJoined: boolean) => !prevJoined);
 		props.socket?.emit('updateList', { type: props.room?.type });
 	}
 
-	// useLayoutEffect(() => {		
-	// 		if (!props.joined && props.room.name){
-	// 			props.setRoom({ name: "", type: "", builder: { username: "" } })
-	// 		}
-	// 	} , [props.joined]
-	// )
 
 	async function loadAddMembersOptions() {
 		const API_LOAD_ADD_MEMBERS_OPTIONS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/addMembersOptions`;
