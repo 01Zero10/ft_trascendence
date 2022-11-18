@@ -87,7 +87,10 @@ export class ChatService {
         .where({id: client_id})
         .getOne())
         const groups = User ? User.rooms : [];
-        return (groups);
+        const rooms = []
+        for(let i of groups)
+            rooms.push(await this.getChannel(i.name))
+        return (rooms);
     }
     
     async getClientRooms(client_id: number) {
@@ -570,6 +573,7 @@ export class ChatService {
         //update rows phase
         Promise.all(await rowsToUpdate.map(async (element) => {
             let index = await this.banOrMuteRepository.findOne({ where: [{channelName: channelName}, {username: element}]});
+            //console.log(index)
             index.status = mode,
             index.reason = reason;
             index.expireDate = expirationDate;
