@@ -82,7 +82,7 @@ function Navigation() {
 
   const contextData = useContext(Student)
 
-  const [count, setCount] = useState("4");
+  const [count, setCount] = useState(4);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
