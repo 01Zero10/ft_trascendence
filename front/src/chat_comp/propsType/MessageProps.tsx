@@ -7,7 +7,7 @@ type MessageProps = {
 	createdAt: any,
 	username: string,
 	message: string,
-	admin?: boolean
+	admin?: 0 | 1 | 2
 	builder?: string
 }
 

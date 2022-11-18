@@ -13,14 +13,16 @@ export default function ChannelBodyStatus(props: any) {
     const [userOpen, setUserOpen] = useState(true)
 
     //---------------------chat.tsx States----------------------
-    const [admin, setAdmin] = useState(false)
+    const [admin, setAdmin] = useState<0 | 1 | 2>(0)
 
     const [members, setMembers] = useState<string[]>([]);
     const [admins, setAdmins] = useState<string[]>([]);
 
     useLayoutEffect(() => {
-        if (student.username === props.room.builder.username || admins.findIndex((x) => x === student.username) !== -1)
-            setAdmin(true)
+        if (student.username === props.room.builder.username)
+            setAdmin(2)
+        else if (admins.findIndex((x) => x === student.username) !== -1)
+            setAdmin(1)
     }, [admins])
 
     //chiude le liste in status 
@@ -75,7 +77,7 @@ export default function ChannelBodyStatus(props: any) {
             await getChatMembers();
             await getRoomAdmins()
         }
-        setAdmin(false)
+        setAdmin(0)
         getData();
     }, [props.room.name])
 

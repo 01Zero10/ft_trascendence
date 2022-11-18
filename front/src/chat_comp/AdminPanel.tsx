@@ -27,13 +27,13 @@ export default function AdminPanel(props: any) {
 
 
 	useLayoutEffect(() => {
-		console.log("metti il controllo sui bannati e mutati")
+	  //console.log("metti il controllo sui bannati e mutati")
 		props.socket.emit('expiredMuteOrBan', { channelName: props.room.name });
 		//const API_EXPIRED_MUTE_OR_BAN = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/expiredMuteOrBan/ancora`;
 	}, [props.opened])
 
 
-	console.log("room: ", props.room)
+  //console.log("room: ", props.room)
 	//funzioni switch mute/ban
 
 	// function switchAction(value: SetStateAction<"ban" | "mute" | "kick">) {
@@ -67,7 +67,7 @@ export default function AdminPanel(props: any) {
 		if (props.room.name != '') {
 			let response = await fetch(API_GET_MUTED);
 			let data = await response.json();
-			//console.log("muuuuuuuuted banned = ", data);
+		  console.log("muuuuuuuuted banned = ", data);
 			let fetchMuted: {
 				value: string;
 				label: string;
@@ -91,7 +91,7 @@ export default function AdminPanel(props: any) {
 		if (props.room.name != '') {
 			let response = await fetch(API_GET_BANNED);
 			let data = await response.json();
-			//console.log("daaaaaata banned = ", data);
+			console.log("daaaaaata banned = ", data);
 			let fetchBanned: {
 				value: string;
 				label: string;
@@ -120,7 +120,7 @@ export default function AdminPanel(props: any) {
 				body: JSON.stringify({ channelName: props.room.name, mode: action }),
 			});
 			let data = await response.json();
-			//console.log("daaaaaata options = ", data);
+			console.log("daaaaaata options = ", data);
 			let fetchOptions: {
 				value: string;
 				label: string;
@@ -160,7 +160,6 @@ export default function AdminPanel(props: any) {
 			await getOptions();
 			await getBanned()
 		}
-		//console.log("initialization")
 		prepareInitialData();
 	}, [props.room.name])
 

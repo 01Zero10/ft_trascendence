@@ -149,9 +149,6 @@ export default function OwnerPanel(props: any) {
 	function handleTransferListChange(data: any){
 		let n = 0
 		let ch = 0
-		console.log(ch)
-		console.log(data)
-		console.log(oldData)
 		for(let i of data){
 			if (i.length === 0)
 			{

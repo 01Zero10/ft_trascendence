@@ -26,7 +26,7 @@ export default function ChannelBodyNav(props: any) {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ client: student.username, channelName: props.room?.name, joined: props.joined }),
 		})
-		console.log(props.joined)
+	  //console.log(props.joined)
 		props.setJoined((prevJoined: boolean) => !prevJoined);
 		props.socket?.emit('updateList', { type: props.room?.type });
 	}
@@ -112,7 +112,7 @@ export default function ChannelBodyNav(props: any) {
 							ADD MEMBERS
 						</Button>
 					</div>}
-				{(props.room && student.username !== props.builder && props.admin) &&
+				{(props.room && student.username !== props.builder && props.admin !== 0) &&
 					<div style={{ paddingTop: "5px", position: "relative", width: "20%" }}>
 						<Button
 							radius="xl"

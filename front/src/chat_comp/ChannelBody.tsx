@@ -58,7 +58,7 @@ export default function ChannelBody(props: any) {
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ client: student.username, channelName: props.room.name, joined: props.joined }),
 			})
-			console.log(props.joined)
+		  //console.log(props.joined)
 			props.setJoined((prevJoined: boolean) => !prevJoined);
 			props.socket?.emit('updateList', { type: props.room.type });
 		}
@@ -72,12 +72,12 @@ export default function ChannelBody(props: any) {
 				headers: { 'Content-Type': 'application/json' },
 			})
 			const data = await response.json();
-			console.log(data);
+		  //console.log(data);
 			const now = new Date();
 			for (const element of data) {
 				let timer: any = new Date(element.expireDate).getTime() - now.getTime();
-				console.log('elemento === ', element)
-				console.log(timer);
+			  //console.log('elemento === ', element)
+			  //console.log(timer);
 				if (timer < 0)
 					props.socket?.emit('singleMuteOrBanRemove', { channelName: element.channelName, client: student.username, status: element.status });
 				else { //controllare se funziona?
