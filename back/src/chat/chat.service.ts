@@ -9,6 +9,7 @@ import { PrivateMessages } from './privateMessages.entity';
 import { BanOrMute } from './banOrMute.entity';
 import { createCipheriv, scrypt, randomBytes} from 'crypto';
 import { promisify } from 'util';
+import { channel } from 'diagnostics_channel';
 
 @Injectable()
 export class ChatService {
@@ -434,12 +435,13 @@ export class ChatService {
             }
     }
 
-    async buildCipherPass(pass: string){
-        // const iv = Buffer.from(process.env.BUFFER_IV, 'base64');
-        const iv = randomBytes(16);
+    async buildCipherPass(pass: string, channel: string){
+        const iv = Buffer.from(channel, 'base64');
+        // const iv = randomBytes(16);
         const key = (await promisify(scrypt)("process.env.PASS_TO_ENCRYPT", 'salt', 32)) as Buffer;
         const cipher = createCipheriv("aes-256-gcm", key, iv);
         let crypted = cipher.update(pass, 'utf-8', 'hex') + cipher.final('hex');
+        console.log("cripted", crypted)
         return crypted;
     }
 
@@ -451,7 +453,7 @@ export class ChatService {
             const newRoom = await this.roomsRepository.create({name: roomName});
             newRoom.type = type;
             if (type === 'protected')
-                newRoom.password = await this.buildCipherPass(password);
+                newRoom.password = await this.buildCipherPass(password, roomName);
             return newRoom;
         }
         else {
@@ -523,10 +525,7 @@ export class ChatService {
     }
 
     async editUsersOnChannel(admins: {value: string, label: string}[], members: {value: string, label: string}[], channelName: string){
-        //console.log("1", admins);
-        //console.log("2", members);
         const room = await this.roomsRepository.findOne({where : {name: channelName}});
-        //console.log(room);
         let updatingAdmins: User[] = [(await this.getRoomOwner(channelName))];
         await Promise.all(await admins.map(async (element) => {
             updatingAdmins.push(await this.userRepository.findOne({ where : { username: element.value} }))
@@ -536,7 +535,6 @@ export class ChatService {
     }
 
     async setJoin(client: string, channelName: string, joined: boolean){
-        //console.log("joined = ", joined);
         if (joined)
             await this.leaveChannel(channelName, client);
         else
@@ -572,7 +570,6 @@ export class ChatService {
         //update rows phase
         Promise.all(await rowsToUpdate.map(async (element) => {
             let index = await this.banOrMuteRepository.findOne({ where: [{channelName: channelName}, {username: element}]});
-            //console.log(index)
             index.status = mode,
             index.reason = reason;
             index.expireDate = expirationDate;
@@ -609,16 +606,16 @@ export class ChatService {
     // ???
 
     async updateUserSocket(userID: string, userSocket: string){
-        //console.log("attenzione");
-        //console.log(userID, userSocket);
         if (userID)
             await this.userRepository.update(userID, {socket_id: userSocket})
     }
 
     async checkProtectedPassword(input: string, channel: string){
-        const iv = Buffer.from(process.env.BUFFER_IV, 'base64');
-        const key = (await promisify(scrypt)(process.env.PASS_TO_ENCRYPT, 'salt', 32)) as Buffer;
-        const cipher = createCipheriv(process.env.ALGORITHM_TO_ENCRYPT, key, iv);
+        const iv = Buffer.from(channel, 'base64');
+        console.log(iv)
+        // const iv = randomBytes(16);
+        const key = (await promisify(scrypt)("process.env.PASS_TO_ENCRYPT", 'salt', 32)) as Buffer;
+        const cipher = createCipheriv("aes-256-gcm", key, iv);
         let cipherInput = cipher.update(input, 'utf-8', 'hex') + cipher.final('hex');
         if (cipherInput === (await this.getRoomByName(channel)).password)
             return true;
