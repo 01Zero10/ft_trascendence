@@ -36,6 +36,9 @@ export type Paddle = {
 }
 
 function PlayGround(props: any) {
+
+    console.log("SOCKET = ", props.socket);
+
     const navigate = useNavigate()
     const contextData = useContext(Student)
     // const [loader, setLoader] = useState<boolean>(true);

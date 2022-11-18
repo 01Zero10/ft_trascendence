@@ -65,7 +65,7 @@ function Demo(props: any) {
   // }
 
   return (
-    <div style={{display:"flex", justifyContent:"center", alignContent:"center", height:"100%", width:"100%"}}>
+    <div style={{ display: "flex", justifyContent: "center", alignContent: "center" }}>
       <Select
         placeholder="Pick one"
         variant='unstyled'
@@ -85,10 +85,9 @@ function Demo(props: any) {
           }
         })}
       />
-
-        <Button>
-          Confirm
-        </Button>
+      <Button>
+        Confirm
+      </Button>
     </div>
   );
 }
@@ -101,16 +100,13 @@ export function ClassicModal(props: any) {
     <div className="classic_grid_container">
       <div className="grid_item_1" onClick={() => props.setPlay(true)}>
         <div className="logo_holder">
-          <p className="logo">Join the queue</p>
+          <p className="logo">Matchmaking</p>
         </div>
       </div>
       <div className="grid_item_2">
-          <p className="logo">Or choose a friend to play with!</p>
-          <div style={{padding:"5%"}}>
-            <Demo client={contextData.username} setGameOptions={props.setGameOptions} />
-          </div>
       </div>
-      {/* <div className="grid_item_3">Lista Partite in corso</div> */}
+      <div className="grid_item_3">Lista Partite in corso</div>
+      <Demo client={contextData.username} setGameOptions={props.setGameOptions} />
     </div>
   )
 }

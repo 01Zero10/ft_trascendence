@@ -13,6 +13,7 @@ import { ChatController } from "./chat/chat.controller";
 import { GameModule } from "./game/game.module";
 import { Match } from "./game/match.entity";
 import { Friendship } from "./user/friendship.entity";
+import { GameGateWay } from "./game/game.gateway";
 
 @Module({
   imports: [
@@ -41,6 +42,6 @@ import { Friendship } from "./user/friendship.entity";
     })
   ],
   controllers: [AuthController, ChatController], 
-  providers: [ChatGateWay],
+  providers: [ChatGateWay, GameGateWay],
 }) 
 export class AppModule {}

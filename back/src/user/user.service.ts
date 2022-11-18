@@ -301,14 +301,14 @@ export class UserService {
     newbie.id = Number(userID)
     newbie.status = 'online'
     newbie.user = client;
-    console.log("toSetOnline", newbie);
+    //console.log("toSetOnline", newbie);
     return await this.onlineRepository.save(newbie);
     }
   }
 
   async setOfflineStatus(userID: string){
     const toSetOffline = await this.onlineRepository.findOne({ where : { id: Number(userID)} })
-    console.log("toSetOffline", toSetOffline);
+    //console.log("toSetOffline", toSetOffline);
     if (toSetOffline)
       await this.onlineRepository.remove(toSetOffline);
   }
