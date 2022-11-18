@@ -177,8 +177,11 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   async handleDisconnect(clientSocket: Socket) {
-    await this.userService.setOfflineStatus(String(clientSocket.handshake.query.userID));
-    this.logger.log(`clientSocket disconnected: ${clientSocket.id}`);
+    if (clientSocket.handshake.query.userID !== 'undefined' && clientSocket.handshake.query.userID !== "null")
+    {
+      await this.userService.setOfflineStatus(String(clientSocket.handshake.query.userID));
+      this.logger.log(`clientSocket disconnected: ${clientSocket.id}`);
+    }
   }
 
   async sleep(time: number) {
