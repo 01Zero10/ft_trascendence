@@ -5,9 +5,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link, NavLink, Route, Routes } from 'react-router-dom';
 import './Navigation.css';
 import { Student } from './App';
-import { ActionIcon, Avatar, Box, Button, List } from '@mantine/core';
+import { ActionIcon, Avatar, Box, Button, Indicator, List } from '@mantine/core';
 import MenuIcon from '@mui/icons-material/Menu';
 import { IconBell, IconBellRinging } from '@tabler/icons';
+import NotificationBell from './NotificationBell';
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,600,1,200" />
 
@@ -81,6 +82,7 @@ function Navigation() {
 
   const contextData = useContext(Student)
 
+  const [count, setCount] = useState("4");
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -152,11 +154,10 @@ function Navigation() {
   }))
   return (
     <>
-      <AppBar sx={{ bgcolor: 'transparent', color: '#fff', width: '100%' }} component='nav'>
+      <AppBar sx={{ bgcolor: 'transparent', color: '#fff', width: '100%', paddingLeft: '32px', paddingRight: '32px' }} component='nav'>
         <Toolbar>
-          <ActionIcon variant="transparent"><IconBell color='white'></IconBell></ActionIcon>
+          <NotificationBell count={count} sx={{right:"20%"}} />
           <IconButton
-
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}

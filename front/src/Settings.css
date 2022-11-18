@@ -52,7 +52,7 @@
 .username {
   background: linear-gradient(90deg, rgba(255, 85, 94, 1) 0%, rgba(102, 38, 238, 1) 100%);
   font-family: 'Odibee Sans', sans-serif;
-  -webkit-background-clip: text;
+  /* -webkit-background-clip: text; */
   -webkit-text-fill-color: transparent;
   letter-spacing: 0.2rem;
   font-weight: 700;
