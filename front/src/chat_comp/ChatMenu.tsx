@@ -1,9 +1,12 @@
 import React, { useContext, useState } from "react"
-import Textbox from "../components/Textbox"
-import ChannelList from "./ChannelList"
-import { Button, Center, Tabs } from "@mantine/core";
 import { Student } from "../App";
-import { IconArrowBack, IconMessageCircle, IconPlus, IconShield, IconUser, IconUsers } from "@tabler/icons";
+import {Tab} from "@mantine/core/lib/Tabs/Tab/Tab";
+import {Tabs, Center} from "@mantine/core";
+import {IconMessageCircle, IconPlus, IconShield, IconUser, IconUsers} from "@tabler/icons";
+import {Fab} from "@mui/material";
+import {positions} from "@mui/system";
+
+
 
 
 export default function ChatMenu(props: any) {
@@ -11,57 +14,39 @@ export default function ChatMenu(props: any) {
 	let [src, setSrc] = useState('')
 	let [card, setCard] = useState("public")
 
+	const tabStyle = {
+		color:"violet"
+	}
+
 	function search(e: React.ChangeEvent<HTMLInputElement>) {
 		setSrc(e.target.value)
 	}
-	// console.log(card)
+
 	return (
-		<div className="chat-nav">
-			<div className="chat-search">
-				<p id="benvenuto" >Hi {props.student.username}</p>
-				<p>SEARCH CHANNEL</p>
-				<div>
-					<form className="search-bar-form">
-						<Textbox class="search-bar"
-							autoComplete="off"
-							handleChange={search}
-							type="search"
-							placeholder="Search"
-						/>
-					</form>
-					<div style={{ display: "flex", width: "100%", height: "10%", marginTop: "7px", justifyContent: "center", alignItems: "center" }}>
-						<div style={{display: "flex", }}>
-							<div style={{ backgroundColor: "white", borderRadius: "5px 5px 0 0" }}>
-								<Tabs variant="default" color="white" defaultValue="public" value={card}>
-									<Tabs.List position="center">
-										<Tabs.Tab value={`membership/${contextData.id}`} icon={<IconUser size={14} />} color="grape" onClick={() => setCard(`membership/${contextData.id}`)}>My Channels</Tabs.Tab>
-										<Tabs.Tab value="public" color="grape" icon={<IconUsers size={14} />} onClick={() => setCard("public")}>Public</Tabs.Tab>
-										<Tabs.Tab value="protected" color="grape" icon={<IconShield size={14} />} onClick={() => setCard("protected")}>Protected</Tabs.Tab>
-										<Tabs.Tab value={`FriendsChatList/${contextData.username}`} color="grape" icon={<IconMessageCircle size={14} />} onClick={() => setCard(`FriendsChatList/${contextData.username}`)}>DM's</Tabs.Tab>
-									</Tabs.List>
-								</Tabs>
-							</div>
-						</div>
-					</div>
-				</div>
+		<div className="chat-nav" style={{padding:"0 0 0 5px", backgroundColor:"black"}}>
+			<Center style={{ textAlign:"center", position: "relative", height: "5%", backgroundColor: "black", width: "100%" }}>
+				<img style={{width:"80%"}} src="/account_decoration_top.svg" alt="img_account" />
+				<div style={{color:"violet"}}> Trascendence Channel</div>
+			</Center>
+			<div style={{ position: "relative", height: "85%", backgroundColor: "black", width: "100%" }}>
+				<Tabs variant={"default"} radius="lg" color={"grape"} defaultValue={"all"} style={{position:"relative", height:"90%"}}>
+						<Tabs.List position="center" grow={true}>
+							<Tabs.Tab color={"grape"} style={tabStyle} value="all"  icon={<IconUsers size={14} />} onClick={() => setCard("public")}>All Channel</Tabs.Tab>
+							<Tabs.Tab style={tabStyle} value={`membership/${contextData.id}`} icon={<IconUser size={14} />} onClick={() => setCard(`membership/${contextData.id}`)}>My Channels</Tabs.Tab>
+							{/*<Tabs.Tab value="protected" icon={<IconShield size={14} />} onClick={() => setCard("protected")}>Protected</Tabs.Tab>*/}
+							<Tabs.Tab style={tabStyle} value={`FriendsChatList/${contextData.username}`} icon={<IconMessageCircle size={14} />} onClick={() => setCard(`FriendsChatList/${contextData.username}`)}>DM's</Tabs.Tab>
+						</Tabs.List>
+					<Tabs.Panel style={tabStyle} value="all">cazzo 1</Tabs.Panel>
+					<Tabs.Panel style={tabStyle} value={`membership/${contextData.id}`}>cazzo 2</Tabs.Panel>
+					<Tabs.Panel style={tabStyle} value={`FriendsChatList/${contextData.username}`}>cazzo 3</Tabs.Panel>
+
+				</Tabs>
 			</div>
-			<ChannelList
-				setOpened={props.setOpened}
-				src={src}
-				card={card}
-				room={props.room}
-				chOptions={props.chOptions}
-				socket={props?.socket}
-				setRoom={props.setRoom}
-				setChOptions={props.setChOptions}
-			/>
-			<div className="button-holder">
-				<Center>
-					<Button onClick={() => props.setCreateChan((prevCreateChan: boolean) => (!prevCreateChan))} 
-						leftIcon={props.createChan ? <IconArrowBack />:<IconPlus />}variant="gradient" gradient={{ from: 'indigo', to: 'grape', deg: 35 }} size="lg" uppercase>
-						{props.createChan ? "Back" : "Create a Channel"}
-					</Button>
-				</Center>
+			<div style={{height:"10%", backgroundColor:"black", display:"flex"}}>
+				<div style={{position:"relative", width:"70%", height:"100%"}}>
+					<img src="/account_decoration_down.svg" alt="img_account" />
+				</div>
+				<Fab color="secondary" aria-label="add"><IconPlus></IconPlus></Fab>
 			</div>
 		</div >
 	)

@@ -65,32 +65,7 @@ export default function Chat(props: any) {
 
 	return (
 		<div className="chat-dashboard">
-			<ChatMenu
-				setCreateChan={setCreateChan}
-				createChan={createChan}
-				className="test"
-				student={student}
-				room={room.name}
-				chOptions={chOptions}
-				setRoom={joinRoom}
-				socket={props?.socket}
-				setOpened={setOpened}
-				setChOptions={setChOptions}
-			/>
-			<ChannelBodyStatus
-				setRoom={setRoom}
-				createChan={createChan}
-				opened={opened}
-				setOpened={setOpened}
-				setChOptions={setChOptions}
-				chOptions={chOptions}
-				room={room}
-				handleSend={handleSend}
-				setInput={setInput}
-				input={input}
-				socket={props.socket}
-				setCreateChan={setCreateChan}
-			/>
+			<ChatMenu></ChatMenu>
 		</div>
 	)
 }

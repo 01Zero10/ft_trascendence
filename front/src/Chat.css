@@ -15,23 +15,21 @@
 
 .chat-dashboard {
     display: flex;
+    position: absolute;
     height: calc(100vh - 90px) !important;
     width: 100vw;
     margin-top: 90px;
     /* position: relative; */
-    background-color: #FAFBFF;
+    background-color: black;
 }
 
 .chat-nav {
-    /* float: left; */
-    /* border: 10px; */
-    /* border: blueviolet; */
-    border-width: 10px;
+    /*display: flex;*/
+    border-right: violet;
+    position: relative;
+    border-radius: 15px;
     background-color: #FAFBFF;
-    /* margin-top: auto; */
-    width: 25%;
-    /* width: 20vw; */
-    /* position: absolute; */
+    width: 20%;
     height: 100%;
 }
 

@@ -1,21 +1,9 @@
-import { useEffect } from "react";
-import { io, Socket } from "socket.io-client";
+import React from "react"
 
-export default function Leaderboard() {
-    let gameSocket: Socket;
+export default function LeaderBoard(props: any){
+    return(
+        <div>
 
-    useEffect(() => {
-        gameSocket = io(`http://${process.env.REACT_APP_IP_ADDR}:3001/game`);
-        //console.log("porco dio", gameSocket);
-        return () => {
-            gameSocket.disconnect();
-        }
-    }, []);
-
-    useEffect(() => {
-        gameSocket?.on('ciao', () => {
-            console.log('ricevuto ciao');
-        })
-    }, [])
-    return (<></>);
+        </div>
+    )
 }

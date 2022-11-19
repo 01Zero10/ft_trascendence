@@ -13,7 +13,7 @@ import Chat from './Chat';
 import Loader from './components/Loader';
 import { io, Socket } from 'socket.io-client';
 import Account from './Account';
-import Leaderboard from './LeaderBoard';
+import LeaderBoard2 from './LeaderBoard2';
 
 export interface Rooms {
   name: string;
@@ -124,7 +124,7 @@ function App() {
                 <Route path="/" element={<Login />} />
                 <Route path="/home" element={<Home />} />
                 <Route path={`/users/:user_id`} element={<Account />} />
-                <Route path="/leaderboard" element={<Leaderboard />} />
+                <Route path="/leaderboard" element={<LeaderBoard2 />} />
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/game" element={<Game socket={socket} />} />
                 <Route path="/users/settings" element={<Settings />} />
