@@ -25,7 +25,8 @@
 
 .chat-nav {
     /*display: flex;*/
-    border-right: violet;
+    border-right: 5px #781C9C;
+    border-bottom: 5px #781C9C;
     position: relative;
     border-radius: 15px;
     background-color: #FAFBFF;
