@@ -66,6 +66,7 @@ export default function Chat(props: any) {
 	return (
 		<div className="chat-dashboard">
 			<ChatMenu></ChatMenu>
+			<ChannelBodyStatus></ChannelBodyStatus>
 		</div>
 	)
 }

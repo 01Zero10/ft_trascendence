@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext, useLayoutEffect } from "react"
 import { Rooms, Student } from "../App";
-import { ActionIcon, Box } from "@mantine/core";
-import { IconSettings } from "@tabler/icons";
+import { ActionIcon, Badge, Box } from "@mantine/core";
+import { IconLock, IconSettings } from "@tabler/icons";
 
 export default function ChannelList(props: any) {
 	const [channelList, setChannelList] = useState<object[]>([])
@@ -39,6 +39,7 @@ export default function ChannelList(props: any) {
 	// 	props.setOpened("owner")
 	// }
 	
+	const lockIcon = (<IconLock ></IconLock>)
 
 
 	return (
@@ -48,20 +49,17 @@ export default function ChannelList(props: any) {
 				console.log(element)
 				return (
 					// element.name?.includes(props.src) ?
-						<div style={{  }} key={id + "channel-selection"} className="channel-selection">
-							<div key={id + "settings- chat-select"} className="settings- chat-select" >
-								<Box key={id + "box"} sx={{ position: "relative", width: "100%", height: "100%" }} onClick={() => { props.setRoom(element.name) }}>
+						<div style={{width:"80%", height:"70px", position:"relative", marginBottom:"5px" }} key={id + "channel-selection"}>
+							<div key={id + "settings- chat-select"} >
+								<Box key={id + "box"} sx={{ position: "relative", width: "100%", height: "100%" }}>
 									{element.name}
 								</Box>
-								{(element.type !== "direct" && element.builder?.username === student.username) &&
-									<ActionIcon key={id + "actionIcon"} style={{ verticalAlign: "center" }}
-										><IconSettings key={id + "settingsIcon"} /></ActionIcon>}
+								{element.type === "protected" && <Badge variant="gradient" gradient={{ from: 'orange', to: 'red' }} radius="xs" leftSection={lockIcon}>Protected</Badge>}
 							</div>
 						</div> )
 						// : null)
 				}
 			)}
-			</>
-
+		</>
 	)
 }
