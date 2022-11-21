@@ -29,9 +29,12 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   async handleDisconnect(clientSocket: Socket) {
       this.logger.log(`disconesso dal GAME namespace ${clientSocket.id}`);
       const client = String(clientSocket.handshake.query.username);
-      const ret = this.gameService.handleLeaveQueue(client);
-      if (!ret)
-        this.gameService.handleLeavePlayRoom(client);
+      console.log('cclient0 ', client);
+      this.gameService.handleLeaveQueue(client);
+      //const ret = await this.gameService.handleLeaveQueue(client);
+      //console.log('retttt = ', ret);
+      //if (!ret)
+        //this.gameService.handleLeavePlayRoom(client);
   }
 
   @SubscribeMessage('onPress')
@@ -89,6 +92,8 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   async handleLeftGame(namePlayRoom: string){
+    console.log('handle left game');
+    console.log(namePlayRoom);
     this.server.to(namePlayRoom).emit('endGame', 'left');
   }
 

@@ -79,6 +79,8 @@ export class GameService{
     }
 
     async handleLeaveQueue(client: string){
+        console.log('cclient1 ', client);
+        
         let playRoom = await this.runningMatches
         .createQueryBuilder()
         .where({player1: client})
@@ -87,14 +89,25 @@ export class GameService{
         if (playRoom !== null)
         {
             await this.runningMatches.remove(playRoom);
-            return 1;
+            return ;
         }
-        return 0;
+        this.handleLeavePlayRoom(client);
     }
 
     async handleLeavePlayRoom(client: string){
+        console.log('cclient2 ', client);
+
+        // let playRoom = await this.runningMatches
+        // .findOne({ where : [{player1: client}, {player2: client}]});
+        
         let playRoom = await this.runningMatches
-        .findOne({ where : [{player1: client}, {player2: client}]});
+        .createQueryBuilder('playroom')
+        .where("playroom.player1 = :client_n", { client_n: client })
+        .orWhere("playroom.player2 = :client_n", { client_n: client })
+        .getOne()
+
+
+        console.log('p-p-pl = ', playRoom);
         
         if (playRoom)
         {
