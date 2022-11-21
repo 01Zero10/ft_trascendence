@@ -279,6 +279,38 @@ export class UserService {
     return response;
   }
 
+  async getFriendsRequest(client: string, profileUser: string){
+    //const arrayFriends = (await this.getByUsername(profileUser)).friends;
+    //console.log(arrayFriends);
+    const arrayRequest = await this.friendShipRepository
+    .createQueryBuilder('request')
+    .where("request.user1 = :client_n", { client_n: client })
+    //.orWhere("request.user2 = :client_n", { client_n: client })
+    .andWhere("request.friendship = :state", { state: "pending" })
+    .andWhere("request.sender != :sender_n", { sender_n: client })
+    .getMany()
+
+    console.log(arrayRequest);
+    const response: FriendListItem[] = [];
+    if (arrayRequest && arrayRequest.length > 0)
+    {
+      await Promise.all(await arrayRequest.map(async (element) => {
+        //const sender = await this.getByUsername(element.)
+        //const sender = (element.)
+        const player = await this.getByUsername(element.sender);
+        const item: FriendListItem = { 
+          username: player.username,
+          nickname: player.nickname,
+          avatar: player.avatar,
+          friendship: (await this.checkFriendship(client, player.username)),
+          position: 42, //TODO: forzato xk manca ancora tutto il resto
+        }
+        response.push(item);
+      }))
+    }
+    return response;
+  }
+
   async getListFriends(client: string){
     const arrayFriends = (await this.getByUsername(client)).friends;
     //console.log(arrayFriends);

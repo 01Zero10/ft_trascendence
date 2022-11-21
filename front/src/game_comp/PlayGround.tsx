@@ -108,8 +108,9 @@ function PlayGround(props: any) {
             >
                 <div>
                     <div className="inner1">
-                        {contextData.username === winner ? <h1 style={{ padding: "5%" }}>You Won! 🥳</h1> :
-                            <h1 style={{ padding: "5%" }}>You Lost.. 😭</h1>}
+                        {winner === 'left' ? <h1 style={{ padding: "5%" }}>Opponent left the room! 🤪</h1> :
+                            (contextData.username === winner ? <h1 style={{ padding: "5%" }}>You Won! 🥳</h1> :
+                                <h1 style={{ padding: "5%" }}>You Lost.. 😭</h1>)}
                     </div>
                     {/* style={{width:"50%", display:"flex", justifyContent:"center"}} */}
                     <div className="inner2">

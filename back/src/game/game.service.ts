@@ -1,7 +1,8 @@
-import { Injectable } from "@nestjs/common";
+import { forwardRef, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/user";
 import { Repository } from "typeorm";
+import { GameGateWay } from "./game.gateway";
 import { Match } from "./match.entity";
 import { RunningMatch } from "./runningMatch.entity";
 
@@ -28,9 +29,9 @@ interface plRoom {
     leftPlayer: Player;
     rightPlayer: Player;
     ball: Ball;
-    leftPoint: number
-    rightPoint: number
-    idInterval?: object;
+    leftPoint: number;
+    rightPoint: number;
+    idInterval?: ReturnType<typeof setInterval>;
 }
 
 const canvasHeight = 750
@@ -42,11 +43,12 @@ const array_dir_y: Array<number> = [-3, 3];
 
 @Injectable()
 export class GameService{
-    private mapPlRoom: Map<string, plRoom>
+    /*private*/ mapPlRoom: Map<string, plRoom>
     constructor(
         @InjectRepository(Match) private matchRepository: Repository<Match>,
         @InjectRepository(RunningMatch) private runningMatches: Repository<RunningMatch>,
-        @InjectRepository(User) private userRepository: Repository<User>
+        @InjectRepository(User) private userRepository: Repository<User>,
+        @Inject(forwardRef(() => GameGateWay)) private readonly gameGateway: GameGateWay
         ){this.mapPlRoom = new Map<string, plRoom>()}
         
 
@@ -74,6 +76,43 @@ export class GameService{
         playRoom.rightSide = client;
         await this.runningMatches.save(playRoom);
         return {namePlayRoom: playRoom.playRoom, side: 'right'};
+    }
+
+    async handleLeaveQueue(client: string){
+        let playRoom = await this.runningMatches
+        .createQueryBuilder()
+        .where({player1: client})
+        .andWhere({player2: ''})
+        .getOne()
+        if (playRoom !== null)
+        {
+            await this.runningMatches.remove(playRoom);
+            return 1;
+        }
+        return 0;
+    }
+
+    async handleLeavePlayRoom(client: string){
+        let playRoom = await this.runningMatches
+        .findOne({ where : [{player1: client}, {player2: client}]});
+        
+        if (playRoom)
+        {
+            clearInterval(this.mapPlRoom.get(playRoom.playRoom).idInterval)
+            await this.gameGateway.handleLeftGame(playRoom.playRoom)
+            
+            
+            await this.matchRepository.save({player1: playRoom.player1,
+                avatar1: playRoom.avatar1,
+                player2: playRoom.player2,
+                avatar2: playRoom.avatar2,
+                points1: (playRoom.player1 === client ? this.mapPlRoom.get(playRoom.playRoom).leftPoint : -42),
+                points2: (playRoom.player2 === client ? this.mapPlRoom.get(playRoom.playRoom).rightPoint : -42),
+            })
+
+
+            await this.runningMatches.remove(playRoom);
+        }
     }
 
     async generateBallDirection(namePlayRoom: string){
@@ -157,7 +196,7 @@ export class GameService{
         }
     }
 
-    updateIdInterval(namePlayRoom: string, id: object){
+    updateIdInterval(namePlayRoom: string, id: ReturnType<typeof setInterval>){
         this.mapPlRoom.get(namePlayRoom).idInterval = id;
     }
 

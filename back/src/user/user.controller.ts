@@ -78,6 +78,13 @@ export class UsersController {
     return await this.userService.getFriends(client, profileUser);
   }
 
+  @Post('getFriendsRequest')
+  async GetFriendsRequest(@Body('client') client: string, @Body('profileUser') profileUser: string){
+    console.log(client);
+    console.log(profileUser);
+    return await this.userService.getFriendsRequest(client, profileUser);
+  }
+
   @Get('getListFriends/:client')
   async GetListFriends(@Param('client') client: string){
     return await this.userService.getListFriends(client);

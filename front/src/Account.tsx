@@ -2,7 +2,7 @@ import React, { ReactNode, useContext, useEffect, useState } from "react";
 import './Account.css'
 import { student, Student } from "./App";
 
-import { Avatar, Badge, Divider, Fab, Grid, IconButton, List, ListItem, ListItemText, styled, Tab } from "@mui/material";
+import { Avatar, Badge, Divider, dividerClasses, Fab, Grid, IconButton, List, ListItem, ListItemText, styled, Tab } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { AddCircle, CheckCircle, Close, Done, EmojiEvents, HourglassTop, PersonAddAlt1, PersonRemove } from "@mui/icons-material";
 import Tabs from '@mui/material/Tabs';
@@ -139,65 +139,6 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-function Scoreboard(props: any) {
-  //const contextData = useContext(Student);
-
-  const { isOpen, toggle, handleClose } = useModal();
-  const [matches, setMatches] = useState<Match[]>([]);
-  //const [client, setClient] = useState<String>(contextData.username)
-
-  const MATCH_API = `http://${process.env.REACT_APP_IP_ADDR}:3001/game/getMatches/${props.client.username}`
-
-  useEffect(() => {
-    async function getMatches() {
-      console.log(MATCH_API);
-      let response = await fetch(MATCH_API);
-      let data = await response.json();
-      let fetchMatches: Match[] = [];
-
-      await data.forEach((element: Match) => {
-        let iMatch: Match = element;
-        fetchMatches.push(iMatch);
-        setMatches(fetchMatches);
-      })
-    }
-    getMatches();
-  }, [props.client])
-  console.log(matches);
-
-
-  return (
-    <>
-      <div className="table_dashboard">
-        {matches.map((p) => (
-          <List sx={{ width: '100%', bgcolor: 'transparent', display: 'flex' }} key={p.id}>
-            <ListItem>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Avatar sx={{ width: 56, height: 56 }} src={p.avatar1} />
-                <ListItemText sx={{ color: '#fff' }} primary={p.player1} />
-              </div>
-            </ListItem>
-            <ListItem>
-              <p style={{ fontSize: '1.5vw', fontWeight: '500', color: '#fff' }}>{p.points1}</p>
-              <p className="VS"> VS </p>
-              <p style={{ fontSize: '1.5vw', fontWeight: '500', color: '#fff' }}>{p.points2}</p>
-              {/* <ListItemText primary={p.points1} />
-          <ListItemText primary=' VS ' />
-          <ListItemText primary={p.points2} /> */}
-            </ListItem>
-            <ListItem>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Avatar sx={{ width: 56, height: 56 }} src={p.avatar2} />
-                <ListItemText sx={{ color: '#fff' }} primary={p.player2} />
-              </div>
-            </ListItem>
-          </List>
-        ))}
-      </div>
-    </>
-  );
-}
-
 function Account() {
 
   const contextData = useContext(Student)
@@ -285,43 +226,136 @@ function Account() {
   //PROVA ALERT PER RICHIESTA
   // if (friendship === 'toReply') {alert(`${user_id} sent you a friend request`)}
 
+
+  //Per lista amici e visualizzare in account
+
+  const [friendsUser, setFriendsUser] = useState<FriendshipsUser[]>([]);
+  const [friendRequest, setFriendsRequest] = useState<FriendshipsUser[]>([]);
+  console.log("qui", friendsUser);
+
+  useEffect(() => {
+    const API_URL_GET_FRIENDS = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/getFriends`;
+    const getFriends = async () => {
+      await fetch(API_URL_GET_FRIENDS, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ client: contextData.username, profileUser: user_id }),
+      })
+        .then((response) => response.json())
+        .then(async (result) => {
+          const fetchFriends: FriendshipsUser[] = [];
+          await Promise.all(await result.map(async (element: any) => {
+            if (element.username !== contextData.username) {
+              let iFriend: FriendshipsUser = {
+                username: element.username,
+                nickname: element.nickname,
+                avatar: element.avatar,
+                position: element.position,
+                friendship: element.friendship,
+              }
+              fetchFriends.push(iFriend);
+            }
+          }))
+          setFriendsUser(fetchFriends);
+        }
+        )
+    }
+    getFriends();
+  }, [user_id])
+
+  useEffect(() => {
+    const API_URL_GET_FRIENDS = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/getFriendsRequest`;
+    const getFriendsRequest = async () => {
+      await fetch(API_URL_GET_FRIENDS, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ client: contextData.username, profileUser: user_id }),
+      })
+        .then((response) => response.json())
+        .then(async (result) => {
+          const fetchFriendsRequest: FriendshipsUser[] = [];
+          await Promise.all(await result.map(async (element: any) => {
+            if (element.username !== contextData.username) {
+              let iFriendRequest: FriendshipsUser = {
+                username: element.username,
+                nickname: element.nickname,
+                avatar: element.avatar,
+                position: element.position,
+                friendship: element.friendship,
+              }
+              fetchFriendsRequest.push(iFriendRequest);
+            }
+          }))
+          setFriendsRequest(fetchFriendsRequest);
+        }
+        )
+    }
+    getFriendsRequest();
+  }, [user_id])
+
+  function Scoreboard(props: any) {
+    //const contextData = useContext(Student);
+
+    const { isOpen, toggle, handleClose } = useModal();
+    const [matches, setMatches] = useState<Match[]>([]);
+    //const [client, setClient] = useState<String>(contextData.username)
+
+    const MATCH_API = `http://${process.env.REACT_APP_IP_ADDR}:3001/game/getMatches/${props.client.username}`
+
+    useEffect(() => {
+      async function getMatches() {
+        console.log(MATCH_API);
+        let response = await fetch(MATCH_API);
+        let data = await response.json();
+        let fetchMatches: Match[] = [];
+
+        await data.forEach((element: Match) => {
+          let iMatch: Match = element;
+          fetchMatches.push(iMatch);
+          setMatches(fetchMatches);
+        })
+      }
+      getMatches();
+    }, [props.client])
+    console.log(matches);
+
+    return (
+      <>
+        <div className="table_dashboard">
+          {matches.map((p) => (
+            <List sx={{ width: '100%', bgcolor: 'transparent', display: 'flex' }} key={p.id}>
+              <ListItem>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <Avatar sx={{ width: 56, height: 56 }} src={p.avatar1} />
+                  <ListItemText sx={{ color: '#fff' }} primary={p.player1} />
+                </div>
+              </ListItem>
+              <ListItem>
+                <p style={{ fontSize: '1.5vw', fontWeight: '500', color: '#fff' }}>{p.points1}</p>
+                <p className="VS"> VS </p>
+                <p style={{ fontSize: '1.5vw', fontWeight: '500', color: '#fff' }}>{p.points2}</p>
+                {/* <ListItemText primary={p.points1} />
+          <ListItemText primary=' VS ' />
+          <ListItemText primary={p.points2} /> */}
+              </ListItem>
+              <ListItem>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <Avatar sx={{ width: 56, height: 56 }} src={p.avatar2} />
+                  <ListItemText sx={{ color: '#fff' }} primary={p.player2} />
+                </div>
+              </ListItem>
+            </List>
+          ))}
+        </div>
+      </>
+    );
+  }
+
   // Lista degli amici quando si clicca il bottone
   function Friends_b() {
     const { isOpen, toggle, handleClose } = useModal();
-
-    const [friendsUser, setFriendsUser] = useState<FriendshipsUser[]>([]);
-    console.log("qui", friendsUser);
-
-    useEffect(() => {
-      const API_URL_GET_FRIENDS = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/getFriends`;
-      const getFriends = async () => {
-        await fetch(API_URL_GET_FRIENDS, {
-          method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ client: contextData.username, profileUser: user_id }),
-        })
-          .then((response) => response.json())
-          .then(async (result) => {
-            const fetchFriends: FriendshipsUser[] = [];
-            await Promise.all(await result.map(async (element: any) => {
-              if (element.username !== contextData.username) {
-                let iFriend: FriendshipsUser = {
-                  username: element.username,
-                  nickname: element.nickname,
-                  avatar: element.avatar,
-                  position: element.position,
-                  friendship: element.friendship,
-                }
-                fetchFriends.push(iFriend);
-              }
-            }))
-            setFriendsUser(fetchFriends);
-          }
-          )
-      }
-      getFriends();
-    }, [user_id])
 
     return (
       <>
@@ -378,20 +412,6 @@ function Account() {
     )
   }
 
-  // function Add_b_small() {
-  //   return (
-  //     <div className="">
-  //       <Grid item xs={3}>
-  //         <IconButton sx={{ color: red[500] }} component="label"
-  //           onClick={addFriend}>
-  //           <AddCircle fontSize="medium" />
-  //         </IconButton>
-  //         <div className="profile-card-inf__title"></div>
-  //         <div className="" style={{ textAlign: 'center' }}>ADD <br />FRIEND</div>
-  //       </Grid>
-  //     </div>
-  //   )
-  // }
   /******* FINE *******/
 
   async function deleteRequestOrFriendship(userToDelete: string) {
@@ -408,7 +428,7 @@ function Account() {
   function Pending_b() {
     return (
       <div style={{ textAlign: 'center' }}>
-        <h2 style={{ padding: '1.5rem' }}>Pending request</h2>
+        <h2 style={{ padding: '1.5rem' }}>Pending request {client.username}</h2>
         <Fab color="secondary" aria-label="user" onClick={() => deleteRequestOrFriendship(user_id!)}>
           <HourglassTop fontSize="large" />
         </Fab>
@@ -502,21 +522,59 @@ function Account() {
     setValue(newValue);
   };
 
+  //Modificare qui per account personale
+
+  function My_Wrap() {
+
+    return (
+      <>
+        <div className="request">
+          <h1 style={{ textAlign: 'center', padding: '3%', fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', fontSize: '2.5vw', color: '#fff' }}>Friendship Request</h1>
+          {friendRequest.map((account) => (
+            <div>
+              <List sx={{ width: '100%', bgcolor: 'transparent', display: 'flex', alignItems: 'center' }} key={account.username}>
+                <ListItem>
+                  <ListItemText primary={account.username} secondary={account.nickname} sx={{ color: '#fff' }} />
+
+
+                </ListItem>
+                <ListItem>
+
+                  {/* {user_id === contextData.username && account.username === user_id ? 'nope' :
+                  (account.friendship && account.friendship.friendship === 'pending') ?
+                    <Pending_b_small username={account.username} /> : (account.friendship && account.friendship.friendship === 'friends') ?
+                      <div style={{ textAlign: 'center', color: '#fff' }} ><CheckCircle sx={{ color: '#6626ee', paddingBottom: '5%' }} />
+                        <p className="p_friendlist" /> FRIEND</div> :
+                      <div style={{ textAlign: 'center', color: '#fff' }} ><IconButton sx={{ color: '#e91e63', paddingBottom: '5%' }} component="label"
+                        onClick={() => addFriend(account.username!)}>
+                        <AddCircle fontSize="medium" />
+                      </IconButton>
+                        <p className="p_friendlist" />ADD FRIEND</div>
+                } */}
+                </ListItem>
+              </List>
+            </div>
+          ))}
+        </div>
+      </>
+    )
+  }
+
   return (
     <>
       <div className="wrap">
-
-        <div className="request">
-          <div>
-            <h1 style={{ textAlign: 'center', padding: '3%', fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', fontSize: '2.5vw', color: '#fff' }}>Friendship</h1>
-            {user_id === contextData.username ? '' :
-              friendship === 'pending' ?
-                <Pending_b /> : friendship === 'toReply' ?
-                  <SendNotification /> : friendship === 'friends' ?
-                    <Remove_b /> : <Add_b />}
+        {contextData.username !== user_id ?
+          <div className="request">
+            <div>
+              <h1 style={{ textAlign: 'center', padding: '3%', fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', fontSize: '2.5vw', color: '#fff' }}>Friendship</h1>
+              {user_id === contextData.username ? '' :
+                friendship === 'pending' ?
+                  <Pending_b /> : friendship === 'toReply' ?
+                    <SendNotification /> : friendship === 'friends' ?
+                      <Remove_b /> : <Add_b />}
+            </div>
           </div>
-        </div>
-
+          : <My_Wrap />}
         <div className="main">
           <div className="account_decoration">
             <div className="avatar__img-account">
@@ -534,6 +592,7 @@ function Account() {
           </div>
         </div>
 
+
         <div className="box-item">
           {/* <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: 224 }}> */}
           {/* MATCHES */}
@@ -544,7 +603,7 @@ function Account() {
             value={value}
             onChange={handleChange}
             aria-label="Vertical tabs"
-            sx={{ borderRight: 1, borderColor: 'divider', width: '15vw' }}
+            sx={{ borderRight: 1, borderColor: 'divider', width: '15%' }}
           >
             <Tab sx={{ fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.1rem', fontWeight: '600', fontSize: '1.5vw', color: '#fff' }} label="Matches" {...a11yProps(0)} />
             <Tab sx={{ fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.1rem', fontWeight: '600', fontSize: '1.5vw', color: '#fff' }} label="Friends" {...a11yProps(1)} />
@@ -552,12 +611,12 @@ function Account() {
 
           </Tabs>
           <TabPanel value={value} index={0}>
-            <div className="">
+            <div >
               <Scoreboard client={client} />
             </div>
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <div className="">
+            <div>
               <Friends_b />
             </div>
           </TabPanel>

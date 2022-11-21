@@ -1,4 +1,4 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { forwardRef, Inject, Injectable, Logger } from "@nestjs/common";
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer, 
   OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, WsResponse} from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
@@ -8,8 +8,9 @@ import { GameService } from "src/game/game.service";
 @WebSocketGateway({ cors: true, namespace: '/game' })
 @Injectable()
 export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-  constructor(private userService: UserService,
-            private gameService: GameService){}
+  constructor(
+    @Inject(forwardRef(() => GameService)) private readonly gameService: GameService)
+    {}
 
   private logger: Logger = new Logger('GameGateway');
 
@@ -27,6 +28,10 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   async handleDisconnect(clientSocket: Socket) {
       this.logger.log(`disconesso dal GAME namespace ${clientSocket.id}`);
+      const client = String(clientSocket.handshake.query.username);
+      const ret = this.gameService.handleLeaveQueue(client);
+      if (!ret)
+        this.gameService.handleLeavePlayRoom(client);
   }
 
   @SubscribeMessage('onPress')
@@ -83,14 +88,18 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
     this.startTick(data);
   }
 
+  async handleLeftGame(namePlayRoom: string){
+    this.server.to(namePlayRoom).emit('endGame', 'left');
+  }
+
   startTick(data: {namePlayRoom: string, rightPlayer: string, leftPlayer: string}) {
-    var id = setInterval(async () => {
+    this.gameService.mapPlRoom.get(data.namePlayRoom).idInterval = setInterval(async () => {
+    //var id = setInterval(async () => {
       let roomInMap = await this.gameService.updatePlayer(data.namePlayRoom);
       const restart = await this.gameService.updateBall(data.namePlayRoom);
       if (restart){
         console.log("dataTick ", data);
         roomInMap = await this.gameService.restart(data.namePlayRoom);
-        //console.log(roomInMap.ball);
         this.server.to(data.namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
         if (roomInMap.leftPoint !== 3 && roomInMap.rightPoint !== 3)
           this.server.to(data.namePlayRoom).emit('goal', data, restart);
@@ -99,12 +108,13 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
           const winner = await this.gameService.saveMatch(data.namePlayRoom, roomInMap.leftPoint, roomInMap.rightPoint);
           this.server.to(data.namePlayRoom).emit('endGame', winner);
         }
-        clearInterval(id);
+        //clearInterval(id);
+        clearInterval(this.gameService.mapPlRoom.get(data.namePlayRoom).idInterval)
       }
       else
         this.server.to(data.namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
     }, 10)
-    console.log(id);
+    //console.log(id);
   }
 
   async sleep(time: number) {

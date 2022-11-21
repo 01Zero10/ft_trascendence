@@ -42,6 +42,6 @@ import { GameGateWay } from "./game/game.gateway";
     })
   ],
   controllers: [AuthController, ChatController], 
-  providers: [ChatGateWay, GameGateWay],
+  providers: [ChatGateWay],
 }) 
 export class AppModule {}
