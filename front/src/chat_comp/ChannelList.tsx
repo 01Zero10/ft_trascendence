@@ -29,36 +29,39 @@ export default function ChannelList(props: any) {
 		});
 	}, [])
 
-	function setChOpt(channel: Rooms) {
-		if (props.chOptions?.name === channel.name) {
-			props.setChOptions(null)
-			props.setOpened("")
-			return
-		}
-		props.setChOptions(channel)
-		props.setOpened("owner")
-	}
+	// function setChOpt(channel: Rooms) {
+	// 	if (props.chOptions?.name === channel.name) {
+	// 		props.setChOptions(null)
+	// 		props.setOpened("")
+	// 		return
+	// 	}
+	// 	props.setChOptions(channel)
+	// 	props.setOpened("owner")
+	// }
 	
 
 
 	return (
-		<div className="chat-selection">
+		// <div style={{width:"100%", height:"100%", position:"relative", background:"lime", color:"red"}}>
+		<>
 			{channelList.map(function (element: any, id: number) {
+				console.log(element)
 				return (
-					element.name?.includes(props.src) ?
-						<div key={id + "channel-selection"} className="channel-selection">
+					// element.name?.includes(props.src) ?
+						<div style={{  }} key={id + "channel-selection"} className="channel-selection">
 							<div key={id + "settings- chat-select"} className="settings- chat-select" >
 								<Box key={id + "box"} sx={{ position: "relative", width: "100%", height: "100%" }} onClick={() => { props.setRoom(element.name) }}>
 									{element.name}
 								</Box>
 								{(element.type !== "direct" && element.builder?.username === student.username) &&
 									<ActionIcon key={id + "actionIcon"} style={{ verticalAlign: "center" }}
-										onClick={() => setChOpt(element)}><IconSettings key={id + "settingsIcon"} /></ActionIcon>}
+										><IconSettings key={id + "settingsIcon"} /></ActionIcon>}
 							</div>
-						</div> :
-						null)
+						</div> )
+						// : null)
 				}
 			)}
-		</div>
+			</>
+
 	)
 }

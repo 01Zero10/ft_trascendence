@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 import { Room } from "@mui/icons-material";
 
 export default function ChannelMessage(props: MessageProps) {
-
 	const student = useContext(Student)
 	let navigate = useNavigate();
 	const naturalTime = (new Date(props.createdAt)).toString().slice(0, 24);
