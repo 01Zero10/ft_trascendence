@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Student } from "../App";
 import {Tab} from "@mantine/core/lib/Tabs/Tab/Tab";
 import {Tabs, Center, ScrollArea} from "@mantine/core";
@@ -10,11 +10,14 @@ import { Padding } from "@mui/icons-material";
 
 
 
-
 export default function ChatMenu(props: any) {
 	const contextData = useContext(Student);
 	let [src, setSrc] = useState('')
 	let [card, setCard] = useState("public")
+
+	const [matches, setMatches] = useState(window.matchMedia("(min-width: 1000px)").matches)
+	
+	useEffect(() => { window.matchMedia("(min-width: 1000px)").addEventListener('change', e => setMatches( e.matches )); }, []);
 
 	const tabStyle = {
 		color:"#781C9C",
@@ -24,8 +27,21 @@ export default function ChatMenu(props: any) {
 		color:"red",
 		height:"80%",
 		positions:"relative",
-		padding:"10px 0 0 0"
+		padding:"10px 0 0 0", 
 	}
+
+	const scrollAreaStyle = {
+		scrollbar: {
+            '&, &:hover': {
+              background: "black",
+            },
+
+            '&[data-orientation="vertical"] .mantine-ScrollArea-thumb': {
+              backgroundColor: "#781C9C"
+            }
+		}
+	}
+
 
 	function search(e: React.ChangeEvent<HTMLInputElement>) {
 		setSrc(e.target.value)
@@ -46,15 +62,16 @@ export default function ChatMenu(props: any) {
 						<Tabs.Tab color={"orange"} style={{color:"orange"}} value={`FriendsChatList/${contextData.username}`} icon={<IconMessageCircle size={14} />} onClick={() => setCard(`FriendsChatList/${contextData.username}`)}>DM's</Tabs.Tab>
 					</Tabs.List>
 					<Tabs.Panel style={tabPanelStyle} value="all">cazzo 1</Tabs.Panel>
-					<Tabs.Panel style={tabPanelStyle} value={`membership/${contextData.id}`}><ScrollArea style={{ position:"relative", height:"100%" }}><ChannelList card={card}/></ScrollArea></Tabs.Panel>
-					<Tabs.Panel style={tabPanelStyle} value={`FriendsChatList/${contextData.username}`}><ScrollArea style={{ position:"relative", height:"100%" }}><ChannelList card={card}/></ScrollArea></Tabs.Panel>
+					<Tabs.Panel style={tabPanelStyle} value={`membership/${contextData.id}`}><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList card={card}/></ScrollArea></Tabs.Panel>
+					<Tabs.Panel style={tabPanelStyle} value={`FriendsChatList/${contextData.username}`}><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList card={card}/></ScrollArea></Tabs.Panel>
 				</Tabs>
 			</div>
-			<div style={{height:"10%", backgroundColor:"black", display:"flex", borderRadius:"15px", flexDirection:"column"}}>
+			<div style={{backgroundColor:"black", display:"flex", borderRadius:"15px", flexDirection:"column"}}>
 				<div style={{position:"relative", width:"100%", height:"100%"}}>
 					<img src="/account_decoration_down.svg" alt="img_account" />
 				</div>
-				<Fab style={{margin:"0 auto 5%", width:"50%", height:"80px" }} variant={"extended"} color="secondary" aria-label="add"><IconPlus></IconPlus>Create Channel</Fab>
+				{matches && (<Fab style={{margin:"0 auto 0", width:"50%", backgroundColor: "#781C9C", color: "white" }} variant={"extended"} aria-label="add"><IconPlus></IconPlus>Create Channel</Fab>)}
+				{!matches && (<Fab style={{margin:"5% auto 0", backgroundColor: "#781C9C", color: "white"}} size="medium"><IconPlus></IconPlus></Fab>)}
 			</div>
 		</div >
 	)

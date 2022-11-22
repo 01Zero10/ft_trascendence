@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Tomorrow:wght@400;700&display=swap');
+
+:root {
+  --yellow-color: #fcee09; 
+  --red-color: #ff003c;
+  --black-color: #050a0e;
+  --blue-color: #00f0ff;
+  --white-color: #fafafa;
+  --purple-color: #781C9C;
+}
+
+.btn {
+  width: 80%;
+  height: 70px; 
+  border: 0;
+  outline: none;
+  background-color: var(--purple-color);
+  cursor: pointer;
+  position: relative;
+  color: var(--white-color);
+  clip-path: polygon(92% 0, 100% 25%, 100% 100%, 8% 100%, 0% 75%, 0 0);
+  z-index: 1;
+  margin: 0 auto 1%;
+}
+
+.btn__content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  font-family: 'Tomorrow', sans-serif;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  background-color: black;
+  clip-path: polygon(92% 0, 100% 25%, 100% 100%, 8% 100%, 0% 75%, 0 0);
+  z-index: 2;
+}
+
+.btn:hover {
+  background-color: var(--white-color);
+}
+
+.btn:hover .btn__content {
+  background-color: var(--purple-color);
+  color: var(--black-color);
+}

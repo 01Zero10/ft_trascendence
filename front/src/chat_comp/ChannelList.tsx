@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext, useLayoutEffect } from "react"
 import { Rooms, Student } from "../App";
 import { ActionIcon, Badge, Box } from "@mantine/core";
 import { IconLock, IconSettings } from "@tabler/icons";
+import "./ChannelList_style.css"
 
 export default function ChannelList(props: any) {
 	const [channelList, setChannelList] = useState<object[]>([])
@@ -43,23 +44,41 @@ export default function ChannelList(props: any) {
 
 
 	return (
-		// <div style={{width:"100%", height:"100%", position:"relative", background:"lime", color:"red"}}>
-		<>
+		<div style={{display: "flex", flexDirection: "column"}}>
 			{channelList.map(function (element: any, id: number) {
 				console.log(element)
 				return (
 					// element.name?.includes(props.src) ?
-						<div style={{width:"80%", height:"70px", position:"relative", marginBottom:"5px" }} key={id + "channel-selection"}>
-							<div key={id + "settings- chat-select"} >
-								<Box key={id + "box"} sx={{ position: "relative", width: "100%", height: "100%" }}>
-									{element.name}
-								</Box>
+						<button className="btn" key={id + "channel-selection"}>
+							<div className="btn__content" key={id + "settings- chat-select"} >
+								{element.name}
 								{element.type === "protected" && <Badge variant="gradient" gradient={{ from: 'orange', to: 'red' }} radius="xs" leftSection={lockIcon}>Protected</Badge>}
 							</div>
-						</div> )
+						</button> )
 						// : null)
 				}
 			)}
-		</>
+		</div>
 	)
+
+	// return (
+	// 	// <div style={{width:"100%", height:"100%", position:"relative", background:"lime", color:"red"}}>
+	// 	<>
+	// 		{channelList.map(function (element: any, id: number) {
+	// 			console.log(element)
+	// 			return (
+	// 				// element.name?.includes(props.src) ?
+	// 					<div style={{width:"80%", height:"70px", position:"relative", marginBottom:"5px" }} key={id + "channel-selection"}>
+	// 						<div key={id + "settings- chat-select"} >
+	// 							<Box key={id + "box"} sx={{ position: "relative", width: "100%", height: "100%" }}>
+	// 								{element.name}
+	// 							</Box>
+	// 							{element.type === "protected" && <Badge variant="gradient" gradient={{ from: 'orange', to: 'red' }} radius="xs" leftSection={lockIcon}>Protected</Badge>}
+	// 						</div>
+	// 					</div> )
+	// 					// : null)
+	// 			}
+	// 		)}
+	// 	</>
+	// )
 }
