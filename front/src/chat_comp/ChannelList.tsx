@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext, useLayoutEffect } from "react"
 import { Rooms, Student } from "../App";
 import { ActionIcon, Badge, Box } from "@mantine/core";
-import { IconLock, IconSettings } from "@tabler/icons";
+import { IconLock, IconLockOpen, IconSettings } from "@tabler/icons";
 import "./ChannelList_style.css"
 
 export default function ChannelList(props: any) {
@@ -40,7 +40,8 @@ export default function ChannelList(props: any) {
 	// 	props.setOpened("owner")
 	// }
 	
-	const lockIcon = (<IconLock ></IconLock>)
+	// const lockIcon = (<IconLock ></IconLock>)
+	// const lockIconOpen = (<IconLockOpen></IconLockOpen>)
 
 
 	return (
@@ -48,14 +49,18 @@ export default function ChannelList(props: any) {
 			{channelList.map(function (element: any, id: number) {
 				console.log(element)
 				return (
-					// element.name?.includes(props.src) ?
+					element.name?.includes(props.src) ? (
 						<button className="btn" key={id + "channel-selection"}>
 							<div className="btn__content" key={id + "settings- chat-select"} >
 								{element.name}
-								{element.type === "protected" && <Badge variant="gradient" gradient={{ from: 'orange', to: 'red' }} radius="xs" leftSection={lockIcon}>Protected</Badge>}
 							</div>
+							<span className="btn__label">
+								{element.type === "public" && <Badge className="channnelBadgeStyle" radius="xs">Public</Badge>}
+								{element.type === "protected" && <Badge className="channnelBadgeStyle" radius="xs">Protected</Badge>}
+								{/* {element.type === "protected" && <Badge variant="gradient" gradient={{ from: 'orange', to: 'red' }} radius="xs" leftSection={lockIcon}>Protected</Badge>} */}
+							</span>
 						</button> )
-						// : null)
+					: null)
 				}
 			)}
 		</div>

@@ -1,12 +1,15 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Student } from "../App";
 import {Tab} from "@mantine/core/lib/Tabs/Tab/Tab";
-import {Tabs, Center, ScrollArea} from "@mantine/core";
+import {Tabs, Center, ScrollArea, Input} from "@mantine/core";
 import {IconMessageCircle, IconPlus, IconShield, IconUser, IconUsers} from "@tabler/icons";
 import {Fab} from "@mui/material";
 import {positions} from "@mui/system";
 import ChannelList from "./ChannelList";
 import { Padding } from "@mui/icons-material";
+import Textbox from "../components/Textbox";
+import SearchIcon from '@mui/icons-material/Search';
+import "./ChatMenu_style.css"
 
 
 
@@ -62,9 +65,12 @@ export default function ChatMenu(props: any) {
 						<Tabs.Tab color={"orange"} style={{color:"orange"}} value={`FriendsChatList/${contextData.username}`} icon={<IconMessageCircle size={14} />} onClick={() => setCard(`FriendsChatList/${contextData.username}`)}>DM's</Tabs.Tab>
 					</Tabs.List>
 					<Tabs.Panel style={tabPanelStyle} value="all">cazzo 1</Tabs.Panel>
-					<Tabs.Panel style={tabPanelStyle} value={`membership/${contextData.id}`}><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList card={card}/></ScrollArea></Tabs.Panel>
+					<Tabs.Panel style={tabPanelStyle} value={`membership/${contextData.id}`}><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList src={src} card={card}/></ScrollArea></Tabs.Panel>
 					<Tabs.Panel style={tabPanelStyle} value={`FriendsChatList/${contextData.username}`}><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList card={card}/></ScrollArea></Tabs.Panel>
 				</Tabs>
+				<div className="search_container">
+					<input className="search_input" placeholder="Search" type="text" onChange={search} autoComplete="off"/>
+				</div>
 			</div>
 			<div style={{backgroundColor:"black", display:"flex", borderRadius:"15px", flexDirection:"column"}}>
 				<div style={{position:"relative", width:"100%", height:"100%"}}>
