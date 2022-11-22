@@ -56,6 +56,23 @@ export class GameService{
         return await this.matchRepository.find({ where : [{ player1: client}, {player2: client} ]})
     }
 
+    async getClassicRunningMatches(){
+        console.log('get services')
+        return await this.runningMatches
+        .createQueryBuilder('match')
+        .where({typo: 'classic'})
+        .select(['match.player1', 'match.player2', 'match.avatar1', 'match.avatar2'])
+        .getMany();
+    }
+
+    async getAdvancedRunningMatches(){
+        return await this.runningMatches
+        .createQueryBuilder('match')
+        .where({typo: 'advanced'})
+        .select(['match.player1', 'match.player2', 'match.avatar1', 'match.avatar2'])
+        .getMany();
+    }
+
     async createOrJoinPlayRoom(client: string, avatar: string){
         let playRoom = await this.runningMatches
         .createQueryBuilder('runningMatch')

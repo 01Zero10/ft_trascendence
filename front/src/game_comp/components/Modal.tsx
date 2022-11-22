@@ -6,6 +6,13 @@ import { forwardRef } from 'react';
 import { Group, Avatar, Text, Select, Button } from '@mantine/core';
 import { Student } from "../../App";
 
+export interface RunningMatches {
+  playRoom: string;
+  typo: string;
+  player1: string;
+  player2: string;
+}
+
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
   image: string;
   label: string;
@@ -60,10 +67,6 @@ function Demo(props: any) {
     getFriensOnline();
   }, [])
 
-  // function test2(e: React.RefAttributes<HTMLInputElement>) {
-  //   console.log(e)
-  // }
-
   return (
     <div style={{ display: "flex", justifyContent: "center", alignContent: "center" }}>
       <Select
@@ -95,6 +98,28 @@ function Demo(props: any) {
 export function ClassicModal(props: any) {
 
   const contextData = useContext(Student)
+  const [runningMatches, setRunningMatches] = useState<RunningMatches[]>([])
+
+  useEffect(() => {
+    async function getRunningMatches() {
+      console.log(`http://${process.env.REACT_APP_IP_ADDR}:3001/game/get${props.typo}RunningMatches`)
+      let response = await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/game/get${props.typo}RunningMatches`);
+
+      let data = await response.json();
+      let fetchRunningMatches: RunningMatches[] = [];
+      await Promise.all(await data.map(async (element: any) => {
+        let iRunningMatches: RunningMatches = {
+          playRoom: element.playroom,
+          typo: props.typo,
+          player1: element.player1,
+          player2: element.player2,
+        }
+        fetchRunningMatches.push(iRunningMatches);
+      }))
+      setRunningMatches(fetchRunningMatches);
+    }
+    getRunningMatches();
+  }, [])
 
   return (
     <div className="classic_grid_container">

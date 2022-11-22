@@ -5,6 +5,14 @@ import "./Game.css"
 import { LeadGrid } from "./game_comp/components/LeadGrid";
 import PlayGround from "./game_comp/PlayGround";
 
+export interface RunningMatches {
+    playRoom: string;
+    typo: string;
+    player1: string;
+    player2: string;
+}
+
+
 export default function Game(props: any) {
     const contextData = useContext(Student)
     const [play, setPlay] = useState(false)
@@ -18,7 +26,7 @@ export default function Game(props: any) {
         return () => {
             newSocket.disconnect();
         }
-    }, []);
+    }, [contextData.username]);
 
     return (
         <div className="game_container">
