@@ -61,7 +61,7 @@ export class GameService{
         return await this.runningMatches
         .createQueryBuilder('match')
         .where({typo: 'classic'})
-        .select(['match.player1', 'match.player2', 'match.avatar1', 'match.avatar2'])
+        .select(['match.playRoom','match.player1', 'match.player2', 'match.avatar1', 'match.avatar2'])
         .getMany();
     }
 
@@ -69,7 +69,7 @@ export class GameService{
         return await this.runningMatches
         .createQueryBuilder('match')
         .where({typo: 'advanced'})
-        .select(['match.player1', 'match.player2', 'match.avatar1', 'match.avatar2'])
+        .select(['match.playRoom','match.player1', 'match.player2', 'match.avatar1', 'match.avatar2'])
         .getMany();
     }
 

@@ -5,6 +5,7 @@ import './ModalGrid.css'
 import { forwardRef } from 'react';
 import { Group, Avatar, Text, Select, Button } from '@mantine/core';
 import { Student } from "../../App";
+import { fontSize } from "@mui/system";
 
 export interface RunningMatches {
   playRoom: string;
@@ -42,9 +43,9 @@ function Demo(props: any) {
 
   useEffect(() => {
     async function getFriensOnline() {
-      let response = await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/users/getOnlineFriends/${props.client}`)
+      let response = await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/users/getOnlineFriends/${props.client}`);
       let data = await response.json();
-      console.log(data);
+      //console.log(response);
       let fetchFriendsOnline: {
         image: string;
         label: string;
@@ -95,21 +96,32 @@ function Demo(props: any) {
   );
 }
 
-export function ClassicModal(props: any) {
-
-  const contextData = useContext(Student)
+function RunningMatchesList(props: any){
   const [runningMatches, setRunningMatches] = useState<RunningMatches[]>([])
+
+  const runningMatchesList_style_container = {
+    display:"flex",
+    width:"80%",
+    borderRadius:"5px", 
+    backgroundColor:"red", 
+    margin:"0 auto 2%",
+    justifyContent:"center",
+    alignItems:"center"
+  }
+
+  const runningMatchesList_style = {
+    fontSize: "1.15rem"
+  }
 
   useEffect(() => {
     async function getRunningMatches() {
       console.log(`http://${process.env.REACT_APP_IP_ADDR}:3001/game/get${props.typo}RunningMatches`)
       let response = await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/game/get${props.typo}RunningMatches`);
-
       let data = await response.json();
       let fetchRunningMatches: RunningMatches[] = [];
       await Promise.all(await data.map(async (element: any) => {
         let iRunningMatches: RunningMatches = {
-          playRoom: element.playroom,
+          playRoom: element.playRoom,
           typo: props.typo,
           player1: element.player1,
           player2: element.player2,
@@ -122,7 +134,28 @@ export function ClassicModal(props: any) {
   }, [])
 
   return (
-    <div className="classic_grid_container">
+    <>
+    { runningMatches.map(function(element: any){
+        console.log(element)
+        return (
+
+          <div style={runningMatchesList_style_container} key={element.playRoom}>
+            <div style={runningMatchesList_style}>{element.player1} VS {element.player2}</div>
+          </div>
+        )
+      }
+    )}
+    </>
+  )
+}
+
+export function ClassicModal(props: any) {
+
+  const contextData = useContext(Student)
+
+
+  return (
+    <div className="classic_grid_container" >
       <div className="grid_item_1" onClick={() => props.setPlay(true)}>
         <div className="logo_holder">
           <p className="logo">Matchmaking</p>
@@ -130,7 +163,7 @@ export function ClassicModal(props: any) {
       </div>
       <div className="grid_item_2">
       </div>
-      <div className="grid_item_3">Lista Partite in corso</div>
+      <div className="grid_item_3"> LISTA PARTITE IN CORSO<RunningMatchesList typo={props.typo}/></div>
       <Demo client={contextData.username} setGameOptions={props.setGameOptions} />
     </div>
   )
