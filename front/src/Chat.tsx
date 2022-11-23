@@ -14,7 +14,7 @@ export default function Chat(props: any) {
 	const [chOptions, setChOptions] = useState<Rooms | null>(null)
 	const [input, setInput] = useState('');
 	const [opened, setOpened] = useState("")
-	const [createChan, setCreateChan] = useState(false)
+
 
 	async function SetRoomName(client: string, target: string) {
 
@@ -65,8 +65,8 @@ export default function Chat(props: any) {
 
 	return (
 		<div className="chat-dashboard">
-			<ChatMenu></ChatMenu>
-			<ChannelBodyStatus></ChannelBodyStatus>
+			<ChatMenu setRoom={setRoom}></ChatMenu>
+			<ChannelBodyStatus room={room}></ChannelBodyStatus>
 		</div>
 	)
 }

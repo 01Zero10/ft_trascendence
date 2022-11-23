@@ -207,8 +207,10 @@ export default function ChannelBody(props: any) {
 
 	//console.log((!props.createChan && props.room && !joined && checkPwd))
 	return (
-		<div style={{ position:"relative", height:"100%", width:"80%", background:"#ffffff" }}>
-			ciao
+		
+		<div style={{ position:"relative", height:"100%", width:"80%"}}>
+			<ChannelBodyNav room={props.room}></ChannelBodyNav>
+			<div style={{ background:"black", position:"relative", height:"92%", width:"100%"}}></div>
 		</div>
 	)
 }

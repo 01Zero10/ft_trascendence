@@ -1,4 +1,6 @@
-import { Box, Button, Divider, FocusTrap, MultiSelect, PasswordInput, SegmentedControl, TextInput } from "@mantine/core"
+import { BackgroundImage, Box, Button, Center, Divider, FocusTrap, Input, Modal, MultiSelect, PasswordInput, SegmentedControl, Slider, TextInput } from "@mantine/core"
+import { width } from "@mui/system";
+import { url } from "inspector";
 import React, { useContext, useEffect, useState } from "react"
 import { Student } from "../App";
 
@@ -131,72 +133,50 @@ export default function CreateChannel(props: any) {
         props.setCreateChan(false)
     }
 
+/*root	.mantine-Modal-root	Root element, contains modal and overlay
+inner	.mantine-Modal-inner	Modal wrapper, centers modal
+modal	.mantine-Modal-modal	Modal root
+header	.mantine-Modal-header	Modal header, contains close button and title
+overlay	.mantine-Modal-overlay	Overlay
+title	.mantine-Modal-title	Modal title
+body	.mantine-Modal-body	Modal body, displayed after header
+close	.mantine-Modal-close	Close button*/
+
     return (
-        <Box sx={{ width: "100%", height: "100%", align: "center" }}>
-            <Box sx={{ width: "100%", height: "10%" }}>
-                <div className="mute-ban-text">Choose the group name</div>
-                <FocusTrap>
-                    <TextInput
-                        value={newOption.nameGroup}
-                        onChange={(e) => changeName(e.target.value)}
-                        placeholder="Choose a group name!"></TextInput>
-                </FocusTrap>
-            </Box>
-            <Box sx={{ width: "100%", height: "10%" }}>
-                <br />
-                <div className="mute-ban-text">Choose the channel type</div>
-                <SegmentedControl onChange={changeType} fullWidth
-                    color="grape"
-                    radius={"xl"}
-                    transitionDuration={350}
-                    data={[
-                        { label: 'Public', value: 'public' },
-                        { label: 'Protected', value: 'protected' },
-                        { label: 'Private', value: 'private' },
-                    ]}
+        <Modal centered styles={(root) => ({
+
+            inner:{
+                backgroundColor: 'transparent',
+            },
+            modal: {
+                backgroundColor: 'transparent',
+            },
+            header: {
+                backgroundColor: 'transparent',
+                textAlign: 'center',
+                backgroundImage:'url("/account_decoration_down.svg")',
+                BackgroundSize:"contain",
+                backgroundRepeat:"no-repeat"
+                
+            },
+            body:{
+                width:"70%",
+                height:"70%",
+                backgroundColor: 'transparent',
+                textAlign: 'center',
+            }
+        })} opened={props.newChannel} onClose={ () => props.setNewChannel(false) }>
+                <Center style={{width:"100%", height:"100%"}}>
+                <Input styles={(root) => (
+                    {wrapper:{color:"white"}})}
+                    variant="unstyled"
+                    placeholder="Channel Name"
+                    radius="md"
                 />
-            </Box>
-            {(newOption.type == 'protected') && <Box sx={{ width: "100%", height: "20s%" }}>
-                <div className="mute-ban-text">Type a password (make sure it's secret.. 🤭)</div>
-                <br />
-                <PasswordInput
-                    placeholder="Set a Password"
-                    onChange={(event) => changePassword(event.currentTarget.value)}
-                >
-                </PasswordInput>
-                <PasswordInput
-                    placeholder="Confirm Password"
-                    onChange={(event) => changeConfirmPass(event.currentTarget.value)}
-                    error={newOption.password === newOption.confirmPass ? false : "password don't match"}
-                >
-                </PasswordInput>
-            </Box>}
-            <Box sx={{ width: "100%", height: "10%" }}>
-                <div className="mute-ban-text">Who do you want to add?</div>
-                <MultiSelect
-                    data={optionsFriends}
-                    placeholder="Pick who you want to add.."
-                    searchable
-                    dropdownPosition="bottom"
-                    clearButtonLabel="Clear selection"
-                    // nothingFound="Nothing found" TODO: vedere BUG
-                    value={newOption.members}
-                    onChange={changeMembers}
-                />
-            </Box>
-            <br />
-            <Box>
-                {(newOption.nameGroup) &&
-                    <Button
-                        size="lg"
-                        radius="lg"
-                        fullWidth variant="gradient"
-                        gradient={{ from: 'orange', to: 'lime' }}
-                        onClick={handleConfirm}
-                        disabled={!checkProtectedChannel()}>
-                        Conferma
-                    </Button>}
-            </Box>
-        </Box>
+                    <div style={{background:"black",width:"50%", height:"50%", color:"#ffff"}} >
+                        
+                    </div>
+                </Center> 
+            </Modal>
     )
 }

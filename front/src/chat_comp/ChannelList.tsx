@@ -50,7 +50,7 @@ export default function ChannelList(props: any) {
 				console.log(element)
 				return (
 					element.name?.includes(props.src) ? (
-						<button className="btn" key={id + "channel-selection"}>
+						<button className="btn" key={id + "channel-selection"} onClick={() => props.setRoom({...element})}>
 							<div className="btn__content" key={id + "settings- chat-select"} >
 								{element.name}
 							</div>
