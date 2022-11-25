@@ -154,7 +154,7 @@ function Navigation() {
   }))
   return (
     <>
-      <AppBar sx={{ bgcolor: 'transparent', color: '#fff', width: '100%', paddingLeft: '32px', paddingRight: '32px' }} component='nav'>
+      <AppBar position='absolute' sx={{ bgcolor: 'transparent', color: '#fff', width: '100%', paddingLeft: '32px', paddingRight: '32px', zIndex:"50" }} component='nav'>
         <Toolbar>
           <NotificationBell count={count} sx={{right:"20%"}} />
           <IconButton
