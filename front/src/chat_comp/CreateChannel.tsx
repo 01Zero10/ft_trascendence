@@ -159,7 +159,8 @@ export default function CreateChannel(props: any) {
         props.setCreateChan(false)
     }
 
-    console.log(newOption)
+    console.log(optionsFriends)
+
 /*root	.mantine-Modal-root	Root element, contains modal and overlay
 inner	.mantine-Modal-inner	Modal wrapper, centers modal
 modal	.mantine-Modal-modal	Modal root
@@ -171,33 +172,34 @@ close	.mantine-Modal-close	Close button*/
 
     return (
         <Modal centered 
-        //styles={(root) => ({
-        //     inner:{
-        //         backgroundColor: 'transparent',
-        //     },
-        //     modal: {
-        //         backgroundColor: 'transparent',
-        //     },
-        //     header: {
-        //         backgroundColor: 'transparent',
-        //         textAlign: 'center',
-        //         backgroundImage:'url("/account_decoration_down.svg")',
-        //         BackgroundSize:"contain",
-        //         backgroundRepeat:"no-repeat"
+        styles={(root) => ({
+            inner:{
+                backgroundColor: 'transparent',
+            },
+            modal: {
+                backgroundColor: 'transparent',
+            },
+            header: {
+                backgroundColor: 'transparent',
+                textAlign: 'center',
+                backgroundImage:'url("/account_decoration_down.svg")',
+                BackgroundSize:"contain",
+                backgroundRepeat:"no-repeat"
                 
-        //     },
-        //     body:{
-        //         width:"70%",
-        //         height:"70%",
-        //         backgroundColor: 'transparent',
-        //         textAlign: 'center',
-        //     }
-        // })} 
+            },
+            body:{
+                width:"70%",
+                height:"70%",
+                backgroundColor: 'transparent',
+                textAlign: 'center',
+            }
+        })} 
             opened={props.newChannel} onClose={ () => props.setNewChannel(false) }>
-                <div>
+                <div style={{backgroundImage:"/chip.svg" , backgroundSize:"cover", backgroundPosition:"center"}}>
                     <div style={{width:"100%"}}>
                         <SegmentedControl style={{width:"100%"}} value={newOption.type} data={controlData} onChange={changeType} ></SegmentedControl>
                     </div> 
+                    <img src="/account_decoration_top.svg" alt="" />
                     <div>
                         <Input styles={(root) => (
                             {input:{color:"white"}})}
@@ -206,8 +208,9 @@ close	.mantine-Modal-close	Close button*/
                             radius="md"
                         />
                     </div>
-                    {newOption.type === "protected" && <form style={{display:"flex", background:"white",width:"100%", height:"50%", color:"#ffff"}} >
-                            <PasswordInput style={{ margin:"auto", width:"45%"} } disabled={newOption.type !== "protected"}
+                    <img src="/account_decoration_down.svg" alt="" />
+                    {newOption.type === "protected" && <form style={{ display:"flex", background:"transparent",width:"100%", height:"50%", color:"#ffff"}} >
+                            <PasswordInput styles={() => ({label:{color:"#781C9C"}})} style={{ margin:"auto", width:"45%"} } disabled={newOption.type !== "protected"}
                                 label="Password"
                                 value={newOption.password}
                                 visible={visible}
@@ -215,6 +218,7 @@ close	.mantine-Modal-close	Close button*/
                                 onChange={(e) => changePassword(e.target.value)}
                             />
                             <PasswordInput
+                                styles={() => ({label:{color:"#781C9C"}})}
                                 style={{ margin:"auto", width:"45%"} }
                                 label="Confirm password"
                                 value={newOption.confirmPass}
@@ -225,6 +229,7 @@ close	.mantine-Modal-close	Close button*/
                                 onChange={(e) => changeConfirmPass(e.target.value)}
                             />
                     </form>}
+                    
                     <div>
                         <MultiSelect data={optionsFriends} value={newOption.members} placeholder={"Add members"}></MultiSelect>
                     </div>
