@@ -56,7 +56,7 @@ export class UserService {
     return updateAvatar;
   }
 
-  async create(userData: CreateUserDto): Promise<User> {
+  async create(userData: any): Promise<User> {
     const exists = await this.getByUsername(userData.login);
     if (exists) {
       const rnd = Math.floor(Math.random() * 100);
@@ -67,7 +67,7 @@ export class UserService {
       id: userData.id,
       username: userData.login,
       nickname: userData.login,
-      avatar: userData.image_url,
+      avatar: userData.image.link,
       two_fa_auth: false,
       points: 0,
       wins: 0,
@@ -109,7 +109,6 @@ export class UserService {
       body: JSON.stringify(body),
       headers: { "Content-Type": "application/json" },
     });
-    //console.log(response.status);
     if (response.status != 200) {
       return { user: null, first: false };
     }
@@ -120,6 +119,7 @@ export class UserService {
       headers: { Authorization: 'Bearer ' + token },
     });
     data = await response.json();
+    //console.log(data);
     const user: User = await this.getById(data.id);
     token = await this.jwt.signAsync({
       id: data.id,
@@ -132,22 +132,6 @@ export class UserService {
     } else return { user, first: false };
   } 
 
-  // async pushRoom(userID: number, room: string){
-  //   const user: User = await this.userRepository.findOne({where: {id: userID}, relations: ['rooms']});
-  //   if (!user.rooms[room])
-  //   {
-  //     user.rooms.push[room];
-  //     await this.userRepository.save(user);
-  //   }
-  // }
-
-  // async getRoomsOfUser(userID: number): Promise<Rooms[]>{
-  //   const user: User = await this.userRepository.findOne({where: {id: userID}, relations: ['rooms']});
-  //console.log("[getRoomsOfUser]");
-  //console.log(user.rooms);
-  //   return user.rooms;
-  // }
-
   async blockUser(client: string, userToBlock: string){ //da testare
     const User = await this.userRepository.findOne({ where : {username: client}});
     const index = User.blockedUsers.indexOf(userToBlock, 0);
@@ -155,8 +139,6 @@ export class UserService {
         User.blockedUsers.splice(index, 1);
     else
         User.blockedUsers.push(userToBlock);
-    //console.log
-    //console.log(User.blockedUsers);
     await this.userRepository.save(User)
   }
 
@@ -193,7 +175,6 @@ export class UserService {
   async addFriend(client: string, profileUser: string){
     const friend1: string = (client < profileUser) ? client : profileUser;
     const friend2: string = (client == friend1) ? profileUser : client;
-    //console.log(friend1, friend2, client);
     
     return this.friendShipRepository.save({
       user1: friend1,
@@ -248,7 +229,6 @@ export class UserService {
     userProfileUser.friends.push(client)
     await this.userRepository.save(userClient);
     await this.userRepository.save(userProfileUser);
-    //console.log("friend", userClient.friends);
     await this.friendShipRepository.save(request);
   }
 
@@ -259,13 +239,39 @@ export class UserService {
 
   async getFriends(client: string, profileUser: string){
     const arrayFriends = (await this.getByUsername(profileUser)).friends;
-    //console.log(arrayFriends);
     const response: FriendListItem[] = [];
     if (arrayFriends && arrayFriends.length > 0)
     {
       await Promise.all(await arrayFriends.map(async (element) => {
         const player = await this.getByUsername(element);
-        //console.log((await this.checkFriendship(client, player.username)).friendship);
+        const item: FriendListItem = { 
+          username: player.username,
+          nickname: player.nickname,
+          avatar: player.avatar,
+          friendship: (await this.checkFriendship(client, player.username)),
+          position: 42, //TODO: forzato xk manca ancora tutto il resto
+        }
+        response.push(item);
+      }))
+    }
+    return response;
+  }
+
+  async getFriendsRequest(client: string, profileUser: string){
+    const arrayRequest = await this.friendShipRepository
+    .createQueryBuilder('request')
+    .where("request.user1 = :client_n", { client_n: client })
+    //.orWhere("request.user2 = :client_n", { client_n: client })
+    .andWhere("request.friendship = :state", { state: "pending" })
+    .andWhere("request.sender != :sender_n", { sender_n: client })
+    .getMany()
+
+    console.log(arrayRequest);
+    const response: FriendListItem[] = [];
+    if (arrayRequest && arrayRequest.length > 0)
+    {
+      await Promise.all(await arrayRequest.map(async (element) => {
+        const player = await this.getByUsername(element.sender);
         const item: FriendListItem = { 
           username: player.username,
           nickname: player.nickname,
@@ -301,14 +307,12 @@ export class UserService {
     newbie.id = Number(userID)
     newbie.status = 'online'
     newbie.user = client;
-    //console.log("toSetOnline", newbie);
     return await this.onlineRepository.save(newbie);
     }
   }
 
   async setOfflineStatus(userID: string){
     const toSetOffline = await this.onlineRepository.findOne({ where : { id: Number(userID)} })
-    //console.log("toSetOffline", toSetOffline);
     if (toSetOffline)
       await this.onlineRepository.remove(toSetOffline);
   }

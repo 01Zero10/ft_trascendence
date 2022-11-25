@@ -4,9 +4,12 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 export class RunningMatch {
     @PrimaryGeneratedColumn('increment')
     id: number;
-
+    
     @Column()
     playRoom: string;
+
+    @Column({default: 'classic'})
+    typo: string;
 
     @Column()
     player1: string;

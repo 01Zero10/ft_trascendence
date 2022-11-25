@@ -58,7 +58,7 @@ export function LeadGrid(props: any) {
           centered
           overlayOpacity={0.50}
           overlayBlur={5}>
-          <ClassicModal setPlay={props.setPlay} setGameOptions={setGameOptions} />
+          <ClassicModal setPlay={props.setPlay} setGameOptions={setGameOptions} typo={'classic'} />
         </Modal>
         <Modal
           opened={opened_advanced}
@@ -71,7 +71,7 @@ export function LeadGrid(props: any) {
           centered
           overlayOpacity={0.50}
           overlayBlur={5}>
-          <AvancedModal setPlay={props.setPlay} setGameOptions={setGameOptions} />
+          <ClassicModal setPlay={props.setPlay} setGameOptions={setGameOptions} typo={'advanced'} />
         </Modal>
         <div className='card_text_container card_1'>
           <div className='card classic_card' ref={hoverRef} onClick={() => { setGameOptions({ type: "classic" }); setOpened_classic(true) }}>

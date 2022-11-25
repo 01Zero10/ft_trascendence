@@ -59,6 +59,7 @@ export class AuthController {
     @Query("state") path: string,
     @Res({ passthrough: true }) response: Response
   ): Promise<any> {
+    console.log("uno");
     const { user, first } = await this.user.login(code, response);
     //if (first)
       //return response.redirect('http://localhost:3000/user/prova');

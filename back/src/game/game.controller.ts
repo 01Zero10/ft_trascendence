@@ -9,4 +9,14 @@ export class GameController{
     async getMatches(@Param('client') client: string){
         return await this.gameService.getMatches(client);
     }
+
+    @Get('getClassicRunningMatches')
+    async GetClassicRunningMatches(){
+        return await this.gameService.getClassicRunningMatches();
+    }
+
+    @Get('getAdvancedRunningMatches')
+    async GetAdvancedRunningMatches(){
+        return await this.gameService.getAdvancedRunningMatches();
+    }
 }
