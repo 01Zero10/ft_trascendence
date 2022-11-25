@@ -1,6 +1,10 @@
-import { BackgroundImage, Box, Button, Center, Divider, FocusTrap, Input, Modal, MultiSelect, PasswordInput, SegmentedControl, Slider, TextInput } from "@mantine/core"
+import { BackgroundImage, Box, Button, Center, Divider, FocusTrap, Input, Modal, MultiSelect, PasswordInput, SegmentedControl, Slider, Stack, TextInput } from "@mantine/core"
+import { useDisclosure } from "@mantine/hooks";
 import { width } from "@mui/system";
+import { IconLock, IconPassword, IconShield, IconWorld } from "@tabler/icons";
 import { url } from "inspector";
+import { type } from "os";
+import { stringify } from "querystring";
 import React, { useContext, useEffect, useState } from "react"
 import { Student } from "../App";
 
@@ -16,6 +20,26 @@ export interface NewChannel {
 
 export default function CreateChannel(props: any) {
     const contextData = useContext(Student);
+    const controlData = [
+        { label: (
+            <Center>
+              <IconWorld size={16} />
+              <Box ml={10}>Public</Box>
+            </Center>
+          ), value: 'public' },
+        { label: (
+            <Center>
+                <IconShield size={16}></IconShield>
+                <Box ml={10}>Protected</Box>
+            </Center>
+          ), value: 'protected' },
+        { label: (
+            <Center>
+              <IconLock size={16} />
+              <Box ml={10}>Private</Box>
+            </Center>
+          ), value: 'private' },
+    ]
     const [newOption, setNewOption] = useState<NewChannel>({
         builder: contextData.username,
         nameGroup: '',
@@ -24,6 +48,8 @@ export default function CreateChannel(props: any) {
         password: '',
         confirmPass: ''
     });
+    const [pass, setPass] = useState("")
+    const [visible, { toggle }] = useDisclosure(false);
 
     const [optionsFriends, setOptionsFriends] = useState<{ value: string, label: string }[]>([{ value: "", label: "" }]);
 
@@ -133,6 +159,7 @@ export default function CreateChannel(props: any) {
         props.setCreateChan(false)
     }
 
+    console.log(newOption)
 /*root	.mantine-Modal-root	Root element, contains modal and overlay
 inner	.mantine-Modal-inner	Modal wrapper, centers modal
 modal	.mantine-Modal-modal	Modal root
@@ -143,40 +170,66 @@ body	.mantine-Modal-body	Modal body, displayed after header
 close	.mantine-Modal-close	Close button*/
 
     return (
-        <Modal centered styles={(root) => ({
-
-            inner:{
-                backgroundColor: 'transparent',
-            },
-            modal: {
-                backgroundColor: 'transparent',
-            },
-            header: {
-                backgroundColor: 'transparent',
-                textAlign: 'center',
-                backgroundImage:'url("/account_decoration_down.svg")',
-                BackgroundSize:"contain",
-                backgroundRepeat:"no-repeat"
+        <Modal centered 
+        //styles={(root) => ({
+        //     inner:{
+        //         backgroundColor: 'transparent',
+        //     },
+        //     modal: {
+        //         backgroundColor: 'transparent',
+        //     },
+        //     header: {
+        //         backgroundColor: 'transparent',
+        //         textAlign: 'center',
+        //         backgroundImage:'url("/account_decoration_down.svg")',
+        //         BackgroundSize:"contain",
+        //         backgroundRepeat:"no-repeat"
                 
-            },
-            body:{
-                width:"70%",
-                height:"70%",
-                backgroundColor: 'transparent',
-                textAlign: 'center',
-            }
-        })} opened={props.newChannel} onClose={ () => props.setNewChannel(false) }>
-                <Center style={{width:"100%", height:"100%"}}>
-                <Input styles={(root) => (
-                    {wrapper:{color:"white"}})}
-                    variant="unstyled"
-                    placeholder="Channel Name"
-                    radius="md"
-                />
-                    <div style={{background:"black",width:"50%", height:"50%", color:"#ffff"}} >
-                        
+        //     },
+        //     body:{
+        //         width:"70%",
+        //         height:"70%",
+        //         backgroundColor: 'transparent',
+        //         textAlign: 'center',
+        //     }
+        // })} 
+            opened={props.newChannel} onClose={ () => props.setNewChannel(false) }>
+                <div>
+                    <div style={{width:"100%"}}>
+                        <SegmentedControl style={{width:"100%"}} value={newOption.type} data={controlData} onChange={changeType} ></SegmentedControl>
+                    </div> 
+                    <div>
+                        <Input styles={(root) => (
+                            {input:{color:"white"}})}
+                            variant="unstyled"
+                            placeholder="Channel Name"
+                            radius="md"
+                        />
                     </div>
-                </Center> 
+                    {newOption.type === "protected" && <form style={{display:"flex", background:"white",width:"100%", height:"50%", color:"#ffff"}} >
+                            <PasswordInput style={{ margin:"auto", width:"45%"} } disabled={newOption.type !== "protected"}
+                                label="Password"
+                                value={newOption.password}
+                                visible={visible}
+                                onVisibilityChange={toggle}
+                                onChange={(e) => changePassword(e.target.value)}
+                            />
+                            <PasswordInput
+                                style={{ margin:"auto", width:"45%"} }
+                                label="Confirm password"
+                                value={newOption.confirmPass}
+                                visible={visible}
+                                onVisibilityChange={toggle}
+                                display={newOption.password}
+                                error={newOption.password !== newOption.confirmPass && "non corrispondono coglione!"}
+                                onChange={(e) => changeConfirmPass(e.target.value)}
+                            />
+                    </form>}
+                    <div>
+                        <MultiSelect data={optionsFriends} value={newOption.members} placeholder={"Add members"}></MultiSelect>
+                    </div>
+                    <Button style={{ width:"100%" }} >ciao</Button>
+                </div>
             </Modal>
     )
 }
