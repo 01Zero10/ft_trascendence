@@ -1,5 +1,15 @@
 import { Box, Button, Center, Modal, MultiSelect, ActionIcon } from "@mantine/core"
-import { IconAxe, IconDoorExit, IconGavel, IconHammer, IconSettings, IconSettings2, IconUserPlus, IconWreckingBall } from "@tabler/icons";
+import {
+	IconAxe,
+	IconDoorEnter,
+	IconDoorExit,
+	IconGavel,
+	IconHammer,
+	IconSettings,
+	IconSettings2,
+	IconUserPlus,
+	IconWreckingBall
+} from "@tabler/icons";
 import React, { useContext, useEffect, useLayoutEffect, useState } from "react"
 import { Rooms, Student } from "../App";
 
@@ -71,6 +81,7 @@ export default function ChannelBodyNav(props: any) {
 					<ActionIcon variant="transparent" color="grape"><IconUserPlus></IconUserPlus></ActionIcon>
 					<ActionIcon variant="transparent" color="grape"><IconGavel></IconGavel></ActionIcon>
 					<ActionIcon variant="transparent" color="grape"><IconDoorExit></IconDoorExit></ActionIcon>
+					<ActionIcon variant="transparent" color="grape"><IconDoorEnter></IconDoorEnter></ActionIcon>
 				</div>
 			</div>
 			<svg style={{ position:"relative", height:"30%", width:"100%", rotate:"180deg", float:"right"}} ><image style={{ width:"20%"}} xlinkHref="/chat_decoration_top_mod_color2.svg"></image></svg>
