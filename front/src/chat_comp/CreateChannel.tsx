@@ -279,7 +279,9 @@ close	.mantine-Modal-close	Close button*/
                     <div>
                         <MultiSelect style={{ width:"90%", margin:"auto"}} data={optionsFriends} value={newOption.members} placeholder={"Add members"}></MultiSelect>
                     </div>
-                    <Button style={{ width:"50%", margin:"10px auto auto" }} >ciao</Button>
+                    <button className="btn_createChannel">
+                        <div className="btn__content_createChannel">Create Channel</div>
+                    </button>
                 </div>
             </Modal>
     )
