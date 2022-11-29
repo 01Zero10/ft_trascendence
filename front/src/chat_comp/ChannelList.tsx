@@ -57,6 +57,7 @@ export default function ChannelList(props: any) {
 							<span className="btn__label">
 								{element.type === "public" && <Badge className="channnelBadgeStyle" radius="xs">Public</Badge>}
 								{element.type === "protected" && <Badge className="channnelBadgeStyle" radius="xs">Protected</Badge>}
+								{element.type === "private" && <Badge className="channnelBadgeStyle" radius="xs">Private</Badge>}
 								{/* {element.type === "protected" && <Badge variant="gradient" gradient={{ from: 'orange', to: 'red' }} radius="xs" leftSection={lockIcon}>Protected</Badge>} */}
 							</span>
 						</button> )

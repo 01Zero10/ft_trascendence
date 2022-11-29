@@ -4,6 +4,7 @@
   --yellow-color: #fcee09; 
   --red-color: #ff003c;
   --black-color: #050a0e;
+  --black-light-color: #050a0ee9;
   --blue-color: #00f0ff;
   --white-color: #fafafa;
   --purple-color: #781C9C;
@@ -45,8 +46,8 @@
 }
 
 .btn:hover .btn__content {
-  background-color: var(--purple-color);
-  color: var(--black-color);
+  background-color: var(--black-light-color);
+  color: var(--white-color);
 }
 
 .btn__label {

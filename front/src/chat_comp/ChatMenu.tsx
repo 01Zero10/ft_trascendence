@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { Student } from "../App";
 import {Tab} from "@mantine/core/lib/Tabs/Tab/Tab";
 import {Tabs, Center, ScrollArea, Input, Modal} from "@mantine/core";
-import {IconMessageCircle, IconPlus, IconShield, IconUser, IconUsers} from "@tabler/icons";
+import {IconMessageCircle, IconPlus, IconShield, IconUser, IconUsers, IconArrowBack} from "@tabler/icons";
 import {Fab} from "@mui/material";
 import {positions} from "@mui/system";
 import ChannelList from "./ChannelList";
@@ -20,9 +20,10 @@ export default function ChatMenu(props: any) {
 	const [card, setCard] = useState("public")
 	const [newChannel, setNewChannel] = useState(false)
 
-	const [matches, setMatches] = useState(window.matchMedia("(min-width: 1000px)").matches)
-	
-	useEffect(() => { window.matchMedia("(min-width: 1000px)").addEventListener('change', e => setMatches( e.matches )); }, []);
+	// ***** useEffect per sostituire tasto crea canale con '+' quando la pagina viene ridimensionata *****
+
+	// const [matches, setMatches] = useState(window.matchMedia("(min-width: 1000px)").matches)
+	// useEffect(() => { window.matchMedia("(min-width: 1000px)").addEventListener('change', e => setMatches( e.matches )); }, []);
 
 	const tabStyle = {
 		color:"#781C9C",
@@ -80,8 +81,13 @@ export default function ChatMenu(props: any) {
 				<div style={{position:"relative", width:"100%", height:"100%"}}>
 					<img src="/account_decoration_down.svg" alt="img_account" />
 				</div>
-				{matches && (<Fab style={{margin:"0 auto 0", width:"50%", backgroundColor: "#781C9C", color: "white" }} variant={"extended"} aria-label="add" onClick={() => setNewChannel(true)} ><IconPlus></IconPlus>Create Channel</Fab>)}
-				{!matches && (<Fab style={{margin:"5% auto 0", backgroundColor: "#781C9C", color: "white"}} size="medium" onClick={() => setNewChannel(true)}><IconPlus></IconPlus></Fab>)}
+
+				{newChannel ? 
+					<Fab style={{margin:"0 auto 0", width:"50%", backgroundColor: "#781C9C", color: "white" }} variant={"extended"} aria-label="add" onClick={() => setNewChannel(false)} ><IconArrowBack></IconArrowBack>Back</Fab> :
+				 	<Fab style={{margin:"0 auto 0", width:"50%", backgroundColor: "#781C9C", color: "white" }} variant={"extended"} aria-label="add" onClick={() => setNewChannel(true)} ><IconPlus></IconPlus>Create Channel</Fab>}
+
+				{/* {matches && (<Fab style={{margin:"0 auto 0", width:"50%", backgroundColor: "#781C9C", color: "white" }} variant={"extended"} aria-label="add" onClick={() => setNewChannel(true)} ><IconPlus></IconPlus>Create Channel</Fab>)}
+				{!matches && (<Fab style={{margin:"5% auto 0", backgroundColor: "#781C9C", color: "white"}} size="medium" onClick={() => setNewChannel(true)}><IconPlus></IconPlus></Fab>)} */}
 			</div>
 		</div >
 	)
