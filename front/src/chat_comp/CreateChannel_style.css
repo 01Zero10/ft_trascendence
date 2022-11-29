@@ -1,0 +1,38 @@
+/*	CREA NOME CANALE */
+
+.search_container {
+	margin: 10px auto -10px;
+}
+
+.search_input {
+	width: 90%;
+	outline: none;
+	border: none;
+	border-style: none;
+	border-radius: 0px;
+	background-color: transparent;
+	font-family: 'Smooch Sans', sans-serif;
+	letter-spacing: 0.15em;
+	font-size: 1.5rem;
+	color: white;
+}
+
+ .search_input::placeholder {
+	background-color: transparent;
+	color: rgba(255, 255, 255, 0.493);
+	font-size: 1.5rem;
+	letter-spacing: 0.15em;
+	font-weight: 400;
+}
+
+
+.search_input:focus {
+	border-style: none;
+	border: none;
+	border-radius: 0px;
+	background-color: transparent;
+	font-family: 'Smooch Sans', sans-serif;
+	letter-spacing: 0.15em;
+	font-size: 1.5rem;
+	color: white;
+}

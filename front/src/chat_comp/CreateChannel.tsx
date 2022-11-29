@@ -1,13 +1,15 @@
-import { BackgroundImage, Box, Button, Center, Divider, FocusTrap, Input, Modal, MultiSelect, PasswordInput, SegmentedControl, Slider, Stack, TextInput } from "@mantine/core"
+import { BackgroundImage, Box, Button, Center, createStyles, Divider, FocusTrap, Input, Modal, MultiSelect, PasswordInput, SegmentedControl, Slider, Stack, TextInput } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks";
+import { red } from "@mui/material/colors";
 import { width } from "@mui/system";
 import { IconLock, IconPassword, IconShield, IconWorld } from "@tabler/icons";
+import { notDeepEqual } from "assert";
 import { url } from "inspector";
 import { type } from "os";
 import { stringify } from "querystring";
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useState} from "react"
 import { Student } from "../App";
-
+import "./CreateChannel_style.css"
 
 export interface NewChannel {
     builder: string,
@@ -171,45 +173,89 @@ body	.mantine-Modal-body	Modal body, displayed after header
 close	.mantine-Modal-close	Close button*/
 
     return (
-        <Modal centered 
+        <Modal centered withCloseButton={false}
         styles={(root) => ({
             inner:{
                 backgroundColor: 'transparent',
             },
             modal: {
                 backgroundColor: 'transparent',
-            },
-            header: {
-                backgroundColor: 'transparent',
-                textAlign: 'center',
-                backgroundImage:'url("/account_decoration_down.svg")',
-                BackgroundSize:"contain",
-                backgroundRepeat:"no-repeat"
-                
+                display: "flex",
+                flexDirection:"column" ,
+                alignItems:"center",
+                justifyContent:"center",
+                margin: 0,
             },
             body:{
-                width:"70%",
-                height:"70%",
+                width:"100%",
+                height:"80%",
                 backgroundColor: 'transparent',
                 textAlign: 'center',
             }
         })} 
             opened={props.newChannel} onClose={ () => props.setNewChannel(false) }>
-                <div style={{backgroundImage:"/chip.svg" , backgroundSize:"cover", backgroundPosition:"center"}}>
+                <div>
                     <div style={{width:"100%"}}>
-                        <SegmentedControl style={{width:"100%"}} value={newOption.type} data={controlData} onChange={changeType} ></SegmentedControl>
+                        <SegmentedControl style={{width:"100%",height: "50px"}} value={newOption.type} data={controlData} onChange={changeType}
+                        styles={() => ({
+                            root: {
+                                backgroundColor:"transparent",
+                            },
+                            control: {
+                                margin:"auto 2% auto",
+                                height: "100%",
+                                border:"0",
+                                outline: "none",
+                                backgroundColor: "#781C9C",
+                                cursor: "pointer",
+                                position: "relative",
+                                color: "#fafafa",
+                                clipPath: "polygon(92% 0, 100% 25%, 100% 100%, 8% 100%, 0% 75%, 0 0)",
+                                '&:not(:first-of-type)':{
+                                    border: "none",
+                                }
+                            },
+                            active: {
+                                backgroundColor:"transparent",
+                            },
+                            label: {
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                position: "absolute",
+                                fontFamily: "'Tomorrow', sans-serif",
+                                fontSize: "0.95rem",
+                                top: "2px",
+                                left: "2px",
+                                right: "2px",
+                                bottom: "2px",
+                                backgroundColor: "#050a0e",
+                                clipPath: "polygon(92% 0, 100% 25%, 100% 100%, 8% 100%, 0% 75%, 0 0)",
+                                '&:hover':{
+                                    color:"#fafafa",
+                                    backgroundColor: "#050a0ec6",
+                                }
+                            },
+                            labelActive:{
+                                color: "#fafafa !important", 
+                            },
+                            controlActive:{
+                                backgroundColor: "#fafafa"
+                            }
+                        })}/>
                     </div> 
                     <img src="/account_decoration_top.svg" alt="" />
-                    <div>
-                        <Input styles={(root) => (
-                            {input:{color:"white"}})}
+                    <div className="search_container">
+                        {/* <Input className="search_input" styles={(root) => (
+                            {input:{width:"90%",color:"white", margin:"10px auto -10px"}})}
                             variant="unstyled"
                             placeholder="Channel Name"
                             radius="md"
-                        />
+                        /> */}
+                        <input className="search_input" placeholder="Channel name" type="text" autoComplete="off"/>
                     </div>
                     <img src="/account_decoration_down.svg" alt="" />
-                    {newOption.type === "protected" && <form style={{ display:"flex", background:"transparent",width:"100%", height:"50%", color:"#ffff"}} >
+                    {newOption.type === "protected" && <form style={{ display:"flex", background:"transparent",width:"100%", height:"50%", color:"#ffff", margin:"10px auto 10px"}} >
                             <PasswordInput styles={() => ({label:{color:"#781C9C"}})} style={{ margin:"auto", width:"45%"} } disabled={newOption.type !== "protected"}
                                 label="Password"
                                 value={newOption.password}
@@ -231,9 +277,9 @@ close	.mantine-Modal-close	Close button*/
                     </form>}
                     
                     <div>
-                        <MultiSelect data={optionsFriends} value={newOption.members} placeholder={"Add members"}></MultiSelect>
+                        <MultiSelect style={{ width:"90%", margin:"auto"}} data={optionsFriends} value={newOption.members} placeholder={"Add members"}></MultiSelect>
                     </div>
-                    <Button style={{ width:"100%" }} >ciao</Button>
+                    <Button style={{ width:"50%", margin:"10px auto auto" }} >ciao</Button>
                 </div>
             </Modal>
     )

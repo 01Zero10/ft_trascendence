@@ -85,7 +85,6 @@ export default function ChatMenu(props: any) {
 				{newChannel ? 
 					<Fab style={{margin:"0 auto 0", width:"50%", backgroundColor: "#781C9C", color: "white" }} variant={"extended"} aria-label="add" onClick={() => setNewChannel(false)} ><IconArrowBack></IconArrowBack>Back</Fab> :
 				 	<Fab style={{margin:"0 auto 0", width:"50%", backgroundColor: "#781C9C", color: "white" }} variant={"extended"} aria-label="add" onClick={() => setNewChannel(true)} ><IconPlus></IconPlus>Create Channel</Fab>}
-
 				{/* {matches && (<Fab style={{margin:"0 auto 0", width:"50%", backgroundColor: "#781C9C", color: "white" }} variant={"extended"} aria-label="add" onClick={() => setNewChannel(true)} ><IconPlus></IconPlus>Create Channel</Fab>)}
 				{!matches && (<Fab style={{margin:"5% auto 0", backgroundColor: "#781C9C", color: "white"}} size="medium" onClick={() => setNewChannel(true)}><IconPlus></IconPlus></Fab>)} */}
 			</div>
