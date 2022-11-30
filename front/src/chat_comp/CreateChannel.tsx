@@ -158,10 +158,11 @@ export default function CreateChannel(props: any) {
             })
         })
     	//console.log("sono passato di qui")
-        props.setCreateChan(false)
+        //props.setCreateChan(false)
+        props.setNewChannel(false)
     }
 
-    console.log(optionsFriends)
+    //console.log(optionsFriends)
 
 /*root	.mantine-Modal-root	Root element, contains modal and overlay
 inner	.mantine-Modal-inner	Modal wrapper, centers modal
@@ -252,7 +253,13 @@ close	.mantine-Modal-close	Close button*/
                             placeholder="Channel Name"
                             radius="md"
                         /> */}
-                        <input className="search_input" placeholder="Channel name" type="text" autoComplete="off"/>
+                        <input  className="search_input" 
+                                placeholder="Channel name"
+                                type="text"
+                                autoComplete="off"
+                                value={newOption.nameGroup}
+                                onChange={(e) => changeName(e.target.value)}
+                        />
                     </div>
                     <img src="/account_decoration_down.svg" alt="" />
                     {newOption.type === "protected" && <form style={{ display:"flex", background:"transparent",width:"100%", height:"50%", color:"#ffff", margin:"10px auto 10px"}} >
@@ -279,9 +286,11 @@ close	.mantine-Modal-close	Close button*/
                     <div>
                         <MultiSelect style={{ width:"90%", margin:"auto"}} data={optionsFriends} value={newOption.members} placeholder={"Add members"}></MultiSelect>
                     </div>
-                    <button className="btn_createChannel">
+                    <Box>
+                    {(newOption.nameGroup) && <button className="btn_createChannel" onClick={handleConfirm} disabled={!checkProtectedChannel()}>
                         <div className="btn__content_createChannel">Create Channel</div>
-                    </button>
+                    </button>}
+                    </Box>
                 </div>
             </Modal>
     )
