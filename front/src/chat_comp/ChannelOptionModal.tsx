@@ -181,7 +181,6 @@ close	.mantine-Modal-close	Close button*/
             }
         })} 
             opened={props.newChannel} onClose={ () => props.setNewChannel(false) }>
-
             </Modal>
     )
 }
