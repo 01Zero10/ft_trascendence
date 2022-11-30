@@ -67,7 +67,7 @@ export default function AdminPanel(props: any) {
 		if (props.room.name != '') {
 			let response = await fetch(API_GET_MUTED);
 			let data = await response.json();
-		  console.log("muuuuuuuuted banned = ", data);
+		  //console.log("muuuuuuuuted banned = ", data);
 			let fetchMuted: {
 				value: string;
 				label: string;
@@ -91,7 +91,7 @@ export default function AdminPanel(props: any) {
 		if (props.room.name != '') {
 			let response = await fetch(API_GET_BANNED);
 			let data = await response.json();
-			console.log("daaaaaata banned = ", data);
+			// console.log("daaaaaata banned = ", data);
 			let fetchBanned: {
 				value: string;
 				label: string;
@@ -120,7 +120,7 @@ export default function AdminPanel(props: any) {
 				body: JSON.stringify({ channelName: props.room.name, mode: action }),
 			});
 			let data = await response.json();
-			console.log("daaaaaata options = ", data);
+			// console.log("daaaaaata options = ", data);
 			let fetchOptions: {
 				value: string;
 				label: string;

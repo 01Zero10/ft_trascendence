@@ -12,7 +12,7 @@ export default function Chat(props: any) {
 	const student = useContext(Student);
 	const [room, setRoom] = useState<Rooms>({ name: "", type: "", builder: { username: "" } })
 	const [chOptions, setChOptions] = useState<Rooms | null>(null)
-	const [input, setInput] = useState('');
+	
 	const [opened, setOpened] = useState("")
 
 
@@ -51,17 +51,17 @@ export default function Chat(props: any) {
 		props.socket?.emit('joinRoom', { client: student.username, room: room });
 	}
 
-	const handleSend = (e?: React.FormEvent<HTMLFormElement>) => {
-		if (e)
-			e.preventDefault();
-		if (input !== '') {
-			props.socket?.emit(
-				'msgToServer',
-				{ room: room.name, username: student.username, message: input, avatar: student.avatar }
-			);
-			setInput('');
-		}
-	};
+	// const handleSend = (e?: React.FormEvent<HTMLFormElement>) => {
+	// 	if (e)
+	// 		e.preventDefault();
+	// 	if (input !== '') {
+	// 		props.socket?.emit(
+	// 			'msgToServer',
+	// 			{ room: room.name, username: student.username, message: input, avatar: student.avatar }
+	// 		);
+	// 		setInput('');
+	// 	}
+	// };
 
 	return (
 		<div className="chat-dashboard">

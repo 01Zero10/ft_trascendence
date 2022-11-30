@@ -150,38 +150,38 @@ export default function ChannelBody(props: any) {
 	// 	}
 	// }
 
-	// async function getChatMessages() {
-	// 	if (props.room !== "") {
-	// 		setMessages([]);
-	// 		await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/chat/chrono`, {
-	// 			method: 'POST',
-	// 			credentials: 'include',
-	// 			headers: { 'Content-Type': 'application/json' },
-	// 			body: JSON.stringify({ user: student.username, roomName: props.room.name }),
-	// 		})
-	// 			.then(response => {
-	// 				response.json().then(pack => {
-	// 					pack.forEach((element: packMessage) => {
-	// 						setMessages(messages => [...messages, element]);
-	// 					});
-	// 				})
-	// 			})
-	// 	}
-	// 	else
-	// 		setMessages([]);
-	// }
+	async function getChatMessages() {
+		if (props.room !== "") {
+			setMessages([]);
+			await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/chat/chrono`, {
+				method: 'POST',
+				credentials: 'include',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ user: student.username, roomName: props.room.name }),
+			})
+				.then(response => {
+					response.json().then(pack => {
+						pack.forEach((element: packMessage) => {
+							setMessages(messages => [...messages, element]);
+						});
+					})
+				})
+		}
+		else
+			setMessages([]);
+	}
 
 	// // useEffect(() => console.log("controllo del proprio stato e"))
 
-	// useEffect(() => {
-	// 	getChatMessages();
-	// }, [props.room.name])
+	useEffect(() => {
+		getChatMessages();
+	}, [props.room.name])
 
-	// useEffect(() => {
-	// 	props.socket?.on('msgToClient', (client_message: packMessage) => {
-	// 		setMessages(messages => [...messages, client_message]);
-	// 	});
-	// }, [props.socket])
+	useEffect(() => {
+		props.socket?.on('msgToClient', (client_message: packMessage) => {
+			setMessages(messages => [...messages, client_message]);
+		});
+	}, [props.socket])
 
 	// useEffect(() => {
 	// 	bottomRef.current?.scrollIntoView()
@@ -205,12 +205,20 @@ export default function ChannelBody(props: any) {
 
 	//-----------------------------------------------------------
 
-	//console.log((!props.createChan && props.room && !joined && checkPwd))
+	console.log(messages)
 	return (
-		
 		<div style={{ position:"relative", height:"100%", width:"80%"}}>
 			<ChannelBodyNav room={props.room}></ChannelBodyNav>
-			<div style={{ background:"black", position:"relative", height:"92%", width:"100%"}}></div>
+			<div style={{ background:"lime", position:"relative", height:"92%", width:"100%"}}>
+				{messages.map((m: packMessage, id: number) => {
+					return(
+						<ChannelMessage username={m.username} message={m.message} createdAt={m.createdAt} key={id}></ChannelMessage>
+					)
+				})}
+			</div>
+			<ChannelInput
+				room={props.room}
+				mute={(myState?.mode === "mute")}></ChannelInput>
 		</div>
 	)
 }

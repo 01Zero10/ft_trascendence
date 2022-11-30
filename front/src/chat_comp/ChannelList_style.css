@@ -31,7 +31,7 @@
   position: absolute;
   font-family: 'Tomorrow', sans-serif;
   font-size: 0.95rem;
-  /* text-transform: uppercase; */
+  text-transform: uppercase;
   top: 2px;
   left: 2px;
   right: 2px;
