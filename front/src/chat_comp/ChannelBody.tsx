@@ -218,7 +218,8 @@ export default function ChannelBody(props: any) {
 			</div>
 			<ChannelInput
 				room={props.room}
-				mute={(myState?.mode === "mute")}></ChannelInput>
+				mute={(myState?.mode === "mute")}
+				socket={props.socket}></ChannelInput>
 		</div>
 	)
 }

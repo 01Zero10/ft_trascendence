@@ -66,7 +66,7 @@ export default function Chat(props: any) {
 	return (
 		<div className="chat-dashboard">
 			<ChatMenu setRoom={setRoom}></ChatMenu>
-			<ChannelBodyStatus room={room}></ChannelBodyStatus>
+			<ChannelBodyStatus room={room} socket={props.socket}></ChannelBodyStatus>
 		</div>
 	)
 }

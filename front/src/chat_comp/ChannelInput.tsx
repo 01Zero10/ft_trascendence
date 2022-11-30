@@ -5,7 +5,10 @@ export default function ChannelInput(props: any) {
     const student = useContext(Student)
     const [input, setInput] = useState('');
 
+    console.log("input room: ", props.room)
+
     const handleSend = () => {
+        
 		if (input !== '') {
 			props.socket?.emit(
 				'msgToServer',
