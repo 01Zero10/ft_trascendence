@@ -1,0 +1,40 @@
+.messageContainer{
+    width: 90%;
+    height: 150px;
+    border: 0;
+    outline: none;
+    background-color: var(--purple-color);
+    position: relative;
+    color: var(--white-color);
+    clip-path: polygon(92% 0, 100% 25%, 100% 100%, 8% 100%, 0% 75%, 0 0);
+    z-index: 1;
+    margin: 5% auto auto;
+}
+.messageContent{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    font-family: 'Tomorrow', sans-serif;
+    font-size: 0.85rem;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    background-color: black;
+    clip-path: polygon(92% 0, 100% 25%, 100% 100%, 8% 100%, 0% 75%, 0 0);
+    z-index: 2;
+}
+
+.messageHeader{
+    display: flex;
+    width: 100%;
+    background-color: rgb(241, 47, 255);
+}
+
+.messageText{
+    /* height: 70%; */
+    width: 100%;
+    background-color: chocolate;
+}
