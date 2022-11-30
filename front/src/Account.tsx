@@ -289,6 +289,7 @@ function Account() {
             }
           }))
           setFriendsRequest(fetchFriendsRequest);
+          console.log(fetchFriendsRequest);
         }
         )
     }

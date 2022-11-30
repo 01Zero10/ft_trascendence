@@ -156,7 +156,7 @@ function Navigation() {
     <>
       <AppBar sx={{ bgcolor: 'transparent', color: '#fff', width: '100%', paddingLeft: '32px', paddingRight: '32px' }} component='nav'>
         <Toolbar>
-          <NotificationBell count={count} sx={{right:"20%"}} />
+          <NotificationBell count={count} setCount={setCount} sx={{ right: "20%" }} />
           <IconButton
             aria-label="open drawer"
             edge="start"
