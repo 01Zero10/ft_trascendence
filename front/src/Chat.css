@@ -25,10 +25,13 @@
 
 .chat-nav {
     /*display: flex;*/
+    border-top: 2px solid #781C9C;
     border-right: 5px #781C9C;
     border-bottom: 5px #781C9C;
     position: relative;
     border-radius: 15px;
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
     background-color: #FAFBFF;
     width: 20%;
     height: 100%;

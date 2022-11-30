@@ -44,7 +44,6 @@
 	color: var(--white-color);
 	clip-path: polygon(92% 0, 100% 25%, 100% 100%, 8% 100%, 0% 75%, 0 0);
 	z-index: 1;
-	margin-left: 5%;
 }
 
 .channelTitleContent{
@@ -68,8 +67,15 @@
 .channelOptionBar {
 	position: relative;
 	height: 100%;
-	width: 60%;
+	width: 30%;
 	background: black;
 	display: flex;
+	justify-content: center;
+	align-items: flex-end;
 	border-bottom: 2px solid var(--purple-color);
+}
+
+.nonServoANiente {
+	width: 30%;
+	border-top: 2px solid var(--purple-color);
 }

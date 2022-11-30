@@ -75,6 +75,7 @@ export default function ChannelBodyNav(props: any) {
 	return (
 		<div className="channelNavContainer">
 			<div className="channelNavTopBar">
+				<div className="nonServoANiente"></div>
 				<div className="channelTitleContainer">
 					<div className="channelTitleBox">
 						<div className="channelTitleContent">
