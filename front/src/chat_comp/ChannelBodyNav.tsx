@@ -30,17 +30,17 @@ export default function ChannelBodyNav(props: any) {
 	// 		setNameToDisplay('chat with: ' + props.room.name.replaceAll(student.username, ''));
 	// }, [props.room])
 
-	// async function SetJoinFetch() {
-	// 	const API_SET_JOIN = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/setJoin`;
-	// 	await fetch(API_SET_JOIN, {
-	// 		method: 'POST',
-	// 		credentials: 'include',
-	// 		headers: { 'Content-Type': 'application/json' },
-	// 		body: JSON.stringify({ client: student.username, channelName: props.room?.name, joined: props.joined }),
-	// 	})
-	// 	props.setJoined((prevJoined: boolean) => !prevJoined);
-	// 	props.socket?.emit('updateList', { type: props.room?.type });
-	// }
+	async function SetJoinFetch() {
+		const API_SET_JOIN = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/setJoin`;
+		await fetch(API_SET_JOIN, {
+			method: 'POST',
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ client: student.username, channelName: props.room?.name, joined: props.joined }),
+		})
+		props.setJoined((prevJoined: boolean) => !prevJoined);
+		props.socket?.emit('updateList', { type: props.room?.type });
+	}
 
 
 	// async function loadAddMembersOptions() {
@@ -87,8 +87,8 @@ export default function ChannelBodyNav(props: any) {
 					<ActionIcon variant="transparent" color="grape"><IconSettings></IconSettings></ActionIcon>
 					<ActionIcon variant="transparent" color="grape"><IconUserPlus></IconUserPlus></ActionIcon>
 					<ActionIcon variant="transparent" color="grape"><IconGavel></IconGavel></ActionIcon>
-					<ActionIcon variant="transparent" color="grape"><IconDoorExit></IconDoorExit></ActionIcon>
-					<ActionIcon variant="transparent" color="grape"><IconDoorEnter></IconDoorEnter></ActionIcon>
+					{props.joined && <ActionIcon variant="transparent" color="grape"><IconDoorExit></IconDoorExit></ActionIcon>}
+					{!props.joined && <ActionIcon variant="transparent" color="grape"><IconDoorEnter></IconDoorEnter></ActionIcon>}
 				</div>
 			</div>
 			{/* <svg style={{ position:"relative", height:"30%", width:"100%", rotate:"180deg", float:"right"}} ><image style={{ width:"20%"}} xlinkHref="/chat_decoration_top_mod_color2.svg"></image></svg> */}

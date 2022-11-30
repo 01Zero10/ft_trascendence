@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react"
 import { Student } from "../App";
 
 export default function ChannelInput(props: any) {
@@ -34,7 +34,7 @@ export default function ChannelInput(props: any) {
         }
     }
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         document.addEventListener("keydown", setNewLine)
         document.addEventListener("keydown", sendWithEnter)
         return () => {
@@ -46,8 +46,8 @@ export default function ChannelInput(props: any) {
     //console.log("input room",props.room)
 
     return (
-        <form className="channel-input">
-            <textarea id="message-area"  className="channel-input-text" 
+        <div className="channel-input">
+            <textarea className="channel-input-text" 
                         value={input} 
                         placeholder={props.mute ? "sei stato mutato" : "Scrivi qui il tuo messaggio..." }
                         onChange={(e) => setInput(e.target.value)} 
@@ -56,6 +56,6 @@ export default function ChannelInput(props: any) {
                         >
             </textarea>
             <button className="channel-input-button" onClick={handleSend} disabled={props.mute}>Invia</button>
-        </form>
+        </div>
     )
 }

@@ -68,7 +68,7 @@ export default function ChatMenu(props: any) {
 						{/*<Tabs.Tab value="protected" icon={<IconShield size={14} />} onClick={() => setCard("protected")}>Protected</Tabs.Tab>*/}
 						<Tabs.Tab style={tabStyle} value={`FriendsChatList/${contextData.username}`} icon={<IconMessageCircle size={14} />} onClick={() => setCard(`FriendsChatList/${contextData.username}`)}>DM's</Tabs.Tab>
 					</Tabs.List>
-					<Tabs.Panel style={tabPanelStyle} value="all">cazzo 1</Tabs.Panel>
+					<Tabs.Panel style={tabPanelStyle} value="all"><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList src={src} card={card} setRoom={props.setRoom}/></ScrollArea></Tabs.Panel>
 					<Tabs.Panel style={tabPanelStyle} value={`membership/${contextData.id}`}><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList src={src} card={card} setRoom={props.setRoom}/></ScrollArea></Tabs.Panel>
 					<Tabs.Panel style={tabPanelStyle} value={`FriendsChatList/${contextData.username}`}><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList card={card}/></ScrollArea></Tabs.Panel>
 				</Tabs>

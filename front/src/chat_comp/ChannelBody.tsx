@@ -205,21 +205,20 @@ export default function ChannelBody(props: any) {
 
 	//-----------------------------------------------------------
 
-	console.log(messages)
 	return (
 		<div style={{ position:"relative", height:"100%", width:"80%"}}>
 			<ChannelBodyNav room={props.room}></ChannelBodyNav>
 			<div style={{ background:"lime", position:"relative", height:"92%", width:"100%"}}>
-				{messages.map((m: packMessage, id: number) => {
+				{props.room.name && messages.map((m: packMessage, id: number) => {
 					return(
 						<ChannelMessage username={m.username} message={m.message} createdAt={m.createdAt} key={id}></ChannelMessage>
 					)
 				})}
 			</div>
-			<ChannelInput
+			{props.room.name && <ChannelInput
 				room={props.room}
 				mute={(myState?.mode === "mute")}
-				socket={props.socket}></ChannelInput>
+				socket={props.socket}></ChannelInput>}
 		</div>
 	)
 }

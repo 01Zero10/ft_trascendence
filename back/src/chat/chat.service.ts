@@ -37,7 +37,7 @@ export class ChatService {
         const Rooms = await this.roomsRepository
         .createQueryBuilder('room')
         .leftJoinAndSelect('room.builder', 'builder')
-        .where("room.type != :type_n", {type: 'private'})
+        .where("room.type != :type_n", {type_n: 'private'})
         .select(['room.name', 'room.type', 'builder.username'])
         .getMany()
         return Rooms;

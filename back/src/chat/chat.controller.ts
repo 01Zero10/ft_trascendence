@@ -47,7 +47,7 @@ export class ChatController {
         return (await this.chatService.getUsersOnDB());
     }
 
-    @Get('getAll')
+    @Get('getall')
     async getAllChannels() {
         return (await this.chatService.getAllChannels());
     }
