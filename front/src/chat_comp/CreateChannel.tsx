@@ -262,7 +262,7 @@ close	.mantine-Modal-close	Close button*/
                         />
                     </div>
                     <img src="/account_decoration_down.svg" alt="" />
-                    {newOption.type === "protected" && <form style={{ display:"flex", background:"transparent",width:"100%", height:"50%", color:"#ffff", margin:"10px auto 10px"}} >
+                    {newOption.type === "protected" && <form style={{ display:"flex", background:"transparent",width:"100%", height:"50%", color:"#ffff", margin:"10px auto 10px", padding:"11px"}} >
                             <PasswordInput styles={() => ({label:{color:"#781C9C"}})} style={{ margin:"auto", width:"45%"} } disabled={newOption.type !== "protected"}
                                 label="Password"
                                 value={newOption.password}
