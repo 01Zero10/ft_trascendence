@@ -174,7 +174,7 @@ body	.mantine-Modal-body	Modal body, displayed after header
 close	.mantine-Modal-close	Close button*/
 
     return (
-        <Modal centered withCloseButton={false}
+        <Modal centered withCloseButton={false} closeOnClickOutside={false}
         styles={(root) => ({
             inner:{
                 backgroundColor: 'transparent',
