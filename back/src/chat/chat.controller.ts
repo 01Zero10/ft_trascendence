@@ -47,6 +47,11 @@ export class ChatController {
         return (await this.chatService.getUsersOnDB());
     }
 
+    @Get('getAll')
+    async getAllChannels() {
+        return (await this.chatService.getAllChannels());
+    }
+
     @Get('getpublic')
     async getPublicChannels(): Promise<Rooms[]> {
         return (await this.chatService.getPublicChannels());

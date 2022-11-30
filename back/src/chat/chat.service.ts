@@ -33,6 +33,16 @@ export class ChatService {
         .getMany()
     }
     
+    async getAllChannels() {
+        const Rooms = await this.roomsRepository
+        .createQueryBuilder('room')
+        .leftJoinAndSelect('room.builder', 'builder')
+        .where("room.type != :type_n", {type: 'private'})
+        .select(['room.name', 'room.type', 'builder.username'])
+        .getMany()
+        return Rooms;
+    }
+
     async getPublicChannels() {
         const Rooms = await this.roomsRepository
         .createQueryBuilder('room')
@@ -40,7 +50,6 @@ export class ChatService {
         .where({type: 'public'})
         .select(['room.name', 'room.type', 'builder.username'])
         .getMany()
-        //console.log("publicissimo", Rooms);
         return Rooms;
     }
 
