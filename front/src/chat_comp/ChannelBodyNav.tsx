@@ -84,9 +84,9 @@ export default function ChannelBodyNav(props: any) {
 					</div>
 				</div>
 				<div className="channelOptionBar">
-					<ActionIcon variant="transparent" color="grape"><IconSettings></IconSettings></ActionIcon>
-					<ActionIcon variant="transparent" color="grape"><IconUserPlus></IconUserPlus></ActionIcon>
-					<ActionIcon variant="transparent" color="grape"><IconGavel></IconGavel></ActionIcon>
+					<ActionIcon variant="transparent" color="grape" onClick={() => props.setModalTypeOpen("options")}><IconSettings></IconSettings></ActionIcon>
+					<ActionIcon variant="transparent" color="grape" onClick={() => props.setModalTypeOpen("add")}><IconUserPlus></IconUserPlus></ActionIcon>
+					<ActionIcon variant="transparent" color="grape" onClick={() => props.setModalTypeOpen("admin")}><IconGavel></IconGavel></ActionIcon>
 					{props.joined && <ActionIcon variant="transparent" color="grape"><IconDoorExit></IconDoorExit></ActionIcon>}
 					{!props.joined && <ActionIcon variant="transparent" color="grape"><IconDoorEnter></IconDoorEnter></ActionIcon>}
 				</div>

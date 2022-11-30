@@ -8,6 +8,8 @@ import { Box, Button, Modal, PasswordInput, Skeleton } from "@mantine/core";
 import ChannelMessage2 from "./message2";
 import CreateChannel from "./CreateChannel";
 import { IconLock } from "@tabler/icons";
+import OptionsPanel from "./OptionsPanel";
+import ChannelOptionModal from "./ChannelOptionModal";
 
 
 /*A ogni click sulla stanza viene aggiornato MyState
@@ -30,6 +32,8 @@ export interface MutesAndBans {
 }
 
 //mood-silence, ban, user-search || user
+
+
 export default function ChannelBody(props: any) {
 	const [messages, setMessages] = useState<packMessage[]>([])
 	const bottomRef = useRef<null | HTMLDivElement>(null);
@@ -37,6 +41,7 @@ export default function ChannelBody(props: any) {
 	// const [listUser, setListUser] = useState<string[]>([]);
 	const student = useContext(Student);
 	// const [joined, setJoined] = useState(false)
+	const [modalTypeOpen, setModalTypeOpen] = useState<"" | "admin" | "options" | "add">("")
 	const [checkPwd, setCheckPwd] = useState(false)
 	const [inputPwd, setInputPwd] = useState("")
 	const [myState, setMyState] = useState<MyStateOnChannel | null>(null);
@@ -205,9 +210,12 @@ export default function ChannelBody(props: any) {
 
 	//-----------------------------------------------------------
 
+	console.log(modalTypeOpen != "")
+
 	return (
 		<div style={{ position:"relative", height:"100%", width:"80%"}}>
-			<ChannelBodyNav room={props.room}></ChannelBodyNav>
+			{(modalTypeOpen != "") && <ChannelOptionModal />}
+			<ChannelBodyNav room={props.room} setModalTypeOpen={setModalTypeOpen}></ChannelBodyNav>
 			<div style={{ background:"lime", position:"relative", height:"92%", width:"100%"}}>
 				{props.room.name && messages.map((m: packMessage, id: number) => {
 					return(

@@ -5,10 +5,7 @@ export default function ChannelInput(props: any) {
     const student = useContext(Student)
     const [input, setInput] = useState('');
 
-    console.log("input room: ", props.room)
-
     const handleSend = () => {
-        
 		if (input !== '') {
 			props.socket?.emit(
 				'msgToServer',
@@ -28,6 +25,7 @@ export default function ChannelInput(props: any) {
     }
 
     function sendWithEnter(e: any) {
+        console.log("sono entrato")
         if (!e.shiftKey && e.key === "Enter") {
             e.preventDefault()
             handleSend();
