@@ -16,4 +16,7 @@ export class Notifications {
 
     @Column({nullable: true})
     sentAt: Date;
+
+    @Column({default: false})
+    seen: boolean;
 }

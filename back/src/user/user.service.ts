@@ -8,6 +8,7 @@ import { CreateUserDto } from "./utils/user.dto";
 import { JwtService } from "@nestjs/jwt";
 import { Friendship } from "./friendship.entity";
 import { Online } from "./online.entity";
+import { Notifications } from "src/navigation/notifications.entity";
 
 export interface FriendListItem {
   username: string;
@@ -23,6 +24,7 @@ export class UserService {
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Friendship) private friendShipRepository: Repository<Friendship>,
     @InjectRepository(Online) private onlineRepository: Repository<Online>,
+    @InjectRepository(Notifications) private notificationsRepository: Repository<Notifications>,
     private readonly jwt: JwtService,
   ) {}
 
@@ -176,6 +178,12 @@ export class UserService {
     const friend1: string = (client < profileUser) ? client : profileUser;
     const friend2: string = (client == friend1) ? profileUser : client;
     
+    await this.notificationsRepository.save({
+      receiver: profileUser,
+      sender: client,
+      type: 'friendship',
+    })
+
     return this.friendShipRepository.save({
       user1: friend1,
       user2: friend2,
@@ -211,6 +219,10 @@ export class UserService {
       await this.userRepository.save(userProfileUser);
     }
     await this.friendShipRepository.remove(request);
+
+    const notification = await this.notificationsRepository.findOneBy({ sender: client, receiver: profileUser});
+    if (notification)
+      await this.notificationsRepository.remove(notification);
   }
 
   async acceptFriendRequest(client: string, profileUser: string){
@@ -230,6 +242,12 @@ export class UserService {
     await this.userRepository.save(userClient);
     await this.userRepository.save(userProfileUser);
     await this.friendShipRepository.save(request);
+
+    const notification = await this.notificationsRepository.findOneBy({ receiver: client, sender: profileUser});
+    notification.receiver = profileUser;
+    notification.sender = client;
+    notification.type = 'accepted_friendship';
+    await this.notificationsRepository.save(notification);
   }
 
   async getFriendships(client: string){
