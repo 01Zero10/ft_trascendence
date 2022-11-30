@@ -12,6 +12,7 @@ import {
 } from "@tabler/icons";
 import React, { useContext, useEffect, useLayoutEffect, useState } from "react"
 import { Rooms, Student } from "../App";
+import "./ChannelBody_style.css"
 
 export default function ChannelBodyNav(props: any) {
 	const student = useContext(Student);
@@ -72,9 +73,15 @@ export default function ChannelBodyNav(props: any) {
 
 	// console.log("room: ",props.room)
 	return (
-		<div style={{ position:"relative", height:"8%", width:"100%", background:"cyan"}}>
-			<div style={{ position:"relative", height:"70%", width:"100%", background:"cyan", display:"flex" }}>
-				<Center style={{ color:"#781C9C", position:"relative", height:"100%", width:"40%", background:"black"}} >{props.room.name}</Center>
+		<div className="channelNavContainer">
+			<div className="channelNavTopBar">
+				<div className="channelTitleContainer">
+					<div className="channelTitleBox">
+						<div className="channelTitleContent">
+							{props.room.name}
+						</div>
+					</div>
+				</div>
 				<div style={{ position:"relative", height:"100%", width:"60%", background:"black", display:"flex"}}>
 					
 					<ActionIcon variant="transparent" color="grape"><IconSettings></IconSettings></ActionIcon>
@@ -84,7 +91,9 @@ export default function ChannelBodyNav(props: any) {
 					<ActionIcon variant="transparent" color="grape"><IconDoorEnter></IconDoorEnter></ActionIcon>
 				</div>
 			</div>
-			<svg style={{ position:"relative", height:"30%", width:"100%", rotate:"180deg", float:"right"}} ><image style={{ width:"20%"}} xlinkHref="/chat_decoration_top_mod_color2.svg"></image></svg>
+			{/* <svg style={{ position:"relative", height:"30%", width:"100%", rotate:"180deg", float:"right"}} ><image style={{ width:"20%"}} xlinkHref="/chat_decoration_top_mod_color2.svg"></image></svg> */}
 		</div>
 	)
+
+	{/* <Center style={{ color:"#781C9C", position:"relative", height:"100%", width:"40%", background:"black"}} >{props.room.name}</Center> */}
 }
