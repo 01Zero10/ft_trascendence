@@ -82,8 +82,7 @@ export default function ChannelBodyNav(props: any) {
 						</div>
 					</div>
 				</div>
-				<div style={{ position:"relative", height:"100%", width:"60%", background:"black", display:"flex"}}>
-					
+				<div className="channelOptionBar">
 					<ActionIcon variant="transparent" color="grape"><IconSettings></IconSettings></ActionIcon>
 					<ActionIcon variant="transparent" color="grape"><IconUserPlus></IconUserPlus></ActionIcon>
 					<ActionIcon variant="transparent" color="grape"><IconGavel></IconGavel></ActionIcon>
