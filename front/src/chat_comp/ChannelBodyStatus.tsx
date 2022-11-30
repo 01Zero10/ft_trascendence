@@ -83,7 +83,7 @@ export default function ChannelBodyStatus(props: any) {
 
     return (
         <div style={{position:"relative", height:"100%", backgroundColor:"lime", width:"80%", display:"flex"}}>
-            {<ChannelBody room={props.room}/>}
+            {<ChannelBody room={props.room} socket={props.socket}/>}
             <div style={{position:"relative", height:"100%", backgroundColor:"darkred", width:"20%"}}> ciaqo</div>
         </div>
     )
