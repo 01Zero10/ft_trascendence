@@ -284,7 +284,15 @@ close	.mantine-Modal-close	Close button*/
                     </form>}
                     
                     <div>
-                        <MultiSelect style={{ width:"90%", margin:"auto"}} data={optionsFriends} value={newOption.members} placeholder={"Add members"}></MultiSelect>
+                        <MultiSelect style={{ width:"90%", margin:"auto"}} 
+                            data={optionsFriends}
+                            value={newOption.members}
+                            placeholder={"Add members"}
+                            searchable
+                            dropdownPosition="bottom"
+                            nothingFound="NIENTE, NON HAI AMICI"
+                            onChange={changeMembers}>
+                        </MultiSelect>
                     </div>
                     <Box>
                     {(newOption.nameGroup) && <button className="btn_createChannel" onClick={handleConfirm} disabled={!checkProtectedChannel()}>
