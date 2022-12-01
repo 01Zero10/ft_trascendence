@@ -24,4 +24,9 @@ export class GameController{
     async GetLeaderBoard(){
         return await this.gameService.getLeaderBoard();
     }
+
+    @Get('test/:winner')
+    async getTest(@Param('winner') winner: string){
+        return await this.gameService.updatePosition(winner);
+    }
 }

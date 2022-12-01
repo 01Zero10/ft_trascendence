@@ -124,16 +124,11 @@ export class GameService{
         .where("playroom.player1 = :client_n", { client_n: client })
         .orWhere("playroom.player2 = :client_n", { client_n: client })
         .getOne()
-
-
         console.log('p-p-pl = ', playRoom);
-        
         if (playRoom)
         {
             clearInterval(this.mapPlRoom.get(playRoom.playRoom).idInterval)
             await this.gameGateway.handleLeftGame(playRoom.playRoom)
-            
-            
             await this.matchRepository.save({player1: playRoom.player1,
                 avatar1: playRoom.avatar1,
                 player2: playRoom.player2,
@@ -141,8 +136,6 @@ export class GameService{
                 points1: (playRoom.player1 === client ? this.mapPlRoom.get(playRoom.playRoom).leftPoint : -42),
                 points2: (playRoom.player2 === client ? this.mapPlRoom.get(playRoom.playRoom).rightPoint : -42),
             })
-
-
             await this.runningMatches.remove(playRoom);
         }
     }
@@ -181,22 +174,6 @@ export class GameService{
     async getPlayRoomByName(playRoom: string){
         return this.runningMatches.findOne({where: {playRoom: playRoom}});
     }
-
-    // async setKeysPlayer(namePlayRoom: string, side: string, dir: number=1){
-    //     console.log("set keys ", this.mapPlRoom.get(namePlayRoom));
-    //     if (side === 'left'){
-    //         if (dir > 0)
-    //             this.mapPlRoom.get(namePlayRoom).leftPlayer.up = !this.mapPlRoom.get(namePlayRoom).leftPlayer.up;
-    //         else
-    //             this.mapPlRoom.get(namePlayRoom).leftPlayer.down = !this.mapPlRoom.get(namePlayRoom).leftPlayer.down;
-    //     }
-    //     else {
-    //         if (dir > 0)
-    //             this.mapPlRoom.get(namePlayRoom).rightPlayer.up = !this.mapPlRoom.get(namePlayRoom).rightPlayer.up;
-    //         else
-    //             this.mapPlRoom.get(namePlayRoom).rightPlayer.down = !this.mapPlRoom.get(namePlayRoom).rightPlayer.down;
-    //     }
-    // }
 
     async setKeysPlayerPress(namePlayRoom: string, side: string, dir: number=1){
         if (side === 'left'){
@@ -307,6 +284,56 @@ export class GameService{
         if (roomSaved.points1 > roomSaved.points2)
             return roomSaved.player1;
         return roomSaved.player2;
+    }
+
+    async updatePosition(winner: string){
+        const points_to_add = 100;
+        let winnerRow = await this.leaderboardRepository
+        .createQueryBuilder('board')
+        .leftJoin('board.user', 'user')
+        .where("user.username = :winner_n", {winner_n: winner})
+        .getOne();
+
+        if (!winnerRow){    
+            const user = await this.userRepository.findOne({ where: {username: winner}});
+            winnerRow = this.leaderboardRepository.create({
+                user: user,
+                points: points_to_add,
+                position: 0,
+            })
+        }
+        else {
+            winnerRow.points += points_to_add;
+        }
+
+        const all = await this.leaderboardRepository
+        .createQueryBuilder('board')
+        .leftJoin('board.user', 'user')
+        .orderBy('user.points', 'DESC')
+        .getMany();
+
+        if (!all.length)
+            return await this.leaderboardRepository.save(winnerRow);
+
+        let index = 0;
+        while(all[index] && all[index].points >= winnerRow.points)
+            index++;
+        
+        if (!all[index])
+        {
+            winnerRow.position = all[index - 1].position + 1;
+            return await this.leaderboardRepository.save(winnerRow);
+        }
+
+        winnerRow.position = all[index].position;
+        await this.leaderboardRepository.save(winnerRow);
+
+        while(all[index])
+        {
+            all[index].position += 1;
+            await this.leaderboardRepository.save(all[index]);
+            index++;
+        }
     }
 
     async getLeaderBoard(){
