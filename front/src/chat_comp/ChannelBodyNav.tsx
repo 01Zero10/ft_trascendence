@@ -13,6 +13,7 @@ import {
 import React, { useContext, useEffect, useLayoutEffect, useState } from "react"
 import { Rooms, Student } from "../App";
 import "./ChannelBody_style.css"
+import CreateChannel from "./CreateChannel";
 
 export default function ChannelBodyNav(props: any) {
 	const student = useContext(Student);
@@ -71,9 +72,10 @@ export default function ChannelBodyNav(props: any) {
 
 	//impostazioni(owner), admin, leave, add people(owner)
 
-	// console.log("room: ",props.room)
+	console.log("room: ",props.joined)
 	return (
 		<div className="channelNavContainer">
+			<CreateChannel modalTypeOpened={props.modalTypeOpen} room={props.room}/>
 			<div className="channelNavTopBar">
 				<div className="nonServoANiente"></div>
 				<div className="channelTitleContainer">
@@ -87,8 +89,8 @@ export default function ChannelBodyNav(props: any) {
 					<ActionIcon variant="transparent" color="grape" onClick={() => props.setModalTypeOpen("options")}><IconSettings></IconSettings></ActionIcon>
 					<ActionIcon variant="transparent" color="grape" onClick={() => props.setModalTypeOpen("add")}><IconUserPlus></IconUserPlus></ActionIcon>
 					<ActionIcon variant="transparent" color="grape" onClick={() => props.setModalTypeOpen("admin")}><IconGavel></IconGavel></ActionIcon>
-					{props.joined && <ActionIcon variant="transparent" color="grape"><IconDoorExit></IconDoorExit></ActionIcon>}
-					{!props.joined && <ActionIcon variant="transparent" color="grape"><IconDoorEnter></IconDoorEnter></ActionIcon>}
+					{props.joined && <ActionIcon onClick={() => props.setJoined((prevState: boolean) => !prevState)} variant="transparent" color="grape"><IconDoorExit></IconDoorExit></ActionIcon>}
+					{!props.joined && <ActionIcon onClick={() => props.setJoined((prevState: boolean) => !prevState)} variant="transparent" color="grape"><IconDoorEnter></IconDoorEnter></ActionIcon>}
 				</div>
 			</div>
 			{/* <svg style={{ position:"relative", height:"30%", width:"100%", rotate:"180deg", float:"right"}} ><image style={{ width:"20%"}} xlinkHref="/chat_decoration_top_mod_color2.svg"></image></svg> */}
