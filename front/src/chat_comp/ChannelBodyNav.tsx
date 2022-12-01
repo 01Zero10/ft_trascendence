@@ -70,12 +70,11 @@ export default function ChannelBodyNav(props: any) {
 	// 	setOpened(false);
 	// }
 
-	//impostazioni(owner), admin, leave, add people(owner)
 
-	console.log("room: ",props.joined)
+	// console.log("room: ",props.joined)
 	return (
 		<div className="channelNavContainer">
-			<CreateChannel modalTypeOpened={props.modalTypeOpen} room={props.room}/>
+			<CreateChannel modalTypeOpen={props.modalTypeOpen} room={props.room}/>
 			<div className="channelNavTopBar">
 				<div className="nonServoANiente"></div>
 				<div className="channelTitleContainer">
@@ -86,11 +85,11 @@ export default function ChannelBodyNav(props: any) {
 					</div>
 				</div>
 				<div className="channelOptionBar">
-					<ActionIcon variant="transparent" color="grape" onClick={() => props.setModalTypeOpen("options")}><IconSettings></IconSettings></ActionIcon>
-					<ActionIcon variant="transparent" color="grape" onClick={() => props.setModalTypeOpen("add")}><IconUserPlus></IconUserPlus></ActionIcon>
-					<ActionIcon variant="transparent" color="grape" onClick={() => props.setModalTypeOpen("admin")}><IconGavel></IconGavel></ActionIcon>
-					{props.joined && <ActionIcon onClick={() => props.setJoined((prevState: boolean) => !prevState)} variant="transparent" color="grape"><IconDoorExit></IconDoorExit></ActionIcon>}
-					{!props.joined && <ActionIcon onClick={() => props.setJoined((prevState: boolean) => !prevState)} variant="transparent" color="grape"><IconDoorEnter></IconDoorEnter></ActionIcon>}
+					{(props.room.name && props.room.builder.username === student.username)&& <ActionIcon variant="transparent" color="grape" onClick={() => props.setModalTypeOpen("options")}><IconSettings></IconSettings></ActionIcon>}
+					{(props.room.name && props.room.builder.username === student.username)&& <ActionIcon variant="transparent" color="grape" onClick={() => props.setModalTypeOpen("add")}><IconUserPlus></IconUserPlus></ActionIcon>}
+					{props.room.name && <ActionIcon variant="transparent" color="grape" onClick={() => props.setModalTypeOpen("admin")}><IconGavel></IconGavel></ActionIcon>}
+					{(props.room.name && props.joined) && <ActionIcon onClick={() => props.setJoined((prevState: boolean) => !prevState)} variant="transparent" color="grape"><IconDoorExit></IconDoorExit></ActionIcon>}
+					{(props.room.name && !props.joined) && <ActionIcon onClick={() => props.setJoined((prevState: boolean) => !prevState)} variant="transparent" color="grape"><IconDoorEnter></IconDoorEnter></ActionIcon>}
 				</div>
 			</div>
 			{/* <svg style={{ position:"relative", height:"30%", width:"100%", rotate:"180deg", float:"right"}} ><image style={{ width:"20%"}} xlinkHref="/chat_decoration_top_mod_color2.svg"></image></svg> */}

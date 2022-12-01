@@ -5,10 +5,6 @@ import ChannelInput from "./ChannelInput"
 import { packMessage } from "../About";
 import { Student } from "../App";
 import { Box, Button, Modal, PasswordInput, ScrollArea, Skeleton } from "@mantine/core";
-import ChannelMessage2 from "./message2";
-import CreateChannel from "./CreateChannel";
-import { IconLock } from "@tabler/icons";
-import OptionsPanel from "./OptionsPanel";
 import ChannelOptionModal from "./ChannelOptionModal";
 
 
@@ -41,7 +37,7 @@ export default function ChannelBody(props: any) {
 	// const [listUser, setListUser] = useState<string[]>([]);
 	const student = useContext(Student);
 	const [joined, setJoined] = useState(false)
-	const [modalTypeOpen, setModalTypeOpen] = useState<"" | "admin" | "options" | "add">("")
+	const [modalTypeOpen, setModalTypeOpen] = useState<null | "admin" | "options" | "add">(null)
 	const [checkPwd, setCheckPwd] = useState(false)
 	const [inputPwd, setInputPwd] = useState("")
 	const [myState, setMyState] = useState<MyStateOnChannel | null>(null);
@@ -210,14 +206,14 @@ export default function ChannelBody(props: any) {
 
 	//-----------------------------------------------------------
 
-	console.log(modalTypeOpen != "")
+	console.log("rodaltype:",modalTypeOpen )
 
 	return (
 		<div style={{ position:"relative", height:"100%", width:"80%"}}>
-			{(modalTypeOpen != "") && <ChannelOptionModal setModalTypeOpen={setModalTypeOpen} modalTypeOpen={modalTypeOpen}/>}
-			<ChannelBodyNav joined={joined} setJoined={setJoined} room={props.room} setModalTypeOpen={setModalTypeOpen}></ChannelBodyNav>
+			{props.room.name && <ChannelOptionModal setModalTypeOpen={setModalTypeOpen} modalTypeOpen={modalTypeOpen} room={props.room} opened={(modalTypeOpen !== null)}/>}
+			<ChannelBodyNav joined={joined} setJoined={setJoined} room={props.room} setModalTypeOpen={setModalTypeOpen} ></ChannelBodyNav>
 			<div style={{ background:"black",color:"white", position:"relative", height:"92%", width:"100%"}}>
-				<ScrollArea style={{height:"90%"}}>
+				<ScrollArea style={{height:"89%"}}>
 				{props.room.name && messages.map((m: packMessage, id: number) => {
 					return(
 						<ChannelMessage username={m.username} message={m.message} createdAt={m.createdAt} key={id} avatar={m.avatar}></ChannelMessage>

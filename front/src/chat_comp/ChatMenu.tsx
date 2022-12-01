@@ -17,7 +17,7 @@ import CreateChannel from "./CreateChannel";
 export default function ChatMenu(props: any) {
 	const contextData = useContext(Student);
 	const [src, setSrc] = useState('')
-	const [card, setCard] = useState("public")
+	const [card, setCard] = useState("all")
 	const [newChannel, setNewChannel] = useState(false)
 
 	// ***** useEffect per sostituire tasto crea canale con '+' quando la pagina viene ridimensionata *****
