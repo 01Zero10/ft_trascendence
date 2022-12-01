@@ -40,7 +40,7 @@ export default function ChannelMessage(props: MessageProps) {
 			</Menu> */}
 
 	return (
-		<div id={props.id} className={props.class} style={{margin: "0.5% 0 0 0.5%"}}>
+		<div id={props.id} className={props.class} style={{margin: "0 0 0.5% 0.5%"}}>
 					<div className="messageHeader">
 						<Avatar
 							className="avatarStyle"
