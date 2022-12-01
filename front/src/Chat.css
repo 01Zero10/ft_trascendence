@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tomorrow:wght@400;700&display=swap');
 
 /**{*/
 /*  height: 100vh;*/
@@ -300,13 +301,14 @@ p {
     margin-left: auto;
     margin-right: auto;
     margin-top: 0.5%;
+    font-family: 'Tomorrow', sans-serif;
 }
 
 .channel-input-text {
     height: 100%;
     width: 80%;
     font-weight: 400;
-    font-size: large;
+    font-size: medium;
     letter-spacing: 3px;
     resize: none;
     background-color: rgba(0, 0, 0, 0.700); border: none;
@@ -318,6 +320,7 @@ p {
     padding-top: 1%;
     padding-left: 2%;
     margin: 0;
+    font-family: 'Tomorrow', sans-serif;
 }
 
 .channel-input-button {
@@ -329,6 +332,7 @@ p {
     border-style: solid;
     border-width: 0;
     background-color:var(--purple-color);
+    font-family: 'Tomorrow', sans-serif;
     color: white;
     cursor: pointer;
     transition: 0s;

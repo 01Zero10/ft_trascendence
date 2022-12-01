@@ -184,9 +184,9 @@ export default function ChannelBody(props: any) {
 		});
 	}, [props.socket])
 
-	// useEffect(() => {
-	// 	bottomRef.current?.scrollIntoView()
-	// }, [messages])
+	useEffect(() => {
+		bottomRef.current?.scrollIntoView()
+	}, [messages])
 
 	// useLayoutEffect(
 	// 	() => { setCheckPwd(props.room.type === "protected") },
@@ -206,6 +206,18 @@ export default function ChannelBody(props: any) {
 
 	//-----------------------------------------------------------
 
+	const scrollAreaStyle = {
+		scrollbar: {
+            '&, &:hover': {
+              background: "black",
+            },
+
+            '&[data-orientation="vertical"] .mantine-ScrollArea-thumb': {
+              backgroundColor: "#781C9C"
+            }
+		}
+	}
+
 	console.log("rodaltype:",modalTypeOpen )
 
 	return (
@@ -213,12 +225,13 @@ export default function ChannelBody(props: any) {
 			{props.room.name && <ChannelOptionModal setModalTypeOpen={setModalTypeOpen} modalTypeOpen={modalTypeOpen} room={props.room} opened={(modalTypeOpen !== null)}/>}
 			<ChannelBodyNav joined={joined} setJoined={setJoined} room={props.room} setModalTypeOpen={setModalTypeOpen} ></ChannelBodyNav>
 			<div style={{ background:"black",color:"white", position:"relative", height:"92%", width:"100%"}}>
-				<ScrollArea style={{height:"89%"}}>
+				<ScrollArea style={{height:"89%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)}>
 				{props.room.name && messages.map((m: packMessage, id: number) => {
 					return(
 						<ChannelMessage username={m.username} message={m.message} createdAt={m.createdAt} key={id} avatar={m.avatar}></ChannelMessage>
 					)
 				})}
+				<div ref={bottomRef}></div>
 				</ScrollArea>
 				{props.room.name && <ChannelInput
 				className="inputTextArea"

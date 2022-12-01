@@ -40,25 +40,27 @@ export default function ChannelMessage(props: MessageProps) {
 			</Menu> */}
 
 	return (
-		<div id={props.id} className={props.class} style={{margin: "0 0 0.5% 0.5%"}}>
-					<div className="messageHeader">
+		<div id={props.id} className={props.class} style={{margin: "0 0 1% 0.5%"}}>
+					<div className="message_container">
 						<Avatar
 							className="avatarStyle"
 							src={props.avatar}
-							size={55}
+							size={60}
 							radius={0}
 
 						/>
-						<div className="usernameDetails_container">
-							<span id={props.id} className="usernameHeader">{props.username}</span>
-							<span id={props.id} className="detailsHeader">{naturalTime}</span>
+						<div className="text_header_container">
+							<div className="usernameDetails_container">
+								<span id={props.id} className="usernameHeader">{props.username}</span>
+								<span id={props.id} className="detailsHeader">{naturalTime}</span>
+							</div>
+							<div className="messageText">
+							{/* <span id={props.id} className="">{props.message}</span> */}
+							<p className="textMessageArea">
+								{props.message}
+							</p>
+							</div>
 						</div>
-					</div>
-					<div className="messageText">
-						{/* <span id={props.id} className="">{props.message}</span> */}
-						<p className="textMessageArea">
-							{props.message}
-						</p>
 					</div>
 		</div >
 	)
