@@ -40,7 +40,7 @@ export default function ChannelBody(props: any) {
 	//---------------------------------------------------------
 	// const [listUser, setListUser] = useState<string[]>([]);
 	const student = useContext(Student);
-	// const [joined, setJoined] = useState(false)
+	const [joined, setJoined] = useState(false)
 	const [modalTypeOpen, setModalTypeOpen] = useState<"" | "admin" | "options" | "add">("")
 	const [checkPwd, setCheckPwd] = useState(false)
 	const [inputPwd, setInputPwd] = useState("")
@@ -122,23 +122,23 @@ export default function ChannelBody(props: any) {
 
 	// //console.log("MyStateOnChannel", myState);
 
-	// useEffect(() => {
-	// 	async function checkJoined() {
-	// 		const API_CHECK_JOINED = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/checkJoined`;
-	// 		let response = await fetch(API_CHECK_JOINED, {
-	// 			method: 'POST',
-	// 			credentials: 'include',
-	// 			headers: { 'Content-Type': 'application/json' },
-	// 			body: JSON.stringify({ client: student.id, channelName: props.room.name })
-	// 		})
-	// 		const data = await response.json();
-	// 		props.setJoined(data);
-	// 	}
-	// 	if (props.room.type === 'direct')
-	// 		props.setJoined(true);
-	// 	else
-	// 		checkJoined().then();
-	// }, [props.room])
+	useEffect(() => {
+		async function checkJoined() {
+			const API_CHECK_JOINED = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/checkJoined`;
+			let response = await fetch(API_CHECK_JOINED, {
+				method: 'POST',
+				credentials: 'include',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ client: student.id, channelName: props.room.name })
+			})
+			const data = await response.json();
+			props.setJoined(data);
+		}
+		if (props.room.type === 'direct')
+			props.setJoined(true);
+		else
+			checkJoined().then();
+	}, [props.room])
 
 	// var prevUser: string
 
@@ -215,7 +215,7 @@ export default function ChannelBody(props: any) {
 	return (
 		<div style={{ position:"relative", height:"100%", width:"80%"}}>
 			{(modalTypeOpen != "") && <ChannelOptionModal />}
-			<ChannelBodyNav room={props.room} setModalTypeOpen={setModalTypeOpen}></ChannelBodyNav>
+			<ChannelBodyNav joined={joined} room={props.room} setModalTypeOpen={setModalTypeOpen}></ChannelBodyNav>
 			<div style={{ background:"lime", position:"relative", height:"92%", width:"100%"}}>
 				{props.room.name && messages.map((m: packMessage, id: number) => {
 					return(
