@@ -70,9 +70,11 @@
     border-right: 2px solid var(--purple-color);
     border-left: 2px solid var(--purple-color);
     border-bottom: 2px solid var(--purple-color);
+
 }
 
 .textMessageArea {
+    
     width: 100%;
     background: transparent;
     padding: 1%;
@@ -82,4 +84,6 @@
     font-family: 'Tomorrow', sans-serif;
     font-weight: 400;
     letter-spacing: normal;
+    text-align: start;
+    word-break: break-all;
 }
