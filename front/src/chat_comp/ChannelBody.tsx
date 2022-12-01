@@ -216,8 +216,8 @@ export default function ChannelBody(props: any) {
 		<div style={{ position:"relative", height:"100%", width:"80%"}}>
 			{(modalTypeOpen != "") && <ChannelOptionModal />}
 			<ChannelBodyNav joined={joined} setJoined={setJoined} room={props.room} setModalTypeOpen={setModalTypeOpen}></ChannelBodyNav>
-			<div style={{ background:"lime", position:"relative", height:"92%", width:"100%"}}>
-				<ScrollArea>
+			<div style={{ background:"black",color:"white", position:"relative", height:"92%", width:"100%"}}>
+				<ScrollArea style={{height:"90%"}}>
 				{props.room.name && messages.map((m: packMessage, id: number) => {
 					return(
 						<ChannelMessage username={m.username} message={m.message} createdAt={m.createdAt} key={id} avatar={m.avatar}></ChannelMessage>
