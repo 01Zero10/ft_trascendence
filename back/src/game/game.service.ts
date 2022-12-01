@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/user";
 import { Repository } from "typeorm";
 import { GameGateWay } from "./game.gateway";
+import { Leaderboard } from "./leaderboard.entity";
 import { Match } from "./match.entity";
 import { RunningMatch } from "./runningMatch.entity";
 
@@ -48,6 +49,7 @@ export class GameService{
         @InjectRepository(Match) private matchRepository: Repository<Match>,
         @InjectRepository(RunningMatch) private runningMatches: Repository<RunningMatch>,
         @InjectRepository(User) private userRepository: Repository<User>,
+        @InjectRepository(Leaderboard) private leaderboardRepository: Repository<Leaderboard>,
         @Inject(forwardRef(() => GameGateWay)) private readonly gameGateway: GameGateWay
         ){this.mapPlRoom = new Map<string, plRoom>()}
         
@@ -305,6 +307,18 @@ export class GameService{
         if (roomSaved.points1 > roomSaved.points2)
             return roomSaved.player1;
         return roomSaved.player2;
+    }
+
+    async getLeaderBoard(){
+        const board = await this.leaderboardRepository
+        .createQueryBuilder('player')
+        .leftJoinAndSelect('player.user', 'user')
+        .select(['player.points', 'user.avatar', 'user.username', 'user.nickname'])
+        .orderBy('player.points', 'DESC')
+        .limit(10)
+        .getMany();
+
+        return (board);
     }
 
     async sleep(time: number) {
