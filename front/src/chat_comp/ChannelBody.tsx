@@ -219,7 +219,7 @@ export default function ChannelBody(props: any) {
 			<div style={{ background:"lime", position:"relative", height:"92%", width:"100%"}}>
 				{props.room.name && messages.map((m: packMessage, id: number) => {
 					return(
-						<ChannelMessage username={m.username} message={m.message} createdAt={m.createdAt} key={id}></ChannelMessage>
+						<ChannelMessage username={m.username} message={m.message} createdAt={m.createdAt} key={id} avatar={m.avatar}></ChannelMessage>
 					)
 				})}
 			</div>

@@ -7,11 +7,11 @@
 /*  max-width: -webkit-fill-available;*/
 /*  !*eight: 100vh;*!*/
 /*}*/
-* {
+/* * {
     margin: 0;
     font-family: 'Smooch Sans', sans-serif;
     overflow-anchor: none;
-}
+} */
 
 .chat-dashboard {
     display: flex;
