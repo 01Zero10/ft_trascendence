@@ -215,7 +215,7 @@ export default function ChannelBody(props: any) {
 	return (
 		<div style={{ position:"relative", height:"100%", width:"80%"}}>
 			{(modalTypeOpen != "") && <ChannelOptionModal />}
-			<ChannelBodyNav joined={joined} room={props.room} setModalTypeOpen={setModalTypeOpen}></ChannelBodyNav>
+			<ChannelBodyNav joined={joined} setJoined={setJoined} room={props.room} setModalTypeOpen={setModalTypeOpen}></ChannelBodyNav>
 			<div style={{ background:"lime", position:"relative", height:"92%", width:"100%"}}>
 				{props.room.name && messages.map((m: packMessage, id: number) => {
 					return(
