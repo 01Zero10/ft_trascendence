@@ -22,24 +22,25 @@ export default function ChannelInput(props: any) {
                 (prevInput + "\n")
             )
         }
-    }
-
-    function sendWithEnter(e: any) {
-        console.log("sono entrato")
-        if (!e.shiftKey && e.key === "Enter") {
+        else if (!e.shiftKey && e.key === "Enter") {
             e.preventDefault()
             handleSend();
         }
     }
 
-    useLayoutEffect(() => {
-        document.addEventListener("keydown", setNewLine)
-        document.addEventListener("keydown", sendWithEnter)
-        return () => {
-            document.removeEventListener("keydown", setNewLine)
-            document.removeEventListener("keydown", sendWithEnter)
-        }
-    }, [props.input])
+    // function sendWithEnter(e: any) {
+
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     document.addEventListener("keydown", setNewLine)
+    //     document.addEventListener("keydown", sendWithEnter)
+    //     return () => {
+    //         document.removeEventListener("keydown", setNewLine)
+    //         document.removeEventListener("keydown", sendWithEnter)
+    //     }
+    // }, [])
 
     //console.log("input room",props.room)
 
@@ -51,6 +52,7 @@ export default function ChannelInput(props: any) {
                         onChange={(e) => setInput(e.target.value)} 
                         required
                         disabled={props.mute}
+                        onKeyDown={setNewLine}
                         >
             </textarea>
             <button className="channel-input-button" onClick={handleSend} disabled={props.mute}>Invia</button>
