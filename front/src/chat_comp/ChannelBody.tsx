@@ -40,7 +40,7 @@ export default function ChannelBody(props: any) {
 	//---------------------------------------------------------
 	// const [listUser, setListUser] = useState<string[]>([]);
 	const student = useContext(Student);
-	// const [joined, setJoined] = useState(false)
+	const [joined, setJoined] = useState(false)
 	const [modalTypeOpen, setModalTypeOpen] = useState<"" | "admin" | "options" | "add">("")
 	const [checkPwd, setCheckPwd] = useState(false)
 	const [inputPwd, setInputPwd] = useState("")
@@ -215,9 +215,9 @@ export default function ChannelBody(props: any) {
 	return (
 		<div style={{ position:"relative", height:"100%", width:"80%"}}>
 			{(modalTypeOpen != "") && <ChannelOptionModal />}
-			<ChannelBodyNav room={props.room} setModalTypeOpen={setModalTypeOpen}></ChannelBodyNav>
-			<div style={{ background:"black", position:"relative", height:"92%", width:"100%", color:"white"}}>
-				<ScrollArea style={{height:"90%"}}>
+			<ChannelBodyNav joined={joined} setJoined={setJoined} room={props.room} setModalTypeOpen={setModalTypeOpen}></ChannelBodyNav>
+			<div style={{ background:"lime", position:"relative", height:"92%", width:"100%"}}>
+				<ScrollArea>
 				{props.room.name && messages.map((m: packMessage, id: number) => {
 					return(
 						<ChannelMessage username={m.username} message={m.message} createdAt={m.createdAt} key={id} avatar={m.avatar}></ChannelMessage>
