@@ -18,7 +18,7 @@ export default function ChannelInput(props: any) {
     const setNewLine = (e: any) => {
         if (e.shiftKey && e.key === "Enter") {
             e.preventDefault()
-            props.setInput((prevInput: string) =>
+            setInput((prevInput: string) =>
                 (prevInput + "\n")
             )
         }
@@ -27,22 +27,6 @@ export default function ChannelInput(props: any) {
             handleSend();
         }
     }
-
-    // function sendWithEnter(e: any) {
-
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     document.addEventListener("keydown", setNewLine)
-    //     document.addEventListener("keydown", sendWithEnter)
-    //     return () => {
-    //         document.removeEventListener("keydown", setNewLine)
-    //         document.removeEventListener("keydown", sendWithEnter)
-    //     }
-    // }, [])
-
-    //console.log("input room",props.room)
 
     return (
         <div className="channel-input">
