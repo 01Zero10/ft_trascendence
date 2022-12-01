@@ -214,7 +214,7 @@ export default function ChannelBody(props: any) {
 
 	return (
 		<div style={{ position:"relative", height:"100%", width:"80%"}}>
-			{(modalTypeOpen != "") && <ChannelOptionModal />}
+			{(modalTypeOpen != "") && <ChannelOptionModal setModalTypeOpen={setModalTypeOpen} modalTypeOpen={modalTypeOpen}/>}
 			<ChannelBodyNav joined={joined} setJoined={setJoined} room={props.room} setModalTypeOpen={setModalTypeOpen}></ChannelBodyNav>
 			<div style={{ background:"black",color:"white", position:"relative", height:"92%", width:"100%"}}>
 				<ScrollArea style={{height:"90%"}}>
