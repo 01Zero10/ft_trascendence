@@ -23,10 +23,12 @@ const ListSearch = () => {
   const contextData = useContext(Student)
 
   const [options, setOptions] = React.useState<userNavBar[]>([])
-  const [search, setSearch] = React.useState({
+
+  const setSearch_initial_value = {
     query: '',
     list: [] as unknown as userNavBar[],
-  })
+  }
+  const [search, setSearch] = React.useState(setSearch_initial_value)
 
   useEffect(() => {
     async function getUserNavBar() {
@@ -42,12 +44,17 @@ const ListSearch = () => {
     //console.log(options);
   }, []) //[] ?
 
+
+  const resetValue = (e: any)=> {
+    e.target.value = "";
+    setSearch(setSearch_initial_value)
+  }
+
   const searchChange = (e: { target: { value: string; }; }) => {
     const result = options.filter(options => {
       if (options.username === contextData.username) return false
       if (e.target.value === "") return options
       return options.username.toLowerCase().includes(e.target.value.toLowerCase())
-
     })
 
     setSearch({
@@ -55,16 +62,19 @@ const ListSearch = () => {
       list: result
     })
   }
+
+
+
   return (
     <div className='filter-search-bar'>
       <div className="search-box">
         <button className="btn-search"><i className="fas fa-search"><SearchIcon sx={{ fontSize: 30, color: 'linear-gradient(to right bottom, #FD297B, #FF5864, #FF655B' }} /></i></button>
-        <input className='input-search' placeholder="Type an username" type="text" value={search.query} onChange={searchChange} />
+        <input className='input-search' placeholder="Type an username" type="text" value={search.query} onChange={searchChange} onBlur={resetValue}/>
         <ul className="filter-search-results">
           {(search.query === '' ? "" : !search.list.length ? <li className="filter-search-results-item"><h3 className='err_msg'>Your query did not return any results</h3></li> : search.list.map(option => {
             return (
               <ListItemAvatar>
-                <Link to={`/users/${option.username}`}>
+                <Link to={`/users/${option.username}`} onClick={resetValue} onMouseDown={(e) => e.preventDefault()}>
                   <li className="filter-search-results-item" key={option.username}>{option.username}
                     <img className='avatar_search' alt="user_avatar" src={option.avatar} />
                   </li>

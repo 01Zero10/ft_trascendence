@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { AddCircle, CheckCircle, Close, Done, EmojiEvents, HourglassTop, PersonAddAlt1, PersonRemove } from "@mui/icons-material";
 import Tabs from '@mui/material/Tabs';
 import { red } from "@mui/material/colors";
+import { FocusTrap } from "@mantine/core";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
