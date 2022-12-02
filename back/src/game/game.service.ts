@@ -287,7 +287,7 @@ export class GameService{
     }
 
     async updatePosition(winner: string){
-        const points_to_add = 100;
+        const points_to_add = 10;
         let winnerRow = await this.leaderboardRepository
         .createQueryBuilder('board')
         .leftJoin('board.user', 'user')
@@ -306,32 +306,49 @@ export class GameService{
             winnerRow.points += points_to_add;
         }
 
+        console.log("step 1 ", winnerRow);
         const all = await this.leaderboardRepository
         .createQueryBuilder('board')
         .leftJoin('board.user', 'user')
-        .orderBy('user.points', 'DESC')
+        .orderBy('board.points', 'DESC')
         .getMany();
 
+        console.log("step 2 ", all);
+
         if (!all.length)
+        {
+            winnerRow.position = 1;
             return await this.leaderboardRepository.save(winnerRow);
+        }
 
         let index = 0;
         while(all[index] && all[index].points >= winnerRow.points)
             index++;
-        
+        console.log("step 3 ", all[index]);
         if (!all[index])
         {
+            console.log("inside");
             winnerRow.position = all[index - 1].position + 1;
+            console.log("inside ", winnerRow);
             return await this.leaderboardRepository.save(winnerRow);
         }
+        console.log("step 4");
 
         winnerRow.position = all[index].position;
+        console.log("step 5_1 ", winnerRow);
+        console.log("step 5_2 ", all[index]);
+        console.log(winnerRow.id);
+        console.log(all[index].id);
+        // if (winnerRow.user === all[index].user)
+        //     index++;
         await this.leaderboardRepository.save(winnerRow);
 
         while(all[index])
         {
-            all[index].position += 1;
-            await this.leaderboardRepository.save(all[index]);
+            if (winnerRow.user !== all[index].user){
+                all[index].position += 1;
+                await this.leaderboardRepository.save(all[index]);
+            }
             index++;
         }
     }
