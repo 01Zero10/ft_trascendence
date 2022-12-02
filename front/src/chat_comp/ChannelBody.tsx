@@ -172,7 +172,19 @@ export default function ChannelBody(props: any) {
 			setMessages([]);
 	}
 
-	// // useEffect(() => console.log("controllo del proprio stato e"))
+	const joinRoom = async (roomName: string) => {
+		console.log(props.room, joined)
+		if (props.room.name && props.room.type === "public")
+			props.socket?.emit('joinRoom', { client: student.username, room: props.room.name });
+		else if (props.room.name && props.room.type === "protected" && joined)
+			props.socket?.emit('joinRoom', { client: student.username, room: props.room.name });
+	}
+
+	useEffect(() => 
+		{
+			joinRoom(props.room.name)
+		}, [props.room, joined]
+	)
 
 	useEffect(() => {
 		getChatMessages();
@@ -180,6 +192,7 @@ export default function ChannelBody(props: any) {
 
 	useEffect(() => {
 		props.socket?.on('msgToClient', (client_message: packMessage) => {
+			console.log("sono passato da qui")
 			setMessages(messages => [...messages, client_message]);
 		});
 	}, [props.socket])

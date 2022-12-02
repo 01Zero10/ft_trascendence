@@ -30,20 +30,6 @@ export default function ChannelList(props: any) {
 		});
 	}, [props.socket])
 
-	// function setChOpt(channel: Rooms) {
-	// 	if (props.chOptions?.name === channel.name) {
-	// 		props.setChOptions(null)
-	// 		props.setOpened("")
-	// 		return
-	// 	}
-	// 	props.setChOptions(channel)
-	// 	props.setOpened("owner")
-	// }
-	
-	// const lockIcon = (<IconLock ></IconLock>)
-	// const lockIconOpen = (<IconLockOpen></IconLockOpen>)
-
-
 	return (
 		<div style={{display: "flex", flexDirection: "column"}}>
 			{channelList.map(function (element: any, id: number) {
