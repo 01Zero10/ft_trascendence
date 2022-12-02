@@ -25,7 +25,7 @@ export default function ChannelList(props: any) {
 
 	useEffect(() => {
 		props.socket?.on('update', async (type: string) => {
-			if (props.card === "all")
+			if (props.card !== "direct")
 				await getChannels();
 		});
 	}, [props.socket])

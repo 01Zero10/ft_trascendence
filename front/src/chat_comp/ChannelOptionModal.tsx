@@ -39,7 +39,7 @@ export default function ChannelOptionModal(props: any) {
     });
     const [pass, setPass] = useState("")
     const [visible, { toggle }] = useDisclosure(false);
-
+    const [admins, setAdmins] = useState<string[]>([])
     const [optionsFriends, setOptionsFriends] = useState<{ value: string, label: string }[]>([{ value: "", label: "" }]);
 
     useEffect(() => {
@@ -60,6 +60,20 @@ export default function ChannelOptionModal(props: any) {
         }
         getListFriend();
     }, [])
+
+    async function getRoomAdmins() {
+		if (props.room.name && props.room.name !== '') {
+			const API_GET_ADMINS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/admins/${props.room.name}`;
+            let response = await fetch(API_GET_ADMINS);
+            let data = await response.json();
+            let fetchAdmins: string[] = [];
+            await Promise.all(await data.map(async (element: any) => {
+                let iMember: string = element.username
+                fetchAdmins.push(iMember);
+            }))
+            setAdmins(fetchAdmins);
+        }
+	}
 
     function changeType(value: string) {
         setNewOption((prevChOptions: NewChannel) => {
@@ -151,6 +165,30 @@ export default function ChannelOptionModal(props: any) {
 	}
 		props.setModalTypeOpen(null)
 	}
+
+    useEffect( () =>
+        {
+            getRoomAdmins()
+        }
+        , [props.room.name]
+    )
+
+    function handleAdminsChange(value: string[]){
+        let tmp = [...admins]
+        for (let element of value) {
+            let indx = admins.indexOf(element)
+            if (indx === -1)
+                tmp.push(element);
+        }
+        for (let element of admins){
+            let indx = value.indexOf(element)
+            if (indx === -1)
+                tmp.splice(tmp.indexOf(element), 1)
+        }
+        setAdmins(tmp)
+    }
+
+    console.log(admins)
 
     return (
         <Modal centered withCloseButton={true} closeOnClickOutside={false}
@@ -265,6 +303,15 @@ export default function ChannelOptionModal(props: any) {
                             dropdownPosition="bottom"
                             nothingFound="NIENTE, NON HAI AMICI"
                             onChange={changeMembers}>
+                        </MultiSelect>}
+                        {props.modalTypeOpen === "options" && <MultiSelect style={{ width:"90%", margin:"auto"}} 
+                            data={optionsFriends}
+                            value={admins}
+                            placeholder={"Select Admins"}
+                            searchable
+                            dropdownPosition="bottom"
+                            nothingFound="NON CI SONO PERSONE"
+                            onChange={handleAdminsChange}>
                         </MultiSelect>}
                     </div>
                     <Box>

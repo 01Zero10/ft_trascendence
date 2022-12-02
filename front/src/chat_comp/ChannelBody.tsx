@@ -226,7 +226,9 @@ export default function ChannelBody(props: any) {
 				setJoined={setJoined} 
 				room={props.room} 
 				setModalTypeOpen={setModalTypeOpen} 
-				socket={props.socket} />
+				socket={props.socket} 
+				setRoom={props.setRoom}
+				/>
 			<div style={{ background:"black",color:"white", position:"relative", height:"92%", width:"100%"}}>
 				<ScrollArea style={{height:"89%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)}>
 				{props.room.name && messages.map((m: packMessage, id: number) => {
