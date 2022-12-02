@@ -56,7 +56,7 @@ export default function ChatMenu(props: any) {
 
 	return (
 		<div className="chat-nav" style={{marginBottom:"20px", borderStyle:"solid", padding:"0 0 0 15px", backgroundColor:"black", }}>
-			<CreateChannel newChannel={newChannel} setNewChannel={setNewChannel} ></CreateChannel>
+			<CreateChannel newChannel={newChannel} setNewChannel={setNewChannel} socket={props.socket}></CreateChannel>
 			{/* <div style={{ textAlign:"center", position: "relative", height: "5%", backgroundColor: "black", width: "100%" }}>
 				<img style={{ marginTop:"-10px", float:"right", width:"100%"}} src="/chat_decoration_top_mod_color.svg" alt="img_account" />
 			</div> */}
@@ -68,9 +68,9 @@ export default function ChatMenu(props: any) {
 						{/*<Tabs.Tab value="protected" icon={<IconShield size={14} />} onClick={() => setCard("protected")}>Protected</Tabs.Tab>*/}
 						<Tabs.Tab style={tabStyle} value={`FriendsChatList/${contextData.username}`} icon={<IconMessageCircle size={14} />} onClick={() => setCard(`FriendsChatList/${contextData.username}`)}>DM's</Tabs.Tab>
 					</Tabs.List>
-					<Tabs.Panel style={tabPanelStyle} value="all"><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList src={src} card={card} setRoom={props.setRoom}/></ScrollArea></Tabs.Panel>
-					<Tabs.Panel style={tabPanelStyle} value={`membership/${contextData.id}`}><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList src={src} card={card} setRoom={props.setRoom}/></ScrollArea></Tabs.Panel>
-					<Tabs.Panel style={tabPanelStyle} value={`FriendsChatList/${contextData.username}`}><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList card={card}/></ScrollArea></Tabs.Panel>
+					<Tabs.Panel style={tabPanelStyle} value="all"><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList socket={props.socket} src={src} card={card} setRoom={props.setRoom}/></ScrollArea></Tabs.Panel>
+					<Tabs.Panel style={tabPanelStyle} value={`membership/${contextData.id}`}><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList socket={props.socket} src={src} card={card} setRoom={props.setRoom}/></ScrollArea></Tabs.Panel>
+					<Tabs.Panel style={tabPanelStyle} value={`FriendsChatList/${contextData.username}`}><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList socket={props.socket} card={card}/></ScrollArea></Tabs.Panel>
 				</Tabs>
 				<div className="search_container">
 					<input className="search_input" placeholder="Search" type="text" onChange={search} autoComplete="off"/>

@@ -218,7 +218,7 @@ export default function ChannelBody(props: any) {
 		}
 	}
 
-	console.log("rodaltype:",modalTypeOpen )
+	//console.log("rodaltype:",modalTypeOpen )
 
 	return (
 		<div style={{ position:"relative", height:"100%", width:"80%"}}>

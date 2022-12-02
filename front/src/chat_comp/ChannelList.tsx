@@ -13,7 +13,6 @@ export default function ChannelList(props: any) {
 		let data = await response.json();
 		let options_: Rooms[] = [];
 		await Promise.all(await data.map(async (element: any) => {
-			console.log(element)
 			if (options_.findIndex(x => x.name === element.name) === -1)
 				options_.push(element);
 		}))
@@ -26,10 +25,10 @@ export default function ChannelList(props: any) {
 
 	useEffect(() => {
 		props.socket?.on('update', async (type: string) => {
-			if (props.card === type)
+			if (props.card === "all")
 				await getChannels();
 		});
-	}, [])
+	}, [props.socket])
 
 	// function setChOpt(channel: Rooms) {
 	// 	if (props.chOptions?.name === channel.name) {
