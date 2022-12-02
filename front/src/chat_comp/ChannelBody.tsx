@@ -42,28 +42,28 @@ export default function ChannelBody(props: any) {
 	const [inputPwd, setInputPwd] = useState("")
 	const [myState, setMyState] = useState<MyStateOnChannel | null>(null);
 
-	// async function checkProtectedPassword() {
-	// 	const API_CHECK_PROTECTED_PASS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/checkProtectedPass`;
-	// 	let response = await fetch(API_CHECK_PROTECTED_PASS, {
-	// 		method: 'POST',
-	// 		credentials: 'include',
-	// 		headers: { 'Content-Type': 'application/json' },
-	// 		body: JSON.stringify({ input: inputPwd, channelName: props.room.name })
-	// 	})
-	// 	const data = await response.json()
-	// 	if (data) {
-	// 		const API_SET_JOIN = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/setJoin`;
-	// 		await fetch(API_SET_JOIN, {
-	// 			method: 'POST',
-	// 			credentials: 'include',
-	// 			headers: { 'Content-Type': 'application/json' },
-	// 			body: JSON.stringify({ client: student.username, channelName: props.room.name, joined: props.joined }),
-	// 		})
-	// 	  //console.log(props.joined)
-	// 		props.setJoined((prevJoined: boolean) => !prevJoined);
-	// 		props.socket?.emit('updateList', { type: props.room.type });
-	// 	}
-	// }
+
+	async function checkProtectedPassword() {
+		const API_CHECK_PROTECTED_PASS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/checkProtectedPass`;
+		let response = await fetch(API_CHECK_PROTECTED_PASS, {
+			method: 'POST',
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ input: inputPwd, channelName: props.room.name })
+		})
+		const data = await response.json()
+		if (data) {
+			const API_SET_JOIN = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/setJoin`;
+			await fetch(API_SET_JOIN, {
+				method: 'POST',
+				credentials: 'include',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ client: student.username, channelName: props.room.name, joined: props.joined }),
+			})
+			setJoined((prevJoined: boolean) => !prevJoined);
+			props.socket?.emit('updateList', { type: props.room.type });
+		}
+	}
 
 	// useEffect(() => {
 	// 	const API_GET_MUTES_BANS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getMyMutesAndBans/${student.username}`;
@@ -116,40 +116,26 @@ export default function ChannelBody(props: any) {
 	// 	fillStateOnChannel().then()
 	// }, [props.room])
 
-	// //console.log("MyStateOnChannel", myState);
+	// //console.log("MyStateOnChannel", myState)
 
-	// useEffect(() => {
-	// 	async function checkJoined() {
-	// 		const API_CHECK_JOINED = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/checkJoined`;
-	// 		let response = await fetch(API_CHECK_JOINED, {
-	// 			method: 'POST',
-	// 			credentials: 'include',
-	// 			headers: { 'Content-Type': 'application/json' },
-	// 			body: JSON.stringify({ client: student.id, channelName: props.room.name })
-	// 		})
-	// 		const data = await response.json();
-	// 		props.setJoined(data);
-	// 	}
-	// 	if (props.room.type === 'direct')
-	// 		props.setJoined(true);
-	// 	else
-	// 		checkJoined().then();
-	// }, [props.room])
-
-	// var prevUser: string
-
-	// function printImg(username: string): boolean {
-	// 	if (!prevUser) {
-	// 		prevUser = username;
-	// 		return true;
-	// 	} else {
-	// 		if (prevUser !== username) {
-	// 			prevUser = username;
-	// 			return true;
-	// 		}
-	// 		return false
-	// 	}
-	// }
+	useEffect(() => {
+		async function checkJoined() {
+			const API_CHECK_JOINED = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/checkJoined`;
+			let response = await fetch(API_CHECK_JOINED, {
+				method: 'POST',
+				credentials: 'include',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ client: student.id, channelName: props.room.name })
+			})
+			const data = await response.json();
+			console.log("DATA: ",data)
+			setJoined(data);
+		}
+		if (props.room.type === 'direct')
+			setJoined(true);
+		else
+			checkJoined().then();
+	}, [props.room])
 
 	async function getChatMessages() {
 		if (props.room !== "") {
@@ -214,7 +200,6 @@ export default function ChannelBody(props: any) {
 	// 	}
 	// 	else
 	// 		props.setRoom(element.name)
-
 	// }
 
 	//-----------------------------------------------------------
@@ -236,7 +221,12 @@ export default function ChannelBody(props: any) {
 	return (
 		<div style={{ position:"relative", height:"100%", width:"80%"}}>
 			{props.room.name && <ChannelOptionModal setModalTypeOpen={setModalTypeOpen} modalTypeOpen={modalTypeOpen} room={props.room} opened={(modalTypeOpen !== null)}/>}
-			<ChannelBodyNav joined={joined} setJoined={setJoined} room={props.room} setModalTypeOpen={setModalTypeOpen} ></ChannelBodyNav>
+			<ChannelBodyNav 
+				joined={joined} 
+				setJoined={setJoined} 
+				room={props.room} 
+				setModalTypeOpen={setModalTypeOpen} 
+				socket={props.socket} />
 			<div style={{ background:"black",color:"white", position:"relative", height:"92%", width:"100%"}}>
 				<ScrollArea style={{height:"89%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)}>
 				{props.room.name && messages.map((m: packMessage, id: number) => {
@@ -246,7 +236,7 @@ export default function ChannelBody(props: any) {
 				})}
 				<div ref={bottomRef}></div>
 				</ScrollArea>
-				{props.room.name && <ChannelInput
+				{(props.room.name && joined) && <ChannelInput
 				className="inputTextArea"
 				room={props.room}
 				mute={(myState?.mode === "mute")}

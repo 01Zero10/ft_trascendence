@@ -12,39 +12,37 @@ export default function Chat(props: any) {
 	const student = useContext(Student);
 	const [room, setRoom] = useState<Rooms>({ name: "", type: "", builder: { username: "" } })
 	const [chOptions, setChOptions] = useState<Rooms | null>(null)
-	
-	const [opened, setOpened] = useState("")
 
 
-	async function SetRoomName(client: string, target: string) {
+	// async function SetRoomName(client: string, target: string) {
 
-		const API_TARGET = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/checkTarget/${target}`
-		const checkTarget = await fetch(API_TARGET, {
-			credentials: 'include',
-			headers: { 'Content-Type': 'application/json' },
-		})
-			.then((response) => response.json());
-		if (checkTarget) {
-			if (client < target) {
-				setRoom((prevRoom) => { return ({ ...prevRoom, name: client + target, type: 'direct' }) });
-				return (client + target);
-			}
-			else {
-				setRoom((prevRoom) => { return ({ ...prevRoom, name: target + client, type: 'direct' }) });
-				return (target + client);
-			}
-		}
-		else {
-			const API_GET_CHANNEL = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getChannel/${target}`
-			const fetchRoom = await fetch(API_GET_CHANNEL, {
-				credentials: 'include',
-				headers: { 'Content-Type': 'application/json' },
-			})
-				.then((response) => response.json())
-			setRoom({ name: fetchRoom.name, type: fetchRoom.type, builder: { ...fetchRoom.builder } });
-			return target;
-		}
-	}
+	// 	const API_TARGET = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/checkTarget/${target}`
+	// 	const checkTarget = await fetch(API_TARGET, {
+	// 		credentials: 'include',
+	// 		headers: { 'Content-Type': 'application/json' },
+	// 	})
+	// 		.then((response) => response.json());
+	// 	if (checkTarget) {
+	// 		if (client < target) {
+	// 			setRoom((prevRoom) => { return ({ ...prevRoom, name: client + target, type: 'direct' }) });
+	// 			return (client + target);
+	// 		}
+	// 		else {
+	// 			setRoom((prevRoom) => { return ({ ...prevRoom, name: target + client, type: 'direct' }) });
+	// 			return (target + client);
+	// 		}
+	// 	}
+	// 	else {
+	// 		const API_GET_CHANNEL = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getChannel/${target}`
+	// 		const fetchRoom = await fetch(API_GET_CHANNEL, {
+	// 			credentials: 'include',
+	// 			headers: { 'Content-Type': 'application/json' },
+	// 		})
+	// 			.then((response) => response.json())
+	// 		setRoom({ name: fetchRoom.name, type: fetchRoom.type, builder: { ...fetchRoom.builder } });
+	// 		return target;
+	// 	}
+	// }
 
 	// const joinRoom = async (roomName: string) => {
 	// 	const room = await SetRoomName(student.username, roomName);

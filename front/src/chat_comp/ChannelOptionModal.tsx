@@ -118,36 +118,6 @@ export default function ChannelOptionModal(props: any) {
             return true;
     }
 
-
-    // async function handleConfirm() {
-    //     await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/chat/createGroupChat2`, {
-    //         method: 'POST',
-    //         credentials: 'include',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify({
-    //             builder: newOption.builder,
-    //             nameGroup: newOption.nameGroup,
-    //             members: newOption.members,
-    //             type: newOption.type,
-    //             password: newOption.confirmPass
-    //         }),
-    //     })
-    //     props.socket?.emit('updateList', { type: `${newOption.type}` })
-    //     setNewOption((prevChOptions: NewChannel) => {
-    //         return ({
-    //             ...prevChOptions,
-    //             builder: contextData.username,
-    //             nameGroup: '',
-    //             members: [],
-    //             type: 'public',
-    //             confirmPass: '',
-    //             password: ''
-    //         })
-    //     })
-    //     props.setNewChannel(false)
-    // }
-
-
     async function handleButtonClick() {
         if (props.modalTypeOpen === "options"){
 		const API_EDIT_CHAT = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/editChannel`;
