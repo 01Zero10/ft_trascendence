@@ -13,7 +13,7 @@ export interface RunningMatches {
 }
 
 
-export default function Game(props: any) {
+export default function Game() {
     const contextData = useContext(Student)
     const [play, setPlay] = useState(false)
     const [socket, setSocket] = useState<Socket | null>(null);

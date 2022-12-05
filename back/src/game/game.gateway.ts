@@ -2,7 +2,6 @@ import { forwardRef, Inject, Injectable, Logger } from "@nestjs/common";
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer, 
   OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, WsResponse} from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
-import { UserService } from "src/user/user.service";
 import { GameService } from "src/game/game.service";
 
 @WebSocketGateway({ cors: true, namespace: '/game' })

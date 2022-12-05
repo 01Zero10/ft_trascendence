@@ -92,18 +92,18 @@ function App() {
     getUserInfo();
   }, [])
 
-  const [socket, setSocket] = useState<Socket | null>(null);
-  useLayoutEffect(() => {
-    if (contextData.id !== 0) {
-      const url = `http://${process.env.REACT_APP_IP_ADDR}:3001`;
-      const newSocket = io(`http://${process.env.REACT_APP_IP_ADDR}:3001`, { query: { userID: String(contextData.id) } });
-      newSocket.on('connect', () => {
-        setSocket(newSocket);
-        contextData.socket_id = newSocket.id;
-      }
-      )
-    }
-  }, [contextData.id]);
+  // const [socket, setSocket] = useState<Socket | null>(null);
+  // useLayoutEffect(() => {
+  //   if (contextData.id !== 0) {
+  //     const url = `http://${process.env.REACT_APP_IP_ADDR}:3001`;
+  //     const newSocket = io(`http://${process.env.REACT_APP_IP_ADDR}:3001`, { query: { userID: String(contextData.id) } });
+  //     newSocket.on('connect', () => {
+  //       setSocket(newSocket);
+  //       contextData.socket_id = newSocket.id;
+  //     }
+  //     )
+  //   }
+  // }, [contextData.id]);
 
   const [currPath, setCurrPath] = useState(window.location.pathname)
 
@@ -126,9 +126,9 @@ function App() {
                 <Route path={`/users/:user_id`} element={<Account />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/logout" element={<Logout />} />
-                <Route path="/game" element={<Game socket={socket} />} />
+                <Route path="/game" element={<Game />} />
                 <Route path="/users/settings" element={<Settings />} />
-                <Route path="/chat" element={<Chat socket={socket} />} />
+                <Route path="/chat" element={<Chat />} />
               </Routes>
             </Student.Provider>
           </>

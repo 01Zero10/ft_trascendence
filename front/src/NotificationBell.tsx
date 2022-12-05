@@ -56,6 +56,13 @@ export default function NotificationBell(props: any) {
         getNotifications();
     }, [])
 
+    //in testing
+    useEffect(() => {
+        props.socket?.on('updateBell', () => {
+            getNotifications();
+        });
+    }, [props.socket])
+    //----------
     useEffect(() => {
         setCount(seen)
     }, [notifications])
