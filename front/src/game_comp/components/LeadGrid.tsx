@@ -48,6 +48,25 @@ export function LeadGrid(props: any) {
     <Center>
       <div className='container'>
         <Modal
+        styles={(root) => ({
+          inner:{
+              backgroundColor: 'transparent',
+          },
+          modal: {
+              backgroundColor: 'transparent',
+              display: "flex",
+              flexDirection:"column" ,
+              alignItems:"center",
+              justifyContent:"center",
+              margin: 0,
+          },
+          body:{
+              width:"100%",
+              height:"80%",
+              backgroundColor: 'transparent',
+              textAlign: 'center',
+          },
+      })} 
           opened={opened_classic}
           onClose={() => { setGameOptions({ type: "" }); setOpened_classic(false) }}
           withCloseButton={false}
@@ -61,6 +80,25 @@ export function LeadGrid(props: any) {
           <ClassicModal setPlay={props.setPlay} setGameOptions={setGameOptions} typo={'classic'} />
         </Modal>
         <Modal
+        styles={(root) => ({
+          inner:{
+              backgroundColor: 'transparent',
+          },
+          modal: {
+              backgroundColor: 'transparent',
+              display: "flex",
+              flexDirection:"column" ,
+              alignItems:"center",
+              justifyContent:"center",
+              margin: 0,
+          },
+          body:{
+              width:"100%",
+              height:"80%",
+              backgroundColor: 'transparent',
+              textAlign: 'center',
+          },
+      })} 
           opened={opened_advanced}
           onClose={() => { setGameOptions({ type: "" }); setOpened_advanced(false) }}
           withCloseButton={false}

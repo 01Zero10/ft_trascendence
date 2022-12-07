@@ -1,13 +1,3 @@
-:root {
-	--yellow-color: #fcee09; 
-	--red-color: #ff003c;
-	--black-color: #050a0e;
-	--black-light-color: #050a0ee9;
-	--blue-color: #00f0ff;
-	--white-color: #fafafa;
-	--purple-color: #781C9C;
-  }
-
 .channelNavContainer {
 	position: relative;
 	height: 8%;

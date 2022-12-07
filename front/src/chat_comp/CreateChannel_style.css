@@ -1,15 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Tomorrow:wght@400;700&display=swap');
 
-:root {
-  --yellow-color: #fcee09; 
-  --red-color: #ff003c;
-  --black-color: #050a0e;
-  --black-light-color: #050a0ee9;
-  --blue-color: #00f0ff;
-  --white-color: #fafafa;
-  --purple-color: #781C9C;
-}
-
 .btn_createChannel {
   width: 100%;
   height: 60px; 

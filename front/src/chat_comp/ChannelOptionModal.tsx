@@ -5,6 +5,7 @@ import { IconLock, IconShield, IconWorld } from "@tabler/icons";
 import React, { useContext, useEffect, useState } from "react"
 import { Student } from "../App";
 import { NewChannel } from "./CreateChannel";
+import "./ChannelOptionModal_stye.css"
 
 
 export default function ChannelOptionModal(props: any) {
@@ -191,7 +192,7 @@ export default function ChannelOptionModal(props: any) {
     console.log(admins)
 
     return (
-        <Modal centered withCloseButton={true} closeOnClickOutside={false}
+        <Modal centered withCloseButton={false} closeOnClickOutside={false} zIndex={1500}
         styles={(root) => ({
             inner:{
                 backgroundColor: 'transparent',
@@ -209,7 +210,7 @@ export default function ChannelOptionModal(props: any) {
                 height:"80%",
                 backgroundColor: 'transparent',
                 textAlign: 'center',
-            }
+            },
         })} 
             opened={props.opened} onClose={ () => props.setModalTypeOpen(null) }>
                 <div>
@@ -318,6 +319,11 @@ export default function ChannelOptionModal(props: any) {
                     {<button className="btn_createChannel" onClick={handleButtonClick}>
                         <div className="btn__content_createChannel">{props.modalTypeOpen !== "add" ? "Confirm" : "Add Members"}</div>
                     </button>}
+                    </Box>
+                    <Box>
+                        <button className="btn_close" onClick={() => props.setModalTypeOpen(null)}>
+                            <div className="btn_close__content">Close</div>
+                        </button>
                     </Box>
                 </div>
             </Modal>
