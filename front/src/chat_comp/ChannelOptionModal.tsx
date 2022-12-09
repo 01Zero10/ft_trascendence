@@ -206,6 +206,9 @@ export default function ChannelOptionModal(props: any) {
                 if(newOption.password && newOption.password === newOption.confirmPass){
                     setBtnDisabled(false)
                 }
+                else{
+                    setBtnDisabled(false)
+                }
             }
             else{
                 console.log(2.5)
@@ -216,6 +219,9 @@ export default function ChannelOptionModal(props: any) {
             if (newOption.type !== props.room.type){
                 if(newOption.type === "protected"){
                     if(newOption.password && newOption.password === newOption.confirmPass){
+                        setBtnDisabled(false)
+                    }
+                    else{
                         setBtnDisabled(false)
                     }
                 }
