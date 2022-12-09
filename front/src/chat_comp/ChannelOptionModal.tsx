@@ -198,20 +198,16 @@ export default function ChannelOptionModal(props: any) {
     }
 
     useEffect(() => {
-        // console.log(newOption.type)
-        console.log("pass:", newOption.nameGroup )
-        console.log(btnDisabled)
         if (newOption.type !== props.room.type){
             if(newOption.type === "protected"){
                 if(newOption.password && newOption.password === newOption.confirmPass){
                     setBtnDisabled(false)
                 }
                 else{
-                    setBtnDisabled(false)
+                    setBtnDisabled(true)
                 }
             }
             else{
-                console.log(2.5)
                 setBtnDisabled(false)
             }
         }
@@ -222,7 +218,7 @@ export default function ChannelOptionModal(props: any) {
                         setBtnDisabled(false)
                     }
                     else{
-                        setBtnDisabled(false)
+                        setBtnDisabled(true)
                     }
                 }
                 else
