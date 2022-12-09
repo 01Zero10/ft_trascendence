@@ -1,4 +1,4 @@
-import { Box, Center, Modal, MultiSelect, PasswordInput, SegmentedControl } from "@mantine/core";
+import { Box, Center, FocusTrap, Modal, MultiSelect, PasswordInput, SegmentedControl } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { PropaneSharp } from "@mui/icons-material";
 import { IconLock, IconShield, IconWorld } from "@tabler/icons";
@@ -262,7 +262,8 @@ export default function ChannelOptionModal(props: any) {
                                 backgroundColor: "#fafafa"
                             }
                         })}/>}
-                    </div> 
+                    </div>
+                    <FocusTrap><input type="" style={{width:"0", height:"0", border:"none"}} /></FocusTrap>
                     <img src="/account_decoration_top.svg" alt="" />
                     {props.modalTypeOpen === "options" && <div className="search_container">
                         <input  className="search_input" 
