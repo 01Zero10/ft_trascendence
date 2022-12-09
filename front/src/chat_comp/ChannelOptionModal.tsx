@@ -227,6 +227,8 @@ export default function ChannelOptionModal(props: any) {
             else
                 setBtnDisabled(false)
         }
+        if(newOption.nameGroup === "")
+            setBtnDisabled(true)
     }
     )
 
