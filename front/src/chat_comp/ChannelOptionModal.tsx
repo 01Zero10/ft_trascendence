@@ -8,8 +8,18 @@ import { NewChannel } from "./CreateChannel";
 import "./ChannelOptionModal_stye.css"
 
 
+
+
 export default function ChannelOptionModal(props: any) {
     const contextData = useContext(Student);
+    const newOption_basic = {
+        builder: contextData.username,
+        nameGroup: "",
+        members: [],
+        type: props.room.type,
+        password: '',
+        confirmPass: ''
+    }
     const controlData = [
         { label: (
             <Center>
@@ -30,16 +40,8 @@ export default function ChannelOptionModal(props: any) {
             </Center>
           ), value: 'private' },
     ]
-    const [newOption, setNewOption] = useState<NewChannel>({
-        builder: contextData.username,
-        nameGroup: "",
-        members: [],
-        type: props.room.type,
-        password: '',
-        confirmPass: ''
-    });
+    const [newOption, setNewOption] = useState<NewChannel>({...newOption_basic});
     const [btnDisabled, setBtnDisabled] = useState(true)
-    const [pass, setPass] = useState("")
     const [visible, { toggle }] = useDisclosure(false);
     const [admins, setAdmins] = useState<string[]>([])
     const [optionsFriends, setOptionsFriends] = useState<{ value: string, label: string }[]>([{ value: "", label: "" }]);
@@ -358,7 +360,11 @@ export default function ChannelOptionModal(props: any) {
                     </button>}
                     </Box>
                     <Box>
-                        <button className="btn_close" onClick={() => props.setModalTypeOpen(null)}>
+                        <button className="btn_close" onClick={() => {
+                            props.setModalTypeOpen(null); 
+                            setNewOption({...newOption_basic}); 
+                            setBtnDisabled(true);
+                            }}>
                             <div className="btn_close__content">Close</div>
                         </button>
                     </Box>
