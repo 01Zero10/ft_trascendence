@@ -536,8 +536,7 @@ export class ChatService {
         }
         this.roomsRepository.save(room);
     }
-
-    //TODO eliminare members  
+ 
     async editUsersOnChannel(admins: string[], channelName: string){
         console.log("ADMINS: ", admins)
         const room = await this.roomsRepository.findOne({where : {name: channelName}});
