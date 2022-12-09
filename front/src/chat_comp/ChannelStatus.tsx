@@ -50,7 +50,7 @@ export default function ChannelStatus(props: any) {
 
 	return (
 		<div style={{position:"relative", height:"100%", backgroundColor:"darkred", width:"20%"}}> 
-			<div style={{width:"90%", height:"10%"}} onClick={() => navigate(("/users/" + props.room.builder.username))}>{props.room.builder.username}</div>
+			{props.room.name &&<div style={{width:"90%", height:"10%"}} onClick={() => navigate(("/users/" + props.room.builder.username))}>{props.room.builder.username}</div>}
 			{props.room.name && props.members.map((element: string, id: number) => {return(
 				<div style={{width:"100%", height:"10%", display:"flex"}} key={id}> 
 					<div style={{width:"80%", height:"10%"}} onClick={() => navigate(("/users/" + element))} >{element}</div>

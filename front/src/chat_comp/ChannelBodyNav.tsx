@@ -20,8 +20,6 @@ export default function ChannelBodyNav(props: any) {
 	const [newMembers, setNewMembers] = useState<string[]>([]);
 	const [addMembersOptions, setAddMembersOptions] = useState<string[]>([]);
 	const [nameToDisplay, setNameToDisplay] = useState<string>('');
-
-	const [opened, setOpened] = useState(false);
 	/* ***  array di utenti da poter aggiungere *** */
 
 	// useEffect(() => {

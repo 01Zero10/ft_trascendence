@@ -299,7 +299,6 @@ export default function ChannelOptionModal(props: any) {
                                 onChange={(e) => changeConfirmPass(e.target.value)}
                             />
                     </form>}
-                    
                     <div>
                         {props.modalTypeOpen === "add" && <MultiSelect style={{ width:"90%", margin:"auto"}} 
                             data={optionsFriends}
@@ -321,7 +320,7 @@ export default function ChannelOptionModal(props: any) {
                         </MultiSelect>}
                     </div>
                     <Box>
-                    {<button className="btn_createChannel" onClick={handleButtonClick}>
+                    {<button className="btn_createChannel" onClick={handleButtonClick} >
                         <div className="btn__content_createChannel">{props.modalTypeOpen !== "add" ? "Confirm" : "Add Members"}</div>
                     </button>}
                     </Box>
