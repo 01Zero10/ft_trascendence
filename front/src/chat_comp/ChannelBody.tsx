@@ -223,18 +223,25 @@ export default function ChannelBody(props: any) {
 		<div style={{ position:"relative", height:"100%", width:"80%"}}>
 			{(props.room.name && modalTypeOpen === "admin") && <AdminPanel
 				room={props.room}
+				members={props.members}
+				setMembers={props.setMembers}
 				setModalTypeOpen={setModalTypeOpen}
 				opened={(modalTypeOpen !== null)}
 				socket={props.socket}
 			/>}
-			{(props.room.name && modalTypeOpen !== "admin" ) && <ChannelOptionModal setModalTypeOpen={setModalTypeOpen} modalTypeOpen={modalTypeOpen} room={props.room} opened={(modalTypeOpen !== null)}/>}
-			<ChannelBodyNav 
-				joined={joined} 
-				setJoined={setJoined} 
+			{(props.room.name && modalTypeOpen !== "admin" ) && <ChannelOptionModal 
 				room={props.room} 
+				modalTypeOpen={modalTypeOpen} 
+				opened={(modalTypeOpen !== null)}
 				setModalTypeOpen={setModalTypeOpen} 
+				/>}
+			<ChannelBodyNav 
+				room={props.room} 
+				joined={joined} 
 				socket={props.socket} 
 				setRoom={props.setRoom}
+				setJoined={setJoined} 
+				setModalTypeOpen={setModalTypeOpen} 
 				/>
 			<div style={{ background:"black",color:"white", position:"relative", height:"92%", width:"100%"}}>
 				<ScrollArea style={{height:"89%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)}>

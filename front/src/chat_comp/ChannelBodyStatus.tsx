@@ -4,16 +4,10 @@ import ChannelStatus from "./ChannelStatus";
 import ChannelBody from "./ChannelBody";
 
 export default function ChannelBodyStatus(props: any) {
-    //---------------------ChannelBody States-----------------------
     const [joined, setJoined] = useState(false)
-    //const [createChan, setCreateChan] = useState(false)
     const student = useContext(Student);
-    //---------------------ChannelStatus States----------------------  
-    const [adminOpen, setAdminOpen] = useState(true)
-    const [userOpen, setUserOpen] = useState(true)
-
     //---------------------chat.tsx States----------------------
-    const [admin, setAdmin] = useState<0 | 1 | 2>(0)
+    // const [admin, setAdmin] = useState<0 | 1 | 2>(0)
 
     const [members, setMembers] = useState<string[]>([]);
     const [admins, setAdmins] = useState<string[]>([]);
@@ -83,8 +77,18 @@ export default function ChannelBodyStatus(props: any) {
 
     return (
         <div style={{position:"relative", height:"100%", backgroundColor:"lime", width:"80%", display:"flex"}}>
-            {<ChannelBody room={props.room} socket={props.socket} setRoom={props.setRoom}/>}
-            <ChannelStatus room={props.room}></ChannelStatus>
+            <ChannelBody 
+                room={props.room} 
+                socket={props.socket} 
+                members={members}
+                setMembers={setMembers}
+                setRoom={props.setRoom}
+                />
+            <ChannelStatus 
+                room={props.room}
+                members={members}
+                setMembers={setMembers}
+            />
         </div>
     )
 }

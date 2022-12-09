@@ -4,7 +4,6 @@ import { IconArrowBigDown, IconArrowBigTop } from '@tabler/icons';
 import OptionsPanel from "./OptionsPanel";
 
 export default function ChannelStatus(props: any) {
-	const [members, setMembers] = useState<string[]>([])
 
 	async function getChannelMembers() {
 		const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/allmembers/${props.room.name}`;
@@ -17,15 +16,17 @@ export default function ChannelStatus(props: any) {
 				let iMember:string = element.nickname;
 				fetchMember.push(iMember);
 			}))
-			setMembers(fetchMember);
+			props.setMembers(fetchMember);
 		}
 	}
 
+	useLayoutEffect(() => {getChannelMembers()}
+		, [props.room.name]
+	)
 
-	useLayoutEffect(() => {getChannelMembers()}, [props.room.name])
 	return (
 		<div style={{position:"relative", height:"100%", backgroundColor:"darkred", width:"20%"}}> 
-			{props.room.name && members.map((element: string, id: number) => {return(<div style={{width:"100%", height:"10%"}}key={id}> {element} </div>)})}
+			{props.room.name && props.members.map((element: string, id: number) => {return(<div style={{width:"100%", height:"10%"}}key={id}> {element} </div>)})}
 		</div>
 	)
 }
