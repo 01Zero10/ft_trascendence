@@ -81,12 +81,16 @@ export default function ChannelBodyStatus(props: any) {
                 room={props.room} 
                 socket={props.socket} 
                 members={members}
+                admins={admins}
+                setAdmins={setAdmins}
                 setMembers={setMembers}
                 setRoom={props.setRoom}
                 />
             <ChannelStatus 
                 room={props.room}
                 members={members}
+                admins={admins}
+                setAdmins={setAdmins}
                 setMembers={setMembers}
             />
         </div>

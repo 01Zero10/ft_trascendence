@@ -537,11 +537,13 @@ export class ChatService {
         this.roomsRepository.save(room);
     }
 
-    async editUsersOnChannel(admins: {value: string, label: string}[], members: {value: string, label: string}[], channelName: string){
+    //TODO eliminare members  
+    async editUsersOnChannel(admins: string[], channelName: string){
+        console.log("ADMINS: ", admins)
         const room = await this.roomsRepository.findOne({where : {name: channelName}});
         let updatingAdmins: User[] = [(await this.getRoomOwner(channelName))];
         await Promise.all(await admins.map(async (element) => {
-            updatingAdmins.push(await this.userRepository.findOne({ where : { username: element.value} }))
+            updatingAdmins.push(await this.userRepository.findOne({ where : { username: element} }))
         }))
         room.admins = updatingAdmins;
         return await this.roomsRepository.save(room);

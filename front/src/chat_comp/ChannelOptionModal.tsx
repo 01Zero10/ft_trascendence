@@ -134,6 +134,7 @@ export default function ChannelOptionModal(props: any) {
     }
 
     async function handleButtonClick() {
+        //modifica il canale
         if (props.modalTypeOpen === "options"){
 		const API_EDIT_CHAT = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/editChannel`;
 		await fetch(API_EDIT_CHAT, {
@@ -146,14 +147,17 @@ export default function ChannelOptionModal(props: any) {
 				password: newOption.confirmPass,
 				newName: newOption.nameGroup,
 			})
-		})
+		}) 
+
 		const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/editUsers`;
 		await fetch(API_GET_MEMBERS, {
 			credentials: 'include',
 			headers: { 'Content-Type': 'application/json' },
 			method: 'POST',
-			body: JSON.stringify({ data: newOption.members, channelName: props.room.name })
+			body: JSON.stringify({ data: props.admins, channelName: props.room.name })
 		})}
+
+        // aggiunge utenti
         if (props.modalTypeOpen === "add"){
 		const API_ADD_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/addMembers`;
 		await fetch(API_ADD_MEMBERS, {
@@ -186,7 +190,7 @@ export default function ChannelOptionModal(props: any) {
             if (indx === -1)
                 tmp.splice(tmp.indexOf(element), 1)
         }
-        setAdmins(tmp)
+        props.setAdmins(tmp)
     }
 
     //console.log(admins)
@@ -307,8 +311,8 @@ export default function ChannelOptionModal(props: any) {
                             onChange={changeMembers}>
                         </MultiSelect>}
                         {props.modalTypeOpen === "options" && <MultiSelect style={{ width:"90%", margin:"auto"}} 
-                            data={optionsFriends}
-                            value={admins}
+                            data={props.members}
+                            value={props.admins}
                             placeholder={"Select Admins"}
                             searchable
                             dropdownPosition="bottom"

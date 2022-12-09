@@ -27,8 +27,8 @@ interface DataNotLimited{
 }
 
 export interface Data{
-    admins: DataAdmins[],
-    members: DataMembers[],
+    admins: string[],
+    members: string[],
 }
 
 export interface Limited{
@@ -240,8 +240,9 @@ export class ChatController {
     }
 
     @Post('editUsers')
-    async editUsersOnChannel(@Body('data') data: Data, @Body('channelName') channelName: string){
-        this.chatService.editUsersOnChannel(data[0], data[1], channelName);
+    async editUsersOnChannel(@Body('data') data: string[], @Body('channelName') channelName: string){
+        console.log("data:", data)
+        this.chatService.editUsersOnChannel(data, channelName);
     }
 
     @Post('setJoin')

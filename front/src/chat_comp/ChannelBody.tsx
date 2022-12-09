@@ -231,8 +231,11 @@ export default function ChannelBody(props: any) {
 			/>}
 			{(props.room.name && modalTypeOpen !== "admin" ) && <ChannelOptionModal 
 				room={props.room} 
+				members={props.members}
 				modalTypeOpen={modalTypeOpen} 
+				admins={props.admins}
 				opened={(modalTypeOpen !== null)}
+				setAdmins={props.setAdmins}
 				setModalTypeOpen={setModalTypeOpen} 
 				/>}
 			<ChannelBodyNav 
