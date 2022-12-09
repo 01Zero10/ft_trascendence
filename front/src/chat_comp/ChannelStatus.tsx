@@ -1,7 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react"
-import { Box, Collapse, TransferListData, ActionIcon, Button, Center } from "@mantine/core";
-import { IconArrowBigDown, IconArrowBigTop } from '@tabler/icons';
-import OptionsPanel from "./OptionsPanel";
+import React, { useLayoutEffect } from "react"
 import { useNavigate } from "react-router-dom";
 
 export default function ChannelStatus(props: any) {
@@ -39,8 +36,6 @@ export default function ChannelStatus(props: any) {
             }
         }
     }
-
-
 
 	useLayoutEffect(() => {
 		getChannelMembers()
