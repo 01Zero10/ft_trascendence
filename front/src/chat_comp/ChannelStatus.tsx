@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react"
+import React, { useEffect, useLayoutEffect } from "react"
 import { useNavigate } from "react-router-dom";
 
 export default function ChannelStatus(props: any) {

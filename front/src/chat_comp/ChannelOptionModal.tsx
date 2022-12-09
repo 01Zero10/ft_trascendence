@@ -1,6 +1,6 @@
 import { Box, Center, FocusTrap, Modal, MultiSelect, PasswordInput, SegmentedControl } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { PropaneSharp } from "@mui/icons-material";
+import { PropaneSharp, Tune } from "@mui/icons-material";
 import { IconLock, IconShield, IconWorld } from "@tabler/icons";
 import React, { useContext, useEffect, useState } from "react"
 import { Student } from "../App";
@@ -38,6 +38,7 @@ export default function ChannelOptionModal(props: any) {
         password: '',
         confirmPass: ''
     });
+    const [btnDisabled, setBtnDisabled] = useState(true)
     const [pass, setPass] = useState("")
     const [visible, { toggle }] = useDisclosure(false);
     const [admins, setAdmins] = useState<string[]>([])
@@ -121,6 +122,7 @@ export default function ChannelOptionModal(props: any) {
                 members: membersList,
             })
         })
+        //setBtnDisabled(false)
     }
 
     function checkProtectedChannel() {
@@ -192,6 +194,37 @@ export default function ChannelOptionModal(props: any) {
         }
         props.setAdmins(tmp)
     }
+
+    useEffect(() => {
+        // console.log(newOption.type)
+        console.log("pass:", newOption.nameGroup )
+        console.log(btnDisabled)
+        if (newOption.type !== props.room.type){
+            if(newOption.type === "protected"){
+                if(newOption.password && newOption.password === newOption.confirmPass){
+                    setBtnDisabled(false)
+                }
+            }
+            else{
+                console.log(2.5)
+                setBtnDisabled(false)
+            }
+        }
+        if(newOption.nameGroup !== ""){
+            if (newOption.type !== props.room.type){
+                if(newOption.type === "protected"){
+                    if(newOption.password && newOption.password === newOption.confirmPass){
+                        setBtnDisabled(false)
+                    }
+                }
+                else
+                    setBtnDisabled(false)
+            }
+            else
+                setBtnDisabled(false)
+        }
+    }
+    )
 
     //console.log(admins)
 
@@ -320,7 +353,7 @@ export default function ChannelOptionModal(props: any) {
                         </MultiSelect>}
                     </div>
                     <Box>
-                    {<button className="btn_createChannel" onClick={handleButtonClick} >
+                    {<button className="btn_createChannel" onClick={handleButtonClick} disabled={btnDisabled} >
                         <div className="btn__content_createChannel">{props.modalTypeOpen !== "add" ? "Confirm" : "Add Members"}</div>
                     </button>}
                     </Box>
