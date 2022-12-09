@@ -76,7 +76,7 @@ export default function ChannelBodyStatus(props: any) {
     //     setAdmin(0)
     //     getData();
     // }, [props.room.name])
-    console.log("admin: ", admin)
+    // console.log("admin: ", admin)
     return (
         <div style={{position:"relative", height:"100%", backgroundColor:"lime", width:"80%", display:"flex"}}>
             <ChannelBody 

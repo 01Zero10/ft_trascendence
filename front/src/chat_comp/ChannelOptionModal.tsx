@@ -123,9 +123,10 @@ export default function ChannelOptionModal(props: any) {
                 ...prevChOptions,
                 members: membersList,
             })
-        })
-        //setBtnDisabled(false)
+        });
+        setBtnDisabled(false);
     }
+
 
     function checkProtectedChannel() {
         if (newOption.type === 'protected' && newOption.confirmPass === '') {
@@ -195,6 +196,8 @@ export default function ChannelOptionModal(props: any) {
                 tmp.splice(tmp.indexOf(element), 1)
         }
         props.setAdmins(tmp)
+        console.log(1);
+        setBtnDisabled(false)
     }
 
     useEffect(() => {
@@ -229,7 +232,7 @@ export default function ChannelOptionModal(props: any) {
         }
         if(newOption.nameGroup === "")
             setBtnDisabled(true)
-    }
+    }, [newOption]
     )
 
     //console.log(admins)

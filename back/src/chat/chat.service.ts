@@ -211,7 +211,7 @@ export class ChatService {
     }
 
     async getRoomOwner(roomName: string){
-        //console.log(roomName)
+        console.log(roomName)
         const owner = (await this.roomsRepository.createQueryBuilder("room")
         .leftJoinAndSelect("room.builder", "builder")
         .where({name: roomName})
