@@ -6,6 +6,7 @@ import { packMessage } from "../About";
 import { Student } from "../App";
 import { Box, Button, Modal, PasswordInput, ScrollArea, Skeleton } from "@mantine/core";
 import ChannelOptionModal from "./ChannelOptionModal";
+import AdminPanel from "./AdminPanel";
 
 
 /*A ogni click sulla stanza viene aggiornato MyState
@@ -220,7 +221,13 @@ export default function ChannelBody(props: any) {
 
 	return (
 		<div style={{ position:"relative", height:"100%", width:"80%"}}>
-			{props.room.name && <ChannelOptionModal setModalTypeOpen={setModalTypeOpen} modalTypeOpen={modalTypeOpen} room={props.room} opened={(modalTypeOpen !== null)}/>}
+			{(props.room.name && modalTypeOpen === "admin") && <AdminPanel
+				room={props.room}
+				setModalTypeOpen={setModalTypeOpen}
+				opened={(modalTypeOpen !== null)}
+				socket={props.socket}
+			/>}
+			{(props.room.name && modalTypeOpen !== "admin" ) && <ChannelOptionModal setModalTypeOpen={setModalTypeOpen} modalTypeOpen={modalTypeOpen} room={props.room} opened={(modalTypeOpen !== null)}/>}
 			<ChannelBodyNav 
 				joined={joined} 
 				setJoined={setJoined} 
