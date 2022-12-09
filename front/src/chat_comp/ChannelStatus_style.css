@@ -1,0 +1,17 @@
+.membersList_header {
+	height: 30%;
+	width: 100%;
+	background-color: yellow;
+}
+
+.membersList {
+	height: 70%;
+	width: 100%;
+	background-color: blueviolet;
+}
+
+.membersList_element {
+	height: 1%;
+	width: 100%;
+	background-color: lime;
+}
