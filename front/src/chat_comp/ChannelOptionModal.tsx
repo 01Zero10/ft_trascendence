@@ -189,7 +189,7 @@ export default function ChannelOptionModal(props: any) {
         setAdmins(tmp)
     }
 
-    console.log(admins)
+    //console.log(admins)
 
     return (
         <Modal centered withCloseButton={false} closeOnClickOutside={false} zIndex={1500}

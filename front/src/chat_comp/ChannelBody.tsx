@@ -129,7 +129,7 @@ export default function ChannelBody(props: any) {
 				body: JSON.stringify({ client: student.id, channelName: props.room.name })
 			})
 			const data = await response.json();
-			console.log("DATA: ",data)
+			//console.log("DATA: ",data)
 			setJoined(data);
 		}
 		if (props.room.type === 'direct')
@@ -160,7 +160,7 @@ export default function ChannelBody(props: any) {
 	}
 
 	const joinRoom = async (roomName: string) => {
-		console.log(props.room, joined)
+		//console.log(props.room, joined)
 		if (props.room.name && props.room.type === "public")
 			props.socket?.emit('joinRoom', { client: student.username, room: props.room.name });
 		else if (props.room.name && props.room.type === "protected" && joined)
@@ -179,7 +179,7 @@ export default function ChannelBody(props: any) {
 
 	useEffect(() => {
 		props.socket?.on('msgToClient', (client_message: packMessage) => {
-			console.log("sono passato da qui")
+			//console.log("sono passato da qui")
 			setMessages(messages => [...messages, client_message]);
 		});
 	}, [props.socket])

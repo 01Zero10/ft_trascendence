@@ -80,8 +80,8 @@ export class UsersController {
 
   @Post('getFriendsRequest')
   async GetFriendsRequest(@Body('client') client: string, @Body('profileUser') profileUser: string){
-    console.log(client);
-    console.log(profileUser);
+    //console.log(client);
+    //console.log(profileUser);
     return await this.userService.getFriendsRequest(client, profileUser);
   }
 

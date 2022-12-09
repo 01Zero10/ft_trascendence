@@ -213,11 +213,11 @@ export class ChatController {
     @Body('members') members: string[],
     @Body('type') type: string,
     @Body('password') password: string){
-        console.log("builder", builder);
-        console.log("nameGroup", nameGroup);
-        console.log("members", members);
-        console.log("type", type);
-        console.log("pwd", password);
+        //console.log("builder", builder);
+        //console.log("nameGroup", nameGroup);
+        //console.log("members", members);
+        //console.log("type", type);
+        //console.log("pwd", password);
         const room = await this.chatService.createGroupChat2(builder, nameGroup, members, type, password);
         return room;
     }
@@ -341,10 +341,10 @@ export class ChatController {
     @Get('test')
     async test(){
          const iv = randomBytes(16); //<Buffer 06 d3 9c 9a 68 d8 4e ba 19 47 3b 49 4c 95 62 fe>
-         console.log(iv)
-         console.log(iv.toString('base64'));
+         //console.log(iv)
+         //console.log(iv.toString('base64'));
         // console.log(process.env.BUFFER_IV)
-        console.log(Buffer.from(process.env.BUFFER_IV, 'base64'))
+        //console.log(Buffer.from(process.env.BUFFER_IV, 'base64'))
         //---const iv = Buffer.from(process.env.BUFFER_IV, 'base64')
         //console.log('IV');
         //console.log(iv);

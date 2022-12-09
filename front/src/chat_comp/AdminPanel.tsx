@@ -4,6 +4,7 @@ import {
 	Input,
 	Modal, MultiSelect,
 	NumberInput, PasswordInput,
+	ScrollArea,
 	SegmentedControl, Tabs,
 	TextInput,
 	TransferList,
@@ -42,13 +43,14 @@ export default function AdminPanel(props: any) {
 
 
 	async function getChannelMembers() {
-		const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getChatMembers/${props.room.name}`;
+		const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/allmembers/${props.room.name}`;
 		if (props.room.name !== '') {
 			let response = await fetch(API_GET_MEMBERS);
 			let data = await response.json();
+			//console.log("data: ", data)
 			let fetchMember: string[] = [];
 			await Promise.all(await data?.map(async (element: any) => {
-				let iMember:string = element;
+				let iMember:string = element.nickname;
 				fetchMember.push(iMember);
 			}))
 			setMembers(fetchMember);
@@ -224,7 +226,7 @@ export default function AdminPanel(props: any) {
 
 	//
 
-	console.log(members)
+	//console.log(members)
 	return (<>
 			<Modal centered withCloseButton={false} closeOnClickOutside={false} zIndex={1500}
 				   styles={(root) => ({
@@ -325,7 +327,7 @@ export default function AdminPanel(props: any) {
 							<Tabs.Tab style={tabStyle} value={"unmute"}>UNMUTE</Tabs.Tab>
 						</Tabs.List>
 						<img style={{rotate:"180deg"}}src="/account_decoration_down.svg" alt="" />
-						<Tabs.Panel style={{color:"white"}} value={"ban"}><div>{members.map((element:string, id:number) => <div key={id}>{element}</div>)}</div></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"ban"}><ScrollArea>{members.map((element: string, id: number) => {return(<div> {element} </div>)})}</ScrollArea></Tabs.Panel>
 						<Tabs.Panel style={{color:"white"}} value={"mute"}><div>mute</div></Tabs.Panel>
 						<Tabs.Panel style={{color:"white"}} value={"kick"}><div>kick</div></Tabs.Panel>
 						<Tabs.Panel style={{color:"white"}} value={"unban"}><div>unban</div></Tabs.Panel>

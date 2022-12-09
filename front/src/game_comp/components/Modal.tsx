@@ -104,7 +104,7 @@ function RunningMatchesList(props: any){
 
   useEffect(() => {
     async function getRunningMatches() {
-      console.log(`http://${process.env.REACT_APP_IP_ADDR}:3001/game/get${props.typo}RunningMatches`)
+      //console.log(`http://${process.env.REACT_APP_IP_ADDR}:3001/game/get${props.typo}RunningMatches`)
       let response = await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/game/get${props.typo}RunningMatches`);
       let data = await response.json();
       let fetchRunningMatches: RunningMatches[] = [];
@@ -127,7 +127,7 @@ function RunningMatchesList(props: any){
   return (
     <>
     { runningMatches.map(function(element: any){
-        console.log(element)
+        //console.log(element)
         return (
 
           <div className="running_matches_holder" key={element.playRoom}>

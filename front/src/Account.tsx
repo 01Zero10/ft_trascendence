@@ -161,7 +161,7 @@ function Account() {
   const { user_id } = useParams();
 
   useEffect(() => {
-    console.log('user_id: ', user_id);
+    //console.log('user_id: ', user_id);
   }, [user_id])
 
   useEffect(() => {
@@ -172,7 +172,7 @@ function Account() {
       })
         .then((response) => response.json())
         .then((result) => {
-          console.log(result);
+          //console.log(result);
           setClient({
             id: result.id,
             username: result.username,
@@ -221,7 +221,7 @@ function Account() {
   /*   const ciao = useParams<"user_id">();
 
     useEffect(() => {
-      console.log(ciao);
+      //console.log(ciao);
     }, [ciao]) */
 
   //PROVA ALERT PER RICHIESTA
@@ -307,7 +307,7 @@ function Account() {
 
     useEffect(() => {
       async function getMatches() {
-        console.log(MATCH_API);
+        //console.log(MATCH_API);
         let response = await fetch(MATCH_API);
         let data = await response.json();
         let fetchMatches: Match[] = [];
@@ -320,7 +320,7 @@ function Account() {
       }
       getMatches();
     }, [props.client])
-    console.log(matches);
+    //console.log(matches);
 
     return (
       <>

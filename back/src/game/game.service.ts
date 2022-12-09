@@ -57,7 +57,7 @@ export class GameService{
     }
 
     async getClassicRunningMatches(){
-        console.log('get services')
+        //console.log('get services')
         return await this.runningMatches
         .createQueryBuilder('match')
         .where({typo: 'classic'})
@@ -96,7 +96,7 @@ export class GameService{
     }
 
     async handleLeaveQueue(client: string){
-        console.log('cclient1 ', client);
+        //console.log('cclient1 ', client);
         
         let playRoom = await this.runningMatches
         .createQueryBuilder()
@@ -112,7 +112,7 @@ export class GameService{
     }
 
     async handleLeavePlayRoom(client: string){
-        console.log('cclient2 ', client);
+        //console.log('cclient2 ', client);
 
         // let playRoom = await this.runningMatches
         // .findOne({ where : [{player1: client}, {player2: client}]});
@@ -124,7 +124,7 @@ export class GameService{
         .getOne()
 
 
-        console.log('p-p-pl = ', playRoom);
+        //console.log('p-p-pl = ', playRoom);
         
         if (playRoom)
         {
@@ -181,7 +181,7 @@ export class GameService{
     }
 
     // async setKeysPlayer(namePlayRoom: string, side: string, dir: number=1){
-    //     console.log("set keys ", this.mapPlRoom.get(namePlayRoom));
+    //     //console.log("set keys ", this.mapPlRoom.get(namePlayRoom));
     //     if (side === 'left'){
     //         if (dir > 0)
     //             this.mapPlRoom.get(namePlayRoom).leftPlayer.up = !this.mapPlRoom.get(namePlayRoom).leftPlayer.up;

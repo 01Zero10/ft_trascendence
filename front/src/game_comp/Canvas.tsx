@@ -113,7 +113,7 @@ export default function Canvas(props: CanvasProps) {
 
   useEffect(() => {
     props.socket.on('goal', async (data: { namePlayRoom: string, rightPlayer: string, leftPlayer: string }, point: number) => {
-      console.log('reeeestart0', data);
+      //console.log('reeeestart0', data);
       if (point === 1)
         props.setPoint((prevState: any) => {return {...prevState, right: ++prevState.right}})
       else
@@ -134,7 +134,7 @@ export default function Canvas(props: CanvasProps) {
         props.setOpponentSide({name:leftClient, side: "left", playRoom: namePlayRoom })
       else
         props.setOpponentSide({name:rightClient, side: "right", playRoom: namePlayRoom })
-      console.log("ricevuto ready ", leftClient, rightClient);
+      //console.log("ricevuto ready ", leftClient, rightClient);
       setLoader(false);
       if (props.clientPaddle.side === 'right')
         props.socket.emit('setStart', {

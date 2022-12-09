@@ -197,7 +197,7 @@ export class ChatService {
         .getOne()).members;
         // console.log("");
         // console.log("[getchatmembers]");
-        // console.log(arrayUser);
+        //console.log("arr_u: ",arrayUser);
         // console.log("");
         return arrayUser;
     }
@@ -211,7 +211,7 @@ export class ChatService {
     }
 
     async getRoomOwner(roomName: string){
-        console.log(roomName)
+        //console.log(roomName)
         const owner = (await this.roomsRepository.createQueryBuilder("room")
         .leftJoinAndSelect("room.builder", "builder")
         .where({name: roomName})
@@ -454,13 +454,13 @@ export class ChatService {
         const key = (await promisify(scrypt)("process.env.PASS_TO_ENCRYPT", 'salt', 32)) as Buffer;
         const cipher = createCipheriv("aes-256-gcm", key, iv);
         let crypted = cipher.update(pass, 'utf-8', 'hex') + cipher.final('hex');
-        console.log("cripted", crypted)
+        //console.log("cripted", crypted)
         return crypted;
     }
 
     async createRoom2(client: string, roomName: string, type: string, password: string){
         //const user = await this.userRepository.findOne({where: {username: client}});
-        console.log(client, roomName, type, password)
+        //console.log(client, roomName, type, password)
         const room = await this.roomsRepository.findOne({where: {name: roomName}});
         if (!room){
             const newRoom = await this.roomsRepository.create({name: roomName});
@@ -626,7 +626,7 @@ export class ChatService {
 
     async checkProtectedPassword(input: string, channel: string){
         const iv = Buffer.from(channel, 'base64');
-        console.log(iv)
+        //console.log(iv)
         // const iv = randomBytes(16);
         const key = (await promisify(scrypt)("process.env.PASS_TO_ENCRYPT", 'salt', 32)) as Buffer;
         const cipher = createCipheriv("aes-256-gcm", key, iv);

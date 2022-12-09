@@ -14,7 +14,7 @@ export default function LeaderBoard2() {
 
     useEffect(() => {
         gameSocket?.on('ciao', () => {
-            console.log('ricevuto ciao');
+            //console.log('ricevuto ciao');
         })
     }, [])
     return (<></>);
