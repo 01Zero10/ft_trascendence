@@ -28,7 +28,7 @@ export default function AdminPanel(props: any) {
 	//variabili
 	const [action, setAction] = useState<string>('ban');
 	const [data, setData] = useState<TransferListData>([[], []]);
-	const [members, setMembers] = useState<string[]>([])
+	// const [members, setMembers] = useState<string[]>([])
 	const [limitedUsers, setLimitedUsers] = useState<{
 		value: string;
 		label: string;
@@ -42,20 +42,20 @@ export default function AdminPanel(props: any) {
 	const [reason, setReason] = useState<string>('');
 
 
-	async function getChannelMembers() {
-		const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/allmembers/${props.room.name}`;
-		if (props.room.name !== '') {
-			let response = await fetch(API_GET_MEMBERS);
-			let data = await response.json();
-			//console.log("data: ", data)
-			let fetchMember: string[] = [];
-			await Promise.all(await data?.map(async (element: any) => {
-				let iMember:string = element.nickname;
-				fetchMember.push(iMember);
-			}))
-			setMembers(fetchMember);
-		}
-	}
+	// async function getChannelMembers() {
+	// 	const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/allmembers/${props.room.name}`;
+	// 	if (props.room.name !== '') {
+	// 		let response = await fetch(API_GET_MEMBERS);
+	// 		let data = await response.json();
+	// 		//console.log("data: ", data)
+	// 		let fetchMember: string[] = [];
+	// 		await Promise.all(await data?.map(async (element: any) => {
+	// 			let iMember:string = element.nickname;
+	// 			fetchMember.push(iMember);
+	// 		}))
+	// 		setMembers(fetchMember);
+	// 	}
+	// }
 
 
 
@@ -205,7 +205,6 @@ export default function AdminPanel(props: any) {
 
 	useEffect(() => {
 		async function prepareData() {
-			await getChannelMembers();
 			if (action === 'ban') {
 				//console.log('b-b-ban');
 				await getOptions();
@@ -327,11 +326,11 @@ export default function AdminPanel(props: any) {
 							<Tabs.Tab style={tabStyle} value={"unmute"}>UNMUTE</Tabs.Tab>
 						</Tabs.List>
 						<img style={{rotate:"180deg"}}src="/account_decoration_down.svg" alt="" />
-						<Tabs.Panel style={{color:"white"}} value={"ban"}><ScrollArea>{members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
-						<Tabs.Panel style={{color:"white"}} value={"mute"}><ScrollArea>{members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
-						<Tabs.Panel style={{color:"white"}} value={"kick"}><ScrollArea>{members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
-						<Tabs.Panel style={{color:"white"}} value={"unban"}><ScrollArea>{members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
-						<Tabs.Panel style={{color:"white"}} value={"unmute"}><ScrollArea>{members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"ban"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"mute"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"kick"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"unban"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"unmute"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
 					</Tabs>
 					{/*<img src="/account_decoration_down.svg" alt="" />*/}
 					<Box>
