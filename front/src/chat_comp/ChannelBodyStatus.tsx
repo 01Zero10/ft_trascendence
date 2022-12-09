@@ -7,17 +7,19 @@ export default function ChannelBodyStatus(props: any) {
     const [joined, setJoined] = useState(false)
     const student = useContext(Student);
     //---------------------chat.tsx States----------------------
-    // const [admin, setAdmin] = useState<0 | 1 | 2>(0)
+    const [admin, setAdmin] = useState(false)
 
     const [members, setMembers] = useState<string[]>([]);
     const [admins, setAdmins] = useState<string[]>([]);
 
-    // useLayoutEffect(() => {
-    //     if (student.username === props.room.builder.username)
-    //         setAdmin(2)
-    //     else if (admins.findIndex((x) => x === student.username) !== -1)
-    //         setAdmin(1)
-    // }, [admins])
+    useEffect(() => {
+        if (student.username === props.room.builder.username)
+            setAdmin(true)
+        else if (admins.indexOf(student.username) !== -1)
+            setAdmin(true)
+        else
+            setAdmin(false)
+    }, [admins, props.room.name])
 
     // //chiude le liste in status 
     // useEffect(
@@ -74,7 +76,7 @@ export default function ChannelBodyStatus(props: any) {
     //     setAdmin(0)
     //     getData();
     // }, [props.room.name])
-
+    console.log("admin: ", admin)
     return (
         <div style={{position:"relative", height:"100%", backgroundColor:"lime", width:"80%", display:"flex"}}>
             <ChannelBody 
@@ -82,6 +84,7 @@ export default function ChannelBodyStatus(props: any) {
                 socket={props.socket} 
                 members={members}
                 admins={admins}
+                admin={admin}
                 setAdmins={setAdmins}
                 setMembers={setMembers}
                 setRoom={props.setRoom}
@@ -90,6 +93,7 @@ export default function ChannelBodyStatus(props: any) {
                 room={props.room}
                 members={members}
                 admins={admins}
+                setAdmin={setAdmin}
                 setAdmins={setAdmins}
                 setMembers={setMembers}
             />

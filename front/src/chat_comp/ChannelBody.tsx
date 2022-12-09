@@ -240,6 +240,7 @@ export default function ChannelBody(props: any) {
 				/>}
 			<ChannelBodyNav 
 				room={props.room} 
+				admin={props.admin}
 				joined={joined} 
 				socket={props.socket} 
 				setRoom={props.setRoom}

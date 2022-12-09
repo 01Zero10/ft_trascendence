@@ -85,7 +85,7 @@ export default function ChannelBodyNav(props: any) {
 				<div className="channelOptionBar">
 					{(props.room.name && props.room.builder.username === student.username)&& <ActionIcon variant="transparent" color="grape" onClick={() => props.setModalTypeOpen("options")}><IconSettings></IconSettings></ActionIcon>}
 					{(props.room.name && props.room.builder.username === student.username)&& <ActionIcon variant="transparent" color="grape" onClick={() => props.setModalTypeOpen("add")}><IconUserPlus></IconUserPlus></ActionIcon>}
-					{props.room.name && <ActionIcon variant="transparent" color="grape" onClick={() => props.setModalTypeOpen("admin")}><IconGavel></IconGavel></ActionIcon>}
+					{(props.room.name && props.admin) && <ActionIcon variant="transparent" color="grape" onClick={() => props.setModalTypeOpen("admin")}><IconGavel></IconGavel></ActionIcon>}
 					{(props.room.name && props.joined) && <ActionIcon onClick={() =>{ SetJoinFetch(); props.setRoom((prevState:any) => {return {...prevState, name:""}})}} variant="transparent" color="grape"><IconDoorExit></IconDoorExit></ActionIcon>}
 					{(props.room.name && !props.joined) && <ActionIcon onClick={SetJoinFetch} variant="transparent" color="grape"><IconDoorEnter></IconDoorEnter></ActionIcon>}
 				</div>
