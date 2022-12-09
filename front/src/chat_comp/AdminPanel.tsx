@@ -328,10 +328,10 @@ export default function AdminPanel(props: any) {
 						</Tabs.List>
 						<img style={{rotate:"180deg"}}src="/account_decoration_down.svg" alt="" />
 						<Tabs.Panel style={{color:"white"}} value={"ban"}><ScrollArea>{members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
-						<Tabs.Panel style={{color:"white"}} value={"mute"}><div>mute</div></Tabs.Panel>
-						<Tabs.Panel style={{color:"white"}} value={"kick"}><div>kick</div></Tabs.Panel>
-						<Tabs.Panel style={{color:"white"}} value={"unban"}><div>unban</div></Tabs.Panel>
-						<Tabs.Panel style={{color:"white"}} value={"unmute"}><div>unmute</div></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"mute"}><ScrollArea>{members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"kick"}><ScrollArea>{members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"unban"}><ScrollArea>{members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"unmute"}><ScrollArea>{members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
 					</Tabs>
 					{/*<img src="/account_decoration_down.svg" alt="" />*/}
 					<Box>
