@@ -1,24 +1,25 @@
 .table_dashboard::-webkit-scrollbar {
   width: 13px;
-  display: none;
+  
 }
 
-/* Track 
+/* Track */
 .table_dashboard::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 5vw;
-}*/
+  display: none;
+}
 
-/* Handle 
+/* Handle */
 .table_dashboard::-webkit-scrollbar-thumb {
-  background-color: #a5a5a5;
+  background-color: rgba(102, 38, 238, 1);
   border-radius: 5vw;
-}*/
+}
 
 /* Handle on hover 
 .table_dashboard::-webkit-scrollbar-thumb:hover {
   background: #838383; 
-}*/
+} */
 
 .wrap {
   position: relative;
@@ -166,13 +167,30 @@
   letter-spacing: 0.2rem;
 }
 
-/*** Avatar img ***/
+/*** Avatar img request***/
 
+.avatar__img-request {
+  position: relative;
+  left: 2%;
+  width: 50px;
+  height: 50px;
+  margin: 5%;
+}
+
+.avatar__img-request img {
+  width: 90%;
+  height: 90%;
+  display: block;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/*** Avatar img ***/
 .avatar__img-account {
   position: relative;
   left: 2%;
-  width: 155px;
-  height: 155px;
+  width: 220px;
+  height: 220px;
   margin: 5%;
 }
 
@@ -232,18 +250,24 @@
   flex-direction: column;
   width: 100%;
   max-height: 50vh;
-  overflow: hidden;
   overflow-y: auto;
   /* background-color: rgba(235, 233, 247, 1); */
 }
 
 .VS {
   font-family: 'Odibee Sans', sans-serif;
-  font-size: 3.8vw;
+  font-size: 5vw;
   padding: 0 4rem;
-  background: -webkit-linear-gradient(0deg, rgba(255, 85, 94, 1) 0%, rgba(102, 38, 238, 1) 100%);
+  background: -webkit-linear-gradient(0deg, rgba(255, 85, 94, 1) 5%, rgba(102, 38, 238, 1) 75%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.request-list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5%;
 }
 
 /******* buttons *******/
@@ -588,13 +612,73 @@ h3 {
   }
 }
 
+/**** LAPTOP MAC ****/
+
+/* @media screen and (min-width: 2570px) {
+  .avatar__img-account {
+    width: 430px;
+    height: 430px;
+  }
+
+  .avatar__img-request {
+    width: 150px;
+    height: 150px;
+  }
+} */
+
+
 /**** LAPTOP ****/
 
-@media screen and (max-width: 1366px) {
+@media screen and (max-width: 1380px) {
   .wrap {
     top: 8vh;
   }
+
+  .avatar__img-account {
+    width: 130px;
+    height: 130px;
+  }
+
 }
+
+@media screen and (max-width: 855px) {
+
+  .wrap {
+    position: absolute;
+    width: 90%;
+    align-items: center;
+  }
+
+  .box-item {
+    position: absolute;
+    width: 100%;
+    height: 90%;
+    top: -10%
+  }
+
+  .main {
+    height: 15vh;
+  }
+
+  .request {
+    height: 15vh;
+  }
+
+  .avatar__img-account {
+    width: 100px;
+    height: 100px;
+  }
+
+  .account_decor_down {
+  display: none;
+}
+
+.account_decor_top {
+  display: none;
+}
+}
+
+
 
 /*** TABLET ***/
 @media screen and (max-width: 480px) {
@@ -604,12 +688,14 @@ h3 {
 
 }
 
+
+
 /***** FRIEND LIST *****/
 
 .p_friendlist {
   font-family: 'Smooch Sans', sans-serif;
   color: #fff;
-  font-size: 1.5vw;
+  font-size: 1.3vw;
   letter-spacing: 0.1rem;
   font-weight: 800;
   margin: 0 2vw;
