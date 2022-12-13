@@ -12,7 +12,7 @@ import {
 } from "@mantine/core";
 import { IconAt, IconClock } from "@tabler/icons";
 import React, { SetStateAction, useEffect, useLayoutEffect, useState } from "react"
-
+import "./AdminPanel_style.css"
 export default function AdminPanel(props: any) {
 	const tabStyle = {
 		color:"#781C9C",
@@ -326,11 +326,11 @@ export default function AdminPanel(props: any) {
 							<Tabs.Tab style={tabStyle} value={"unmute"}>UNMUTE</Tabs.Tab>
 						</Tabs.List>
 						<img style={{rotate:"180deg"}}src="/account_decoration_down.svg" alt="" />
-						<Tabs.Panel style={{color:"white"}} value={"ban"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div key={id}> <input type={"checkbox"} id={element} onClick={() => console.log(element)}/><label>{element}</label> </div>)})}</ScrollArea></Tabs.Panel>
-						<Tabs.Panel style={{color:"white"}} value={"mute"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
-						<Tabs.Panel style={{color:"white"}} value={"kick"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
-						<Tabs.Panel style={{color:"white"}} value={"unban"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
-						<Tabs.Panel style={{color:"white"}} value={"unmute"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"ban"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div className={"checkbox_element_container"} key={id}> <div  className={"checkbox_element_input"}><input type={"checkbox"} id={element} /></div><label className={"checkbox_element_label"}>{element}</label> </div>)})}</ScrollArea></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"mute"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div className={"checkbox_element_container"} key={id}> <div  className={"checkbox_element_input"}><input type={"checkbox"} id={element} /></div><label className={"checkbox_element_label"}>{element}</label> </div>)})}</ScrollArea></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"kick"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div className={"checkbox_element_container"} key={id}> <div  className={"checkbox_element_input"}><input type={"checkbox"} id={element} /></div><label className={"checkbox_element_label"}>{element}</label> </div>)})}</ScrollArea></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"unban"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div className={"checkbox_element_container"} key={id}> <div  className={"checkbox_element_input"}><input type={"checkbox"} id={element} /></div><label className={"checkbox_element_label"}>{element}</label> </div>)})}</ScrollArea></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"unmute"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div className={"checkbox_element_container"} key={id}> <div  className={"checkbox_element_input"}><input type={"checkbox"} id={element} /></div><label className={"checkbox_element_label"}>{element}</label> </div>)})}</ScrollArea></Tabs.Panel>
 					</Tabs>
 					{/*<img src="/account_decoration_down.svg" alt="" />*/}
 					<Box>
