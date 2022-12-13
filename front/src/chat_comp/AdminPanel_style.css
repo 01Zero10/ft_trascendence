@@ -1,0 +1,23 @@
+.checkbox_element_container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    /*background-color: darkred;*/
+    margin-bottom: 0.5%;
+    font-family: 'Tomorrow', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+}
+
+.checkbox_element_input {
+    width: 45%;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 2%;
+}
+
+.checkbox_element_label {
+    width: 55%;
+    display: flex;
+    /*background-color: aquamarine;*/
+}
