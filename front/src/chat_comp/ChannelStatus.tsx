@@ -22,7 +22,7 @@ export default function ChannelStatus(props: any) {
 		}
 	}
 
-	    async function getRoomAdmins() {
+	async function getRoomAdmins() {
         if (props.room.name && props.room.type != 'direct') {
             const API_GET_ADMINS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/admins/${props.room.name}`;
             if (props.room.name) {
@@ -38,6 +38,13 @@ export default function ChannelStatus(props: any) {
             }
         }
     }
+
+	useEffect(() => {
+		props.socket.on('updateListMembers', async(nameChannel: string) => {
+			if (props.room.name == nameChannel)
+				await getChannelMembers();
+		});
+	}, [props.socket]);
 
 	useLayoutEffect(() => {
 		getChannelMembers()
