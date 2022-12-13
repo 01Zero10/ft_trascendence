@@ -7,12 +7,12 @@ import { ChatService } from "./chat.service";
 import { UserService } from "src/user/user.service";
 import { GameService } from "src/game/game.service";
 
-@WebSocketGateway({ cors: true })
+@WebSocketGateway({ cors: true, namespace: '/chat' })
 @Injectable()
 export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   constructor(private chatService: ChatService,
             private userService: UserService,
-            private gameService: GameService){}
+          ){}
 
   private logger: Logger = new Logger('ChatGateway');
 
@@ -76,23 +76,27 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   async handleConnection(clientSocket: Socket) {
+    const client_id = String(clientSocket.handshake.query.userID);
+    this.logger.log(`client ${client_id} arrived in /chat`);
     //console.log(String(clientSocket.handshake.query.userID));
-    if (clientSocket.handshake.query.userID !== 'undefined' 
-    && clientSocket.handshake.query.userID !== "null" 
-    )
-    {
-      await this.chatService.updateUserSocket(String(clientSocket.handshake.query.userID), clientSocket.id);
-      await this.userService.setOnlineStatus(String(clientSocket.handshake.query.userID));
-      this.logger.log(`Client connected: ${clientSocket.id}`);
-    }
+    // if (clientSocket.handshake.query.userID !== 'undefined' 
+    // && clientSocket.handshake.query.userID !== "null" 
+    // )
+    // {
+    //   await this.chatService.updateUserSocket(String(clientSocket.handshake.query.userID), clientSocket.id);
+    //   await this.userService.setOnlineStatus(String(clientSocket.handshake.query.userID));
+    //   this.logger.log(`Client connected: ${clientSocket.id}`);
+    // }
   }
 
   async handleDisconnect(clientSocket: Socket) {
-    if (clientSocket.handshake.query.userID !== 'undefined' && clientSocket.handshake.query.userID !== "null")
-    {
-      await this.userService.setOfflineStatus(String(clientSocket.handshake.query.userID));
-      this.logger.log(`clientSocket disconnected: ${clientSocket.id}`);
-    }
+    const client_id = String(clientSocket.handshake.query.userID);
+    this.logger.log(`client ${client_id} left /chat`);
+    // if (clientSocket.handshake.query.userID !== 'undefined' && clientSocket.handshake.query.userID !== "null")
+    // {
+    //   await this.userService.setOfflineStatus(String(clientSocket.handshake.query.userID));
+    //   this.logger.log(`clientSocket disconnected: ${clientSocket.id}`);
+    // }
   }
 
   async sleep(time: number) {

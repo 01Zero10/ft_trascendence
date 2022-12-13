@@ -3,7 +3,7 @@ import { User } from "./user.entity";
 
 @Entity ("online")
 export class Online {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn('uuid')
     id: number;
     
     @Column()

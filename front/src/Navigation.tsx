@@ -1,14 +1,14 @@
 import { Logout, Settings } from '@mui/icons-material';
 import SearchIcon from '@mui/icons-material/Search';
 import { AppBar, Divider, Drawer, IconButton, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, styled, SvgIcon, Toolbar, Tooltip, Typography } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
-import { Link, NavLink, Route, Routes } from 'react-router-dom';
+import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 import './Navigation.css';
 import { Student } from './App';
-import { ActionIcon, Avatar, Box, Button, Indicator, List } from '@mantine/core';
+import { Avatar, Box, List } from '@mantine/core';
 import MenuIcon from '@mui/icons-material/Menu';
-import { IconBell, IconBellRinging } from '@tabler/icons';
 import NotificationBell from './NotificationBell';
+import { io, Socket } from 'socket.io-client';
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,600,1,200" />
 
@@ -91,8 +91,18 @@ const ListSearch = () => {
 function Navigation() {
 
   const contextData = useContext(Student)
+  const [socket, setSocket] = useState<Socket | null>(null);
 
-  const [count, setCount] = useState(4);
+  useLayoutEffect(() => {
+      const newSocket = io(`http://${process.env.REACT_APP_IP_ADDR}:3001`, { query: { userID: String(contextData.id) } });
+      newSocket.on('connect', () => {
+          setSocket(newSocket);
+      })
+      return () => {
+          newSocket.disconnect();
+      }
+  }, [contextData.id]);
+  
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -166,7 +176,7 @@ function Navigation() {
     <>
       <AppBar position='absolute' sx={{ bgcolor: 'transparent', color: '#fff', width: '100%', paddingLeft: '32px', paddingRight: '32px', zIndex:"50" }} component='nav'>
         <Toolbar>
-          <NotificationBell count={count} sx={{right:"20%"}} />
+          <NotificationBell socket={socket} sx={{ right: "20%" }} />
           <IconButton
             aria-label="open drawer"
             edge="start"

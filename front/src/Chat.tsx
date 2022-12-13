@@ -1,17 +1,30 @@
-import React, { useContext, useEffect, useState, } from "react"
+import React, { useContext, useEffect, useLayoutEffect, useState, } from "react"
 import "./Chat.css"
 import ChannelBody from "./chat_comp/ChannelBody"
 import ChatMenu from "./chat_comp/ChatMenu"
 import { Rooms, Student } from "./App"
-import ChannelStatus from "./chat_comp/ChannelStatus";
 import { io, Socket } from "socket.io-client"
 import ChannelBodyStatus from "./chat_comp/ChannelBodyStatus"
 
-export default function Chat(props: any) {
+export default function Chat() {
 
 	const student = useContext(Student);
 	const [room, setRoom] = useState<Rooms>({ name: "", type: "", builder: { username: "" } })
 	const [chOptions, setChOptions] = useState<Rooms | null>(null)
+	const [input, setInput] = useState('');
+	const [opened, setOpened] = useState("")
+	const [createChan, setCreateChan] = useState(false)
+	const [socket, setSocket] = useState<Socket | null>(null);
+	useLayoutEffect(() => {
+	  if (student.id !== 0) {
+		const newSocket = io(`http://${process.env.REACT_APP_IP_ADDR}:3001/chat`, { query: { userID: String(student.id) } });
+		newSocket.on('connect', () => {
+		  setSocket(newSocket);
+		  student.socket_id = newSocket.id;
+		}
+		)
+	  }
+	}, [student.id]);
 
 
 	// async function SetRoomName(client: string, target: string) {

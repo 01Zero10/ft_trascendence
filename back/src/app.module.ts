@@ -14,6 +14,7 @@ import { GameModule } from "./game/game.module";
 import { Match } from "./game/match.entity";
 import { Friendship } from "./user/friendship.entity";
 import { GameGateWay } from "./game/game.gateway";
+import { NavigationModule } from "./navigation/navigation.module";
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { GameGateWay } from "./game/game.gateway";
     AuthModule,
     ChatModule,
     GameModule,
+    NavigationModule,
     JwtModule.register({
       secret: "Segreto243",
       signOptions: {expiresIn: "1d",}
