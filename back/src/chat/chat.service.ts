@@ -11,11 +11,13 @@ import { createCipheriv, scrypt, randomBytes} from 'crypto';
 import { promisify } from 'util';
 import { channel } from 'diagnostics_channel';
 import { ChatGateWay } from './chat.gateway';
+import { Online } from 'src/user/online.entity';
 
 @Injectable()
 export class ChatService {
     constructor(
         @InjectRepository(RoomMessages) private roomMessagesRepository: Repository<RoomMessages>,
+		@InjectRepository(RoomMessages) private onlineRepository: Repository<Online>,
         @InjectRepository(PrivateMessages) private privateMessagesRepository: Repository<PrivateMessages>,
         @InjectRepository(User) private userRepository: Repository<User>,
         @InjectRepository(Rooms) private roomsRepository: Repository<Rooms>,
@@ -197,11 +199,31 @@ export class ChatService {
         .leftJoinAndSelect("room.members", "members")
         .where({name: roomName})
         .getOne()).members;
+
+		const online = await this.onlineRepository.createQueryBuilder("online")
+		.leftJoinAndSelect("online.user", "user")
+		.getMany()
+
+		console.log(online);
+
+		let arrayMembers : {user: User, online: boolean}[] = [];
+
+
+		for ( let element of arrayUser ) 
+		{
+			if ( online.findIndex(x => x.id === element.id) != -1)
+			{
+				arrayMembers.push({user: element, online: true});
+			}
+			else
+				arrayMembers.push({user: element, online: false}); 
         // console.log("");
         // console.log("[getchatmembers]");
         //console.log("arr_u: ",arrayUser);
         // console.log("");
+		}
         return arrayUser;
+		
     }
 
     async getRoomAdmins(roomName: string){
