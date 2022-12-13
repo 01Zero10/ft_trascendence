@@ -29,7 +29,7 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
       this.logger.log(`disconesso dal GAME namespace ${clientSocket.id}`);
       const client = String(clientSocket.handshake.query.username);
       //console.log('cclient0 ', client);
-      this.gameService.handleLeaveQueue(client);
+      // this.gameService.handleLeaveQueue(client);
       //const ret = await this.gameService.handleLeaveQueue(client);
       //console.log('retttt = ', ret);
       //if (!ret)
