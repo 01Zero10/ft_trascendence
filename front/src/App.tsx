@@ -128,7 +128,7 @@ function App() {
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/game" element={<Game />} />
                 <Route path="/users/settings" element={<Settings />} />
-                {/*<Route path="/chat" element={<Chat />} />*/}
+                <Route path="/chat" element={<Chat />} />
               </Routes>
             </Student.Provider>
           </>
