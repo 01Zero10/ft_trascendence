@@ -52,15 +52,19 @@ export default function ChannelStatus(props: any) {
 				<div style={{height:"30%", width:"100%", borderLeft:"5px solid #781C9C"}}></div>
 			</div>
 			<div style={{position:"relative", height:"92%", backgroundColor:"black", color:"white", width:"100%", borderLeft:"5px solid #781C9C", borderBottom:"5px solid #781C9C", borderBottomLeftRadius:" 15px"}}>
-				{props.room.name &&<div style={{width:"90%", height:"10%"}} onClick={() => navigate(("/users/" + props.room.builder.username))}>{props.room.builder.username}</div>}
+				{props.room.name &&<div style={{width:"90%", height:"10%"}} onClick={() => navigate(("/users/" + props.room.builder.username))}>
+					<Indicator color="green" size={12} processing>
+						{props.room.builder.username}
+					</Indicator>
+				</div>}
 				{props.room.name && props.members.map((element: string, id: number) => {return(
 					// \/
 					<div style={{width:"100%", height:"10%", display:"flex"}} key={id}>
 						<div style={{width:"80%", height:"10%"}} onClick={() => navigate(("/users/" + element))} >{element}</div>
-						<Indicator color="green" size={12} processing>
+						{/* <Indicator color="green" size={12} processing> */}
 							<div style={{width:"10%", height:"10%"}}>
 							</div>
-						</Indicator>
+						{/* </Indicator> */}
 						{(props.admins && props.admins.indexOf(element) !== -1) && <div style={{width:"10%", height:"10%"}}>admin</div>} 
 					</div>)})}
 			</div>
