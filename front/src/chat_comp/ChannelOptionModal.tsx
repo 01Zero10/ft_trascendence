@@ -62,7 +62,7 @@ export default function ChannelOptionModal(props: any) {
                     setOptionsFriends(fetchOptions);
                 })
         }
-        getListFriend();
+        getListFriend().then();
     }, [])
 
     async function getRoomAdmins() {
@@ -132,10 +132,7 @@ export default function ChannelOptionModal(props: any) {
         if (newOption.type === 'protected' && newOption.confirmPass === '') {
             return false;
         }
-        else if (newOption.type === 'protected' && newOption.confirmPass !== '' && newOption.confirmPass !== newOption.password)
-            return false;
-        else
-            return true;
+        else return !(newOption.type === 'protected' && newOption.confirmPass !== '' && newOption.confirmPass !== newOption.password);
     }
 
     async function handleButtonClick() {
@@ -178,7 +175,7 @@ export default function ChannelOptionModal(props: any) {
 
     useEffect( () =>
         {
-            getRoomAdmins()
+            getRoomAdmins().then()
         }
         , [props.room.name]
     )
@@ -201,6 +198,7 @@ export default function ChannelOptionModal(props: any) {
     }
 
     useEffect(() => {
+        //TODO: semplificare
         if (newOption.type !== props.room.type){
             if(newOption.type === "protected"){
                 if(newOption.password && newOption.password === newOption.confirmPass){
@@ -234,8 +232,6 @@ export default function ChannelOptionModal(props: any) {
             setBtnDisabled(true)
     }, [newOption]
     )
-
-    //console.log(admins)
 
     return (
         <Modal centered withCloseButton={false} closeOnClickOutside={false} zIndex={1500}
