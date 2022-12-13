@@ -8,12 +8,11 @@ import ChannelBodyStatus from "./chat_comp/ChannelBodyStatus"
 
 export default function Chat() {
 
+
 	const student = useContext(Student);
 	const [room, setRoom] = useState<Rooms>({ name: "", type: "", builder: { username: "" } })
 	const [chOptions, setChOptions] = useState<Rooms | null>(null)
-	const [input, setInput] = useState('');
-	const [opened, setOpened] = useState("")
-	const [createChan, setCreateChan] = useState(false)
+
 	const [socket, setSocket] = useState<Socket | null>(null);
 	useLayoutEffect(() => {
 	  if (student.id !== 0) {
