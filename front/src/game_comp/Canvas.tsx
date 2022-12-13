@@ -35,7 +35,8 @@ type MoveKey = {
 type Ball = {
   x: number
   y: number
-  radius: number
+  width: number
+  height: number
   dx: number
   dy: number
   direction: string | null
@@ -43,7 +44,7 @@ type Ball = {
 
 export default function Canvas(props: CanvasProps) {
   const defaultPlayer = { x: 0, y: 0, height: 70, width: 20 }
-  const defaultBall = { x: props.canvasWidth / 2, y: props.canvasHeight / 2, radius: 20, dx: 0, dy: 0, direction: props.ballDirection }
+  const defaultBall = { x: props.canvasWidth / 2, y: props.canvasHeight / 2, width: 30, height: 30, dx: 0, dy: 0, direction: props.ballDirection }
   const canvasRef = useRef<HTMLCanvasElement>(null);
   let context: CanvasRenderingContext2D | null = null;
   const [loader, setLoader] = useState<boolean>(true);
@@ -78,7 +79,7 @@ export default function Canvas(props: CanvasProps) {
 
   const drawBall = (context: CanvasRenderingContext2D, ball: Ball) => {
     context.beginPath()
-    context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
+    context.fillRect(ball.x, ball.y, ball.width, ball.height )
     context.closePath()
   }
 

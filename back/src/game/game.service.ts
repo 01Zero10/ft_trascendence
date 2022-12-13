@@ -18,7 +18,8 @@ type Player = {
 type Ball = {
     x: number
     y: number
-    radius: number
+    width: number
+    height
     dx: number
     dy: number
     //start: boolean
@@ -37,7 +38,7 @@ interface plRoom {
 const canvasHeight = 750
 const canvasWidth = 1500
 const defaultPlayer = { x: 0, y: 0, height: 150, width: 20, up: false, down: false }
-const defaultBall = { x: canvasWidth / 2, y: canvasHeight / 2, radius: 20, dx: 0, dy: 0, direction: "" }
+const defaultBall = { x: canvasWidth / 2, y: canvasHeight / 2, width: 20, height:20, dx: 0, dy: 0, direction: "" }
 const dir: Array<string> = ["l", "r"];
 const array_dir_y: Array<number> = [-3, 3];
 
@@ -172,7 +173,7 @@ export class GameService{
     async restart(namePlayRoom: string){
         this.mapPlRoom.get(namePlayRoom).leftPlayer = {...defaultPlayer, y: canvasHeight / 2 - defaultPlayer.height / 2},
         this.mapPlRoom.get(namePlayRoom).rightPlayer = {...defaultPlayer, x: canvasWidth - defaultPlayer.width, y: canvasHeight / 2 - defaultPlayer.height / 2}
-        this.ballDirectionAtRestart(namePlayRoom)
+        await this.ballDirectionAtRestart(namePlayRoom)
         return this.mapPlRoom.get(namePlayRoom);
     }
 
@@ -249,45 +250,47 @@ export class GameService{
     }
 
     async updateBall(namePlayRoom: string){
-        if ((this.mapPlRoom.get(namePlayRoom).ball.y + this.mapPlRoom.get(namePlayRoom).ball.radius) + this.mapPlRoom.get(namePlayRoom).ball.dy > canvasHeight || (this.mapPlRoom.get(namePlayRoom).ball.y - this.mapPlRoom.get(namePlayRoom).ball.radius) + this.mapPlRoom.get(namePlayRoom).ball.dy < 0) {
+        if((this.mapPlRoom.get(namePlayRoom).ball.y + this.mapPlRoom.get(namePlayRoom).ball.dy ))
+
+        if ((this.mapPlRoom.get(namePlayRoom).ball.y + this.mapPlRoom.get(namePlayRoom).ball.dy > canvasHeight || (this.mapPlRoom.get(namePlayRoom).ball.y + this.mapPlRoom.get(namePlayRoom).ball.height) + this.mapPlRoom.get(namePlayRoom).ball.dy < 0)) {
             this.mapPlRoom.get(namePlayRoom).ball.dy = -this.mapPlRoom.get(namePlayRoom).ball.dy
         }
-        if (this.mapPlRoom.get(namePlayRoom).ball.x + this.mapPlRoom.get(namePlayRoom).ball.dx < this.mapPlRoom.get(namePlayRoom).ball.radius) {
-            if (this.mapPlRoom.get(namePlayRoom).ball.y > this.mapPlRoom.get(namePlayRoom).leftPlayer.y + this.mapPlRoom.get(namePlayRoom).leftPlayer.width && 
-                this.mapPlRoom.get(namePlayRoom).ball.y < (this.mapPlRoom.get(namePlayRoom).leftPlayer.y + this.mapPlRoom.get(namePlayRoom).leftPlayer.height) + this.mapPlRoom.get(namePlayRoom).leftPlayer.width){
-                this.mapPlRoom.get(namePlayRoom).ball.dx = -this.mapPlRoom.get(namePlayRoom).ball.dx + 0.25
-                if (this.mapPlRoom.get(namePlayRoom).ball.dx > 20){
-                    this.mapPlRoom.get(namePlayRoom).ball.dx = 20
-                }
-            }
-            else {
-                this.mapPlRoom.get(namePlayRoom).ball.dx = 0
-                this.mapPlRoom.get(namePlayRoom).ball.dy = 0
-                this.mapPlRoom.get(namePlayRoom).rightPoint += 1
-                return 1;
-            //props.socket.emit("gol_right", { name: props.clientPaddle.playRoom })
-            // startBall() reset
-            }
-        }
-        if (this.mapPlRoom.get(namePlayRoom).ball.x + this.mapPlRoom.get(namePlayRoom).ball.dy > canvasWidth - this.mapPlRoom.get(namePlayRoom).ball.radius) {
-            if (this.mapPlRoom.get(namePlayRoom).ball.y > this.mapPlRoom.get(namePlayRoom).rightPlayer.y + this.mapPlRoom.get(namePlayRoom).rightPlayer.width && 
-                this.mapPlRoom.get(namePlayRoom).ball.y < (this.mapPlRoom.get(namePlayRoom).rightPlayer.y + this.mapPlRoom.get(namePlayRoom).rightPlayer.height) + this.mapPlRoom.get(namePlayRoom).rightPlayer.width){
-                this.mapPlRoom.get(namePlayRoom).ball.dx = -this.mapPlRoom.get(namePlayRoom).ball.dx - 0.25
-                if (this.mapPlRoom.get(namePlayRoom).ball.dx < -20){
-                    this.mapPlRoom.get(namePlayRoom).ball.dx = -20
-                }
-            }
-            else {
-                this.mapPlRoom.get(namePlayRoom).ball.dx = 0
-                this.mapPlRoom.get(namePlayRoom).ball.dy = 0
-                this.mapPlRoom.get(namePlayRoom).leftPoint += 1
-                return 2;
-            //props.socket.emit("gol_left", { name: props.clientPaddle.playRoom })
-            // startBall() reset
-            }
-        }
-        this.mapPlRoom.get(namePlayRoom).ball.x += this.mapPlRoom.get(namePlayRoom).ball.dx
-        this.mapPlRoom.get(namePlayRoom).ball.y += this.mapPlRoom.get(namePlayRoom).ball.dy
+        // if (this.mapPlRoom.get(namePlayRoom).ball.x + this.mapPlRoom.get(namePlayRoom).ball.dx < this.mapPlRoom.get(namePlayRoom).ball.radius) {
+        //     if (this.mapPlRoom.get(namePlayRoom).ball.y > this.mapPlRoom.get(namePlayRoom).leftPlayer.y + this.mapPlRoom.get(namePlayRoom).leftPlayer.width &&
+        //         this.mapPlRoom.get(namePlayRoom).ball.y < (this.mapPlRoom.get(namePlayRoom).leftPlayer.y + this.mapPlRoom.get(namePlayRoom).leftPlayer.height) + this.mapPlRoom.get(namePlayRoom).leftPlayer.width){
+        //         this.mapPlRoom.get(namePlayRoom).ball.dx = -this.mapPlRoom.get(namePlayRoom).ball.dx + 0.25
+        //         if (this.mapPlRoom.get(namePlayRoom).ball.dx > 20){
+        //             this.mapPlRoom.get(namePlayRoom).ball.dx = 20
+        //         }
+        //     }
+        //     else {
+        //         this.mapPlRoom.get(namePlayRoom).ball.dx = 0
+        //         this.mapPlRoom.get(namePlayRoom).ball.dy = 0
+        //         this.mapPlRoom.get(namePlayRoom).rightPoint += 1
+        //         return 1;
+        //     //props.socket.emit("gol_right", { name: props.clientPaddle.playRoom })
+        //     // startBall() reset
+        //     }
+        // }
+        // if (this.mapPlRoom.get(namePlayRoom).ball.x + this.mapPlRoom.get(namePlayRoom).ball.dy > canvasWidth - this.mapPlRoom.get(namePlayRoom).ball.radius) {
+        //     if (this.mapPlRoom.get(namePlayRoom).ball.y > this.mapPlRoom.get(namePlayRoom).rightPlayer.y + this.mapPlRoom.get(namePlayRoom).rightPlayer.width &&
+        //         this.mapPlRoom.get(namePlayRoom).ball.y < (this.mapPlRoom.get(namePlayRoom).rightPlayer.y + this.mapPlRoom.get(namePlayRoom).rightPlayer.height) + this.mapPlRoom.get(namePlayRoom).rightPlayer.width){
+        //         this.mapPlRoom.get(namePlayRoom).ball.dx = -this.mapPlRoom.get(namePlayRoom).ball.dx - 0.25
+        //         if (this.mapPlRoom.get(namePlayRoom).ball.dx < -20){
+        //             this.mapPlRoom.get(namePlayRoom).ball.dx = -20
+        //         }
+        //     }
+        //     else {
+        //         this.mapPlRoom.get(namePlayRoom).ball.dx = 0
+        //         this.mapPlRoom.get(namePlayRoom).ball.dy = 0
+        //         this.mapPlRoom.get(namePlayRoom).leftPoint += 1
+        //         return 2;
+        //     //props.socket.emit("gol_left", { name: props.clientPaddle.playRoom })
+        //     // startBall() reset
+        //     }
+        // }
+        // this.mapPlRoom.get(namePlayRoom).ball.x += this.mapPlRoom.get(namePlayRoom).ball.dx
+        // this.mapPlRoom.get(namePlayRoom).ball.y += this.mapPlRoom.get(namePlayRoom).ball.dy
         return 0;
     }
 
