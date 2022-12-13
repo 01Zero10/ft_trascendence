@@ -1,4 +1,4 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { forwardRef, Inject, Injectable, Logger } from "@nestjs/common";
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer, 
   OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, WsResponse} from "@nestjs/websockets";
 import {RoomMessages} from "./roomsMessages.entity"
@@ -10,7 +10,9 @@ import { GameService } from "src/game/game.service";
 @WebSocketGateway({ cors: true, namespace: '/chat' })
 @Injectable()
 export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-  constructor(private chatService: ChatService,
+  constructor(
+    //@Inject(forwardRef(() => GameService)) private readonly gameService: GameService
+    @Inject(forwardRef(() => ChatService)) private chatService: ChatService,
             private userService: UserService,
           ){}
 
@@ -61,6 +63,10 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   handleUpdateListChannel(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {type: string}): any {
     this.server.emit('update', data.type);
     return data.type;
+  }
+
+  async handleUpdateListMembers(channelName: string){
+    this.server.to(channelName).emit('updateListMembers');
   }
 
   @SubscribeMessage('leaveRoom')

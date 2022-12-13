@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Socket } from 'socket.io';
 import { User } from 'src/user/user.entity';
@@ -10,6 +10,7 @@ import { BanOrMute } from './banOrMute.entity';
 import { createCipheriv, scrypt, randomBytes} from 'crypto';
 import { promisify } from 'util';
 import { channel } from 'diagnostics_channel';
+import { ChatGateWay } from './chat.gateway';
 
 @Injectable()
 export class ChatService {
@@ -18,7 +19,8 @@ export class ChatService {
         @InjectRepository(PrivateMessages) private privateMessagesRepository: Repository<PrivateMessages>,
         @InjectRepository(User) private userRepository: Repository<User>,
         @InjectRepository(Rooms) private roomsRepository: Repository<Rooms>,
-        @InjectRepository(BanOrMute) private banOrMuteRepository: Repository<BanOrMute>,    ) {}
+        @InjectRepository(BanOrMute) private banOrMuteRepository: Repository<BanOrMute>,
+        @Inject(forwardRef(() => ChatGateWay)) private readonly chatGateway: ChatGateWay    ) {}
 
     //Getters
 
@@ -280,7 +282,10 @@ export class ChatService {
             updatingMembers.push(await this.userRepository.findOne({ where: { username: element} }))
         }))
         room.members = updatingMembers;
-        return await this.roomsRepository.save(room);
+        await this.roomsRepository.save(room);
+        console.log("entratissimo")
+        await this.chatGateway.handleUpdateListMembers(nameChannel);
+        //return await this.roomsRepository.save(room);
     }
     
     //Removers
@@ -350,6 +355,8 @@ export class ChatService {
         //if se membro
         else
             await this.removeUser(nameChannel, exMember);
+        await this.chatGateway.handleUpdateListMembers(nameChannel);
+        //this.chatGateway.handleUpdateListMembers(nameChannel);
     }
 
     async kickUsers(users: string[], channelName: string){
