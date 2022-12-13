@@ -1,10 +1,16 @@
 import { Indicator } from "@mantine/core";
-import React, { useEffect, useLayoutEffect } from "react"
+import React, { useEffect, useLayoutEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import "./ChannelStatus_style.css"
 
 export default function ChannelStatus(props: any) {
 	const navigate = useNavigate()
+	const [online, setOnline] = useState("red");
+
+	// useEffect(() => {
+	// 	setOnline("green");
+	// },[])
+
 
 	async function getChannelMembers() {
 		const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/allmembers/${props.room.name}`;
@@ -40,6 +46,12 @@ export default function ChannelStatus(props: any) {
     }
 
 	useEffect(() => {
+		props.socket?.on('updateListMembers', async() => {
+				await getChannelMembers();
+		});
+	}, [props.socket, props.members]);
+
+	useEffect(() => {
 		props.socket?.on('updateListMembers', async(nameChannel: string) => {
 			if (props.room.name == nameChannel)
 				await getChannelMembers();
@@ -60,18 +72,17 @@ export default function ChannelStatus(props: any) {
 			</div>
 			<div style={{position:"relative", height:"92%", backgroundColor:"black", color:"white", width:"100%", borderLeft:"5px solid #781C9C", borderBottom:"5px solid #781C9C", borderBottomLeftRadius:" 15px"}}>
 				{props.room.name &&<div style={{width:"90%", height:"10%"}} onClick={() => navigate(("/users/" + props.room.builder.username))}>
-					<Indicator color="green" size={12} processing>
+					<Indicator color={online} size={12} processing>
 						{props.room.builder.username}
 					</Indicator>
 				</div>}
 				{props.room.name && props.members.map((element: string, id: number) => {return(
 					// \/
 					<div style={{width:"100%", height:"10%", display:"flex"}} key={id}>
-						<div style={{width:"80%", height:"10%"}} onClick={() => navigate(("/users/" + element))} >{element}</div>
-						{/* <Indicator color="green" size={12} processing> */}
-							<div style={{width:"10%", height:"10%"}}>
-							</div>
-						{/* </Indicator> */}
+						<div style={{width:"90%", height:"10%"}} onClick={() => navigate(("/users/" + element))} >{element}</div>
+						<Indicator color={online} size={12} processing>
+							<div style={{width:"10%", height:"10%"}}></div>
+						</Indicator>
 						{(props.admins && props.admins.indexOf(element) !== -1) && <div style={{width:"10%", height:"10%"}}>admin</div>} 
 					</div>)})}
 			</div>
