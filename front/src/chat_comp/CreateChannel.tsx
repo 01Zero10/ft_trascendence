@@ -15,6 +15,7 @@ export interface NewChannel {
     builder: string,
     nameGroup: string,
     members: string[],
+    admin: string[],
     type: string,
     password: string,
     confirmPass: string
@@ -46,6 +47,7 @@ export default function CreateChannel(props: any) {
         builder: contextData.username,
         nameGroup: '',
         members: [],
+        admin:[],
         type: 'public',
         password: '',
         confirmPass: ''
@@ -75,9 +77,9 @@ export default function CreateChannel(props: any) {
     }, [])
 
     function changeType(value: string) {
-        setNewOption((prevChOptions: NewChannel) => {
+        setNewOption((prevNewOptions: NewChannel) => {
             return ({
-                ...prevChOptions,
+                ...prevNewOptions,
                 type: value,
                 password: '',
                 confirmPass: ''
@@ -86,36 +88,36 @@ export default function CreateChannel(props: any) {
     }
 
     function changeName(name: string) {
-        setNewOption((prevChOptions: NewChannel) => {
+        setNewOption((prevNewOptions: NewChannel) => {
             return ({
-                ...prevChOptions,
+                ...prevNewOptions,
                 nameGroup: name
             })
         })
     }
 
     function changePassword(pass: string) {
-        setNewOption((prevChOptions: NewChannel) => {
+        setNewOption((prevNewOptions: NewChannel) => {
             return ({
-                ...prevChOptions,
+                ...prevNewOptions,
                 password: pass
             })
         })
     }
 
     function changeConfirmPass(pass: string) {
-        setNewOption((prevChOptions: NewChannel) => {
+        setNewOption((prevNewOptions: NewChannel) => {
             return ({
-                ...prevChOptions,
+                ...prevNewOptions,
                 confirmPass: pass
             })
         })
     }
 
     function changeMembers(membersList: string[]) {
-        setNewOption((prevChOptions: NewChannel) => {
+        setNewOption((prevNewOptions: NewChannel) => {
             return ({
-                ...prevChOptions,
+                ...prevNewOptions,
                 members: membersList,
             })
         })
@@ -125,10 +127,7 @@ export default function CreateChannel(props: any) {
         if (newOption.type === 'protected' && newOption.confirmPass === '') {
             return false;
         }
-        else if (newOption.type === 'protected' && newOption.confirmPass !== '' && newOption.confirmPass !== newOption.password)
-            return false;
-        else
-            return true;
+        else return !(newOption.type === 'protected' && newOption.confirmPass !== '' && newOption.confirmPass !== newOption.password);
     }
 
 
@@ -157,8 +156,6 @@ export default function CreateChannel(props: any) {
                 password: ''
             })
         })
-    	//console.log("sono passato di qui")
-        //props.setCreateChan(false)
         props.setNewChannel(false)
     }
 

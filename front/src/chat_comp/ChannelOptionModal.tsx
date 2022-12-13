@@ -16,6 +16,7 @@ export default function ChannelOptionModal(props: any) {
         builder: contextData.username,
         nameGroup: "",
         members: [],
+        admin: [...props.admins],
         type: props.room.type,
         password: '',
         confirmPass: ''
@@ -43,7 +44,7 @@ export default function ChannelOptionModal(props: any) {
     const [newOption, setNewOption] = useState<NewChannel>({...newOption_basic});
     const [btnDisabled, setBtnDisabled] = useState(true)
     const [visible, { toggle }] = useDisclosure(false);
-    const [admins, setAdmins] = useState<string[]>([])
+    //const [admins, setAdmins] = useState<string[]>([])
     const [optionsFriends, setOptionsFriends] = useState<{ value: string, label: string }[]>([{ value: "", label: "" }]);
 
     useEffect(() => {
@@ -75,7 +76,7 @@ export default function ChannelOptionModal(props: any) {
                 let iMember: string = element.username
                 fetchAdmins.push(iMember);
             }))
-            setAdmins(fetchAdmins);
+            props.setAdmins(fetchAdmins);
         }
 	}
 
@@ -125,6 +126,20 @@ export default function ChannelOptionModal(props: any) {
             })
         });
         setBtnDisabled(false);
+    }
+
+    function changeAdmin(adminList: string[]) {
+        setNewOption((prevChOptions: NewChannel) => {
+            return ({
+                ...prevChOptions,
+                admin: adminList,
+            })
+        });
+        setBtnDisabled(true);
+        for (let element of newOption.admin) {
+            if (props.admins.indexOf(element) === -1)
+                setBtnDisabled(false)
+        }
     }
 
 
@@ -181,24 +196,22 @@ export default function ChannelOptionModal(props: any) {
     )
 
     function handleAdminsChange(value: string[]){
-        let tmp = [...admins]
+        let tmp = [...newOption.admin]
         for (let element of value) {
-            let indx = admins.indexOf(element)
+            let indx = newOption.admin.indexOf(element)
             if (indx === -1)
                 tmp.push(element);
         }
-        for (let element of admins){
+        for (let element of newOption.admin){
             let indx = value.indexOf(element)
             if (indx === -1)
                 tmp.splice(tmp.indexOf(element), 1)
         }
         props.setAdmins(tmp)
-        console.log(1);
-        setBtnDisabled(false)
     }
 
     useEffect(() => {
-        //TODO: semplificare
+        //TODO: collegare tutte le protezioni
         if (newOption.type !== props.room.type){
             if(newOption.type === "protected"){
                 if(newOption.password && newOption.password === newOption.confirmPass){
@@ -230,6 +243,8 @@ export default function ChannelOptionModal(props: any) {
         }
         if(newOption.nameGroup === "")
             setBtnDisabled(true)
+        if(newOption.members.length !== 0)
+            setBtnDisabled(false)
     }, [newOption]
     )
 
@@ -349,7 +364,7 @@ export default function ChannelOptionModal(props: any) {
                         </MultiSelect>}
                         {props.modalTypeOpen === "options" && <MultiSelect style={{ width:"90%", margin:"auto"}} 
                             data={props.members}
-                            value={props.admins}
+                            value={newOption.admin}
                             placeholder={"Select Admins"}
                             searchable
                             dropdownPosition="bottom"
