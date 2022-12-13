@@ -7,6 +7,10 @@ import { useParams } from "react-router-dom";
 import { AddCircle, Block, CheckCircle, Close, Done, EmojiEvents, HourglassTop, PersonAddAlt1, PersonRemove } from "@mui/icons-material";
 import Tabs from '@mui/material/Tabs';
 
+import { red } from "@mui/material/colors";
+import { FocusTrap } from "@mantine/core";
+
+
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
     backgroundColor: '#44b700',
@@ -159,7 +163,7 @@ function Account() {
   const { user_id } = useParams();
 
   useEffect(() => {
-    console.log('user_id: ', user_id);
+    //console.log('user_id: ', user_id);
   }, [user_id])
 
   useEffect(() => {
@@ -170,7 +174,7 @@ function Account() {
       })
         .then((response) => response.json())
         .then((result) => {
-          console.log(result);
+          //console.log(result);
           setClient({
             id: result.id,
             username: result.username,
@@ -219,7 +223,7 @@ function Account() {
   /*   const ciao = useParams<"user_id">();
 
     useEffect(() => {
-      console.log(ciao);
+      //console.log(ciao);
     }, [ciao]) */
 
   //PROVA ALERT PER RICHIESTA
@@ -307,7 +311,7 @@ function Account() {
 
     useEffect(() => {
       async function getMatches() {
-        console.log(MATCH_API);
+        //console.log(MATCH_API);
         let response = await fetch(MATCH_API);
         let data = await response.json();
         let fetchMatches: Match[] = [];
@@ -320,7 +324,7 @@ function Account() {
       }
       getMatches();
     }, [props.client])
-    console.log(matches);
+    //console.log(matches);
 
     return (
       <>

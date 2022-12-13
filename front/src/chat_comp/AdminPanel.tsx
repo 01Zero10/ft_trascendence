@@ -1,8 +1,23 @@
-import { Button, Input, NumberInput, SegmentedControl, TextInput, TransferList, TransferListData } from "@mantine/core";
+import {
+	Box,
+	Button, FocusTrap,
+	Input,
+	Modal, MultiSelect,
+	NumberInput, PasswordInput,
+	ScrollArea,
+	SegmentedControl, Tabs,
+	TextInput,
+	TransferList,
+	TransferListData
+} from "@mantine/core";
 import { IconAt, IconClock } from "@tabler/icons";
 import React, { SetStateAction, useEffect, useLayoutEffect, useState } from "react"
 
 export default function AdminPanel(props: any) {
+	const tabStyle = {
+		color:"#781C9C",
+		fontWeight:"bold",
+	}
 
 	/*TODO: implementare bene con owner
 	con il pulsante admin la stanza e' sbagliata*/
@@ -13,6 +28,7 @@ export default function AdminPanel(props: any) {
 	//variabili
 	const [action, setAction] = useState<string>('ban');
 	const [data, setData] = useState<TransferListData>([[], []]);
+	// const [members, setMembers] = useState<string[]>([])
 	const [limitedUsers, setLimitedUsers] = useState<{
 		value: string;
 		label: string;
@@ -24,6 +40,23 @@ export default function AdminPanel(props: any) {
 
 	const [time, setTime] = useState<number | undefined>(undefined);
 	const [reason, setReason] = useState<string>('');
+
+
+	// async function getChannelMembers() {
+	// 	const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/allmembers/${props.room.name}`;
+	// 	if (props.room.name !== '') {
+	// 		let response = await fetch(API_GET_MEMBERS);
+	// 		let data = await response.json();
+	// 		//console.log("data: ", data)
+	// 		let fetchMember: string[] = [];
+	// 		await Promise.all(await data?.map(async (element: any) => {
+	// 			let iMember:string = element.nickname;
+	// 			fetchMember.push(iMember);
+	// 		}))
+	// 		setMembers(fetchMember);
+	// 	}
+	// }
+
 
 
 	useLayoutEffect(() => {
@@ -67,7 +100,7 @@ export default function AdminPanel(props: any) {
 		if (props.room.name != '') {
 			let response = await fetch(API_GET_MUTED);
 			let data = await response.json();
-		  console.log("muuuuuuuuted banned = ", data);
+		  //console.log("muuuuuuuuted banned = ", data);
 			let fetchMuted: {
 				value: string;
 				label: string;
@@ -88,10 +121,10 @@ export default function AdminPanel(props: any) {
 
 	async function getBanned() {
 		const API_GET_BANNED = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getBannedUsers/${props.room.name}`;
-		if (props.room.name != '') {
+		if (props.room.name !== '') {
 			let response = await fetch(API_GET_BANNED);
 			let data = await response.json();
-			console.log("daaaaaata banned = ", data);
+			// console.log("daaaaaata banned = ", data);
 			let fetchBanned: {
 				value: string;
 				label: string;
@@ -120,7 +153,7 @@ export default function AdminPanel(props: any) {
 				body: JSON.stringify({ channelName: props.room.name, mode: action }),
 			});
 			let data = await response.json();
-			console.log("daaaaaata options = ", data);
+			// console.log("daaaaaata options = ", data);
 			let fetchOptions: {
 				value: string;
 				label: string;
@@ -192,59 +225,126 @@ export default function AdminPanel(props: any) {
 
 	//
 
-	return (
-		<div className={"owner-panel"}>
-			<div className="mute-ban-text">Mute or ban someone in {props.room.name}</div>
-			<SegmentedControl
-				value={action}
-				onChange={setAction}
-				fullWidth
-				color="grape"
-				radius={"xl"}
-				transitionDuration={350}
-				data={[
-					{ label: 'Ban', value: 'ban' },
-					{ label: 'Mute', value: 'mute' },
-					{ label: 'Kick', value: 'kick' },
-				]}
-			/>
-			<TransferList
-				style={{ transition: "0" }}
-				showTransferAll={false}
-				value={data}
-				nothingFound="No one here"
-				searchPlaceholder="Search..."
-				breakpoint="sm"
-				onChange={setData}
-				radius={"md"}
-			/>
-			<div className="mute-ban-text">Choose a duration (in seconds)</div>
-			<NumberInput
-				icon={<IconClock />}
-				placeholder="For how long?.."
-				radius="lg"
-				value={time}
-				onChange={(val) => setTime(val)}
-				step={10}
-				min={10}
-			/>
-			<TextInput
-				radius="lg"
-				placeholder="What's the reason?"
-				value={reason}
-				onChange={(e) => setReason(e.target.value)}
-			/>
-			<br />
-			<Button
-				type="button"
-				radius="lg"
-				size="sm"
-				fullWidth
-				color="grape"
-				onClick={handleMuteBan}
-			//disabled={!checkSettings()}
-			>Confirm
-			</Button>
-		</div>
+	//console.log(members)
+	return (<>
+			<Modal centered withCloseButton={false} closeOnClickOutside={false} zIndex={1500}
+				   styles={(root) => ({
+					   inner:{
+						   backgroundColor: 'transparent',
+					   },
+					   modal: {
+						   backgroundColor: 'transparent',
+						   display: "flex",
+						   flexDirection:"column" ,
+						   alignItems:"center",
+						   justifyContent:"center",
+						   margin: 0,
+					   },
+					   body:{
+						   width:"100%",
+						   height:"80%",
+						   backgroundColor: 'transparent',
+						   textAlign: 'center',
+					   },
+				   })}
+				   opened={props.opened} onClose={ () => props.setModalTypeOpen(null) }>
+				<div>
+					<div style={{width:"100%"}}>
+						{props.modalTypeOpen === "options" &&
+							<SegmentedControl style={{width:"100%",height: "50px"}} value={""} data={[]} onChange={() => {}}
+						 styles={() => ({
+							 root: {
+								 backgroundColor:"transparent",
+							 },
+							 control: {
+								 margin:"auto 2% auto",
+								 height: "100%",
+								 border:"0",
+								 outline: "none",
+								 backgroundColor: "#781C9C",
+								 cursor: "pointer",
+								 position: "relative",
+								 color: "#fafafa",
+								 clipPath: "polygon(92% 0, 100% 25%, 100% 100%, 8% 100%, 0% 75%, 0 0)",
+								 '&:not(:first-of-type)':{
+									 border: "none",
+								 }
+							 },
+							 active: {
+								 backgroundColor:"transparent",
+							 },
+							 label: {
+								 display: "flex",
+								 alignItems: "center",
+								 justifyContent: "center",
+								 position: "absolute",
+								 fontFamily: "'Tomorrow', sans-serif",
+								 fontSize: "0.95rem",
+								 top: "2px",
+								 left: "2px",
+								 right: "2px",
+								 bottom: "2px",
+								 backgroundColor: "#050a0e",
+								 clipPath: "polygon(92% 0, 100% 25%, 100% 100%, 8% 100%, 0% 75%, 0 0)",
+								 '&:hover':{
+									 color:"#fafafa",
+									 backgroundColor: "#050a0ec6",
+								 }
+							 },
+							 labelActive:{
+								 color: "#fafafa !important",
+							 },
+							 controlActive:{
+								 backgroundColor: "#fafafa"
+							 }
+						 })}/>}
+					</div>
+					<img src="/account_decoration_top.svg" alt="" />
+					{props.modalTypeOpen === "options" && <div className="search_container">
+						<input  className="search_input"
+								placeholder={props.room.name}
+								type="text"
+								autoComplete="off"
+								value={""}
+								// onChange={(e) => changeName(e.target.value)}
+						/>
+					</div>}
+					<Tabs
+						keepMounted={false}
+						variant={"default"}
+						radius="xs"
+						color={"grape"}
+						defaultValue={"ban"}
+						style={{position:"relative", height:"90%"}}>
+						<Tabs.List>
+							<Tabs.Tab style={tabStyle} value={"ban"}>BAN</Tabs.Tab>
+							<Tabs.Tab style={tabStyle} value={"mute"}>MUTE</Tabs.Tab>
+							<Tabs.Tab style={tabStyle} value={"kick"}>KICK</Tabs.Tab>
+						</Tabs.List>
+						<Tabs.List>
+							<Tabs.Tab style={tabStyle} value={"unban"}>UNBAN</Tabs.Tab>
+							<Tabs.Tab style={tabStyle} value={"unmute"}>UNMUTE</Tabs.Tab>
+						</Tabs.List>
+						<img style={{rotate:"180deg"}}src="/account_decoration_down.svg" alt="" />
+						<Tabs.Panel style={{color:"white"}} value={"ban"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"mute"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"kick"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"unban"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"unmute"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
+					</Tabs>
+					{/*<img src="/account_decoration_down.svg" alt="" />*/}
+					<Box>
+						{<button className="btn_createChannel">
+							<div className="btn__content_createChannel">{props.modalTypeOpen !== "add" ? "Confirm" : "Add Members"}</div>
+						</button>}
+					</Box>
+					<Box>
+						<button className="btn_close" onClick={() => props.setModalTypeOpen(null)}>
+							<div className="btn_close__content">Close</div>
+						</button>
+					</Box>
+				</div>
+			</Modal>
+		</>
 	)
 }

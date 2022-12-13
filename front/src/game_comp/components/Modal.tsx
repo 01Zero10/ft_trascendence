@@ -12,6 +12,8 @@ export interface RunningMatches {
   typo: string;
   player1: string;
   player2: string;
+  avatar1?: string;
+  avatar2?: string;
 }
 
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
@@ -69,8 +71,9 @@ function Demo(props: any) {
   }, [])
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", alignContent: "center" }}>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection:"column" }}>
       <Select
+      style={{width:"50%", height:"70px"}}
         placeholder="Pick one"
         variant='unstyled'
         transition={"scale-y"}
@@ -89,7 +92,7 @@ function Demo(props: any) {
           }
         })}
       />
-      <Button>
+      <Button style={{width:"35%", height:"30px"}}>
         Confirm
       </Button>
     </div>
@@ -99,23 +102,9 @@ function Demo(props: any) {
 function RunningMatchesList(props: any){
   const [runningMatches, setRunningMatches] = useState<RunningMatches[]>([])
 
-  const runningMatchesList_style_container = {
-    display:"flex",
-    width:"80%",
-    borderRadius:"5px", 
-    backgroundColor:"red", 
-    margin:"0 auto 2%",
-    justifyContent:"center",
-    alignItems:"center"
-  }
-
-  const runningMatchesList_style = {
-    fontSize: "1.15rem"
-  }
-
   useEffect(() => {
     async function getRunningMatches() {
-      console.log(`http://${process.env.REACT_APP_IP_ADDR}:3001/game/get${props.typo}RunningMatches`)
+      //console.log(`http://${process.env.REACT_APP_IP_ADDR}:3001/game/get${props.typo}RunningMatches`)
       let response = await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/game/get${props.typo}RunningMatches`);
       let data = await response.json();
       let fetchRunningMatches: RunningMatches[] = [];
@@ -125,6 +114,8 @@ function RunningMatchesList(props: any){
           typo: props.typo,
           player1: element.player1,
           player2: element.player2,
+          avatar1: element.avatar1,
+          avatar2: element.avatar2,
         }
         fetchRunningMatches.push(iRunningMatches);
       }))
@@ -136,11 +127,17 @@ function RunningMatchesList(props: any){
   return (
     <>
     { runningMatches.map(function(element: any){
-        console.log(element)
+        //console.log(element)
         return (
 
-          <div style={runningMatchesList_style_container} key={element.playRoom}>
-            <div style={runningMatchesList_style}>{element.player1} VS {element.player2}</div>
+          <div className="running_matches_holder" key={element.playRoom}>
+              <div className="running_matches">
+                <Avatar radius={10} style={{marginRight:"1%"}} src={element.avatar1}></Avatar> 
+                  {element.player1} 
+                  VS 
+                  {element.player2} 
+                <Avatar radius={10} style={{marginLeft:"1%"}} src={element.avatar2}></Avatar>
+              </div>
           </div>
         )
       }
@@ -150,6 +147,7 @@ function RunningMatchesList(props: any){
 }
 
 export function ClassicModal(props: any) {
+  
 
   const contextData = useContext(Student)
 
@@ -162,9 +160,10 @@ export function ClassicModal(props: any) {
         </div>
       </div>
       <div className="grid_item_2">
+        <Demo client={contextData.username} setGameOptions={props.setGameOptions}/>
       </div>
-      <div className="grid_item_3"> LISTA PARTITE IN CORSO<RunningMatchesList typo={props.typo}/></div>
-      <Demo client={contextData.username} setGameOptions={props.setGameOptions} />
+      <div className="grid_item_3"> LISTA PARTITE IN CORSO <RunningMatchesList typo={props.typo}/>
+      </div>
     </div>
   )
 }

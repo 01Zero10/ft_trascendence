@@ -59,7 +59,7 @@ export class GameService{
     }
 
     async getClassicRunningMatches(){
-        console.log('get services')
+        //console.log('get services')
         return await this.runningMatches
         .createQueryBuilder('match')
         .where({typo: 'classic'})
@@ -98,7 +98,7 @@ export class GameService{
     }
 
     async handleLeaveQueue(client: string){
-        console.log('cclient1 ', client);
+        //console.log('cclient1 ', client);
         
         let playRoom = await this.runningMatches
         .createQueryBuilder()
@@ -114,7 +114,7 @@ export class GameService{
     }
 
     async handleLeavePlayRoom(client: string){
-        console.log('cclient2 ', client);
+        //console.log('cclient2 ', client);
 
         // let playRoom = await this.runningMatches
         // .findOne({ where : [{player1: client}, {player2: client}]});
@@ -124,7 +124,9 @@ export class GameService{
         .where("playroom.player1 = :client_n", { client_n: client })
         .orWhere("playroom.player2 = :client_n", { client_n: client })
         .getOne()
+
         console.log('p-p-pl = ', playRoom);
+
         if (playRoom)
         {
             clearInterval(this.mapPlRoom.get(playRoom.playRoom).idInterval)

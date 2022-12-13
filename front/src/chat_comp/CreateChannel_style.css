@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Tomorrow:wght@400;700&display=swap');
+
+.btn_createChannel {
+  width: 100%;
+  height: 60px; 
+  border: 0;
+  outline: none;
+  background-color: var(--purple-color);
+  cursor: pointer;
+  position: relative;
+  color: var(--white-color);
+  clip-path: polygon(92% 0, 100% 25%, 100% 100%, 8% 100%, 0% 75%, 0 0);
+  z-index: 1;
+  margin: 5% auto auto;
+}
+
+.btn__content_createChannel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  font-family: 'Tomorrow', sans-serif;
+  font-size: 1.15rem;
+  text-transform: uppercase;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  background-color: black;
+  clip-path: polygon(92% 0, 100% 25%, 100% 100%, 8% 100%, 0% 75%, 0 0);
+  z-index: 2;
+}
+
+.btn_createChannel:hover {
+  background-color: var(--white-color);
+}
+
+.btn_createChannel:hover .btn__content_createChannel {
+  background-color: var(--black-light-color);
+  color: var(--white-color);
+}
+
+/*	CREA NOME CANALE */
+
+.search_container {
+	margin: 10px auto -10px;
+}
+
+.search_input {
+	width: 90%;
+	outline: none;
+	border: none;
+	border-style: none;
+	border-radius: 0px;
+	background-color: transparent;
+	font-family: 'Smooch Sans', sans-serif;
+	letter-spacing: 0.15em;
+	font-size: 1.5rem;
+	color: white;
+}
+
+ .search_input::placeholder {
+	background-color: transparent;
+	color: rgba(255, 255, 255, 0.493);
+	font-size: 1.5rem;
+	letter-spacing: 0.15em;
+	font-weight: 400;
+}
+
+
+.search_input:focus {
+	border-style: none;
+	border: none;
+	border-radius: 0px;
+	background-color: transparent;
+	font-family: 'Smooch Sans', sans-serif;
+	letter-spacing: 0.15em;
+	font-size: 1.5rem;
+	color: white;
+}

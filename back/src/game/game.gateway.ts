@@ -28,7 +28,7 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   async handleDisconnect(clientSocket: Socket) {
       this.logger.log(`disconesso dal GAME namespace ${clientSocket.id}`);
       const client = String(clientSocket.handshake.query.username);
-      console.log('cclient0 ', client);
+      //console.log('cclient0 ', client);
       this.gameService.handleLeaveQueue(client);
       //const ret = await this.gameService.handleLeaveQueue(client);
       //console.log('retttt = ', ret);
@@ -73,7 +73,7 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   @SubscribeMessage('setStart')
   async handleSetStart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, rightPlayer: string, leftPlayer: string}){
-    console.log("start = ", data);
+    //console.log("start = ", data);
     const roomInMap = await this.gameService.generateBallDirection(data.namePlayRoom);
     //console.log("romminmap ", roomInMap);
     this.server.to(data.namePlayRoom).emit('start', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
@@ -86,13 +86,13 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   @SubscribeMessage('restart')
   async handleRestart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, rightPlayer: string, leftPlayer: string}){
     //console.log(clientSocket.id)
-    console.log('loooooog', data)
+    //console.log('loooooog', data)
     this.startTick(data);
   }
 
   async handleLeftGame(namePlayRoom: string){
-    console.log('handle left game');
-    console.log(namePlayRoom);
+    //console.log('handle left game');
+    //console.log(namePlayRoom);
     this.server.to(namePlayRoom).emit('endGame', 'left');
   }
 
@@ -102,7 +102,7 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
       let roomInMap = await this.gameService.updatePlayer(data.namePlayRoom);
       const restart = await this.gameService.updateBall(data.namePlayRoom);
       if (restart){
-        console.log("dataTick ", data);
+        //console.log("dataTick ", data);
         roomInMap = await this.gameService.restart(data.namePlayRoom);
         this.server.to(data.namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
         if (roomInMap.leftPoint !== 3 && roomInMap.rightPoint !== 3)

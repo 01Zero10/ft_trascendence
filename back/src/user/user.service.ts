@@ -285,7 +285,7 @@ export class UserService {
     .andWhere("request.sender != :sender_n", { sender_n: client })
     .getMany()
 
-    console.log(arrayRequest);
+    //console.log(arrayRequest);
     const response: FriendListItem[] = [];
     if (arrayRequest && arrayRequest.length > 0)
     {
@@ -318,12 +318,18 @@ export class UserService {
   }
 
   async setOnlineStatus(userID: string){
-      await this.setOfflineStatus(userID);
-      const newbie = this.onlineRepository.create();
-      const user = await this.userRepository.findOne({where: {id: Number(userID)}})
-      newbie.user = user;
-      newbie.status = 'online'
-      return await this.onlineRepository.save(newbie);
+
+    const client = await this.getById(Number(userID));
+    await this.setOfflineStatus(userID);
+    //console.log(userID);
+    if (client){
+    const newbie = this.onlineRepository.create();
+    newbie.id = Number(userID)
+    newbie.status = 'online'
+    newbie.user = client;
+    return await this.onlineRepository.save(newbie);
+    }
+
   }
 
   async setOfflineStatus(userID: string){
@@ -338,7 +344,7 @@ export class UserService {
   }
 
   async getOnlineFriends(client: string){
-    console.log("help", client)
+    //console.log("help", client)
     const clientFriends = (await this.getByUsername(client)).friends;
     const onlineFriends = await this.onlineRepository
     .createQueryBuilder('online')

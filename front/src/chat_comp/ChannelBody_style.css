@@ -1,0 +1,71 @@
+.channelNavContainer {
+	position: relative;
+	height: 8%;
+	width: 100%;
+	background: black;
+}
+
+.channelNavTopBar {
+	position: relative;
+	height: 70%;
+	width: 100%;
+	background: transparent;
+	display: flex;
+	flex-direction: row;
+}
+
+.channelTitleContainer {
+	position: relative;
+	height: 100%;
+	width: 40%;
+	background: black;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.channelTitleBox {
+	width: 100%;
+	height: 100%; 
+	border: 0;
+	outline: none;
+	background-color: var(--purple-color);
+	position: relative;
+	color: var(--white-color);
+	clip-path: polygon(92% 0, 100% 25%, 100% 100%, 8% 100%, 0% 75%, 0 0);
+	z-index: 1;
+}
+
+.channelTitleContent{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	font-family: 'Tomorrow', sans-serif;
+	font-size: 1.50rem;
+	text-transform: uppercase;
+	top: 2px;
+	left: 2px;
+	right: 2px;
+	bottom: 2px;
+	background-color: black;
+	color: var(--white-color);
+	clip-path: polygon(92% 0, 100% 25%, 100% 100%, 8% 100%, 0% 75%, 0 0);
+	z-index: 2;
+}
+
+.channelOptionBar {
+	position: relative;
+	height: 100%;
+	width: 30%;
+	background: black;
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+	border-bottom: 2px solid var(--purple-color);
+}
+
+.nonServoANiente {
+	width: 30%;
+	border-top: 2px solid var(--purple-color);
+}

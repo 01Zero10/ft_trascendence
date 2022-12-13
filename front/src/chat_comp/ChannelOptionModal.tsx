@@ -1,28 +1,26 @@
-import { BackgroundImage, Box, Button, Center, createStyles, Divider, FocusTrap, Input, Modal, MultiSelect, PasswordInput, SegmentedControl, Slider, Stack, TextInput } from "@mantine/core"
+import { Box, Center, FocusTrap, Modal, MultiSelect, PasswordInput, SegmentedControl } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { red } from "@mui/material/colors";
-import { width } from "@mui/system";
-import { IconLock, IconPassword, IconShield, IconWorld } from "@tabler/icons";
-import { notDeepEqual } from "assert";
-import { url } from "inspector";
-import { type } from "os";
-import { stringify } from "querystring";
-import React, { useContext, useEffect, useState} from "react"
+import { PropaneSharp, Tune } from "@mui/icons-material";
+import { IconLock, IconShield, IconWorld } from "@tabler/icons";
+import React, { useContext, useEffect, useState } from "react"
 import { Student } from "../App";
-import "./CreateChannel_style.css"
+import { NewChannel } from "./CreateChannel";
+import "./ChannelOptionModal_stye.css"
 
-export interface NewChannel {
-    builder: string,
-    nameGroup: string,
-    members: string[],
-    admin: string[],
-    type: string,
-    password: string,
-    confirmPass: string
-}
 
-export default function CreateChannel(props: any) {
+
+
+export default function ChannelOptionModal(props: any) {
     const contextData = useContext(Student);
+    const newOption_basic = {
+        builder: contextData.username,
+        nameGroup: "",
+        members: [],
+        admin: [...props.admins],
+        type: props.room.type,
+        password: '',
+        confirmPass: ''
+    }
     const controlData = [
         { label: (
             <Center>
@@ -43,18 +41,10 @@ export default function CreateChannel(props: any) {
             </Center>
           ), value: 'private' },
     ]
-    const [newOption, setNewOption] = useState<NewChannel>({
-        builder: contextData.username,
-        nameGroup: '',
-        members: [],
-        admin:[],
-        type: 'public',
-        password: '',
-        confirmPass: ''
-    });
-    const [pass, setPass] = useState("")
+    const [newOption, setNewOption] = useState<NewChannel>({...newOption_basic});
+    const [btnDisabled, setBtnDisabled] = useState(true)
     const [visible, { toggle }] = useDisclosure(false);
-
+    //const [admins, setAdmins] = useState<string[]>([])
     const [optionsFriends, setOptionsFriends] = useState<{ value: string, label: string }[]>([{ value: "", label: "" }]);
 
     useEffect(() => {
@@ -73,13 +63,27 @@ export default function CreateChannel(props: any) {
                     setOptionsFriends(fetchOptions);
                 })
         }
-        getListFriend();
+        getListFriend().then();
     }, [])
 
+    async function getRoomAdmins() {
+		if (props.room.name && props.room.name !== '') {
+			const API_GET_ADMINS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/admins/${props.room.name}`;
+            let response = await fetch(API_GET_ADMINS);
+            let data = await response.json();
+            let fetchAdmins: string[] = [];
+            await Promise.all(await data.map(async (element: any) => {
+                let iMember: string = element.username
+                fetchAdmins.push(iMember);
+            }))
+            props.setAdmins(fetchAdmins);
+        }
+	}
+
     function changeType(value: string) {
-        setNewOption((prevNewOptions: NewChannel) => {
+        setNewOption((prevChOptions: NewChannel) => {
             return ({
-                ...prevNewOptions,
+                ...prevChOptions,
                 type: value,
                 password: '',
                 confirmPass: ''
@@ -88,40 +92,56 @@ export default function CreateChannel(props: any) {
     }
 
     function changeName(name: string) {
-        setNewOption((prevNewOptions: NewChannel) => {
+        setNewOption((prevChOptions: NewChannel) => {
             return ({
-                ...prevNewOptions,
+                ...prevChOptions,
                 nameGroup: name
             })
         })
     }
 
     function changePassword(pass: string) {
-        setNewOption((prevNewOptions: NewChannel) => {
+        setNewOption((prevChOptions: NewChannel) => {
             return ({
-                ...prevNewOptions,
+                ...prevChOptions,
                 password: pass
             })
         })
     }
 
     function changeConfirmPass(pass: string) {
-        setNewOption((prevNewOptions: NewChannel) => {
+        setNewOption((prevChOptions: NewChannel) => {
             return ({
-                ...prevNewOptions,
+                ...prevChOptions,
                 confirmPass: pass
             })
         })
     }
 
     function changeMembers(membersList: string[]) {
-        setNewOption((prevNewOptions: NewChannel) => {
+        setNewOption((prevChOptions: NewChannel) => {
             return ({
-                ...prevNewOptions,
+                ...prevChOptions,
                 members: membersList,
             })
-        })
+        });
+        setBtnDisabled(false);
     }
+
+    function changeAdmin(adminList: string[]) {
+        setNewOption((prevChOptions: NewChannel) => {
+            return ({
+                ...prevChOptions,
+                admin: adminList,
+            })
+        });
+        setBtnDisabled(true);
+        for (let element of newOption.admin) {
+            if (props.admins.indexOf(element) === -1)
+                setBtnDisabled(false)
+        }
+    }
+
 
     function checkProtectedChannel() {
         if (newOption.type === 'protected' && newOption.confirmPass === '') {
@@ -130,48 +150,106 @@ export default function CreateChannel(props: any) {
         else return !(newOption.type === 'protected' && newOption.confirmPass !== '' && newOption.confirmPass !== newOption.password);
     }
 
+    async function handleButtonClick() {
+        //modifica il canale
+        if (props.modalTypeOpen === "options"){
+		const API_EDIT_CHAT = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/editChannel`;
+		await fetch(API_EDIT_CHAT, {
+			method: 'POST',
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				channelName: props.room.name,
+				type: newOption.type,
+				password: newOption.confirmPass,
+				newName: newOption.nameGroup,
+			})
+		}) 
 
-    async function handleConfirm() {
-        await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/chat/createGroupChat2`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                builder: newOption.builder,
-                nameGroup: newOption.nameGroup,
-                members: newOption.members,
-                type: newOption.type,
-                password: newOption.confirmPass
-            }),
-        })
-        props.socket?.emit('updateList', { type: `${newOption.type}` })
-        setNewOption((prevChOptions: NewChannel) => {
-            return ({
-                ...prevChOptions,
-                builder: contextData.username,
-                nameGroup: '',
-                members: [],
-                type: 'public',
-                confirmPass: '',
-                password: ''
-            })
-        })
-        props.setNewChannel(false)
+		const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/editUsers`;
+		await fetch(API_GET_MEMBERS, {
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+			method: 'POST',
+			body: JSON.stringify({ data: props.admins, channelName: props.room.name })
+		})}
+
+        // aggiunge utenti
+        if (props.modalTypeOpen === "add"){
+		const API_ADD_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/addMembers`;
+		await fetch(API_ADD_MEMBERS, {
+			method: 'POST',
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ nameChannel: props.room?.name, newMembers: newOption.members }),
+		})
+
+	}
+		props.setModalTypeOpen(null)
+	}
+
+    useEffect( () =>
+        {
+            getRoomAdmins().then()
+        }
+        , [props.room.name]
+    )
+
+    function handleAdminsChange(value: string[]){
+        let tmp = [...newOption.admin]
+        for (let element of value) {
+            let indx = newOption.admin.indexOf(element)
+            if (indx === -1)
+                tmp.push(element);
+        }
+        for (let element of newOption.admin){
+            let indx = value.indexOf(element)
+            if (indx === -1)
+                tmp.splice(tmp.indexOf(element), 1)
+        }
+        props.setAdmins(tmp)
     }
 
-    //console.log(optionsFriends)
-
-/*root	.mantine-Modal-root	Root element, contains modal and overlay
-inner	.mantine-Modal-inner	Modal wrapper, centers modal
-modal	.mantine-Modal-modal	Modal root
-header	.mantine-Modal-header	Modal header, contains close button and title
-overlay	.mantine-Modal-overlay	Overlay
-title	.mantine-Modal-title	Modal title
-body	.mantine-Modal-body	Modal body, displayed after header
-close	.mantine-Modal-close	Close button*/
+    useEffect(() => {
+        //TODO: collegare tutte le protezioni
+        if (newOption.type !== props.room.type){
+            if(newOption.type === "protected"){
+                if(newOption.password && newOption.password === newOption.confirmPass){
+                    setBtnDisabled(false)
+                }
+                else{
+                    setBtnDisabled(true)
+                }
+            }
+            else{
+                setBtnDisabled(false)
+            }
+        }
+        if(newOption.nameGroup !== ""){
+            if (newOption.type !== props.room.type){
+                if(newOption.type === "protected"){
+                    if(newOption.password && newOption.password === newOption.confirmPass){
+                        setBtnDisabled(false)
+                    }
+                    else{
+                        setBtnDisabled(true)
+                    }
+                }
+                else
+                    setBtnDisabled(false)
+            }
+            else
+                setBtnDisabled(false)
+        }
+        if(newOption.nameGroup === "")
+            setBtnDisabled(true)
+        if(newOption.members.length !== 0)
+            setBtnDisabled(false)
+    }, [newOption]
+    )
 
     return (
-        <Modal centered withCloseButton={false} closeOnClickOutside={false}
+        <Modal centered withCloseButton={false} closeOnClickOutside={false} zIndex={1500}
         styles={(root) => ({
             inner:{
                 backgroundColor: 'transparent',
@@ -189,12 +267,12 @@ close	.mantine-Modal-close	Close button*/
                 height:"80%",
                 backgroundColor: 'transparent',
                 textAlign: 'center',
-            }
+            },
         })} 
-            opened={props.newChannel} onClose={ () => props.setNewChannel(false) }>
+            opened={props.opened} onClose={ () => props.setModalTypeOpen(null) }>
                 <div>
                     <div style={{width:"100%"}}>
-                        <SegmentedControl style={{width:"100%",height: "50px"}} value={newOption.type} data={controlData} onChange={changeType}
+                        {props.modalTypeOpen === "options" &&  <SegmentedControl style={{width:"100%",height: "50px"}} value={newOption.type} data={controlData} onChange={changeType}
                         styles={() => ({
                             root: {
                                 backgroundColor:"transparent",
@@ -240,26 +318,21 @@ close	.mantine-Modal-close	Close button*/
                             controlActive:{
                                 backgroundColor: "#fafafa"
                             }
-                        })}/>
-                    </div> 
+                        })}/>}
+                    </div>
+                    <FocusTrap><input type="" style={{width:"0", height:"0", border:"none"}} /></FocusTrap>
                     <img src="/account_decoration_top.svg" alt="" />
-                    <div className="search_container">
-                        {/* <Input className="search_input" styles={(root) => (
-                            {input:{width:"90%",color:"white", margin:"10px auto -10px"}})}
-                            variant="unstyled"
-                            placeholder="Channel Name"
-                            radius="md"
-                        /> */}
+                    {props.modalTypeOpen === "options" && <div className="search_container">
                         <input  className="search_input" 
-                                placeholder="Channel name"
+                                placeholder={props.room.name}
                                 type="text"
                                 autoComplete="off"
                                 value={newOption.nameGroup}
                                 onChange={(e) => changeName(e.target.value)}
                         />
-                    </div>
+                    </div>}
                     <img src="/account_decoration_down.svg" alt="" />
-                    {newOption.type === "protected" && <form style={{ display:"flex", background:"transparent",width:"100%", height:"50%", color:"#ffff", margin:"10px auto 10px", padding:"11px"}} >
+                    {(newOption.type === "protected" && props.modalTypeOpen === "options") && <form style={{ display:"flex", background:"transparent",width:"100%", height:"50%", color:"#ffff", margin:"10px auto 10px", padding:"11px"}} >
                             <PasswordInput styles={() => ({label:{color:"#781C9C"}})} style={{ margin:"auto", width:"45%"} } disabled={newOption.type !== "protected"}
                                 label="Password"
                                 value={newOption.password}
@@ -279,9 +352,8 @@ close	.mantine-Modal-close	Close button*/
                                 onChange={(e) => changeConfirmPass(e.target.value)}
                             />
                     </form>}
-                    
                     <div>
-                        <MultiSelect style={{ width:"90%", margin:"auto"}} 
+                        {props.modalTypeOpen === "add" && <MultiSelect style={{ width:"90%", margin:"auto"}} 
                             data={optionsFriends}
                             value={newOption.members}
                             placeholder={"Add members"}
@@ -289,12 +361,30 @@ close	.mantine-Modal-close	Close button*/
                             dropdownPosition="bottom"
                             nothingFound="NIENTE, NON HAI AMICI"
                             onChange={changeMembers}>
-                        </MultiSelect>
+                        </MultiSelect>}
+                        {props.modalTypeOpen === "options" && <MultiSelect style={{ width:"90%", margin:"auto"}} 
+                            data={props.members}
+                            value={newOption.admin}
+                            placeholder={"Select Admins"}
+                            searchable
+                            dropdownPosition="bottom"
+                            nothingFound="NON CI SONO PERSONE"
+                            onChange={handleAdminsChange}>
+                        </MultiSelect>}
                     </div>
                     <Box>
-                    {(newOption.nameGroup) && <button className="btn_createChannel" onClick={handleConfirm} disabled={!checkProtectedChannel()}>
-                        <div className="btn__content_createChannel">Create Channel</div>
+                    {<button className="btn_createChannel" onClick={handleButtonClick} disabled={btnDisabled} >
+                        <div className="btn__content_createChannel">{props.modalTypeOpen !== "add" ? "Confirm" : "Add Members"}</div>
                     </button>}
+                    </Box>
+                    <Box>
+                        <button className="btn_close" onClick={() => {
+                            props.setModalTypeOpen(null); 
+                            setNewOption({...newOption_basic}); 
+                            setBtnDisabled(true);
+                            }}>
+                            <div className="btn_close__content">Close</div>
+                        </button>
                     </Box>
                 </div>
             </Modal>

@@ -26,81 +26,58 @@ export default function Chat() {
 	  }
 	}, [student.id]);
 
-	async function SetRoomName(client: string, target: string) {
 
-		const API_TARGET = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/checkTarget/${target}`
-		const checkTarget = await fetch(API_TARGET, {
-			credentials: 'include',
-			headers: { 'Content-Type': 'application/json' },
-		})
-			.then((response) => response.json());
-		if (checkTarget) {
-			if (client < target) {
-				setRoom((prevRoom) => { return ({ ...prevRoom, name: client + target, type: 'direct' }) });
-				return (client + target);
-			}
-			else {
-				setRoom((prevRoom) => { return ({ ...prevRoom, name: target + client, type: 'direct' }) });
-				return (target + client);
-			}
-		}
-		else {
-			const API_GET_CHANNEL = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getChannel/${target}`
-			const fetchRoom = await fetch(API_GET_CHANNEL, {
-				credentials: 'include',
-				headers: { 'Content-Type': 'application/json' },
-			})
-				.then((response) => response.json())
-			setRoom({ name: fetchRoom.name, type: fetchRoom.type, builder: { ...fetchRoom.builder } });
-			return target;
-		}
-	}
+	// async function SetRoomName(client: string, target: string) {
 
-	const joinRoom = async (roomName: string) => {
-		const room = await SetRoomName(student.username, roomName);
-		socket?.emit('joinRoom', { client: student.username, room: room });
-	}
+	// 	const API_TARGET = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/checkTarget/${target}`
+	// 	const checkTarget = await fetch(API_TARGET, {
+	// 		credentials: 'include',
+	// 		headers: { 'Content-Type': 'application/json' },
+	// 	})
+	// 		.then((response) => response.json());
+	// 	if (checkTarget) {
+	// 		if (client < target) {
+	// 			setRoom((prevRoom) => { return ({ ...prevRoom, name: client + target, type: 'direct' }) });
+	// 			return (client + target);
+	// 		}
+	// 		else {
+	// 			setRoom((prevRoom) => { return ({ ...prevRoom, name: target + client, type: 'direct' }) });
+	// 			return (target + client);
+	// 		}
+	// 	}
+	// 	else {
+	// 		const API_GET_CHANNEL = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getChannel/${target}`
+	// 		const fetchRoom = await fetch(API_GET_CHANNEL, {
+	// 			credentials: 'include',
+	// 			headers: { 'Content-Type': 'application/json' },
+	// 		})
+	// 			.then((response) => response.json())
+	// 		setRoom({ name: fetchRoom.name, type: fetchRoom.type, builder: { ...fetchRoom.builder } });
+	// 		return target;
+	// 	}
+	// }
 
-	const handleSend = (e?: React.FormEvent<HTMLFormElement>) => {
-		if (e)
-			e.preventDefault();
-		if (input !== '') {
-			socket?.emit(
-				'msgToServer',
-				{ room: room.name, username: student.username, message: input, avatar: student.avatar }
-			);
-			setInput('');
-		}
-	};
+	// const joinRoom = async (roomName: string) => {
+	// 	const room = await SetRoomName(student.username, roomName);
+	// 	props.socket?.emit('joinRoom', { client: student.username, room: room });
+	// }
+
+	// const handleSend = (e?: React.FormEvent<HTMLFormElement>) => {
+	// 	if (e)
+	// 		e.preventDefault();
+	// 	if (input !== '') {
+	// 		props.socket?.emit(
+	// 			'msgToServer',
+	// 			{ room: room.name, username: student.username, message: input, avatar: student.avatar }
+	// 		);
+	// 		setInput('');
+	// 	}
+	// };
 
 	return (
 		<div className="chat-dashboard">
-			<ChatMenu
-				setCreateChan={setCreateChan}
-				createChan={createChan}
-				className="test"
-				student={student}
-				room={room.name}
-				chOptions={chOptions}
-				setRoom={joinRoom}
-				socket={socket}
-				setOpened={setOpened}
-				setChOptions={setChOptions}
-			/>
-			<ChannelBodyStatus
-				setRoom={setRoom}
-				createChan={createChan}
-				opened={opened}
-				setOpened={setOpened}
-				setChOptions={setChOptions}
-				chOptions={chOptions}
-				room={room}
-				handleSend={handleSend}
-				setInput={setInput}
-				input={input}
-				socket={socket}
-				setCreateChan={setCreateChan}
-			/>
+			<ChatMenu setRoom={setRoom} socket={props.socket}></ChatMenu>
+			<ChannelBodyStatus room={room} socket={props.socket} setRoom={setRoom}></ChannelBodyStatus>
 		</div>
 	)
 }

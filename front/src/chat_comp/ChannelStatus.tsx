@@ -1,90 +1,72 @@
-import React, { useEffect, useState } from "react"
-import { Box, Collapse, TransferListData, ActionIcon, Button, Center } from "@mantine/core";
-import { IconArrowBigDown, IconArrowBigTop } from '@tabler/icons';
-import OptionsPanel from "./OptionsPanel";
-
-//non applicata bene... da capire meglio domani :D
-// export interface Member {
-// 	id: Number,
-// 	username: string,
-// 	nickname: string,
-// 	avatar: string,
-// }
-
-const initialValues: TransferListData = [
-	[
-		{ value: 'empty', label: 'empty' },
-	],
-	[
-		{ value: 'empty', label: 'empty' },
-	],
-];
+import { Indicator } from "@mantine/core";
+import React, { useEffect, useLayoutEffect } from "react"
+import { useNavigate } from "react-router-dom";
+import "./ChannelStatus_style.css"
 
 export default function ChannelStatus(props: any) {
+	const navigate = useNavigate()
 
-	const [ownerOpen, setOwnerOpen] = useState(true)
-	const [adminOpen, setAdminOpen] = useState(true)
-	const [userOpen, setUserOpen] = useState(true)
+	async function getChannelMembers() {
+		const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/allmembers/${props.room.name}`;
+		if (props.room.name) {
+			let response = await fetch(API_GET_MEMBERS);
+			let data = await response.json();
+			//console.log("data: ", data)
+			let fetchMember: string[] = [];
+			await Promise.all(await data?.map(async (element: any) => {
+				let iMember:string = element.nickname;
+				if(element.nickname !== props.room.builder.username)
+					fetchMember.push(iMember);
+			}))
+			props.setMembers(fetchMember);
+		}
+	}
 
-	useEffect(
-		() => {
-			if (!props.chOptions) {
-				setOwnerOpen(true)
-				setAdminOpen(true)
-				setUserOpen(true)
-			} else {
-				setOwnerOpen(false)
-				setAdminOpen(false)
-				setUserOpen(false)
-			}
-		}, [props.chOptions])
+	    async function getRoomAdmins() {
+        if (props.room.name && props.room.type != 'direct') {
+            const API_GET_ADMINS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/admins/${props.room.name}`;
+            if (props.room.name) {
+                let response = await fetch(API_GET_ADMINS);
+                let data = await response.json();
+                let fetchAdmins: string[] = []
 
+                await Promise.all(await data.map(async (element: any) => {
+                    let iMember: string = element.username;
+                    fetchAdmins.push(iMember);
+                }))
+                props.setAdmins(fetchAdmins);
+            }
+        }
+    }
+
+	useLayoutEffect(() => {
+		getChannelMembers()
+		getRoomAdmins()
+	}, [props.room.name]
+	)
 
 	return (
-		<div className="channel-user-list">
-			<div id="user-list" className={props.opened ? "" : "open"}>
-				<div id="user-list" style={{ height: "80%" }} className={""}>
-					<Box sx={{ display: "block", width: "100%", height: "30px", backgroundColor: "#BE4BDB", textAlign: "center" }}>Channel Owner
-					</Box>
-					<ActionIcon onClick={() => setOwnerOpen((prevUserOpen) => !prevUserOpen)} variant="filled" color={"grape"} sx={{ marginTop: "-30px", float: "right", height: "30px" }}>
-						{ownerOpen ? <IconArrowBigTop color={"#000000"} size={16} /> : <IconArrowBigDown color={"#000000"} size={16} />}
-					</ActionIcon>
-					<Collapse in={ownerOpen} transitionDuration={300}>
-						{(props.room.name && props.joined) && <Box sx={{ textAlign: "center" }}>{props.room.builder.username}</Box>}
-					</Collapse>
-					<Box sx={{ display: "block", width: "100%", height: "30px", backgroundColor: "#BE4BDB", paddingBottom: "-10px", textAlign: "center" }}>
-						Admin list
-					</Box>
-					<ActionIcon onClick={() => setAdminOpen((prevAdminOpen) => !prevAdminOpen)} variant="filled" color={"grape"} sx={{ marginTop: "-30px", float: "right", height: "30px" }}>
-						{adminOpen ? <IconArrowBigTop color={"#000000"} size={16} /> :
-							<IconArrowBigDown color={"#000000"} size={16} />}
-					</ActionIcon>
-					<Collapse in={adminOpen} transitionDuration={300}>
-						{(props.room.name && props.joined) && props.admins.map((element: string) => <Box sx={{ textAlign: "center" }}>{element}</Box>)}
-					</Collapse>
-					<Box sx={{ display: "block", width: "100%", height: "30px", backgroundColor: "#BE4BDB", textAlign: "center" }}>User list
-					</Box>
-					<ActionIcon onClick={() => setUserOpen((prevUserOpen) => !prevUserOpen)} variant="filled" color={"grape"} sx={{ marginTop: "-30px", float: "right", height: "30px" }}>
-						{userOpen ? <IconArrowBigTop color={"#000000"} size={16} /> : <IconArrowBigDown color={"#000000"} size={16} />}
-					</ActionIcon>
-					<Collapse in={userOpen} transitionDuration={300}>
-						{(props.room.name && props.joined) && props.members.map((element: string) => <Box sx={{ textAlign: "center" }}>{element}</Box>)}
-					</Collapse>
-				</div>
-				{/*{(props.room.name && !props.opened) &&*/}
-				{/*	<Center>*/}
-				{/*		<Button onClick={() => props.setCreateChan((prevCreateChan: boolean) => (!prevCreateChan))} variant="outline" color="lime" size="xl" uppercase>*/}
-				{/*			Create a Channel*/}
-				{/*		</Button>*/}
-				{/*	</Center>*/}
-				{/*	}*/}
-				{props.opened && <OptionsPanel
-					room={props.room}
-					opened={props.opened}
-					chOptions={props.chOptions}
-					setOpened={props.setOpened}
-					socket={props.socket}
-				/>}
+		<div style={{height:"100%", width:"20%", display:"flex", flexDirection:"column"}}>
+			<div className="membersList_header">
+				<div style={{height:"70%", width:"100%", borderBottom:"2px solid #781C9C"}}></div>
+				<div style={{height:"30%", width:"100%", borderLeft:"5px solid #781C9C"}}></div>
+			</div>
+			<div style={{position:"relative", height:"92%", backgroundColor:"black", color:"white", width:"100%", borderLeft:"5px solid #781C9C", borderBottom:"5px solid #781C9C", borderBottomLeftRadius:" 15px"}}>
+				{props.room.name &&<div style={{width:"90%", height:"10%"}} onClick={() => navigate(("/users/" + props.room.builder.username))}>
+					<Indicator color="green" size={12} processing>
+						{props.room.builder.username}
+					</Indicator>
+				</div>}
+				{props.room.name && props.members.map((element: string, id: number) => {return(
+					// \/
+					<div style={{width:"100%", height:"10%", display:"flex"}} key={id}>
+						<div style={{width:"80%", height:"10%"}} onClick={() => navigate(("/users/" + element))} >{element}</div>
+						{/* <Indicator color="green" size={12} processing> */}
+							<div style={{width:"10%", height:"10%"}}>
+							</div>
+						{/* </Indicator> */}
+						{(props.admins && props.admins.indexOf(element) !== -1) && <div style={{width:"10%", height:"10%"}}>admin</div>} 
+					</div>)})}
 			</div>
 		</div>
 	)

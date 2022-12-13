@@ -33,7 +33,8 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
     @ConnectedSocket() clientSocket: Socket, 
     @MessageBody() data: {room: string, username: string, message: string, avatar: string}):
     Promise<WsResponse<{room: string, username: string, message: string, avatar: string}>> { 
-    const packMessage = await this.chatService.createMessage({...data, clientSocket})
+      //console.log("Data room ", data);
+      const packMessage = await this.chatService.createMessage({...data, clientSocket})
     this.server.to(data.room).emit('msgToClient', packMessage);
     return {event:"msgToServer", data: data}; // equivalent to clientSocket.emit(data);
   }

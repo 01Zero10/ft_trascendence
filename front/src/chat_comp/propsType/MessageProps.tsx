@@ -8,7 +8,8 @@ type MessageProps = {
 	username: string,
 	message: string,
 	admin?: 0 | 1 | 2
-	builder?: string
+	builder?: string,
+	avatar?: string
 }
 
 export default MessageProps

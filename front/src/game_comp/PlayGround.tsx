@@ -37,7 +37,7 @@ export type Paddle = {
 
 function PlayGround(props: any) {
 
-    console.log("SOCKET = ", props.socket);
+    //console.log("SOCKET = ", props.socket);
 
     const navigate = useNavigate()
     const contextData = useContext(Student)
@@ -73,7 +73,7 @@ function PlayGround(props: any) {
             //props.socket.emit('joinPlayRoom', { namePlayRoom: namePlayRoom, side: side });
         })
         props.socket.once('endGame', (winner: string) => {
-            console.log(winner);
+            //console.log(winner);
             setWinner(winner)
         })
     }, [props.socket])
