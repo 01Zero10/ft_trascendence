@@ -326,7 +326,7 @@ export default function AdminPanel(props: any) {
 							<Tabs.Tab style={tabStyle} value={"unmute"}>UNMUTE</Tabs.Tab>
 						</Tabs.List>
 						<img style={{rotate:"180deg"}}src="/account_decoration_down.svg" alt="" />
-						<Tabs.Panel style={{color:"white"}} value={"ban"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"ban"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div key={id}> <input type={"checkbox"} id={element} onClick={() => console.log(element)}/><label>{element}</label> </div>)})}</ScrollArea></Tabs.Panel>
 						<Tabs.Panel style={{color:"white"}} value={"mute"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
 						<Tabs.Panel style={{color:"white"}} value={"kick"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
 						<Tabs.Panel style={{color:"white"}} value={"unban"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div key={id}> {element} </div>)})}</ScrollArea></Tabs.Panel>
