@@ -40,7 +40,7 @@ export default function ChannelStatus(props: any) {
     }
 
 	useEffect(() => {
-		props.socket.on('updateListMembers', async(nameChannel: string) => {
+		props.socket?.on('updateListMembers', async(nameChannel: string) => {
 			if (props.room.name == nameChannel)
 				await getChannelMembers();
 		});

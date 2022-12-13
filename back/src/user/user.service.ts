@@ -318,30 +318,24 @@ export class UserService {
   }
 
   async setOnlineStatus(userID: string){
-
-    const client = await this.getById(Number(userID));
     await this.setOfflineStatus(userID);
-    //console.log(userID);
-    if (client){
     const newbie = this.onlineRepository.create();
-    newbie.id = Number(userID)
+    const user = await this.userRepository.findOne({where: {id: Number(userID)}})
+    newbie.user = user;
     newbie.status = 'online'
-    newbie.user = client;
     return await this.onlineRepository.save(newbie);
-    }
+}
 
-  }
+async setOfflineStatus(userID: string){
+  let toSetOffline = await this.onlineRepository
+  .createQueryBuilder('online')
+  .leftJoin('online.user', 'user')
+  .where('user.id = :toSet_n', {toSet_n: Number(userID)})
+  .getOne();
 
-  async setOfflineStatus(userID: string){
-    let toSetOffline = await this.onlineRepository
-    .createQueryBuilder('online')
-    .leftJoin('online.user', 'user')
-    .where('user.id = :toSet_n', {toSet_n: Number(userID)})
-    .getOne();
-
-    if (toSetOffline)
-      await this.onlineRepository.remove(toSetOffline);
-  }
+  if (toSetOffline)
+    await this.onlineRepository.remove(toSetOffline);
+}
 
   async getOnlineFriends(client: string){
     //console.log("help", client)
