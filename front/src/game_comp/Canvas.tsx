@@ -86,7 +86,13 @@ export default function Canvas(props: CanvasProps) {
   // draw
   const draw = (context: CanvasRenderingContext2D | null, ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
     if (context) {
+      context.fillStyle = "#ffffff"
       context.clearRect(0, 0, props.canvasWidth, props.canvasHeight)
+      context.beginPath()
+      context.fillRect(props.canvasWidth / 2 - 2, 0, 4, props.canvasHeight )
+      context.fillRect(0, 0, props.canvasWidth, 4 )
+      context.fillRect(0, props.canvasHeight, props.canvasWidth , 4 )
+      context.closePath()
       drawPlayer(context, leftPlayer)
       drawPlayer(context, rightPlayer)
       drawBall(context, ball);

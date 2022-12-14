@@ -38,7 +38,7 @@ interface plRoom {
 const canvasHeight = 500
 const canvasWidth = 1000
 const defaultPlayer = { x: 0, y: 0, height: 100, width: 20, up: false, down: false }
-const defaultBall = { x: canvasWidth / 2, y: canvasHeight / 2, width: 30, height:30, dx: 0, dy: 0, direction: "" }
+const defaultBall = { x: canvasWidth / 2 - 15, y: canvasHeight / 2 - 15, width: 30, height:30, dx: 0, dy: 0, direction: "" }
 const dir: Array<string> = ["l", "r"];
 const array_dir_y: Array<number> = [-3, 3];
 
@@ -222,14 +222,12 @@ export class GameService{
     checkPlayerCollision(ball: Ball, rightPlayer?: Player, leftPlayer?: Player){
         console.log(ball.dx)
         if (leftPlayer){
-            return ((ball.y + ball.height) + ball.dy >= leftPlayer.y + leftPlayer.width &&
-                ball.y + ball.dy <= (leftPlayer.y + leftPlayer.height) + leftPlayer.width &&
-                ball.x <= leftPlayer.x + leftPlayer.width && ball.x <= leftPlayer.x + leftPlayer.width)
+            return ((ball.y + ball.height) + ball.dy > leftPlayer.y + leftPlayer.width &&
+                ball.y + ball.dy <= (leftPlayer.y + leftPlayer.height) + leftPlayer.width)
         }
         else{
-            return (((ball.y + ball.width) + ball.height) + ball.dy >= rightPlayer.y  &&
-                (ball.y + ball.width) + ball.dy <= (rightPlayer.y + rightPlayer.height) &&
-            ball.x + ball.width >= rightPlayer.x)
+            return (((ball.y + ball.width) + ball.height) + ball.dy > rightPlayer.y  &&
+                (ball.y + ball.width) + ball.dy < (rightPlayer.y + rightPlayer.height))
         }
     }
 
@@ -253,7 +251,7 @@ export class GameService{
         if (((this.mapPlRoom.get(namePlayRoom).ball.y + this.mapPlRoom.get(namePlayRoom).ball.height) + this.mapPlRoom.get(namePlayRoom).ball.dy  > canvasHeight) || (this.mapPlRoom.get(namePlayRoom).ball.y + this.mapPlRoom.get(namePlayRoom).ball.dy < 0)) {
             this.mapPlRoom.get(namePlayRoom).ball.dy = -this.mapPlRoom.get(namePlayRoom).ball.dy
         }
-        if(this.mapPlRoom.get(namePlayRoom).ball.x <= this.mapPlRoom.get(namePlayRoom).leftPlayer.x + this.mapPlRoom.get(namePlayRoom).leftPlayer.width) {
+        if(this.mapPlRoom.get(namePlayRoom).ball.x < this.mapPlRoom.get(namePlayRoom).leftPlayer.x + this.mapPlRoom.get(namePlayRoom).leftPlayer.width) {
             if(this.checkPlayerCollision(this.mapPlRoom.get(namePlayRoom).ball, null, this.mapPlRoom.get(namePlayRoom).leftPlayer)){
                 this.mapPlRoom.get(namePlayRoom).ball.dx = -this.mapPlRoom.get(namePlayRoom).ball.dx + 0.25
                 if (this.mapPlRoom.get(namePlayRoom).ball.dx > 20)
@@ -272,7 +270,7 @@ export class GameService{
                 if (this.mapPlRoom.get(namePlayRoom).ball.dx < -20)
                     this.mapPlRoom.get(namePlayRoom).ball.dx = -20
             }
-            else if(this.mapPlRoom.get(namePlayRoom).ball.x + this.mapPlRoom.get(namePlayRoom).ball.width  >= canvasWidth){
+            else if(this.mapPlRoom.get(namePlayRoom).ball.x + this.mapPlRoom.get(namePlayRoom).ball.width  > canvasWidth){
                 this.mapPlRoom.get(namePlayRoom).ball.dx = 0
                 this.mapPlRoom.get(namePlayRoom).ball.dy = 0
                 this.mapPlRoom.get(namePlayRoom).leftPoint += 1

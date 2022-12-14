@@ -89,7 +89,7 @@ function PlayGround(props: any) {
     }, [lastPoint])
 
     return (
-        <div>
+        <div style={{backgroundColor:"#000000"}}>
             {winner ? <Modal styles={(root) => ({
                 body: {
                     backgroundColor: '#fff',
@@ -97,7 +97,7 @@ function PlayGround(props: any) {
                 },
             })}
                 onClose={() => console.log("si cazzo!!!!!")}
-                opened={winner ? true : false}
+                opened={!!winner}
                 transitionDuration={600}
                 style={{ backgroundColor: "black", zIndex: "5", }}
                 centered
@@ -143,8 +143,8 @@ function PlayGround(props: any) {
                     opponentPaddle={opponentSide}
                     dir_y={dir_y as 3 | -3}
                     point={point}
-                    canvasHeight={750}
-                    canvasWidth={1500}
+                    canvasHeight={500}
+                    canvasWidth={1000}
                     setPoint={setPoint}
                     ballDirection={ballDirection}
                     setOpponentSide={setOpponentSide}
