@@ -222,7 +222,7 @@ export default function AdminPanel(props: any) {
 
 	//
 
-	//console.log(members)
+	// console.log("Admin props.element: ", props.members)
 	return (<>
 			<Modal centered withCloseButton={false} closeOnClickOutside={false} zIndex={1500} overlayBlur={5}
 				   styles={(root) => ({

@@ -3,6 +3,7 @@ import React, { useEffect, useLayoutEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import "./ChannelStatus_style.css"
 import {green} from "@mui/material/colors";
+import { IconCrown } from "@tabler/icons";
 
 export default function ChannelStatus(props: any) {
 	const navigate = useNavigate()
@@ -76,21 +77,21 @@ export default function ChannelStatus(props: any) {
 	}, [props.members])
 
 	return (
-		<div style={{height:"100%", width:"20%", display:"flex", flexDirection:"column"}}>
+		<div style={{height:"100%", width:"20%", display:"flex", flexDirection:"column", fontFamily:"'Tomorrow', sans-serif", fontWeight:"400", fontSize:"0.95rem"}}>
 			<div className="membersList_header">
 				<div style={{height:"70%", width:"100%", borderBottom:"2px solid #781C9C"}}></div>
 				<div style={{height:"30%", width:"100%", borderLeft:"5px solid #781C9C"}}></div>
 			</div>
 			<div style={{position:"relative", height:"92%", backgroundColor:"black", color:"white", width:"100%", borderLeft:"5px solid #781C9C", borderBottom:"5px solid #781C9C", borderBottomLeftRadius:" 15px"}}>
-				{props.room.name && <div style={{width:"100%", height:"5%", display:"flex", flexDirection:"row"}}>
+				{props.room.name && <div style={{width:"100%", height:"5%", display:"flex", flexDirection:"row",alignItems:"center", justifyContent:"flex-start"}}>
 					<div style={{width:"40%"}} onClick={() => navigate(("/users/" + props.room.builder.username))}>
 						{ownerOnline ? <Indicator color={"green"} size={14} processing position={"middle-end"} zIndex={0}>{props.room.builder.username}</Indicator> :
 							<Indicator color={"red"} size={14} processing position={"middle-end"} zIndex={0}>{props.room.builder.username}</Indicator>}
 					</div>
-					<div style={{width:"10%", marginLeft:"10%"}}>owner</div>
+					<div style={{width:"10%", marginLeft:"10%", display:"flex", alignItems:"center", justifyContent:"center"}}><IconCrown></IconCrown></div>
 				</div>}
 				{props.room.name && props.members?.map((element: {nickname: string, status: boolean}, id: number) => {return(
-					<div style={{width:"100%", height:"5%", display:"flex"}} key={id}>
+					<div style={{width:"100%", height:"5%", display:"flex", alignItems:"center", justifyContent:"flex-start"}} key={id}>
 						<div style={{width:"40%"}} onClick={() => navigate(("/users/" + element.nickname))}>
 							{element.status ? <Indicator color={"green"} size={14} processing position={"middle-end"} zIndex={0}> {element.nickname}</Indicator> :
 								<Indicator color={"red"} size={14} processing position={"middle-end"} zIndex={0}> {element.nickname}</Indicator>}

@@ -88,7 +88,7 @@ export default function ChannelBodyStatus(props: any) {
             <ChannelBody 
                 room={props.room} 
                 socket={props.socket} 
-                members={members}
+                members={members?.map(element => element.nickname)}
                 admins={admins}
                 admin={admin}
                 setAdmins={setAdmins}
