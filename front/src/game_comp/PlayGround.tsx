@@ -1,11 +1,12 @@
 import { Button, Center, Modal } from "@mantine/core"
 import { positions } from "@mui/system"
-import { useContext, useEffect, useLayoutEffect, useState } from "react"
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Student } from "../App"
 import Loader from "../components/Loader"
 import Canvas from "./Canvas"
 import Score from "./Score"
+import Canvas2 from "./canvas2";
 
 type Ball = {
     x: number
@@ -137,7 +138,7 @@ function PlayGround(props: any) {
                     </div>
                 </div>
             </Modal> :
-                <Canvas
+                <Canvas2
                     socket={props.socket}
                     clientPaddle={clientSide}
                     opponentPaddle={opponentSide}
@@ -148,7 +149,7 @@ function PlayGround(props: any) {
                     setPoint={setPoint}
                     ballDirection={ballDirection}
                     setOpponentSide={setOpponentSide}
-                    setLastpoint={setLastPoint}></Canvas>
+                    setLastpoint={setLastPoint}></Canvas2>
             }
         </div>
     )
