@@ -249,7 +249,7 @@ export default function ChannelOptionModal(props: any) {
     )
 
     return (
-        <Modal centered withCloseButton={false} closeOnClickOutside={false} zIndex={1500}
+        <Modal centered withCloseButton={false} closeOnClickOutside={false} zIndex={1500} overlayBlur={5}
         styles={(root) => ({
             inner:{
                 backgroundColor: 'transparent',
