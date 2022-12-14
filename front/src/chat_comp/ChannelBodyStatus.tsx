@@ -3,13 +3,19 @@ import { Student } from "../App";
 import ChannelStatus from "./ChannelStatus";
 import ChannelBody from "./ChannelBody";
 
+// interfaccia per testare nickname e status
+export interface element_status {
+    nickname: string,
+    status:boolean,
+}
 export default function ChannelBodyStatus(props: any) {
     const [joined, setJoined] = useState(false)
     const student = useContext(Student);
     //---------------------chat.tsx States----------------------
     const [admin, setAdmin] = useState(false)
 
-    const [members, setMembers] = useState<string[]>([]);
+    // const [members, setMembers] = useState<string[]>([]);
+    const [members, setMembers] = useState<element_status[]>();
     const [admins, setAdmins] = useState<string[]>([]);
 
     useEffect(() => {

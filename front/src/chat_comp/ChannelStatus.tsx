@@ -18,9 +18,12 @@ export default function ChannelStatus(props: any) {
 			let response = await fetch(API_GET_MEMBERS);
 			let data = await response.json();
 			//console.log("data: ", data)
-			let fetchMember: string[] = [];
+			let fetchMember: {nickname: string, status: boolean}[] = [];
+			// let fetchMember: string[] = [];
 			await Promise.all(await data?.map(async (element: any) => {
-				let iMember:string = element.nickname;
+				// let iMember: string = element.nickname;
+				let iMember: {nickname: string, status: boolean} = {nickname : element.nickname, status: element.status ? true : false}
+
 				if(element.nickname !== props.room.builder.username)
 					fetchMember.push(iMember);
 			}))
@@ -79,11 +82,11 @@ export default function ChannelStatus(props: any) {
 				{props.room.name && props.members.map((element: string, id: number) => {return(
 					// \/
 					<div style={{width:"100%", height:"10%", display:"flex"}} key={id}>
-						<div style={{width:"90%", height:"10%"}} onClick={() => navigate(("/users/" + element))} >{element}</div>
+						<div style={{width:"80%", height:"10%"}} onClick={() => navigate(("/users/" + element))} >{element}</div>
 						<Indicator color={online} size={12} processing>
 							<div style={{width:"10%", height:"10%"}}></div>
 						</Indicator>
-						{(props.admins && props.admins.indexOf(element) !== -1) && <div style={{width:"10%", height:"10%"}}>admin</div>} 
+						{(props.admins && props.admins.indexOf(element) !== -1) && <div style={{width:"10%", height:"10%"}}>admin</div>}
 					</div>)})}
 			</div>
 		</div>
