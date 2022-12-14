@@ -2,6 +2,7 @@ import { Indicator } from "@mantine/core";
 import React, { useEffect, useLayoutEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import "./ChannelStatus_style.css"
+import {green} from "@mui/material/colors";
 
 export default function ChannelStatus(props: any) {
 	const navigate = useNavigate()
@@ -78,19 +79,20 @@ export default function ChannelStatus(props: any) {
 				<div style={{height:"30%", width:"100%", borderLeft:"5px solid #781C9C"}}></div>
 			</div>
 			<div style={{position:"relative", height:"92%", backgroundColor:"black", color:"white", width:"100%", borderLeft:"5px solid #781C9C", borderBottom:"5px solid #781C9C", borderBottomLeftRadius:" 15px"}}>
-				{props.room.name &&<div style={{width:"90%", height:"10%"}} onClick={() => navigate(("/users/" + props.room.builder.username))}>
-					<Indicator color={online} size={12} processing>
-						{props.room.builder.username}
-					</Indicator>
+				{props.room.name && <div style={{width:"100%", height:"5%", display:"flex", flexDirection:"row"}}>
+					<div style={{width:"40%"}} onClick={() => navigate(("/users/" + props.room.builder.username))}>
+						{props.room.builder.status? <Indicator color={"green"} size={14} processing position={"middle-end"} zIndex={0}>{props.room.builder.username}</Indicator> :
+							<Indicator color={"red"} size={14} processing position={"middle-end"} zIndex={0}>{props.room.builder.username}</Indicator>}
+					</div>
+					<div style={{width:"10%", marginLeft:"10%"}}>owner</div>
 				</div>}
 				{props.room.name && props.members?.map((element: {nickname: string, status: boolean}, id: number) => {return(
-					// \/
-					<div style={{width:"100%", height:"10%", display:"flex"}} key={id}>
-						<div style={{width:"80%", height:"10%"}} onClick={() => navigate(("/users/" + element.nickname))} >{element.nickname}</div>
-						<Indicator color={online} size={12} processing>
-							<div style={{width:"10%", height:"10%"}}></div>
-						</Indicator>
-						{(props.admins && props.admins.indexOf(element.nickname) !== -1) && <div style={{width:"10%", height:"10%"}}>admin</div>}
+					<div style={{width:"100%", height:"5%", display:"flex"}} key={id}>
+						<div style={{width:"40%"}} onClick={() => navigate(("/users/" + element.nickname))}>
+							{element.status ? <Indicator color={"green"} size={14} processing position={"middle-end"} zIndex={0}> {element.nickname}</Indicator> :
+								<Indicator color={"red"} size={14} processing position={"middle-end"} zIndex={0}> {element.nickname}</Indicator>}
+						</div>
+						{(props.admins && props.admins.indexOf(element.nickname) !== -1) && <div style={{width:"10%", marginLeft:"10%"}}>admin</div>}
 					</div>)})}
 			</div>
 		</div>
