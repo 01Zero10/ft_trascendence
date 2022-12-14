@@ -43,24 +43,24 @@ type Ball = {
 }
 
 export default function Canvas(props: CanvasProps) {
-  const defaultPlayer = { x: 0, y: 0, height: 70, width: 20 }
-  const defaultBall = { x: props.canvasWidth / 2, y: props.canvasHeight / 2, width: 30, height: 30, dx: 0, dy: 0, direction: props.ballDirection }
+  // const defaultPlayer = { x: 0, y: 0, height: 70, width: 20 }
+  //const defaultBall = { x: props.canvasWidth / 2, y: props.canvasHeight / 2, width: 30, height: 30, dx: 0, dy: 0, direction: props.ballDirection }
   const canvasRef = useRef<HTMLCanvasElement>(null);
   let context: CanvasRenderingContext2D | null = null;
   const [loader, setLoader] = useState<boolean>(true);
   let moveKey: MoveKey = { s: false, w: false, ArrowUp: false, ArrowDown: false }
 
-  const rightPlayer = {
-    ...defaultPlayer,
-    y: (props.canvasHeight / 2) - (defaultPlayer.height / 2),
-    x: props.canvasWidth - (defaultPlayer.width)
-  }
+  // const rightPlayer = {
+  //   ...defaultPlayer,
+  //   y: (props.canvasHeight / 2) - (defaultPlayer.height / 2),
+  //   x: props.canvasWidth - (defaultPlayer.width)
+  // }
 
-  const leftPlayer = {
-    ...defaultPlayer,
-    y: (props.canvasHeight / 2) - (defaultPlayer.height / 2),
-    x: defaultPlayer.x
-  }
+  // const leftPlayer = {
+  //   ...defaultPlayer,
+  //   y: (props.canvasHeight / 2) - (defaultPlayer.height / 2),
+  //   x: defaultPlayer.x
+  // }
   
   function startGame(ball: Ball, left: Player, right: Player) {
     update(context, ball, left, right)
@@ -173,28 +173,32 @@ export default function Canvas(props: CanvasProps) {
   return (
     <div>
       {loader ? <Loader /> :
-        <div>
-          <h2 style={{ color: "black" }}>Player L 
-            {props.clientPaddle.side === 'left' ? props.clientPaddle.name : props.opponentPaddle.name}</h2>
-          <div style={{ color: "black" }} className={"player1"}>
-            <h2 style={{ color: "black" }}>{props.point.left}</h2>
+        <div style={{width:"100%", height:"100%", position:"relative"}}>
+          <div style={{position:"relative", display:"flex", width:"10%", height:"100%"}}>
+            <h2 style={{ color: "#ffffff" }}>Player L
+              {props.clientPaddle.side === 'left' ? props.clientPaddle.name : props.opponentPaddle.name}</h2>
+            <div style={{ color: "#ffffff" }} className={"player1"}>
+              <h2 style={{ color: "#ffffff" }}>{props.point.left}</h2>
+            </div>
+            <h2 style={{ color: "#ffffff"}}>Player R
+              {props.clientPaddle.side === 'right' ? props.clientPaddle.name : props.opponentPaddle.name}</h2>
+            <div style={{ color: "#ffffff"}} className={"player2"}>
+              <h2 style={{ color: "#ffffff" }}>{props.point.right}</h2>
+            </div>
           </div>
-          <h2 style={{ color: "black" }}>Player R 
-            {props.clientPaddle.side === 'right' ? props.clientPaddle.name : props.opponentPaddle.name}</h2>
-          <div style={{ color: "black" }} className={"player2"}>
-            <h2 style={{ color: "black" }}>{props.point.right}</h2>
+          <div style={{width: "90%"}}>
+            <canvas
+              ref={canvasRef}
+              width={props.canvasWidth}
+              height={props.canvasHeight}
+              style={{
+                border: "2px solid #000",
+                width: `${props.canvasWidth}px`,
+                height: `${props.canvasHeight}px`,
+                margin: "20px"
+              }}
+            ></canvas>
           </div>
-          <canvas
-            ref={canvasRef}
-            width={props.canvasWidth}
-            height={props.canvasHeight}
-            style={{
-              border: "2px solid #000",
-              width: `${props.canvasWidth}px`,
-              height: `${props.canvasHeight}px`,
-              margin: "20px"
-            }}
-          ></canvas>
         </div>
       }
     </div>
