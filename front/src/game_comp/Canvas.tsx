@@ -91,7 +91,7 @@ export default function Canvas(props: CanvasProps) {
       context.beginPath()
       context.fillRect(props.canvasWidth / 2 - 2, 0, 4, props.canvasHeight )
       context.fillRect(0, 0, props.canvasWidth, 4 )
-      context.fillRect(0, props.canvasHeight, props.canvasWidth , 4 )
+      context.fillRect(0, props.canvasHeight -4, props.canvasWidth, 4)
       context.closePath()
       drawPlayer(context, leftPlayer)
       drawPlayer(context, rightPlayer)
