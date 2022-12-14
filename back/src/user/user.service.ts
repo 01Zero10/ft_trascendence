@@ -253,6 +253,7 @@ export class UserService {
     notification.receiver = profileUser;
     notification.sender = client;
     notification.type = 'accepted_friendship';
+    notification.seen = false;
     await this.notificationsRepository.save(notification);
     await this.navigationGateway.updateBell(profileUser);
   }

@@ -67,6 +67,10 @@ export default function ChannelStatus(props: any) {
 	}, [props.room.name]
 	)
 
+	useEffect(() => {
+		console.log(props.members);
+	}, [props.members])
+
 	return (
 		<div style={{height:"100%", width:"20%", display:"flex", flexDirection:"column"}}>
 			<div className="membersList_header">
@@ -79,14 +83,14 @@ export default function ChannelStatus(props: any) {
 						{props.room.builder.username}
 					</Indicator>
 				</div>}
-				{props.room.name && props.members.map((element: string, id: number) => {return(
+				{props.room.name && props.members?.map((element: {nickname: string, status: boolean}, id: number) => {return(
 					// \/
 					<div style={{width:"100%", height:"10%", display:"flex"}} key={id}>
-						<div style={{width:"80%", height:"10%"}} onClick={() => navigate(("/users/" + element))} >{element}</div>
+						<div style={{width:"80%", height:"10%"}} onClick={() => navigate(("/users/" + element.nickname))} >{element.nickname}</div>
 						<Indicator color={online} size={12} processing>
 							<div style={{width:"10%", height:"10%"}}></div>
 						</Indicator>
-						{(props.admins && props.admins.indexOf(element) !== -1) && <div style={{width:"10%", height:"10%"}}>admin</div>}
+						{(props.admins && props.admins.indexOf(element.nickname) !== -1) && <div style={{width:"10%", height:"10%"}}>admin</div>}
 					</div>)})}
 			</div>
 		</div>
