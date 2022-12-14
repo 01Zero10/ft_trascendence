@@ -14,10 +14,7 @@ import { IconAt, IconClock } from "@tabler/icons";
 import React, { SetStateAction, useEffect, useLayoutEffect, useState } from "react"
 import "./AdminPanel_style.css"
 export default function AdminPanel(props: any) {
-	const tabStyle = {
-		color:"#781C9C",
-		fontWeight:"bold",
-	}
+
 
 	/*TODO: implementare bene con owner
 	con il pulsante admin la stanza e' sbagliata*/
@@ -227,7 +224,7 @@ export default function AdminPanel(props: any) {
 
 	//console.log(members)
 	return (<>
-			<Modal centered withCloseButton={false} closeOnClickOutside={false} zIndex={1500}
+			<Modal centered withCloseButton={false} closeOnClickOutside={false} zIndex={1500} overlayBlur={5}
 				   styles={(root) => ({
 					   inner:{
 						   backgroundColor: 'transparent',
@@ -316,14 +313,14 @@ export default function AdminPanel(props: any) {
 						color={"grape"}
 						defaultValue={"ban"}
 						style={{position:"relative", height:"90%"}}>
-						<Tabs.List>
-							<Tabs.Tab style={tabStyle} value={"ban"}>BAN</Tabs.Tab>
-							<Tabs.Tab style={tabStyle} value={"mute"}>MUTE</Tabs.Tab>
-							<Tabs.Tab style={tabStyle} value={"kick"}>KICK</Tabs.Tab>
+						<Tabs.List style={{display:"flex", flexDirection:"row", border:"none"}}>
+							<Tabs.Tab className={"adminTab_container"} value={"ban"}><div className={"adminTab_content"}>BAN</div></Tabs.Tab>
+							<Tabs.Tab className={"adminTab_container"} value={"mute"}><div className={"adminTab_content"}>MUTE</div></Tabs.Tab>
+							<Tabs.Tab className={"adminTab_container"} value={"kick"}><div className={"adminTab_content"}>KICK</div></Tabs.Tab>
 						</Tabs.List>
-						<Tabs.List>
-							<Tabs.Tab style={tabStyle} value={"unban"}>UNBAN</Tabs.Tab>
-							<Tabs.Tab style={tabStyle} value={"unmute"}>UNMUTE</Tabs.Tab>
+						<Tabs.List style={{display:"flex", flexDirection:"row", border:"none"}}>
+							<Tabs.Tab className={"adminTab_container"} value={"unban"}><div className={"adminTab_content"}>UNBAN</div></Tabs.Tab>
+							<Tabs.Tab className={"adminTab_container"} value={"unmute"}><div className={"adminTab_content"}>UNMUTE</div></Tabs.Tab>
 						</Tabs.List>
 						<img style={{rotate:"180deg"}}src="/account_decoration_down.svg" alt="" />
 						<Tabs.Panel style={{color:"white"}} value={"ban"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div className={"checkbox_element_container"} key={id}> <div  className={"checkbox_element_input"}><input type={"checkbox"} id={element} /></div><label className={"checkbox_element_label"}>{element}</label> </div>)})}</ScrollArea></Tabs.Panel>
