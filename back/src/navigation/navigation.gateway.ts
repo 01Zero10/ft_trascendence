@@ -29,7 +29,7 @@ export class NavigationGateWay implements OnGatewayInit, OnGatewayConnection, On
     {
         String(clientSocket.handshake.query.userID), clientSocket.id
       await this.navigationService.updateUserSocket(String(clientSocket.handshake.query.userID), clientSocket.id);
-      // await this.userService.setOnlineStatus(String(clientSocket.handshake.query.userID));
+      await this.userService.setOnlineStatus(String(clientSocket.handshake.query.userID));
       this.logger.log(`Client connected: ${clientSocket.id}`);
     }
   }

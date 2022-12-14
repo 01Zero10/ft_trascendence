@@ -341,31 +341,6 @@ export class ChatController {
 
     @Get('test')
     async test(){
-         const iv = randomBytes(16); //<Buffer 06 d3 9c 9a 68 d8 4e ba 19 47 3b 49 4c 95 62 fe>
-         //console.log(iv)
-         //console.log(iv.toString('base64'));
-        // console.log(process.env.BUFFER_IV)
-        //console.log(Buffer.from(process.env.BUFFER_IV, 'base64'))
-        //---const iv = Buffer.from(process.env.BUFFER_IV, 'base64')
-        //console.log('IV');
-        //console.log(iv);
-        //console.log('');
-        //---const key = (await promisify(scrypt)(process.env.PASS_TO_ENCRYPT, 'salt', 32)) as Buffer;
-        //console.log('KEY')
-        //console.log(key);
-        //console.log('');
-        //console.log('CIPHER');
-        //---const cipher = createCipheriv(process.env.ALGORITHM_TO_ENCRYPT, key, iv);
-        //---let crypted = cipher.update('Bop Bop Bop', 'utf-8', 'hex') + cipher.final('hex');    
-        //console.log("encrypted ", crypted)
-        //console.log('');
-        //console.log('DECIPHER');
-        //---const decipher = createDecipheriv(process.env.ALGORITHM_TO_ENCRYPT, key, iv);
-        //---let decrypted = decipher.update(crypted, 'hex', 'utf-8') + decipher.final('utf-8');
-        //console.log("decrypted = ", decrypted);
-        
-        //this.chatService.saveEntityProtectedChannel('ciao', iv, key);
-        
-        // return cipher;
+        return await this.chatService.getChatMembersTest("Speramo_bene");
     }
 }

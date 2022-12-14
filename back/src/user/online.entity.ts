@@ -9,11 +9,11 @@ export class Online {
     @Column()
     status: string;
 
-    @OneToOne(() => User, {cascade: true})
+    //@OneToOne(() => User, {cascade: true})
+    //@JoinColumn()
+    //user: User;
+
+    @OneToOne(() => User, (user) => user.status, {cascade: true})
     @JoinColumn()
     user: User;
-
-    // @OneToOne(() => User, (user) => user.status, {cascade: true})
-    // @JoinColumn()
-    // user: User;
 }

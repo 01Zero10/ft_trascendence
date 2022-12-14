@@ -40,8 +40,8 @@ export class User {
   @JoinTable()
   managedRooms: Rooms[];
 
-  // @OneToOne(() => Online, (online) => online.user)
-  // status: Online
+  @OneToOne(() => Online, (online) => online.user)
+  status: Online;
 
   @Column({ nullable: true })
   socket_id: string;

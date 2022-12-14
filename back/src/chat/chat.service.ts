@@ -195,35 +195,36 @@ export class ChatService {
         //const room = await this.roomsRepository.findOne({where: {name: roomName}});
         /*if (!room)
         return ;*/
-        const arrayUser = (await this.roomsRepository.createQueryBuilder('room')
-        .leftJoinAndSelect("room.members", "members")
+        
+        //old arrayUser
+        // const arrayUser = (await this.roomsRepository.createQueryBuilder('room')
+        // .leftJoinAndSelect("room.members", "members")
+        // .where({name: roomName})
+        // .getOne()).members;
+        // return arrayUser;
+
+        const arrayUser = await this.roomsRepository
+        .createQueryBuilder('room')
+        .leftJoinAndSelect('room.members', 'user')
+        .leftJoinAndSelect('user.status', 'status')
         .where({name: roomName})
-        .getOne()).members;
+        .select(['room.name', 'user.nickname', 'status.status'])
+        .getOne();
 
-		const online = await this.onlineRepository.createQueryBuilder("online")
-		.leftJoinAndSelect("online.user", "user")
-		.getMany()
-
-		console.log(online);
-
-		let arrayMembers : {user: User, online: boolean}[] = [];
-
-
-		for ( let element of arrayUser ) 
-		{
-			if ( online.findIndex(x => x.id === element.id) != -1)
-			{
-				arrayMembers.push({user: element, online: true});
-			}
-			else
-				arrayMembers.push({user: element, online: false}); 
-        // console.log("");
-        // console.log("[getchatmembers]");
-        //console.log("arr_u: ",arrayUser);
-        // console.log("");
-		}
-        return arrayUser;
+        return arrayUser.members;
 		
+    }
+
+    async getChatMembersTest(roomName: string){
+        const arrayUser = await this.roomsRepository
+        .createQueryBuilder('room')
+        .leftJoinAndSelect('room.members', 'user')
+        .leftJoinAndSelect('user.status', 'status')
+        .where({name: roomName})
+        .select(['room.name', 'user.nickname', 'status.status'])
+        .getOne();
+
+        return arrayUser.members;
     }
 
     async getRoomAdmins(roomName: string){
