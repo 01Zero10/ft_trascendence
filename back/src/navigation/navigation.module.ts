@@ -16,7 +16,7 @@ import { Notifications } from "./notifications.entity";
         secret: "Segreto243",
         signOptions: {expiresIn: "1d",}
       })],
-    providers: [NavigationGateWay, NavigationService, UserService],
+    providers: [NavigationService],
     controllers: [NavigationController],
     exports: [NavigationService],
 })

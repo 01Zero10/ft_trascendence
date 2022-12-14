@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from "@nestjs/common";
+import { forwardRef, Inject, Injectable, Logger } from "@nestjs/common";
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer, 
   OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, WsResponse} from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
@@ -8,7 +8,7 @@ import { NavigationService } from "./navigation.service";
 @WebSocketGateway({ cors: true })
 @Injectable()
 export class NavigationGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-  constructor( private userService: UserService,
+  constructor( @Inject(forwardRef(() => UserService)) private userService: UserService,
             private navigationService: NavigationService,
     )
     {}
@@ -20,6 +20,15 @@ export class NavigationGateWay implements OnGatewayInit, OnGatewayConnection, On
 
   afterInit(server: Server) {
     this.logger.log('Notification Gateway On')
+  }
+
+  async updateBell(receiver: string){
+
+    const client = await this.userService.getByUsername(receiver);
+    console.log("client = ", client.username, " sock_id = ", client.socket_id);
+    this.server.to(client.socket_id).emit('updateBell');
+    //const id_socket = (await this.userService.getByUsername(receiver)).socket_id;
+    //this.server.to(id_socket).emit('updateBell');
   }
 
   async handleConnection(clientSocket: Socket) {

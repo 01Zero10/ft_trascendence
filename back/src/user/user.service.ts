@@ -1,4 +1,4 @@
-import { Body, Injectable, Res } from "@nestjs/common";
+import { Body, forwardRef, Inject, Injectable, Res } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Response } from "express";
 import { Repository } from "typeorm";
@@ -9,6 +9,7 @@ import { JwtService } from "@nestjs/jwt";
 import { Friendship } from "./friendship.entity";
 import { Online } from "./online.entity";
 import { Notifications } from "src/navigation/notifications.entity";
+import { NavigationGateWay } from "src/navigation/navigation.gateway";
 
 export interface FriendListItem {
   username: string;
@@ -25,6 +26,7 @@ export class UserService {
     @InjectRepository(Friendship) private friendShipRepository: Repository<Friendship>,
     @InjectRepository(Online) private onlineRepository: Repository<Online>,
     @InjectRepository(Notifications) private notificationsRepository: Repository<Notifications>,
+    @Inject(forwardRef(() => NavigationGateWay)) private readonly navigationGateway: NavigationGateWay,
     private readonly jwt: JwtService,
   ) {}
 
@@ -184,6 +186,8 @@ export class UserService {
       type: 'friendship',
     })
 
+    await this.navigationGateway.updateBell(profileUser);
+
     return this.friendShipRepository.save({
       user1: friend1,
       user2: friend2,
@@ -224,6 +228,7 @@ export class UserService {
     const notification = await this.notificationsRepository.findOneBy({ sender: client, receiver: profileUser});
     if (notification)
       await this.notificationsRepository.remove(notification);
+      await this.navigationGateway.updateBell(profileUser);
   }
 
   async acceptFriendRequest(client: string, profileUser: string){
@@ -249,6 +254,7 @@ export class UserService {
     notification.sender = client;
     notification.type = 'accepted_friendship';
     await this.notificationsRepository.save(notification);
+    await this.navigationGateway.updateBell(profileUser);
   }
 
   async getFriendships(client: string){
