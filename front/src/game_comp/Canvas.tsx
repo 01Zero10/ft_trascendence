@@ -2,7 +2,6 @@ import {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import React from "react";
 import { Socket } from "socket.io-client";
 import Loader from "../components/Loader"
-import { Paddle } from "./PlayGround";
 import {Student} from "../App";
 
 type CanvasProps = {

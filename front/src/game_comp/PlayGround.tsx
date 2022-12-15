@@ -4,32 +4,9 @@ import { useNavigate } from "react-router-dom"
 import { Student } from "../App"
 import Canvas from "./Canvas"
 
-type Ball = {
-    x: number
-    y: number
-    radius: number
-    dx: number
-    dy: number
-    //start: boolean
-    direction: string | null
-}
-
-type Player = {
-    x: number
-    y: number
-    height: number
-    width: number
-}
-
 type Point = {
     left: number
     right: number
-}
-
-export type Paddle = {
-    name: string,
-    side: string,
-    playRoom: string,
 }
 
 function PlayGround(props: any) {
@@ -60,14 +37,9 @@ function PlayGround(props: any) {
                 rightPlayer: data.rightClient
             })
             setLoader(false);
-            //console.log("test", student.username === gameData.rightPlayer, "\nstudent", student.username, "\ngameDATA", gameData.rightPlayer)
             if (student.username === data.rightClient)
                 props.socket.emit('setStart', data.namePlayRoom);
         })
-        // props.socket.on('connectedToGame', (namePlayRoom: string, side: string) => {
-        //     if (side === 'right')
-        //         props.socket.emit('requestOpponent', { namePlayRoom: namePlayRoom, side: side })
-        // })
         props.socket.once('endGame', (winner: string) => {
             setWinner(winner)
         })
