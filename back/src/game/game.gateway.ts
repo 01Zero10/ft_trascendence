@@ -31,19 +31,19 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   @SubscribeMessage('onPress')
-  handleKeyPress(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {key: string, side: string, playRoom: string}): any {
+  handleKeyPress(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {key: string, player: string, playRoom: string}): any {
     if(data.key === 'w' || data.key === 'ArrowUp' )
-      this.gameService.setKeysPlayerPress(data.playRoom, data.side)
+      this.gameService.setKeysPlayerPress(data.playRoom, data.player)
     if (data.key === 's' || data.key === 'ArrowDown' )
-      this.gameService.setKeysPlayerPress(data.playRoom, data.side, -1)
+      this.gameService.setKeysPlayerPress(data.playRoom, data.player, -1)
   }
 
   @SubscribeMessage('onRelease')
-  handleKeyRelease(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {key: string, side: string, playRoom: string}): any {
+  handleKeyRelease(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {key: string, player: string, playRoom: string}): any {
     if(data.key === 'w' || data.key === 'ArrowUp' )
-      this.gameService.setKeysPlayerRelease(data.playRoom, data.side)
+      this.gameService.setKeysPlayerRelease(data.playRoom, data.player)
     if (data.key === 's' || data.key === 'ArrowDown' )
-      this.gameService.setKeysPlayerRelease(data.playRoom, data.side, -1)
+      this.gameService.setKeysPlayerRelease(data.playRoom, data.player, -1)
   }
 
   @SubscribeMessage('connectToGame')

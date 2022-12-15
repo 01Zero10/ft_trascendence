@@ -82,8 +82,8 @@ export class GameService{
             playRoom = this.runningMatches.create({playRoom: 'heldBy' + client, player1: client, leftSide: client, avatar1: avatar});
             await this.runningMatches.save(playRoom);
             this.mapPlRoom.set('heldBy' + client, {
-                leftPlayer: {...defaultPlayer, y: canvasHeight / 2 - defaultPlayer.height / 2}, 
-                rightPlayer:{...defaultPlayer, x: canvasWidth - defaultPlayer.width, y: canvasHeight / 2 - defaultPlayer.height / 2}, 
+                leftPlayer: {...defaultPlayer, username: playRoom.leftSide, y: canvasHeight / 2 - defaultPlayer.height / 2}, 
+                rightPlayer:{...defaultPlayer, username: playRoom.rightSide, x: canvasWidth - defaultPlayer.width, y: canvasHeight / 2 - defaultPlayer.height / 2}, 
                 ball: {...defaultBall}, leftPoint: 0, rightPoint: 0}
                 )
             return {namePlayRoom: 'heldBy' + client, side: 'left'};
@@ -167,7 +167,7 @@ export class GameService{
     }
 
     async setKeysPlayerPress(namePlayRoom: string, side: string, dir: number=1){
-        if (side === 'left'){
+        if (side === this.mapPlRoom.get(namePlayRoom).leftPlayer.username){
             if (dir > 0)
                 this.mapPlRoom.get(namePlayRoom).leftPlayer.up = true;
             else
@@ -182,7 +182,7 @@ export class GameService{
     }
 
     async setKeysPlayerRelease(namePlayRoom: string, side: string, dir: number=1){
-        if (side === 'left'){
+        if (side === this.mapPlRoom.get(namePlayRoom).leftPlayer.username){
             if (dir > 0)
                 this.mapPlRoom.get(namePlayRoom).leftPlayer.up = false;
             else
