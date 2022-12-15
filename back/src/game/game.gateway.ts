@@ -51,7 +51,7 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
     const ret = await this.gameService.createOrJoinPlayRoom(data.username, data.avatar)
     clientSocket.join(ret.namePlayRoom);
     if (ret.side === "right")
-      this.server.to(ret.namePlayRoom).emit('ready', {namePlayRoom: ret.namePlayRoom, leftSide: ret.left, rightSide: ret.right});
+      this.server.to(ret.namePlayRoom).emit('ready', {namePlayRoom: ret.namePlayRoom, leftClient: ret.left, rightClient: ret.right});
     //this.server.to(clientSocket.id).emit('connectedToGame', ret.namePlayRoom, ret.side)
   }
 
