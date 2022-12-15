@@ -7,6 +7,7 @@ import { Match } from "./match.entity";
 import { RunningMatch } from "./runningMatch.entity";
 
 type Player = {
+    username: string
     x: number
     y: number
     height: number
@@ -37,7 +38,7 @@ interface plRoom {
 
 const canvasHeight = 500
 const canvasWidth = 1000
-const defaultPlayer = { x: 0, y: 0, height: 100, width: 20, up: false, down: false }
+const defaultPlayer = {username:"", x: 0, y: 0, height: 100, width: 20, up: false, down: false }
 const defaultBall = { x: canvasWidth / 2 - 15, y: canvasHeight / 2 - 15, width: 30, height:30, dx: 0, dy: 0, direction: "" }
 const dir: Array<string> = ["l", "r"];
 const array_dir_y: Array<number> = [-3, 3];
@@ -51,14 +52,12 @@ export class GameService{
         @InjectRepository(User) private userRepository: Repository<User>,
         @Inject(forwardRef(() => GameGateWay)) private readonly gameGateway: GameGateWay
         ){this.mapPlRoom = new Map<string, plRoom>()}
-        
 
     async getMatches(client: string){
         return await this.matchRepository.find({ where : [{ player1: client}, {player2: client} ]})
     }
 
     async getClassicRunningMatches(){
-        //console.log('get services')
         return await this.runningMatches
         .createQueryBuilder('match')
         .where({typo: 'classic'})
@@ -120,8 +119,6 @@ export class GameService{
         {
             clearInterval(this.mapPlRoom.get(playRoom.playRoom).idInterval)
             await this.gameGateway.handleLeftGame(playRoom.playRoom)
-            
-            
             await this.matchRepository.save({player1: playRoom.player1,
                 avatar1: playRoom.avatar1,
                 player2: playRoom.player2,
@@ -169,22 +166,6 @@ export class GameService{
         return this.runningMatches.findOne({where: {playRoom: playRoom}});
     }
 
-    // async setKeysPlayer(namePlayRoom: string, side: string, dir: number=1){
-    //     //console.log("set keys ", this.mapPlRoom.get(namePlayRoom));
-    //     if (side === 'left'){
-    //         if (dir > 0)
-    //             this.mapPlRoom.get(namePlayRoom).leftPlayer.up = !this.mapPlRoom.get(namePlayRoom).leftPlayer.up;
-    //         else
-    //             this.mapPlRoom.get(namePlayRoom).leftPlayer.down = !this.mapPlRoom.get(namePlayRoom).leftPlayer.down;
-    //     }
-    //     else {
-    //         if (dir > 0)
-    //             this.mapPlRoom.get(namePlayRoom).rightPlayer.up = !this.mapPlRoom.get(namePlayRoom).rightPlayer.up;
-    //         else
-    //             this.mapPlRoom.get(namePlayRoom).rightPlayer.down = !this.mapPlRoom.get(namePlayRoom).rightPlayer.down;
-    //     }
-    // }
-
     async setKeysPlayerPress(namePlayRoom: string, side: string, dir: number=1){
         if (side === 'left'){
             if (dir > 0)
@@ -215,10 +196,6 @@ export class GameService{
         }
     }
 
-    // updateIdInterval(namePlayRoom: string, id: ReturnType<typeof setInterval>){
-    //     this.mapPlRoom.get(namePlayRoom).idInterval = id;
-    // }
-
     checkPlayerCollision(ball: Ball, rightPlayer?: Player, leftPlayer?: Player){
         console.log(ball.dx)
         if (leftPlayer){
@@ -230,7 +207,6 @@ export class GameService{
                 (ball.y + ball.width) + ball.dy < (rightPlayer.y + rightPlayer.height))
         }
     }
-
 
     async updatePlayer(namePlayRoom: string){
         if (this.mapPlRoom.get(namePlayRoom).leftPlayer.up && this.mapPlRoom.get(namePlayRoom).leftPlayer.y >= 5 )
@@ -297,13 +273,4 @@ export class GameService{
             return roomSaved.player1;
         return roomSaved.player2;
     }
-
-    // async sleep(time: number) {
-    //     await new Promise(f => setTimeout(f, time * 1000));
-    //   }
-
-    // async startTick(namePlayRoom: string){
-    //     const playRoom = this.mapPlRoom.get(namePlayRoom);
-
-    // }
 }

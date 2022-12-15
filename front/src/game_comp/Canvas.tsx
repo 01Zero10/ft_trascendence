@@ -43,24 +43,10 @@ type Ball = {
 }
 
 export default function Canvas(props: CanvasProps) {
-  // const defaultPlayer = { x: 0, y: 0, height: 70, width: 20 }
-  //const defaultBall = { x: props.canvasWidth / 2, y: props.canvasHeight / 2, width: 30, height: 30, dx: 0, dy: 0, direction: props.ballDirection }
   const canvasRef = useRef<HTMLCanvasElement>(null);
   let context: CanvasRenderingContext2D | null = null;
   const [loader, setLoader] = useState<boolean>(true);
   let moveKey: MoveKey = { s: false, w: false, ArrowUp: false, ArrowDown: false }
-
-  // const rightPlayer = {
-  //   ...defaultPlayer,
-  //   y: (props.canvasHeight / 2) - (defaultPlayer.height / 2),
-  //   x: props.canvasWidth - (defaultPlayer.width)
-  // }
-
-  // const leftPlayer = {
-  //   ...defaultPlayer,
-  //   y: (props.canvasHeight / 2) - (defaultPlayer.height / 2),
-  //   x: defaultPlayer.x
-  // }
   
   function startGame(ball: Ball, left: Player, right: Player) {
     update(context, ball, left, right)
@@ -157,9 +143,6 @@ export default function Canvas(props: CanvasProps) {
       }
     )
   }, [props.socket, props.clientPaddle])
-
-
-  // add event listener on canvas for mouse position
 
   useLayoutEffect(() => {
     document.addEventListener("keydown", handleKeyPress)
