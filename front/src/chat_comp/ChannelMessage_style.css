@@ -9,12 +9,28 @@
     
 }
 
+.message_container_sender {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 50%;
+    border: 2px solid var(--purple-color);
+    border-radius: 5px 5px 0px 25px;
+}
+
 .avatarStyle {
     border-right: 2px solid var(--purple-color);
     border-bottom: 2px solid var(--purple-color);
     border-radius: 4px 0 25px 0;
     cursor: pointer;
 }
+
+.avatarStyle_sender {
+    border-right: 2px solid var(--purple-color);
+    border-bottom: 2px solid var(--purple-color);
+    border-radius: 0 4px 0px 25px;
+    cursor: pointer;
+}
+
 
 .text_header_container {
     display: flex;
@@ -24,6 +40,17 @@
 
 .usernameDetails_container {
     display: flex;
+    width: 100%;
+    font-family: 'Tomorrow', sans-serif !important;
+    text-transform: uppercase;
+    background-color: var(--purple-color);
+    border-bottom: 2px solid var(--purple-color);
+    border-radius: 0 0 0 0;
+}
+
+.usernameDetails_container_sender {
+    display: flex;
+    flex-direction: row-reverse;
     width: 100%;
     font-family: 'Tomorrow', sans-serif !important;
     text-transform: uppercase;
@@ -67,6 +94,20 @@
     display: flex;
     align-items: baseline;
     justify-content: flex-start;
+    font-family: 'Tomorrow', sans-serif;
+    font-weight: 400;
+    letter-spacing: normal;
+    text-align: start;
+    word-break: break-all;
+}
+
+.textMessageArea_sender {
+    width: 100%;
+    background: transparent;
+    padding: 1%;
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
     font-family: 'Tomorrow', sans-serif;
     font-weight: 400;
     letter-spacing: normal;

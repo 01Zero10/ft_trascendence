@@ -40,14 +40,14 @@ export default function ChannelMessage(props: MessageProps) {
 			</Menu> */}
 
 	return (
-		<div id={props.id} className={props.class} style={{margin: "0 0 1% 0.5%"}}>
+		<>
+			{ student.username !== props.username ? <div id={props.id} className={props.class} style={{margin: "0 0 1% 0.5%"}}>
 					<div className="message_container">
 						<Avatar
 							className="avatarStyle"
 							src={props.avatar}
 							size={60}
 							radius={0}
-
 						/>
 						<div className="text_header_container">
 							<div className="usernameDetails_container">
@@ -62,6 +62,29 @@ export default function ChannelMessage(props: MessageProps) {
 							</div>
 						</div>
 					</div>
-		</div >
+		</div > :
+				<div id={props.id} className={props.class} style={{display:"flex", flexDirection:"row-reverse",margin: "0 0 1% 0.5%"}}>
+					<div className="message_container_sender">
+						<Avatar
+							className="avatarStyle_sender"
+							src={props.avatar}
+							size={60}
+							radius={0}
+						/>
+						<div className="text_header_container">
+							<div className="usernameDetails_container_sender">
+								<span id={props.id} className="usernameHeader">{props.username}</span>
+								<span id={props.id} className="detailsHeader">{naturalTime}</span>
+							</div>
+							<div className="messageText">
+								{/* <span id={props.id} className="">{props.message}</span> */}
+								<p className="textMessageArea_sender">
+									{props.message}
+								</p>
+							</div>
+						</div>
+					</div>
+				</div >}
+		</>
 	)
 }
