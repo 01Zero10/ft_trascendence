@@ -250,7 +250,7 @@ export class GameService{
                 this.mapPlRoom.get(namePlayRoom).ball.dx = 0
                 this.mapPlRoom.get(namePlayRoom).ball.dy = 0
                 this.mapPlRoom.get(namePlayRoom).leftPoint += 1
-                return 2;
+                return 1;
             }
         }
         this.mapPlRoom.get(namePlayRoom).ball.x += this.mapPlRoom.get(namePlayRoom).ball.dx

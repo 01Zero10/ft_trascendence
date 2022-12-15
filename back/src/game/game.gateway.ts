@@ -84,7 +84,7 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
         roomInMap = await this.gameService.restart(data.namePlayRoom);
         this.server.to(data.namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
         if (roomInMap.leftPoint !== 3 && roomInMap.rightPoint !== 3)
-          this.server.to(data.namePlayRoom).emit('goal', data, restart);
+          this.server.to(data.namePlayRoom).emit('goal', {roomName: data.namePlayRoom, leftPoint: roomInMap.leftPoint,  rightPoint: roomInMap.rightPoint});//, restart);
         else
         {
           const winner = await this.gameService.saveMatch(data.namePlayRoom, roomInMap.leftPoint, roomInMap.rightPoint);
