@@ -81,7 +81,7 @@ export default function Canvas2(props: CanvasProps) {
     // draw
     const draw = (context: CanvasRenderingContext2D | null, ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
         if (context) {
-            context.fillStyle = "#ffffff"
+            context.fillStyle = "#781C9C"
             context.clearRect(0, 0, props.canvasWidth, props.canvasHeight)
             context.beginPath()
             context.fillRect(props.canvasWidth / 2 - 2, 0, 4, props.canvasHeight )

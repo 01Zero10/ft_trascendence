@@ -1,21 +1,18 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import React from "react";
 import { Socket } from "socket.io-client";
 import Loader from "../components/Loader"
 import { Paddle } from "./PlayGround";
+import {Student} from "../App";
 
 type CanvasProps = {
   socket: Socket;
-  clientPaddle: Paddle;
-  opponentPaddle: Paddle;
-  dir_y: -3 | 3;
   point: any;
   canvasWidth: number;
   canvasHeight: number;
-  setPoint: React.Dispatch<React.SetStateAction<any>>
-  setOpponentSide: React.Dispatch<React.SetStateAction<Paddle>>
-  ballDirection: string | null
-  setLastpoint: React.Dispatch<React.SetStateAction<any>>
+  setPoint: React.Dispatch<React.SetStateAction<any>>;
+  gameData: {roomName: string, leftPlayer: string, rightPlayer: string};
+  setGameData:  React.Dispatch<React.SetStateAction<{roomName: string, leftPlayer: string, rightPlayer: string}>>;
 };
 
 type Player = {
@@ -43,12 +40,14 @@ type Ball = {
 }
 
 export default function Canvas(props: CanvasProps) {
+  const student = useContext(Student)
   const canvasRef = useRef<HTMLCanvasElement>(null);
   let context: CanvasRenderingContext2D | null = null;
   const [loader, setLoader] = useState<boolean>(true);
   let moveKey: MoveKey = { s: false, w: false, ArrowUp: false, ArrowDown: false }
   
   function startGame(ball: Ball, left: Player, right: Player) {
+    console.log("ball\n", ball, "\nleft\n", left, "\nright\n", right)
     update(context, ball, left, right)
   }
 
@@ -72,7 +71,7 @@ export default function Canvas(props: CanvasProps) {
   // draw
   const draw = (context: CanvasRenderingContext2D | null, ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
     if (context) {
-      context.fillStyle = "#ffffff"
+      context.fillStyle = "#781C9C"
       context.clearRect(0, 0, props.canvasWidth, props.canvasHeight)
       context.beginPath()
       context.fillRect(props.canvasWidth / 2 - 2, 0, 4, props.canvasHeight )
@@ -93,28 +92,25 @@ export default function Canvas(props: CanvasProps) {
   function handleKeyPress(e: KeyboardEvent) {
     if (moveKey.hasOwnProperty(e.key)) {
       e.preventDefault();
-      props.socket.emit('onPress', { key: e.key, side: props.clientPaddle.side, playRoom: props.clientPaddle.playRoom });
+      props.socket.emit('onPress', { key: e.key, player: student.username, playRoom: props.gameData.roomName });
     }
   }
 
   function handleKeyRelease(e: KeyboardEvent) {
     if (moveKey.hasOwnProperty(e.key)) {
       e.preventDefault()
-      props.socket.emit('onRelease', { key: e.key, side: props.clientPaddle.side, playRoom: props.clientPaddle.playRoom });
-    }
-  }
+      props.socket.emit('onRelease', { key: e.key, player: student.username, playRoom: props.gameData.roomName})
+  }}
 
   useEffect(() => {
-    props.socket.on('goal', async (data: { namePlayRoom: string, rightPlayer: string, leftPlayer: string }, point: number) => {
-      //console.log('reeeestart0', data);
-      if (point === 1)
-        props.setPoint((prevState: any) => {return {...prevState, right: ++prevState.right}})
-      else
-        props.setPoint((prevState: any) => {return {...prevState, left: ++prevState.left}})
+    props.socket.on('goal', async (data: {roomName: string, leftPoint: number, rightPoint: number }) => {
+      console.log('reeeestart0', data);
+      props.setPoint({left:data.leftPoint, right: data.rightPoint})
+      //TODO: impostare conto alla rovescia
       await sleep(3);
-      if (props.clientPaddle.name === data.rightPlayer) {
-        props.socket.emit('restart', data);
-      }
+      // if (props.clientPaddle.name === data.rightPlayer) {
+      //   props.socket.emit('restart', data);
+      // }
     })
   }, [])
 
@@ -122,19 +118,16 @@ export default function Canvas(props: CanvasProps) {
     props.socket.on('update', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
       update(context!, ball, leftPlayer, rightPlayer);
     })
-    props.socket.once('ready', (namePlayRoom: string, leftClient: string, rightClient: string) => {
-      if (props.clientPaddle.side === 'right')
-        props.setOpponentSide({name:leftClient, side: "left", playRoom: namePlayRoom })
-      else
-        props.setOpponentSide({name:rightClient, side: "right", playRoom: namePlayRoom })
-      //console.log("ricevuto ready ", leftClient, rightClient);
+    props.socket.once('ready', (data: {namePlayRoom: string, leftClient: string, rightClient: string}) => {
+      props.setGameData({
+        roomName: data.namePlayRoom,
+        leftPlayer: data.leftClient,
+        rightPlayer: data.rightClient
+      })
       setLoader(false);
-      if (props.clientPaddle.side === 'right')
-        props.socket.emit('setStart', {
-          namePlayRoom: namePlayRoom,
-          rightPlayer: rightClient,
-          leftPlayer: leftClient
-        });
+      console.log("test", student.username === props.gameData.rightPlayer, "\nstudent", student.username, "\ngameDATA", props.gameData.rightPlayer)
+      if (student.username === data.rightClient)
+        props.socket.emit('setStart', data.namePlayRoom);
     })
     props.socket.once('start', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
       if (canvasRef.current)
@@ -142,7 +135,7 @@ export default function Canvas(props: CanvasProps) {
       startGame(ball, leftPlayer, rightPlayer);
       }
     )
-  }, [props.socket, props.clientPaddle])
+  }, [props.socket, props.gameData])
 
   useLayoutEffect(() => {
     document.addEventListener("keydown", handleKeyPress)
@@ -151,7 +144,7 @@ export default function Canvas(props: CanvasProps) {
       document.removeEventListener("keydown", handleKeyPress)
       document.removeEventListener("keyup", handleKeyRelease)
     }
-  }, [props.clientPaddle]) // !!! levato context e messo clientPaddle
+  }, []) // !!! levato context e messo clientPaddle
 
   return (
     <div>
@@ -159,12 +152,12 @@ export default function Canvas(props: CanvasProps) {
         <div style={{width:"100%", height:"100%", position:"relative"}}>
           <div style={{position:"relative", display:"flex", width:"10%", height:"100%"}}>
             <h2 style={{ color: "#ffffff" }}>Player L
-              {props.clientPaddle.side === 'left' ? props.clientPaddle.name : props.opponentPaddle.name}</h2>
+              {props.gameData.leftPlayer}</h2>
             <div style={{ color: "#ffffff" }} className={"player1"}>
               <h2 style={{ color: "#ffffff" }}>{props.point.left}</h2>
             </div>
             <h2 style={{ color: "#ffffff"}}>Player R
-              {props.clientPaddle.side === 'right' ? props.clientPaddle.name : props.opponentPaddle.name}</h2>
+              {props.gameData.rightPlayer}</h2>
             <div style={{ color: "#ffffff"}} className={"player2"}>
               <h2 style={{ color: "#ffffff" }}>{props.point.right}</h2>
             </div>
