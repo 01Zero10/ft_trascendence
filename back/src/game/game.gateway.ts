@@ -62,40 +62,41 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   // }
 
   @SubscribeMessage('setStart')
-  async handleSetStart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, rightPlayer: string, leftPlayer: string}){
+  async handleSetStart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string}){//, rightPlayer: string, leftPlayer: string}){
+    console.log("data = ", data);
     const roomInMap = await this.gameService.generateBallDirection(data.namePlayRoom);
     this.server.to(data.namePlayRoom).emit('start', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
     await this.sleep(3);
-    this.startTick(data);
+    this.startTick(data.namePlayRoom);
   }
 
   @SubscribeMessage('restart')
   async handleRestart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, rightPlayer: string, leftPlayer: string}){
-    this.startTick(data);
+    this.startTick(data.namePlayRoom);
   }
 
   async handleLeftGame(namePlayRoom: string){
     this.server.to(namePlayRoom).emit('endGame', 'left');
   }
 
-  startTick(data: {namePlayRoom: string, rightPlayer: string, leftPlayer: string}) {
-    this.gameService.mapPlRoom.get(data.namePlayRoom).idInterval = setInterval(async () => {
-      let roomInMap = await this.gameService.updatePlayer(data.namePlayRoom);
-      const restart = await this.gameService.updateBall(data.namePlayRoom);
+  startTick(namePlayRoom: string){//<, rightPlayer: string, leftPlayer: string}) {
+    this.gameService.mapPlRoom.get(namePlayRoom).idInterval = setInterval(async () => {
+      let roomInMap = await this.gameService.updatePlayer(namePlayRoom);
+      const restart = await this.gameService.updateBall(namePlayRoom);
       if (restart){
-        roomInMap = await this.gameService.restart(data.namePlayRoom);
-        this.server.to(data.namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
+        roomInMap = await this.gameService.restart(namePlayRoom);
+        this.server.to(namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
         if (roomInMap.leftPoint !== 3 && roomInMap.rightPoint !== 3)
-          this.server.to(data.namePlayRoom).emit('goal', {roomName: data.namePlayRoom, leftPoint: roomInMap.leftPoint,  rightPoint: roomInMap.rightPoint});//, restart);
+          this.server.to(namePlayRoom).emit('goal', {roomName: namePlayRoom, leftPoint: roomInMap.leftPoint,  rightPoint: roomInMap.rightPoint});//, restart);
         else
         {
-          const winner = await this.gameService.saveMatch(data.namePlayRoom, roomInMap.leftPoint, roomInMap.rightPoint);
-          this.server.to(data.namePlayRoom).emit('endGame', winner);
+          const winner = await this.gameService.saveMatch(namePlayRoom, roomInMap.leftPoint, roomInMap.rightPoint);
+          this.server.to(namePlayRoom).emit('endGame', winner);
         }
-        clearInterval(this.gameService.mapPlRoom.get(data.namePlayRoom).idInterval)
+        clearInterval(this.gameService.mapPlRoom.get(namePlayRoom).idInterval)
       }
       else
-        this.server.to(data.namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
+        this.server.to(namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
     }, 10)
   }
 
