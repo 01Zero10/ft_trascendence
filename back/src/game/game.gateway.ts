@@ -71,8 +71,8 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   @SubscribeMessage('restart')
-  async handleRestart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, rightPlayer: string, leftPlayer: string}){
-    this.startTick(data.namePlayRoom);
+  async handleRestart(@ConnectedSocket() clientSocket: Socket, @MessageBody() roomName: string){
+    this.startTick(roomName);
   }
 
   async handleLeftGame(namePlayRoom: string){
