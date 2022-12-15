@@ -157,8 +157,8 @@ export class GameService{
     }
 
     async restart(namePlayRoom: string){
-        this.mapPlRoom.get(namePlayRoom).leftPlayer = {...defaultPlayer, y: canvasHeight / 2 - defaultPlayer.height / 2}
-        this.mapPlRoom.get(namePlayRoom).rightPlayer = {...defaultPlayer, x: canvasWidth - defaultPlayer.width, y: canvasHeight / 2 - defaultPlayer.height / 2}
+        this.mapPlRoom.get(namePlayRoom).leftPlayer = {...defaultPlayer, username:this.mapPlRoom.get(namePlayRoom).leftPlayer.username, y: canvasHeight / 2 - defaultPlayer.height / 2}
+        this.mapPlRoom.get(namePlayRoom).rightPlayer = {...defaultPlayer,username:this.mapPlRoom.get(namePlayRoom).rightPlayer.username, x: canvasWidth - defaultPlayer.width, y: canvasHeight / 2 - defaultPlayer.height / 2}
         await this.ballDirectionAtRestart(namePlayRoom)
         return this.mapPlRoom.get(namePlayRoom);
     }
@@ -198,7 +198,6 @@ export class GameService{
     }
 
     checkPlayerCollision(ball: Ball, rightPlayer?: Player, leftPlayer?: Player){
-        console.log(ball.dx)
         if (leftPlayer){
             return ((ball.y + ball.height) + ball.dy > leftPlayer.y + leftPlayer.width &&
                 ball.y + ball.dy <= (leftPlayer.y + leftPlayer.height) + leftPlayer.width)

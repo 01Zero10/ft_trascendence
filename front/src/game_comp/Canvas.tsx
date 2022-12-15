@@ -48,7 +48,6 @@ export default function Canvas(props: CanvasProps) {
   let moveKey: MoveKey = { s: false, w: false, ArrowUp: false, ArrowDown: false }
   
   function startGame(ball: Ball, left: Player, right: Player) {
-    console.log("ball\n", ball, "\nleft\n", left, "\nright\n", right)
     update(context, ball, left, right)
   }
 
@@ -105,15 +104,15 @@ export default function Canvas(props: CanvasProps) {
 
   useEffect(() => {
     props.socket.on('goal', async (data: {roomName: string, leftPoint: number, rightPoint: number }) => {
-      console.log('reeeestart0', data);
       props.setPoint({left:data.leftPoint, right: data.rightPoint})
       //TODO: impostare conto alla rovescia
       await sleep(3);
-      // if (props.clientPaddle.name === data.rightPlayer) {
-      //   props.socket.emit('restart', data);
-      // }
+      // console.log()
+      if (props.gameData.rightPlayer === student.username) {
+        props.socket.emit('restart', data.roomName);
+      }
     })
-  }, [])
+  }, [props.gameData])
 
   useEffect(() => {
     props.socket.on('update', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
@@ -136,8 +135,6 @@ export default function Canvas(props: CanvasProps) {
     }
   }, [props.gameData]) // !!! levato context e messo clientPaddle
 
-
-  console.log("GAMEDATA TUTTE LE VOLTE, ", props.gameData)
   return (
     <div>
       {props.loader ? <Loader /> :

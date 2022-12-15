@@ -63,7 +63,6 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   @SubscribeMessage('setStart')
   async handleSetStart(@ConnectedSocket() clientSocket: Socket, @MessageBody() namePlayRoom: string){//, rightPlayer: string, leftPlayer: string}){
-    console.log("data = ", namePlayRoom);
     const roomInMap = await this.gameService.generateBallDirection(namePlayRoom);
     this.server.to(namePlayRoom).emit('start', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
     await this.sleep(3);
