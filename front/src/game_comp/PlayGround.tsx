@@ -35,6 +35,7 @@ export type Paddle = {
 function PlayGround(props: any) {
     const navigate = useNavigate()
     const student = useContext(Student)
+    const [loader, setLoader] = useState<boolean>(true);
     const [gameData, setGameData] = useState<{roomName: string, leftPlayer: string, rightPlayer: string}>({
         roomName:"",
         leftPlayer:"",
@@ -52,6 +53,17 @@ function PlayGround(props: any) {
 
 
     useEffect(() => {
+        props.socket.once('ready', (data: {namePlayRoom: string, leftClient: string, rightClient: string}) => {
+            setGameData({
+                roomName: data.namePlayRoom,
+                leftPlayer: data.leftClient,
+                rightPlayer: data.rightClient
+            })
+            setLoader(false);
+            //console.log("test", student.username === gameData.rightPlayer, "\nstudent", student.username, "\ngameDATA", gameData.rightPlayer)
+            if (student.username === data.rightClient)
+                props.socket.emit('setStart', data.namePlayRoom);
+        })
         // props.socket.on('connectedToGame', (namePlayRoom: string, side: string) => {
         //     if (side === 'right')
         //         props.socket.emit('requestOpponent', { namePlayRoom: namePlayRoom, side: side })
@@ -110,6 +122,7 @@ function PlayGround(props: any) {
                 </div>
             </Modal> :
                 <Canvas
+                    loader={loader}
                     socket={props.socket}
                     point={point}
                     canvasHeight={500}

@@ -6,6 +6,7 @@ import { Paddle } from "./PlayGround";
 import {Student} from "../App";
 
 type CanvasProps = {
+  loader: boolean;
   socket: Socket;
   point: any;
   canvasWidth: number;
@@ -43,7 +44,7 @@ export default function Canvas(props: CanvasProps) {
   const student = useContext(Student)
   const canvasRef = useRef<HTMLCanvasElement>(null);
   let context: CanvasRenderingContext2D | null = null;
-  const [loader, setLoader] = useState<boolean>(true);
+
   let moveKey: MoveKey = { s: false, w: false, ArrowUp: false, ArrowDown: false }
   
   function startGame(ball: Ball, left: Player, right: Player) {
@@ -118,17 +119,6 @@ export default function Canvas(props: CanvasProps) {
     props.socket.on('update', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
       update(context!, ball, leftPlayer, rightPlayer);
     })
-    props.socket.once('ready', (data: {namePlayRoom: string, leftClient: string, rightClient: string}) => {
-      props.setGameData({
-        roomName: data.namePlayRoom,
-        leftPlayer: data.leftClient,
-        rightPlayer: data.rightClient
-      })
-      setLoader(false);
-      console.log("test", student.username === props.gameData.rightPlayer, "\nstudent", student.username, "\ngameDATA", props.gameData.rightPlayer)
-      if (student.username === data.rightClient)
-        props.socket.emit('setStart', data.namePlayRoom);
-    })
     props.socket.once('start', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
       if (canvasRef.current)
         context = canvasRef.current.getContext("2d");
@@ -137,18 +127,20 @@ export default function Canvas(props: CanvasProps) {
     )
   }, [props.socket, props.gameData])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     document.addEventListener("keydown", handleKeyPress)
     document.addEventListener("keyup", handleKeyRelease)
     return () => {
       document.removeEventListener("keydown", handleKeyPress)
       document.removeEventListener("keyup", handleKeyRelease)
     }
-  }, []) // !!! levato context e messo clientPaddle
+  }, [props.gameData]) // !!! levato context e messo clientPaddle
 
+
+  console.log("GAMEDATA TUTTE LE VOLTE, ", props.gameData)
   return (
     <div>
-      {loader ? <Loader /> :
+      {props.loader ? <Loader /> :
         <div style={{width:"100%", height:"100%", position:"relative"}}>
           <div style={{position:"relative", display:"flex", width:"10%", height:"100%"}}>
             <h2 style={{ color: "#ffffff" }}>Player L
