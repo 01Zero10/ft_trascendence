@@ -84,11 +84,11 @@ export default function ChannelBodyNav(props: any) {
 				</div>
 				<div className="channelOptionBar">
 					{/*TODO: inserire descrizione pulsanti*/}
-					{(props.room.name && props.room.builder.username === student.username)&& <ActionIcon variant="transparent" color="grape" onClick={() => props.setModalTypeOpen("options")}><IconSettings></IconSettings></ActionIcon>}
-					{(props.room.name && props.room.builder.username === student.username)&& <ActionIcon variant="transparent" color="grape" onClick={() => props.setModalTypeOpen("add")}><IconUserPlus></IconUserPlus></ActionIcon>}
-					{(props.room.name && props.admin) && <ActionIcon variant="transparent" color="grape" onClick={() => props.setModalTypeOpen("admin")}><IconGavel></IconGavel></ActionIcon>}
-					{(props.room.name && props.joined) && <ActionIcon onClick={() =>{ SetJoinFetch().then(); props.setRoom((prevState:any) => {return {...prevState, name:""}})}} variant="transparent" color="grape"><IconDoorExit></IconDoorExit></ActionIcon>}
-					{(props.room.name && !props.joined) && <ActionIcon onClick={SetJoinFetch} variant="transparent" color="grape"><IconDoorEnter></IconDoorEnter></ActionIcon>}
+					{(props.room.name && props.room.builder.username === student.username)&& <div className={"divIconContainer"}><IconSettings onClick={() => props.setModalTypeOpen("options")}></IconSettings><p className={"parIconDescription"}>OPTION</p></div>}
+					{(props.room.name && props.room.builder.username === student.username)&& <div className={"divIconContainer"}><IconUserPlus onClick={() => props.setModalTypeOpen("add")}></IconUserPlus><p className={"parIconDescription"}>MEMBERS</p></div>}
+					{(props.room.name && props.admin) && <div className={"divIconContainer"}><IconGavel onClick={() => props.setModalTypeOpen("admin")}></IconGavel><p className={"parIconDescription"}>ADMIN</p></div>}
+					{(props.room.name && props.joined) && <div className={"divIconContainer"}><IconDoorExit onClick={() =>{ SetJoinFetch().then(); props.setRoom((prevState:any) => {return {...prevState, name:""}})}}></IconDoorExit><p className={"parIconDescription"}>LEAVE</p></div>}
+					{(props.room.name && !props.joined) && <div className={"divIconContainer"}><IconDoorEnter onClick={SetJoinFetch}></IconDoorEnter><p className={"parIconDescription"}>ENTER</p></div>}
 				</div>
 			</div>
 			{/* <svg style={{ position:"relative", height:"30%", width:"100%", rotate:"180deg", float:"right"}} ><image style={{ width:"20%"}} xlinkHref="/chat_decoration_top_mod_color2.svg"></image></svg> */}

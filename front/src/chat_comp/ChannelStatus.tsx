@@ -83,18 +83,18 @@ export default function ChannelStatus(props: any) {
 				<div style={{height:"30%", width:"100%", borderLeft:"5px solid #781C9C"}}></div>
 			</div>
 			<div style={{position:"relative", height:"92%", backgroundColor:"black", color:"white", width:"100%", borderLeft:"5px solid #781C9C", borderBottom:"5px solid #781C9C", borderBottomLeftRadius:" 15px"}}>
-				{props.room.name && <div style={{width:"100%", height:"5%", display:"flex", flexDirection:"row",alignItems:"center", justifyContent:"flex-start"}}>
-					<div style={{width:"40%"}} onClick={() => navigate(("/users/" + props.room.builder.username))}>
-						{ownerOnline ? <Indicator color={"green"} size={14} processing position={"middle-end"} zIndex={0}>{props.room.builder.username}</Indicator> :
-							<Indicator color={"red"} size={14} processing position={"middle-end"} zIndex={0}>{props.room.builder.username}</Indicator>}
+				{props.room.name && <div className={"divNameContainer"}>
+					<div className={"divNameContainer_content"} onClick={() => navigate(("/users/" + props.room.builder.username))}>
+						{ownerOnline ? <Indicator color={"green"} size={14} processing position={"middle-end"} zIndex={0}> <p className={"divNameContent_name"}>{props.room.builder.username}</p></Indicator> :
+							<Indicator color={"red"} size={14} processing position={"middle-end"} zIndex={0}> <p className={"divNameContent_name"}>{props.room.builder.username}</p></Indicator>}
 					</div>
 					<div style={{width:"10%", marginLeft:"10%", display:"flex", alignItems:"center", justifyContent:"center"}}><IconCrown></IconCrown></div>
 				</div>}
 				{props.room.name && props.members?.map((element: {nickname: string, status: boolean}, id: number) => {return(
-					<div style={{width:"100%", height:"5%", display:"flex", alignItems:"center", justifyContent:"flex-start"}} key={id}>
-						<div style={{width:"40%"}} onClick={() => navigate(("/users/" + element.nickname))}>
-							{element.status ? <Indicator color={"green"} size={14} processing position={"middle-end"} zIndex={0}> {element.nickname}</Indicator> :
-								<Indicator color={"red"} size={14} processing position={"middle-end"} zIndex={0}> {element.nickname}</Indicator>}
+					<div className={"divNameContainer"} key={id}>
+						<div className={"divNameContainer_content"} onClick={() => navigate(("/users/" + element.nickname))}>
+							{element.status ? <Indicator color={"green"} size={14} processing position={"middle-end"} zIndex={0}> <p className={"divNameContent_name"}>{element.nickname}</p></Indicator> :
+								<Indicator color={"red"} size={14} processing position={"middle-end"} zIndex={0}> <p className={"divNameContent_name"}>{element.nickname}</p></Indicator>}
 						</div>
 						{(props.admins && props.admins.indexOf(element.nickname) !== -1) && <div style={{width:"10%", marginLeft:"10%"}}>admin</div>}
 					</div>)})}

@@ -84,7 +84,7 @@ export default function ChannelBodyStatus(props: any) {
     // }, [props.room.name])
     // console.log("admin: ", admin)
     return (
-        <div style={{position:"relative", height:"100%", backgroundColor:"lime", width:"80%", display:"flex"}}>
+        <div style={{position:"relative", height:"100%", backgroundColor:"black", width:"80%", display:"flex"}}>
             <ChannelBody 
                 room={props.room} 
                 socket={props.socket} 
