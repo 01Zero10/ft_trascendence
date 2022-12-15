@@ -207,7 +207,9 @@ export default function ChannelOptionModal(props: any) {
             if (indx === -1)
                 tmp.splice(tmp.indexOf(element), 1)
         }
-        props.setAdmins(tmp)
+        setNewOption((prevState) => {
+            return {...prevState, admin: tmp}
+        })
     }
 
     useEffect(() => {
