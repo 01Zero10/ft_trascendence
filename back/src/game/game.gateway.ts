@@ -50,14 +50,16 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   async handleClientSide(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {username: string, avatar: string}): Promise<any> {
     const ret = await this.gameService.createOrJoinPlayRoom(data.username, data.avatar)
     clientSocket.join(ret.namePlayRoom);
-    this.server.to(clientSocket.id).emit('connectedToGame', ret.namePlayRoom, ret.side)
+    if (ret.side === "right")
+      this.server.to(ret.namePlayRoom).emit('ready', {namePlayRoom: ret.namePlayRoom, leftSide: ret.left, rightSide: ret.side});
+    //this.server.to(clientSocket.id).emit('connectedToGame', ret.namePlayRoom, ret.side)
   }
 
-  @SubscribeMessage('requestOpponent')
-  async handleJoinPlayRoom(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, side: string}): Promise<any> {
-    const playRoom = await this.gameService.getPlayRoomByName(data.namePlayRoom);
-    this.server.to(data.namePlayRoom).emit('ready', data.namePlayRoom, playRoom.leftSide, playRoom.rightSide)
-  }
+  // @SubscribeMessage('requestOpponent')
+  // async handleJoinPlayRoom(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, side: string}): Promise<any> {
+  //   const playRoom = await this.gameService.getPlayRoomByName(data.namePlayRoom);
+  //   this.server.to(data.namePlayRoom).emit('ready', data.namePlayRoom, playRoom.leftSide, playRoom.rightSide)
+  // }
 
   @SubscribeMessage('setStart')
   async handleSetStart(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, rightPlayer: string, leftPlayer: string}){

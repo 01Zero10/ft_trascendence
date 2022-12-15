@@ -92,7 +92,7 @@ export class GameService{
         playRoom.avatar2 = avatar;
         playRoom.rightSide = client;
         await this.runningMatches.save(playRoom);
-        return {namePlayRoom: playRoom.playRoom, side: 'right'};
+        return {namePlayRoom: playRoom.playRoom, side: "right", left: playRoom.leftSide, right: playRoom.rightSide};
     }
 
     async handleLeaveQueue(client: string){
