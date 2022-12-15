@@ -73,6 +73,10 @@ export class GameService{
         .getMany();
     }
 
+    async getMatchByName(namePlayRoom: string) {
+        return this.mapPlRoom.get(namePlayRoom);
+    }
+
     async createOrJoinPlayRoom(client: string, avatar: string){
         let playRoom = await this.runningMatches
         .createQueryBuilder('runningMatch')
