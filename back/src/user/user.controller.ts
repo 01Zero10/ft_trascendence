@@ -41,10 +41,15 @@ export class UsersController {
   @Post('blockUser')
   async blockUser(@Body('client') client: string, @Body('userToBlock')userToBlock: string){
     //console.log(["___blockUser"]);
-    //console.log("client = ", client, "userToBlock = ", userToBlock);
+    console.log("client = ", client, "userToBlock = ", userToBlock);
     await this.userService.blockUser(client, userToBlock);
     //return ();
   }
+
+  // @Post('blockUser') //on-off
+  // async BlockUser(@Body('client') client: string, @Body('userToBlock') userToBlock: string){
+  //   return await this.userService.blockUser(client, userToBlock);
+  // }
 
   @Post('checkFriendship')
   async checkFriendship(@Body('client1') client1: string, @Body('client2')client2: string){

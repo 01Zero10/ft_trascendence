@@ -138,6 +138,11 @@ export class UserService {
 
   async blockUser(client: string, userToBlock: string){ //da testare
     const User = await this.userRepository.findOne({ where : {username: client}});
+    console.log("ciao");
+    if (!User.blockedUsers){
+      User.blockedUsers = [userToBlock];
+      return await this.userRepository.save(User);
+    }
     const index = User.blockedUsers.indexOf(userToBlock, 0);
     if (index > -1)
         User.blockedUsers.splice(index, 1);
@@ -204,7 +209,7 @@ export class UserService {
     request.sender = null;
     await this.friendShipRepository.save(request);
   }
-
+  
   async deleteRequestOrFriendship(client: string, profileUser: string){
     console.log("./ client ", client, " ./ profileUser ", profileUser);
     const userClient = await this.getByUsername(client);

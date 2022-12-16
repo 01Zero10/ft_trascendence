@@ -462,6 +462,17 @@ function Account() {
     setFriendship("nope");
   }
 
+  async function blockOrUnblockUser(userToBlock: string) {
+    const API_BLOCK_OR_UNBLOCK_FRIEND = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/blockUser`
+    await fetch(API_BLOCK_OR_UNBLOCK_FRIEND, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ client: contextData.username, userToBlock: userToBlock })
+    })
+    setFriendship("nope");
+  }
+
   function Pending_b() {
     return (
       <div style={{ textAlign: 'center' }}>
@@ -550,7 +561,7 @@ function Account() {
   function Block_b() {
     return (
       <div style={{ textAlign: 'center' }}>
-        <Fab color="secondary" aria-label="user" /*onClick={() => deleteRequestOrFriendship(user_id!)} */>
+        <Fab color="secondary" aria-label="user" onClick={() => blockOrUnblockUser(user_id!)}>
           <Block fontSize="large" />
         </Fab>
         {/* <h3 style={{ fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', fontSize: '1.4vw', padding: '10px' }}>PENDING</h3> */}
