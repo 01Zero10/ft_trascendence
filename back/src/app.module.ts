@@ -44,6 +44,6 @@ import { NavigationModule } from "./navigation/navigation.module";
     })
   ],
   controllers: [AuthController, ChatController], 
-  providers: [ChatGateWay],
+  providers: [],
 }) 
 export class AppModule {}

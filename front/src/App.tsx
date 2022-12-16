@@ -27,7 +27,8 @@ export interface student {
   nickname: string;
   avatar: string;
   two_fa_auth: boolean;
-  rooms?: Rooms[];
+  blockedUsers?: string[];
+  rooms?: Rooms[] | null;
   twoFaAuthSecret?: string;
   socket_id?: string;
   points: number;
@@ -43,7 +44,8 @@ export const Student = createContext<student>({
   socket_id: undefined, //
   rooms: undefined, //
   two_fa_auth: false,
-  twoFaAuthSecret: undefined,
+  twoFaAuthSecret: undefined, //poi vediamo
+  blockedUsers: undefined,
   points: 0,
   wins: 0,
   losses: 0,
@@ -59,6 +61,7 @@ function App() {
     avatar: "",
     two_fa_auth: false,
     twoFaAuthSecret: undefined,
+    blockedUsers: undefined,
     points: 0,
     wins: 0,
     losses: 0,
@@ -81,6 +84,7 @@ function App() {
             nickname: result.nickname,
             avatar: result.avatar,
             two_fa_auth: result.two_fa_auth,
+            blockedUsers: result.blockedUsers,
             points: result.points,
             wins: result.wins,
             losses: result.losses,

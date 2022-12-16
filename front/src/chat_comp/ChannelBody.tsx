@@ -250,9 +250,14 @@ export default function ChannelBody(props: any) {
 			<div style={{ background:"black",color:"white", position:"relative", height:"92%", width:"100%"}}>
 				<ScrollArea style={{height:"89%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)}>
 				{props.room.name && messages.map((m: packMessage, id: number) => {
-					return(
-						<ChannelMessage username={m.username} message={m.message} createdAt={m.createdAt} key={id} avatar={m.avatar}></ChannelMessage>
-					)
+						if (student.blockedUsers && student.blockedUsers.findIndex(x => x === m.username) != -1)
+						{
+							console.log(student.blockedUsers.findIndex(x => x === m.username));
+						}	
+						else
+							return(
+							<ChannelMessage username={m.username} message={m.message} createdAt={m.createdAt} key={id} avatar={m.avatar}></ChannelMessage>
+						)
 				})}
 				<div ref={bottomRef}></div>
 				</ScrollArea>
