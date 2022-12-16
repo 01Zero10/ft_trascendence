@@ -256,7 +256,7 @@ export default function ChannelBody(props: any) {
 						}	
 						else
 							return(
-							<ChannelMessage username={m.username} message={m.message} createdAt={m.createdAt} key={id} avatar={m.avatar}></ChannelMessage>
+							<ChannelMessage admin={props.admin} username={m.username} message={m.message} createdAt={m.createdAt} key={id} avatar={m.avatar}></ChannelMessage>
 						)
 				})}
 				<div ref={bottomRef}></div>

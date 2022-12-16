@@ -52,7 +52,7 @@ export default function ChannelMessage(props: MessageProps) {
 						<div className="text_header_container">
 							<div className="usernameDetails_container">
 								{/* <span id={props.id} className="usernameHeader">{props.username}</span> */}
-								<Menu position={"bottom-start"} closeDelay={400}>
+								<Menu position={"bottom-start"} width="target" closeDelay={400}>
 				<Menu.Target>
 					<span id={props.id} className="usernameHeader">{props.username}</span>
 				</Menu.Target>
@@ -61,8 +61,7 @@ export default function ChannelMessage(props: MessageProps) {
 						<Menu.Item icon={<IconUser size={13} />} onClick={() => navigate(('/users/' + props.username))}>User profile</Menu.Item>
 						<Menu.Item icon={<IconMessage size={13} />}>Chat</Menu.Item>
 						<Menu.Item icon={<IconDeviceGamepad2 size={13} />}>Pong</Menu.Item>
-							TODO: inserire controllo admin
-						{(props.admin !== 0 && props.builder !== props.username) &&
+						{(props.admin && props.builder !== props.username) &&
 							<>
 								<Menu.Divider className={"divider"}></Menu.Divider>
 								<Menu.Label>Admin options</Menu.Label>
