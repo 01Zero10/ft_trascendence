@@ -2,7 +2,7 @@ import { Box, Center, FocusTrap, Modal, MultiSelect, PasswordInput, SegmentedCon
 import { useDisclosure } from "@mantine/hooks";
 import { PropaneSharp, Tune } from "@mui/icons-material";
 import { IconLock, IconShield, IconWorld } from "@tabler/icons";
-import React, { useContext, useEffect, useState } from "react"
+import React, {useContext, useEffect, useLayoutEffect, useState} from "react"
 import { Student } from "../App";
 import { NewChannel } from "./CreateChannel";
 import "./ChannelOptionModal_stye.css"
@@ -16,7 +16,7 @@ export default function ChannelOptionModal(props: any) {
         builder: contextData.username,
         nameGroup: "",
         members: [],
-        admin: [...props.admins],
+        admin: [],
         type: props.room.type,
         password: '',
         confirmPass: ''
@@ -46,6 +46,24 @@ export default function ChannelOptionModal(props: any) {
     const [visible, { toggle }] = useDisclosure(false);
     //const [admins, setAdmins] = useState<string[]>([])
     const [optionsFriends, setOptionsFriends] = useState<{ value: string, label: string }[]>([{ value: "", label: "" }]);
+
+
+    useLayoutEffect(() => {
+        if (props.members)
+            setNewOption((prevChOptions: NewChannel) => {
+                return ({
+                    ...prevChOptions,
+                    members: [...props.members],
+                })})
+            }    , [props.members])
+
+    useLayoutEffect(() => {
+            setNewOption((prevChOptions: NewChannel) => {
+                return ({
+                    ...prevChOptions,
+                    admin: [...props.admins],
+                })})
+    } , [props.admins])
 
     useEffect(() => {
         const API_GET_LIST_FRIEND = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/getListFriends/${contextData.username}`;

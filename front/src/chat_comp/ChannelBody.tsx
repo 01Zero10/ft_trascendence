@@ -217,7 +217,7 @@ export default function ChannelBody(props: any) {
 		}
 	}
 
-	//console.log("rodaltype:",modalTypeOpen )
+	console.log("members:",props.members )
 
 	return (
 		<div style={{ position:"relative", height:"100%", width:"80%"}}>
@@ -230,7 +230,7 @@ export default function ChannelBody(props: any) {
 				socket={props.socket}
 			/>}
 			{(props.room.name && modalTypeOpen !== "admin" ) && <ChannelOptionModal 
-				room={props.room} 
+				room={props.room}
 				members={props.members}
 				modalTypeOpen={modalTypeOpen} 
 				admins={props.admins}
