@@ -165,24 +165,25 @@ export default function ChannelOptionModal(props: any) {
 				newName: newOption.nameGroup,
 			})
 		}) 
-
-		const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/editUsers`;
-		await fetch(API_GET_MEMBERS, {
-			credentials: 'include',
-			headers: { 'Content-Type': 'application/json' },
-			method: 'POST',
-			body: JSON.stringify({ data: props.admins, channelName: props.room.name })
-		})}
+        if(newOption.admin.length !== props.admins){
+            const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/editUsers`;
+            await fetch(API_GET_MEMBERS, {
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                method: 'POST',
+                body: JSON.stringify({ data: newOption.admin, channelName: props.room.name })
+            })}
+        }
 
         // aggiunge utenti
         if (props.modalTypeOpen === "add"){
-		const API_ADD_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/addMembers`;
-		await fetch(API_ADD_MEMBERS, {
-			method: 'POST',
-			credentials: 'include',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ nameChannel: props.room?.name, newMembers: newOption.members }),
-		})
+            const API_ADD_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/addMembers`;
+            await fetch(API_ADD_MEMBERS, {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nameChannel: props.room?.name, newMembers: newOption.members }),
+            })
 
 	}
 		props.setModalTypeOpen(null)
@@ -246,6 +247,8 @@ export default function ChannelOptionModal(props: any) {
         if(newOption.nameGroup === "")
             setBtnDisabled(true)
         if(newOption.members.length !== 0)
+            setBtnDisabled(false)
+        if(newOption.admin.length !== props.admins.length)
             setBtnDisabled(false)
     }, [newOption]
     )

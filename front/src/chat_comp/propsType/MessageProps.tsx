@@ -7,9 +7,10 @@ type MessageProps = {
 	createdAt: any,
 	username: string,
 	message: string,
-	admin?: 0 | 1 | 2
+	admin?: boolean,
 	builder?: string,
-	avatar?: string
+	avatar?: string,
+	admins?: string[],
 }
 
 export default MessageProps
