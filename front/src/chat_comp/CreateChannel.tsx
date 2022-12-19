@@ -250,7 +250,8 @@ close	.mantine-Modal-close	Close button*/
                             placeholder="Channel Name"
                             radius="md"
                         /> */}
-                        <input  className="search_input" 
+                        <input  maxLength={18}
+								className="search_input" 
                                 placeholder="Channel name"
                                 type="text"
                                 autoComplete="off"
