@@ -17,6 +17,11 @@ export default function Game(props: any) {
     const contextData = useContext(Student)
     const [play, setPlay] = useState(false)
     const [socket, setSocket] = useState<Socket | null>(null);
+    const [gameData, setGameData] = useState<{roomName: string, leftPlayer: string, rightPlayer: string}>({
+        roomName:"",
+        leftPlayer:"",
+        rightPlayer:""
+    })
 
     useLayoutEffect(() => {
         const newSocket = io(`http://${process.env.REACT_APP_IP_ADDR}:3001/game`, { query: { username: contextData.username } });
@@ -32,9 +37,9 @@ export default function Game(props: any) {
         <div className="game_container">
             <div className="fake_navbar">
             </div>
-            {!play ? <LeadGrid setPlay={setPlay}></LeadGrid> :
+            {!play ? <LeadGrid socket={socket} setGameData={setGameData} setPlay={setPlay}></LeadGrid> :
                 <div className="playground">
-                    <PlayGround socket={socket}></PlayGround>
+                    <PlayGround gameData={gameData} socket={socket} setGameData={setGameData}></PlayGround>
                 </div>}
         </div>
     )

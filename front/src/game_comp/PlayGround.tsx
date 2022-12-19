@@ -13,11 +13,11 @@ function PlayGround(props: any) {
     const navigate = useNavigate()
     const student = useContext(Student)
     const [loader, setLoader] = useState<boolean>(true);
-    const [gameData, setGameData] = useState<{roomName: string, leftPlayer: string, rightPlayer: string}>({
-        roomName:"",
-        leftPlayer:"",
-        rightPlayer:""
-    })
+    // const [gameData, setGameData] = useState<{roomName: string, leftPlayer: string, rightPlayer: string}>({
+    //     roomName:"",
+    //     leftPlayer:"",
+    //     rightPlayer:""
+    // })
     const [point, setPoint] = useState<Point>({
         left: 0,
         right: 0
@@ -31,7 +31,7 @@ function PlayGround(props: any) {
 
     useEffect(() => {
         props.socket.once('ready', (data: {namePlayRoom: string, leftClient: string, rightClient: string}) => {
-            setGameData({
+            props.setGameData({
                 roomName: data.namePlayRoom,
                 leftPlayer: data.leftClient,
                 rightPlayer: data.rightClient
@@ -100,8 +100,8 @@ function PlayGround(props: any) {
                     canvasHeight={500}
                     canvasWidth={1000}
                     setPoint={setPoint}
-                    gameData={gameData}
-                    setGameData={setGameData}
+                    gameData={props.gameData}
+                    setGameData={props.setGameData}
                     />
             }
         </div>

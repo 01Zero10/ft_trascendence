@@ -124,18 +124,30 @@ function RunningMatchesList(props: any){
     getRunningMatches();
   }, [])
 
+  useEffect(() => {
+    props.socket.on("watchGameConfirm",
+        (data: {nameRoom: string, leftClient:string, rightClient:string, leftPoints:number, rightPoints:number}) => {
+          props.setGameData({roomName: data.nameRoom, leftPlayer: data.leftClient, rightPlayer: data.rightClient})
+          props.setPoint({left: data.leftPoints, right:data.rightPoints})
+          props.setPlay(true)
+    }
+  )
+  }, [props.socket])
+
+  function handleClick(playRoom: string){
+    props.socket.emit("watchGameRequest", playRoom)
+  }
+
   return (
     <>
     { runningMatches.map(function(element: any){
         //console.log(element)
         return (
 
-          <div className="running_matches_holder" key={element.playRoom}>
+          <div className="running_matches_holder" key={element.playRoom} onClick={() => handleClick(element.playRoom)}>
               <div className="running_matches">
-                <Avatar radius={10} style={{marginRight:"1%"}} src={element.avatar1}></Avatar> 
-                  {element.player1} 
-                  VS 
-                  {element.player2} 
+                <Avatar radius={10} style={{marginRight:"1%"}} src={element.avatar1}></Avatar>
+                {element.player1 + " VS " + element.player2}
                 <Avatar radius={10} style={{marginLeft:"1%"}} src={element.avatar2}></Avatar>
               </div>
           </div>
@@ -162,7 +174,7 @@ export function ClassicModal(props: any) {
       <div className="grid_item_2">
         <Demo client={contextData.username} setGameOptions={props.setGameOptions}/>
       </div>
-      <div className="grid_item_3"> LISTA PARTITE IN CORSO <RunningMatchesList typo={props.typo}/>
+      <div className="grid_item_3"> LISTA PARTITE IN CORSO <RunningMatchesList socket={props.socket} setPoint={props.setPoint} setGameData={props.setGameData} setPlay={props.setPlay} typo={props.typo}/>
       </div>
     </div>
   )

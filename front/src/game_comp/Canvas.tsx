@@ -126,13 +126,15 @@ export default function Canvas(props: CanvasProps) {
   }, [props.socket, props.gameData])
 
   useEffect(() => {
-    document.addEventListener("keydown", handleKeyPress)
-    document.addEventListener("keyup", handleKeyRelease)
-    return () => {
-      document.removeEventListener("keydown", handleKeyPress)
-      document.removeEventListener("keyup", handleKeyRelease)
+    if(student.username === props.gameData.leftPlayer || student.username === props.gameData.rightPlayer){
+      document.addEventListener("keydown", handleKeyPress)
+      document.addEventListener("keyup", handleKeyRelease)
+      return () => {
+        document.removeEventListener("keydown", handleKeyPress)
+        document.removeEventListener("keyup", handleKeyRelease)
+      }
     }
-  }, [props.gameData]) // !!! levato context e messo clientPaddle
+  }, [props.gameData])
 
   return (
     <div>

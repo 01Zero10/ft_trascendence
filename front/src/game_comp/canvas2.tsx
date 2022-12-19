@@ -2,18 +2,15 @@ import { useEffect,  useRef, } from "react";
 import React from "react";
 import { Socket } from "socket.io-client";
 
-import { Paddle } from "./PlayGround";
 
 type CanvasProps = {
     socket: Socket;
-    clientPaddle: Paddle;
-    opponentPaddle: Paddle;
+
     dir_y: -3 | 3;
     point: any;
     canvasWidth: number;
     canvasHeight: number;
     setPoint: React.Dispatch<React.SetStateAction<any>>
-    setOpponentSide: React.Dispatch<React.SetStateAction<Paddle>>
     ballDirection: string | null
     setLastpoint: React.Dispatch<React.SetStateAction<any>>
 };
