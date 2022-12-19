@@ -18,6 +18,11 @@ export default function ChannelMessage(props: MessageProps) {
 	let navigate = useNavigate();
 	const naturalTime = (new Date(props.createdAt)).toString().slice(0, 24);
 
+	function privateChatWithUser(userToChatWith: string) {
+		//setCard(dm);
+		//setChatWithUser
+	}
+
 //  <Menu position={"bottom-start"} closeDelay={400}>
 // 				<Menu.Target>
 // 					<span id={props.id} className="message-user">{props.username}</span>
@@ -59,7 +64,7 @@ export default function ChannelMessage(props: MessageProps) {
 				{student.username !== props.username &&
 					<Menu.Dropdown>
 						<Menu.Item icon={<IconUser size={13} />} onClick={() => navigate(('/users/' + props.username))}>User profile</Menu.Item>
-						<Menu.Item icon={<IconMessage size={13} />}>Chat</Menu.Item>
+						<Menu.Item icon={<IconMessage size={13} />} onClick={() => privateChatWithUser(props.username)}>Chat</Menu.Item>
 						<Menu.Item icon={<IconDeviceGamepad2 size={13} />}>Pong</Menu.Item>
 						{((props.admin && props.builder !== props.username && props.admins?.indexOf(props.username) === -1) || student.username === props.builder ) &&
 							<>

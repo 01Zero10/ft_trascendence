@@ -78,6 +78,12 @@ export class ChatController {
         return (members);
     }
 
+    @Get('allmembersandstatus/:roomName')
+    async GetAllChatMembersAndStatu(@Param('roomName') roomName: string): Promise<User[]>{
+        const members = await this.chatService.getChatMembersAndStatus(roomName);
+        return (members);
+    }
+
     @Get('members/:roomName')
     async GetChatMembers(@Param('roomName') roomName: string): Promise<User[]>{
         const admins = await this.chatService.getRoomAdmins(roomName);

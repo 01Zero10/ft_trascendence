@@ -16,7 +16,7 @@ export default function ChannelStatus(props: any) {
 
 
 	async function getChannelMembers() {
-		const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/allmembers/${props.room.name}`;
+		const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/allmembersandstatus/${props.room.name}`;
 		if (props.room.name) {
 			let response = await fetch(API_GET_MEMBERS);
 			let data = await response.json();
