@@ -26,7 +26,7 @@ export default function ChannelList(props: any) {
 
 	useEffect(() => {
 		props.socket?.on('update', async (type: string) => {
-			if (props.card !== "direct")
+			if (props.card !== 'FriendsChatList/'+student.username)
 				await getChannels();
 		});
 	}, [props.socket])
