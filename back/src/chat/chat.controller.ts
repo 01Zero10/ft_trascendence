@@ -242,9 +242,16 @@ export class ChatController {
     async EditChannel(
         @Body('channelName') channelName: string,
         @Body('type') type: string,
+        @Body('adminsSetted') adminsSetted: string[],
         @Body('password') password?: string,
-        @Body('newName') newName?: string){
-            await this.chatService.editChannel(channelName, type, password, newName); //impostare un return?
+        @Body('newName') newName?: string ){
+            console.log("---EditChannel---");
+            console.log("channel name ", channelName);
+            console.log("type ", type);
+            console.log("password ", password);
+            console.log("newName ", newName);
+            console.log("adminsSetted ", adminsSetted);
+            await this.chatService.editChannel(channelName, type, adminsSetted, password, newName); //impostare un return?
     }
 
     @Post('editUsers')

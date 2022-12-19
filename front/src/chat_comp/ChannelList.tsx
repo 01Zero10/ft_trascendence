@@ -31,6 +31,13 @@ export default function ChannelList(props: any) {
 		});
 	}, [props.socket])
 
+	useEffect(() => {
+		props.socket?.on('updateChannel', async(roomName: string, type: string, builder: { username: string }) =>{
+			console.log('canalissimo ', roomName, type, builder);
+			props.setRoom({name: roomName, type: type, builder: builder});
+		});
+	}, [props.socket])
+
 	return (
 		<div style={{display: "flex", flexDirection: "column"}}>
 			{channelList.map(function (element: any, id: number) {

@@ -553,9 +553,10 @@ export class ChatService {
     
     //Setters
 
-    async editChannel(channelName: string, type: string, password?: string, newName?: string){
-        //console.log("chname =", channelName, type, password, newName)
-        const room = await this.getRoomByName(channelName);
+    async editChannel(channelName: string, type: string, adminsSetted: string[], password?: string, newName?: string){
+        let room = await this.getRoomByName(channelName);
+        const nameToEmit = room.name;
+        const typeToEmit = room.type;
         //da gestire un eventuale room null?
         if (newName)
         {
@@ -577,7 +578,18 @@ export class ChatService {
             room.type = 'private';
             room.password = null;
         }
-        this.roomsRepository.save(room);
+        room = await this.roomsRepository.save(room);
+        await this.editUsersOnChannel(adminsSetted, room.name);
+        const newDates = await this.roomsRepository
+        .createQueryBuilder('room')
+        .leftJoinAndSelect('room.builder', 'builder')
+        .where({name: room.name})
+        .select(['room.name', 'room.type', 'builder.username'])
+        .getOne();
+        console.log("room ", room);
+        console.log("newdates ", newDates);
+        this.chatGateway.server.emit('update', typeToEmit);
+        this.chatGateway.server.to(nameToEmit).emit('updateChannel', newDates.name, newDates.type, newDates.builder);
     }
  
     async editUsersOnChannel(admins: string[], channelName: string){
