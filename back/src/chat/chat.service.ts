@@ -215,6 +215,20 @@ export class ChatService {
 		
     }
 
+    async getChatMembersForUpdate(roomName: string){
+        const room = await this.roomsRepository.findOne({where: {name: roomName}});
+        /*if (!room)
+        return ;*/
+        
+        //old arrayUser
+        const arrayUser = (await this.roomsRepository.createQueryBuilder('room')
+        .leftJoinAndSelect("room.members", "members")
+        .where({name: roomName})
+        .getOne()).members;
+        return arrayUser;
+		
+    }
+
     async getChatMembersTest(roomName: string){
         const arrayUser = await this.roomsRepository
         .createQueryBuilder('room')
@@ -300,11 +314,12 @@ export class ChatService {
 
     async addMembers(nameChannel: string, newMembers: string[]){
         const room = await this.getRoomByName(nameChannel);
-        const updatingMembers = await this.getChatMembers(nameChannel);
+        const updatingMembers = await this.getChatMembersForUpdate(nameChannel);
         await Promise.all( await newMembers.map(async (element) => {
             updatingMembers.push(await this.userRepository.findOne({ where: { username: element} }))
         }))
         room.members = updatingMembers;
+        console.log("updating Members   ", updatingMembers)
         await this.roomsRepository.save(room);
         console.log("entratissimo")
         await this.chatGateway.handleUpdateListMembers(nameChannel);

@@ -183,6 +183,8 @@ export class ChatController {
 
     @Post('addMembers')
     async addMembers(@Body('nameChannel') nameChannel: string, @Body('newMembers') newMembers: string[]){
+        console.log("nameChannel   ", nameChannel);
+        console.log("newMembers    ", newMembers);
         return (await this.chatService.addMembers(nameChannel, newMembers));
     }
 
