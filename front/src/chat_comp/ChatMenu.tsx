@@ -70,7 +70,7 @@ export default function ChatMenu(props: any) {
 					</Tabs.List>
 					<Tabs.Panel style={tabPanelStyle} value="all"><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList socket={props.socket} src={src} card={props.card} setRoom={props.setRoom}/></ScrollArea></Tabs.Panel>
 					<Tabs.Panel style={tabPanelStyle} value={`membership/${contextData.id}`}><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList socket={props.socket} src={src} card={props.card} setRoom={props.setRoom}/></ScrollArea></Tabs.Panel>
-					<Tabs.Panel style={tabPanelStyle} value={`FriendsChatList/${contextData.username}`}><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList socket={props.socket} card={props.card}/></ScrollArea></Tabs.Panel>
+					<Tabs.Panel style={tabPanelStyle} value={`FriendsChatList/${contextData.username}`}><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList socket={props.socket} src={src} card={props.card}/></ScrollArea></Tabs.Panel>
 				</Tabs>
 				<div className="search_container">
 					<input className="search_input" placeholder="Search" type="text" onChange={search} autoComplete="off"/>
