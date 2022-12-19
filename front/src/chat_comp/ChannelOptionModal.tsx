@@ -346,7 +346,8 @@ export default function ChannelOptionModal(props: any) {
                     <FocusTrap><input type="" style={{width:"0", height:"0", border:"none"}} /></FocusTrap>
                     <img src="/account_decoration_top.svg" alt="" />
                     {props.modalTypeOpen === "options" && <div className="search_container">
-                        <input  className="search_input" 
+                        <input  maxLength={18}
+								className="search_input" 
                                 placeholder={props.room.name}
                                 type="text"
                                 autoComplete="off"
