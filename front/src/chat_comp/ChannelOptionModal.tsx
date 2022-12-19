@@ -181,16 +181,17 @@ export default function ChannelOptionModal(props: any) {
 				type: newOption.type,
 				password: newOption.confirmPass,
 				newName: newOption.nameGroup,
+                adminsSetted: newOption.admin,
 			})
 		}) 
-        if(newOption.admin.length !== props.admins){
-            const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/editUsers`;
-            await fetch(API_GET_MEMBERS, {
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                method: 'POST',
-                body: JSON.stringify({ data: newOption.admin, channelName: props.room.name })
-            })}
+        // if(newOption.admin.length !== props.admins){
+        //     const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/editUsers`;
+        //     await fetch(API_GET_MEMBERS, {
+        //         credentials: 'include',
+        //         headers: { 'Content-Type': 'application/json' },
+        //         method: 'POST',
+        //         body: JSON.stringify({ data: newOption.admin, channelName: props.room.name })
+        //     })}
         }
 
         // aggiunge utenti
