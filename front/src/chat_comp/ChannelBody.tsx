@@ -262,7 +262,8 @@ export default function ChannelBody(props: any) {
 											builder={props.room.builder.username}
 											username={m.username} message={m.message}
 											createdAt={m.createdAt}
-											avatar={m.avatar}/>
+											avatar={m.avatar}
+											setCard={props.setCard}/>
 						)
 				})}
 				<div ref={bottomRef}></div>

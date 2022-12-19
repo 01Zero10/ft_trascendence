@@ -94,6 +94,7 @@ export default function ChannelBodyStatus(props: any) {
                 setAdmins={setAdmins}
                 setMembers={setMembers}
                 setRoom={props.setRoom}
+                setCard={props.setCard}
                 />
             <ChannelStatus 
                 room={props.room}

@@ -13,13 +13,14 @@ import { useNavigate } from "react-router-dom";
 import { Room } from "@mui/icons-material";
 import './ChannelMessage_style.css';
 
-export default function ChannelMessage(props: MessageProps) {
+//export default function ChannelMessage(props: MessageProps) {
+export default function ChannelMessage(props: any) {
 	const student = useContext(Student)
 	let navigate = useNavigate();
 	const naturalTime = (new Date(props.createdAt)).toString().slice(0, 24);
 
 	function privateChatWithUser(userToChatWith: string) {
-		//setCard(dm);
+		props.setCard(`FriendsChatList/${student.username}`);
 		//setChatWithUser
 	}
 
