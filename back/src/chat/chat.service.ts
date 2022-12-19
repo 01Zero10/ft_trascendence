@@ -191,7 +191,7 @@ export class ChatService {
         });
     }
 
-    async getChatMembers(roomName: string){
+    async getChatMembersAndStatus(roomName: string){
         //const room = await this.roomsRepository.findOne({where: {name: roomName}});
         /*if (!room)
         return ;*/
@@ -215,12 +215,10 @@ export class ChatService {
 		
     }
 
-    async getChatMembersForUpdate(roomName: string){
+    async getChatMembers(roomName: string){
         const room = await this.roomsRepository.findOne({where: {name: roomName}});
         /*if (!room)
         return ;*/
-        
-        //old arrayUser
         const arrayUser = (await this.roomsRepository.createQueryBuilder('room')
         .leftJoinAndSelect("room.members", "members")
         .where({name: roomName})
@@ -314,7 +312,7 @@ export class ChatService {
 
     async addMembers(nameChannel: string, newMembers: string[]){
         const room = await this.getRoomByName(nameChannel);
-        const updatingMembers = await this.getChatMembersForUpdate(nameChannel);
+        const updatingMembers = await this.getChatMembers(nameChannel);
         await Promise.all( await newMembers.map(async (element) => {
             updatingMembers.push(await this.userRepository.findOne({ where: { username: element} }))
         }))
