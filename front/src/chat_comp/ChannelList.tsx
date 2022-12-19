@@ -12,7 +12,7 @@ export default function ChannelList(props: any) {
 		let response = await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/chat/get${props.card}`);
 		let data = await response.json();
 		let options_: Rooms[] = [];
-		console.log(options_)
+		console.log("ooooptions ", options_)
 		await Promise.all(await data.map(async (element: any) => {
 			if (options_.findIndex(x => x.name === element.name) === -1)
 				options_.push(element);

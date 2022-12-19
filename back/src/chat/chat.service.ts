@@ -9,18 +9,17 @@ import { PrivateMessages } from './privateMessages.entity';
 import { BanOrMute } from './banOrMute.entity';
 import { createCipheriv, scrypt, randomBytes} from 'crypto';
 import { promisify } from 'util';
-import { channel } from 'diagnostics_channel';
 import { ChatGateWay } from './chat.gateway';
-import { Online } from 'src/user/online.entity';
+import { DirectRooms } from './directRooms.entity';
 
 @Injectable()
 export class ChatService {
     constructor(
         @InjectRepository(RoomMessages) private roomMessagesRepository: Repository<RoomMessages>,
-		@InjectRepository(RoomMessages) private onlineRepository: Repository<Online>,
         @InjectRepository(PrivateMessages) private privateMessagesRepository: Repository<PrivateMessages>,
         @InjectRepository(User) private userRepository: Repository<User>,
         @InjectRepository(Rooms) private roomsRepository: Repository<Rooms>,
+        @InjectRepository(DirectRooms) private directRoomsRepository: Repository<DirectRooms>,
         @InjectRepository(BanOrMute) private banOrMuteRepository: Repository<BanOrMute>,
         @Inject(forwardRef(() => ChatGateWay)) private readonly chatGateway: ChatGateWay    ) {}
 
@@ -77,6 +76,14 @@ export class ChatService {
         .getMany()
         //console.log(Rooms);
         return Rooms;
+    }
+
+    async getDirectChannels(client: string) {
+        const ret = this.directRoomsRepository
+        .createQueryBuilder("direct")
+        .where([{user1: client}, {user2: client}])
+        .getMany();
+        return ret;
     }
 
     async getChannel(channelName: string){

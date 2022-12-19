@@ -141,7 +141,8 @@ export class ChatController {
 
     @Get('getFriendsChatList/:client')
     async GetFriendsChatList(@Param('client') client: string){
-        return await this.chatService.getFriendsRooms(client);
+        return await this.chatService.getDirectChannels(client);
+        //return await this.chatService.getFriendsRooms(client);
     }
 
     @Post('addMembersOptions')
