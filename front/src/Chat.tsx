@@ -13,6 +13,7 @@ export default function Chat() {
 	const [room, setRoom] = useState<Rooms>({ name: "", type: "", builder: { username: "" } })
 	const [chOptions, setChOptions] = useState<Rooms | null>(null)
 	const [card, setCard] = useState("all")
+	const [joined, setJoined] = useState(false)
 
 	const [socket, setSocket] = useState<Socket | null>(null);
 	useLayoutEffect(() => {
@@ -77,7 +78,7 @@ export default function Chat() {
 	return (
 		<div className="chat-dashboard">
 			<ChatMenu setRoom={setRoom} socket={socket} setCard={setCard} card={card}></ChatMenu>
-			<ChannelBodyStatus room={room} socket={socket} setRoom={setRoom} setCard={setCard}></ChannelBodyStatus>
+			<ChannelBodyStatus room={room} socket={socket} setRoom={setRoom} setCard={setCard} joined={joined} setJoined={setJoined}></ChannelBodyStatus>
 		</div>
 	)
 }

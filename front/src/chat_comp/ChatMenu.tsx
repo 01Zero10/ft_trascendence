@@ -64,13 +64,13 @@ export default function ChatMenu(props: any) {
 				<Tabs keepMounted={false} variant={"default"} radius="lg" color={"grape"} defaultValue={"all"} style={{position:"relative", height:"90%"}}>
 					<Tabs.List position="center" grow={true}>
 						<Tabs.Tab style={tabStyle} value="all"  icon={<IconUsers size={14} />} onClick={() => props.setCard("all")}>All Channel</Tabs.Tab>
-						<Tabs.Tab style={tabStyle} value={`membership/${contextData.id}`} icon={<IconUser size={14} />} onClick={() => props.setCard(`membership/${contextData.id}`)}>My Channels</Tabs.Tab>
+						<Tabs.Tab style={tabStyle} value={`membership/${contextData.id}`} icon={<IconUser size={14} />} onClick={() => {props.setCard(`membership/${contextData.id}`)}}>My Channels</Tabs.Tab>
 						{/*<Tabs.Tab value="protected" icon={<IconShield size={14} />} onClick={() => setCard("protected")}>Protected</Tabs.Tab>*/}
 						<Tabs.Tab style={tabStyle} value={`FriendsChatList/${contextData.username}`} icon={<IconMessageCircle size={14} />} onClick={() => props.setCard(`FriendsChatList/${contextData.username}`)}>DM's</Tabs.Tab>
 					</Tabs.List>
 					<Tabs.Panel style={tabPanelStyle} value="all"><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList socket={props.socket} src={src} card={props.card} setRoom={props.setRoom}/></ScrollArea></Tabs.Panel>
 					<Tabs.Panel style={tabPanelStyle} value={`membership/${contextData.id}`}><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList socket={props.socket} src={src} card={props.card} setRoom={props.setRoom}/></ScrollArea></Tabs.Panel>
-					<Tabs.Panel style={tabPanelStyle} value={`FriendsChatList/${contextData.username}`}><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList socket={props.socket} src={src} card={props.card}/></ScrollArea></Tabs.Panel>
+					<Tabs.Panel style={tabPanelStyle} value={`FriendsChatList/${contextData.username}`}><ScrollArea style={{height: "100%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)} ><ChannelList socket={props.socket} src={src} card={props.card} setRoom={props.setRoom}/></ScrollArea></Tabs.Panel>
 				</Tabs>
 				<div className="search_container">
 					<input className="search_input" placeholder="Search" type="text" onChange={search} autoComplete="off"/>
