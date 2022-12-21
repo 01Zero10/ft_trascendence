@@ -19,12 +19,17 @@ export default function ChannelMessage(props: any) {
 	let navigate = useNavigate();
 	const naturalTime = (new Date(props.createdAt)).toString().slice(0, 24);
 
-	function privateChatWithUser(userToChatWith: string) {
+	async function privateChatWithUser(userToChatWith: string) {
+		const API_URL_CREATE_DIRECT_CHAT = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/createDirectChat`;
+		const ret = await fetch(API_URL_CREATE_DIRECT_CHAT, {
+			method: 'POST',
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({client: student.username, userToChatWith: userToChatWith}),
+		}).then((response) => response.json())
+		console.log('---------', ret);
 		props.setCard(`FriendsChatList/${student.username}`);
-		if (student.username < userToChatWith)
-			props.setRoom({ name: student.username + userToChatWith, type: 'direct', builder: {username: null} });
-		else
-			props.setRoom({ name: userToChatWith + student.username, type: 'direct', builder: {username: null} });
+		props.setRoom({ name: ret.name, type: 'direct', builder: {username: null} });
 	}
 
 //  <Menu position={"bottom-start"} closeDelay={400}>

@@ -9,6 +9,9 @@ export class PrivateMessages {
     username: string;
 
     @Column()
+    avatar: string;
+
+    @Column()
     userSocket: string;
 
     @Column()

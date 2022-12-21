@@ -5,6 +5,7 @@ import { AuthGuard } from "src/auth/auth.guard";
 import { Rooms } from "./rooms.entity";
 import { createCipheriv, createDecipheriv, randomBytes, scrypt } from "crypto";
 import { promisify } from "util";
+import { RoomMessages } from "./roomsMessages.entity";
 
 interface DataAdmins{
     value: string,
@@ -117,8 +118,8 @@ export class ChatController {
     @UseGuards(AuthGuard)
     @UseInterceptors(ClassSerializerInterceptor)
     @Post('chrono')
-    async GetChatChronology(@Body('user') username: string, @Body('roomName') roomName: string){
-        const messages = await this.chatService.getMessages(roomName);
+    async GetChatChronology(@Body('user') username: string, @Body('roomName') roomName: string, @Body('type') type: string){
+        const messages = await this.chatService.getMessages(roomName, type);
         return (messages);
     }
     
@@ -230,6 +231,12 @@ export class ChatController {
         const room = await this.chatService.createGroupChat2(builder, nameGroup, members, type, password);
         return room;
     }
+
+    @Post('createDirectChat')
+    async CreateDirectChat(@Body('client') client: string,
+        @Body('userToChatWith') userToChatWith: string){
+            return await this.chatService.createDirectChat(client, userToChatWith);
+        }
 
     //fatto con socket emit... non dovrebbe servire
     // @Get('expiredMuteOrBan/:channelName')

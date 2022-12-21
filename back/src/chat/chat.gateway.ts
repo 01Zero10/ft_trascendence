@@ -33,17 +33,18 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   @SubscribeMessage('msgToServer')
   async handleMessage(
     @ConnectedSocket() clientSocket: Socket, 
-    @MessageBody() data: {room: string, username: string, message: string, avatar: string}):
+    @MessageBody() data: {room: string, username: string, message: string, avatar: string, type: string}):
     Promise<WsResponse<{room: string, username: string, message: string, avatar: string}>> { 
     //console.log("Data room ", data);
-    console.log("Entratissimo");
-      const packMessage = await this.chatService.createMessage({...data, clientSocket})
+    console.log("Entratissimo type = ", data.type, " name = ", data.room);
+      const packMessage = await this.chatService.createMessage({...data, clientSocket}, data.type)
     this.server.to(data.room).emit('msgToClient', packMessage);
     return {event:"msgToServer", data: data}; // equivalent to clientSocket.emit(data);
   }
 
   @SubscribeMessage('joinRoom')
   async handleJoinRoom(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {client: string, room: string}): Promise<any> {
+    console.log("roomie = ", data.room);
     await this.chatService.createRoom(data.client, data.room);
     clientSocket.join(data.room);
     clientSocket.emit('joinedRoom', data.room);
