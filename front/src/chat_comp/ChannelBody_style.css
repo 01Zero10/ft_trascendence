@@ -93,5 +93,5 @@
 	font-weight: 600;
 	color:white;
 	opacity: 0.70;
-	text-shadow: 2px 2px 4px var(--purple-color);
+	/* text-shadow: 4px 4px 6px var(--purple-color); */
 }
