@@ -64,15 +64,15 @@ export default function ChannelMessage(props: any) {
 				</Menu.Target>
 				{student.username !== props.username &&
 					<Menu.Dropdown>
-						<Menu.Item icon={<IconUser size={13} />} onClick={() => navigate(('/users/' + props.username))}>User profile</Menu.Item>
-						<Menu.Item icon={<IconMessage size={13} />} onClick={() => privateChatWithUser(props.username)}>Chat</Menu.Item>
-						<Menu.Item icon={<IconDeviceGamepad2 size={13} />}>Pong</Menu.Item>
+						<Menu.Item className={"messageDropMenu_Item"} icon={<IconUser size={15} />} onClick={() => navigate(('/users/' + props.username))}>User profile</Menu.Item>
+						<Menu.Item className={"messageDropMenu_Item"} icon={<IconMessage size={15} />} onClick={() => privateChatWithUser(props.username)}>Chat</Menu.Item>
+						<Menu.Item className={"messageDropMenu_Item"} icon={<IconDeviceGamepad2 size={15} />}>Pong</Menu.Item>
 						{((props.admin && props.builder !== props.username && props.admins?.indexOf(props.username) === -1) || student.username === props.builder ) &&
 							<>
-								<Menu.Divider className={"divider"}></Menu.Divider>
+								<Menu.Divider className={"messageDropMenu_divider"}></Menu.Divider>
 								<Menu.Label>Admin options</Menu.Label>
-								<Menu.Item icon={<IconBan size={13} />}>Ban</Menu.Item>
-								<Menu.Item icon={<IconMessageOff size={13} />}>Mute</Menu.Item>
+								<Menu.Item className={"messageDropMenu_Item"} icon={<IconBan size={15} />}>Ban</Menu.Item>
+								<Menu.Item className={"messageDropMenu_Item"} icon={<IconMessageOff size={15} />}>Mute</Menu.Item>
 							</>}
 					</Menu.Dropdown>}
 
@@ -98,7 +98,7 @@ export default function ChannelMessage(props: any) {
 						/>
 						<div className="text_header_container">
 							<div className="usernameDetails_container_sender">
-								<span id={props.id} className="usernameHeader">{props.username}</span>
+								<span id={props.id} className="usernameHeader_sender">{props.username}</span>
 								<span id={props.id} className="detailsHeader">{naturalTime}</span>
 							</div>
 							<div className="messageText">

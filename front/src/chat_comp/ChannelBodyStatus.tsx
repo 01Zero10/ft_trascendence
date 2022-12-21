@@ -9,7 +9,7 @@ export interface element_status {
     status:boolean,
 }
 export default function ChannelBodyStatus(props: any) {
-    const [joined, setJoined] = useState(false)
+    //const [joined, setJoined] = useState(false)
     const student = useContext(Student);
     //---------------------chat.tsx States----------------------
     const [admin, setAdmin] = useState(false)
@@ -95,6 +95,8 @@ export default function ChannelBodyStatus(props: any) {
                 setMembers={setMembers}
                 setRoom={props.setRoom}
                 setCard={props.setCard}
+                joined={props.joined}
+                setJoined={props.setJoined}
                 />
             <ChannelStatus 
                 room={props.room}

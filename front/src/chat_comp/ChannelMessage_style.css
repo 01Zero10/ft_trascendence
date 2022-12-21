@@ -21,14 +21,12 @@
     border-right: 2px solid var(--purple-color);
     border-bottom: 2px solid var(--purple-color);
     border-radius: 4px 0 25px 0;
-    cursor: pointer;
 }
 
 .avatarStyle_sender {
     border-right: 2px solid var(--purple-color);
     border-bottom: 2px solid var(--purple-color);
     border-radius: 0 4px 0px 25px;
-    cursor: pointer;
 }
 
 
@@ -63,9 +61,38 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
     width: 50%;
     font-size: 1.25rem;
     cursor: pointer;
+    /* border-right: 1px solid black; */
+}
+
+.usernameHeader:after {
+    content: '';
+    position: absolute;
+    left: 20%;
+    height: 0.5em;
+    width: 60%;
+    border-bottom: 1.5px solid;
+    margin-top: 10px;
+    opacity: 0;
+    transition: opacity 0.35s, transform 0.35s;
+    transform: scale(0,1);
+}
+
+.usernameHeader:hover:after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.usernameHeader_sender {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    font-size: 1.25rem;
+    cursor: default;
     /* border-right: 1px solid black; */
 }
 
@@ -77,6 +104,7 @@
     align-items: flex-end;
     justify-content: flex-end;
     padding-right: 1%;
+    cursor: default;
     /* border-left: 1px solid black; */
 }
 
@@ -113,4 +141,15 @@
     letter-spacing: normal;
     text-align: start;
     word-break: break-all;
+}
+
+.messageDropMenu_Item {
+    font-family: 'Tomorrow', sans-serif;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.messageDropMenu_Divider {
+    border: none;
+
 }

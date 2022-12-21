@@ -12,9 +12,10 @@ import { BanOrMute } from "./banOrMute.entity";
 import { UserService } from "src/user/user.service";
 import { Friendship } from "src/user/friendship.entity";
 import { UsersModule } from "src/user/user.module";
+import { DirectRooms } from "./directRooms.entity";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([RoomMessages, PrivateMessages, User, Rooms, BanOrMute]),
+    imports: [TypeOrmModule.forFeature([RoomMessages, PrivateMessages, User, Rooms, DirectRooms, BanOrMute]),
     JwtModule.register({
         secret: "Segreto243",
         signOptions: {expiresIn: "1d",}

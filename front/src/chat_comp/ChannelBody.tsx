@@ -37,7 +37,7 @@ export default function ChannelBody(props: any) {
 	//---------------------------------------------------------
 	// const [listUser, setListUser] = useState<string[]>([]);
 	const student = useContext(Student);
-	const [joined, setJoined] = useState(false)
+	//const [joined, setJoined] = useState(false)
 	const [modalTypeOpen, setModalTypeOpen] = useState<null | "admin" | "options" | "add">(null)
 	const [checkPwd, setCheckPwd] = useState(false)
 	const [inputPwd, setInputPwd] = useState("")
@@ -61,7 +61,7 @@ export default function ChannelBody(props: any) {
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ client: student.username, channelName: props.room.name, joined: props.joined }),
 			})
-			setJoined((prevJoined: boolean) => !prevJoined);
+			props.setJoined((prevJoined: boolean) => !prevJoined);
 			props.socket?.emit('updateList', { type: props.room.type });
 		}
 	}
@@ -130,10 +130,10 @@ export default function ChannelBody(props: any) {
 			})
 			const data = await response.json();
 			//console.log("DATA: ",data)
-			setJoined(data);
+			props.setJoined(data);
 		}
 		if (props.room.type === 'direct')
-			setJoined(true);
+			props.setJoined(true);
 		else
 			checkJoined().then();
 	}, [props.room])
@@ -163,14 +163,14 @@ export default function ChannelBody(props: any) {
 		//console.log(props.room, joined)
 		if (props.room.name && props.room.type === "public")
 			props.socket?.emit('joinRoom', { client: student.username, room: props.room.name });
-		else if (props.room.name && props.room.type === "protected" && joined)
+		else if (props.room.name && props.room.type === "protected" && props.joined)
 			props.socket?.emit('joinRoom', { client: student.username, room: props.room.name });
 	}
 
 	useEffect(() => 
 		{
 			joinRoom(props.room.name)
-		}, [props.room, joined]
+		}, [props.room, props.joined]
 	)
 
 	useEffect(() => {
@@ -241,10 +241,10 @@ export default function ChannelBody(props: any) {
 			<ChannelBodyNav 
 				room={props.room} 
 				admin={props.admin}
-				joined={joined} 
+				joined={props.joined} 
 				socket={props.socket} 
 				setRoom={props.setRoom}
-				setJoined={setJoined} 
+				setJoined={props.setJoined} 
 				setModalTypeOpen={setModalTypeOpen} 
 				/>
 			<div style={{ background:"black",color:"white", position:"relative", height:"92%", width:"100%"}}>
@@ -268,7 +268,7 @@ export default function ChannelBody(props: any) {
 				})}
 				<div ref={bottomRef}></div>
 				</ScrollArea>
-				{(props.room.name && joined) && <ChannelInput
+				{(props.room.name && props.joined) && <ChannelInput
 				className="inputTextArea"
 				room={props.room}
 				mute={(myState?.mode === "mute")}
