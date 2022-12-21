@@ -21,7 +21,10 @@ export default function ChannelMessage(props: any) {
 
 	function privateChatWithUser(userToChatWith: string) {
 		props.setCard(`FriendsChatList/${student.username}`);
-		//setChatWithUser
+		if (student.username < userToChatWith)
+			props.setRoom({ name: student.username + userToChatWith, type: 'direct', builder: {username: null} });
+		else
+			props.setRoom({ name: userToChatWith + student.username, type: 'direct', builder: {username: null} });
 	}
 
 //  <Menu position={"bottom-start"} closeDelay={400}>

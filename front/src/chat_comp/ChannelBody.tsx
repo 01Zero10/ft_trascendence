@@ -145,7 +145,7 @@ export default function ChannelBody(props: any) {
 				method: 'POST',
 				credentials: 'include',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ user: student.username, roomName: props.room.name }),
+				body: JSON.stringify({ user: student.username, roomName: props.room.name, type: props.room.type }),
 			})
 				.then(response => {
 					response.json().then(pack => {
@@ -161,7 +161,7 @@ export default function ChannelBody(props: any) {
 
 	const joinRoom = async (roomName: string) => {
 		//console.log(props.room, joined)
-		if (props.room.name && props.room.type === "public")
+		if (props.room.name && (props.room.type === "public" || props.room.type === 'direct'))
 			props.socket?.emit('joinRoom', { client: student.username, room: props.room.name });
 		else if (props.room.name && props.room.type === "protected" && props.joined)
 			props.socket?.emit('joinRoom', { client: student.username, room: props.room.name });
@@ -263,7 +263,10 @@ export default function ChannelBody(props: any) {
 											username={m.username} message={m.message}
 											createdAt={m.createdAt}
 											avatar={m.avatar}
-											setCard={props.setCard}/>
+											setCard={props.setCard}
+											room={props.room}
+											setRoom={props.setRoom}
+											/>
 						)
 				})}
 				<div ref={bottomRef}></div>

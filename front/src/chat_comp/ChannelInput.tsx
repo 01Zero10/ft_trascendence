@@ -10,7 +10,7 @@ export default function ChannelInput(props: any) {
             console.log("Entratissimo");
 			props.socket?.emit(
 				'msgToServer',
-				{ room: props.room.name, username: student.username, message: input, avatar: student.avatar }
+				{ room: props.room.name, username: student.username, message: input, avatar: student.avatar, type: props.room.type }
 			);
 			setInput('');
 		}
