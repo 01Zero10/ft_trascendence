@@ -142,3 +142,14 @@
     text-align: start;
     word-break: break-all;
 }
+
+.messageDropMenu_Item {
+    font-family: 'Tomorrow', sans-serif;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.messageDropMenu_Divider {
+    border: none;
+
+}
