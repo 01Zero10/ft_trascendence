@@ -2,7 +2,7 @@ import { Box, Center, FocusTrap, Modal, MultiSelect, PasswordInput, SegmentedCon
 import { useDisclosure } from "@mantine/hooks";
 import { PropaneSharp, Tune } from "@mui/icons-material";
 import { IconLock, IconShield, IconWorld } from "@tabler/icons";
-import React, { useContext, useEffect, useState } from "react"
+import React, {useContext, useEffect, useLayoutEffect, useState} from "react"
 import { Student } from "../App";
 import { NewChannel } from "./CreateChannel";
 import "./ChannelOptionModal_stye.css"
@@ -16,7 +16,7 @@ export default function ChannelOptionModal(props: any) {
         builder: contextData.username,
         nameGroup: "",
         members: [],
-        admin: [...props.admins],
+        admin: [],
         type: props.room.type,
         password: '',
         confirmPass: ''
@@ -46,6 +46,24 @@ export default function ChannelOptionModal(props: any) {
     const [visible, { toggle }] = useDisclosure(false);
     //const [admins, setAdmins] = useState<string[]>([])
     const [optionsFriends, setOptionsFriends] = useState<{ value: string, label: string }[]>([{ value: "", label: "" }]);
+
+
+    useLayoutEffect(() => {
+        if (props.members)
+            setNewOption((prevChOptions: NewChannel) => {
+                return ({
+                    ...prevChOptions,
+                    members: [...props.members],
+                })})
+            }    , [props.members])
+
+    useLayoutEffect(() => {
+            setNewOption((prevChOptions: NewChannel) => {
+                return ({
+                    ...prevChOptions,
+                    admin: [...props.admins],
+                })})
+    } , [props.admins])
 
     useEffect(() => {
         const API_GET_LIST_FRIEND = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/getListFriends/${contextData.username}`;
@@ -163,26 +181,28 @@ export default function ChannelOptionModal(props: any) {
 				type: newOption.type,
 				password: newOption.confirmPass,
 				newName: newOption.nameGroup,
+                adminsSetted: newOption.admin,
 			})
 		}) 
-
-		const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/editUsers`;
-		await fetch(API_GET_MEMBERS, {
-			credentials: 'include',
-			headers: { 'Content-Type': 'application/json' },
-			method: 'POST',
-			body: JSON.stringify({ data: props.admins, channelName: props.room.name })
-		})}
+        // if(newOption.admin.length !== props.admins){
+        //     const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/editUsers`;
+        //     await fetch(API_GET_MEMBERS, {
+        //         credentials: 'include',
+        //         headers: { 'Content-Type': 'application/json' },
+        //         method: 'POST',
+        //         body: JSON.stringify({ data: newOption.admin, channelName: props.room.name })
+        //     })}
+        }
 
         // aggiunge utenti
         if (props.modalTypeOpen === "add"){
-		const API_ADD_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/addMembers`;
-		await fetch(API_ADD_MEMBERS, {
-			method: 'POST',
-			credentials: 'include',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ nameChannel: props.room?.name, newMembers: newOption.members }),
-		})
+            const API_ADD_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/addMembers`;
+            await fetch(API_ADD_MEMBERS, {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nameChannel: props.room?.name, newMembers: newOption.members }),
+            })
 
 	}
 		props.setModalTypeOpen(null)
@@ -207,7 +227,9 @@ export default function ChannelOptionModal(props: any) {
             if (indx === -1)
                 tmp.splice(tmp.indexOf(element), 1)
         }
-        props.setAdmins(tmp)
+        setNewOption((prevState) => {
+            return {...prevState, admin: tmp}
+        })
     }
 
     useEffect(() => {
@@ -245,11 +267,13 @@ export default function ChannelOptionModal(props: any) {
             setBtnDisabled(true)
         if(newOption.members.length !== 0)
             setBtnDisabled(false)
+        if(newOption.admin.length !== props.admins.length)
+            setBtnDisabled(false)
     }, [newOption]
     )
 
     return (
-        <Modal centered withCloseButton={false} closeOnClickOutside={false} zIndex={1500}
+        <Modal centered withCloseButton={false} closeOnClickOutside={false} zIndex={1500} overlayBlur={5}
         styles={(root) => ({
             inner:{
                 backgroundColor: 'transparent',
@@ -323,7 +347,8 @@ export default function ChannelOptionModal(props: any) {
                     <FocusTrap><input type="" style={{width:"0", height:"0", border:"none"}} /></FocusTrap>
                     <img src="/account_decoration_top.svg" alt="" />
                     {props.modalTypeOpen === "options" && <div className="search_container">
-                        <input  className="search_input" 
+                        <input  maxLength={18}
+								className="search_input" 
                                 placeholder={props.room.name}
                                 type="text"
                                 autoComplete="off"

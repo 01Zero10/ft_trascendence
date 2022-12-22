@@ -3,13 +3,19 @@ import { Student } from "../App";
 import ChannelStatus from "./ChannelStatus";
 import ChannelBody from "./ChannelBody";
 
+// interfaccia per testare nickname e status
+export interface element_status {
+    nickname: string,
+    status:boolean,
+}
 export default function ChannelBodyStatus(props: any) {
-    const [joined, setJoined] = useState(false)
+    //const [joined, setJoined] = useState(false)
     const student = useContext(Student);
     //---------------------chat.tsx States----------------------
     const [admin, setAdmin] = useState(false)
 
-    const [members, setMembers] = useState<string[]>([]);
+    // const [members, setMembers] = useState<string[]>([]);
+    const [members, setMembers] = useState<element_status[]>();
     const [admins, setAdmins] = useState<string[]>([]);
 
     useEffect(() => {
@@ -78,19 +84,23 @@ export default function ChannelBodyStatus(props: any) {
     // }, [props.room.name])
     // console.log("admin: ", admin)
     return (
-        <div style={{position:"relative", height:"100%", backgroundColor:"lime", width:"80%", display:"flex"}}>
+        <div style={{position:"relative", height:"100%", backgroundColor:"black", width:"80%", display:"flex"}}>
             <ChannelBody 
                 room={props.room} 
                 socket={props.socket} 
-                members={members}
+                members={members?.map(element => element.nickname)}
                 admins={admins}
                 admin={admin}
                 setAdmins={setAdmins}
                 setMembers={setMembers}
                 setRoom={props.setRoom}
+                setCard={props.setCard}
+                joined={props.joined}
+                setJoined={props.setJoined}
                 />
             <ChannelStatus 
                 room={props.room}
+				socket={props.socket}
                 members={members}
                 admins={admins}
                 setAdmin={setAdmin}

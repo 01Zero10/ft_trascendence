@@ -2,12 +2,14 @@ import React, { ReactNode, useContext, useEffect, useState } from "react";
 import './Account.css'
 import { student, Student } from "./App";
 
-import { Avatar, Badge, Divider, dividerClasses, Fab, Grid, IconButton, List, ListItem, ListItemText, styled, Tab } from "@mui/material";
+import { Avatar, Badge, Fab, Grid, IconButton, List, ListItem, ListItemText, styled, Tab } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { AddCircle, CheckCircle, Close, Done, EmojiEvents, HourglassTop, PersonAddAlt1, PersonRemove } from "@mui/icons-material";
+import { AddCircle, Block, CheckCircle, Close, Done, EmojiEvents, HourglassTop, PersonAddAlt1, PersonRemove } from "@mui/icons-material";
 import Tabs from '@mui/material/Tabs';
+
 import { red } from "@mui/material/colors";
 import { FocusTrap } from "@mantine/core";
+
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -232,7 +234,7 @@ function Account() {
 
   const [friendsUser, setFriendsUser] = useState<FriendshipsUser[]>([]);
   const [friendRequest, setFriendsRequest] = useState<FriendshipsUser[]>([]);
-  console.log("qui", friendsUser);
+  console.log("qui_5", friendsUser);
 
   useEffect(() => {
     const API_URL_GET_FRIENDS = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/getFriends`;
@@ -255,6 +257,7 @@ function Account() {
                 position: element.position,
                 friendship: element.friendship,
               }
+
               fetchFriends.push(iFriend);
             }
           }))
@@ -290,6 +293,7 @@ function Account() {
             }
           }))
           setFriendsRequest(fetchFriendsRequest);
+          console.log(fetchFriendsRequest);
         }
         )
     }
@@ -337,9 +341,6 @@ function Account() {
                 <p style={{ fontSize: '1.5vw', fontWeight: '500', color: '#fff' }}>{p.points1}</p>
                 <p className="VS"> VS </p>
                 <p style={{ fontSize: '1.5vw', fontWeight: '500', color: '#fff' }}>{p.points2}</p>
-                {/* <ListItemText primary={p.points1} />
-          <ListItemText primary=' VS ' />
-          <ListItemText primary={p.points2} /> */}
               </ListItem>
               <ListItem>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -364,14 +365,14 @@ function Account() {
           <button className="modal_close_button" type="button" onClick={handleClose}>X</button> */}
         <div className="table_dashboard">
           {friendsUser.map((f) => (
-            <List sx={{ width: '100%', bgcolor: 'transparent', display: 'flex', alignItems: 'center' }} key={f.username}>
+            <List sx={{ width: '100%', bgcolor: 'transparent', display: 'flex', alignItems: 'center' }} key={f.friendship?.friendship}>
               <ListItem>
                 <Avatar sx={{ width: 56, height: 56 }} src={f.avatar} />
                 <ListItemText primary={f.username} secondary={f.nickname} sx={{ color: '#fff' }} />
               </ListItem>
               <ListItem>
                 <div style={{ textAlign: 'center' }}>
-                  <EmojiEvents sx={{ width: 40, height: 40 }} />
+                  <EmojiEvents sx={{ width: 40, height: 40, color: 'rgba(102, 38, 238, 1)' }} />
                   <p className="p_friendlist"> {`#${f.position}`}</p>
                 </div>
               </ListItem>
@@ -404,12 +405,47 @@ function Account() {
         <Grid item xs={3}>
           <IconButton color="secondary" component="label"
             onClick={() => deleteRequestOrFriendship(props.username)}>
-            <HourglassTop fontSize="medium" />
+            <HourglassTop sx={{ width: 50, height: 50, color: 'rgba(102, 38, 238, 1)' }} />
           </IconButton>
           <div className="profile-card-inf__title"></div>
-          <div style={{ textAlign: 'center' }} className="">PENDING</div>
+          {/* <h1 style={{ textAlign: 'center', color: '#fff', fontSize: '1vw' }}>PENDING</h1> */}
         </Grid>
       </div>
+    )
+  }
+
+  function SendNotification_small(props: any) {
+
+    const yepHandler = async () => {
+      console.log("ciao = ", props.userToAccept);
+      const API__REQUEST = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/acceptFriendRequest`;
+      await fetch(API__REQUEST, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ client: contextData.username, profileUser: props.userToAccept })
+      })
+    }
+
+    return (
+      <>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ margin: '0.5rem 4rem' }}>
+              <Fab color="secondary" aria-label="user" onClick={yepHandler}>
+                <Done />
+              </Fab>
+              {/* <h3 style={{ fontFamily: 'Smooch Sans, sans-serif', marginTop: '0.5rem', letterSpacing: '0.2rem', fontSize: '1vw' }}>ACCEPT</h3> */}
+            </div>
+            <div style={{ margin: '0.5rem 4rem' }}>
+              <Fab color="secondary" aria-label="user" onClick={() => deleteRequestOrFriendship(props.userToAccept)}>
+                <Close />
+              </Fab>
+              {/* <h3 style={{ fontFamily: 'Smooch Sans, sans-serif', marginTop: '0.5rem', letterSpacing: '0.2rem', fontSize: '1vw' }}>DECLINE</h3> */}
+            </div>
+          </div>
+        </div>
+      </>
     )
   }
 
@@ -422,6 +458,17 @@ function Account() {
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ client: contextData.username, profileUser: userToDelete })
+    })
+    setFriendship("nope");
+  }
+
+  async function blockOrUnblockUser(userToBlock: string) {
+    const API_BLOCK_OR_UNBLOCK_FRIEND = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/blockUser`
+    await fetch(API_BLOCK_OR_UNBLOCK_FRIEND, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ client: contextData.username, userToBlock: userToBlock })
     })
     setFriendship("nope");
   }
@@ -510,6 +557,18 @@ function Account() {
       </>
     )
   }
+
+  function Block_b() {
+    return (
+      <div style={{ textAlign: 'center' }}>
+        <Fab color="secondary" aria-label="user" onClick={() => blockOrUnblockUser(user_id!)}>
+          <Block fontSize="large" />
+        </Fab>
+        {/* <h3 style={{ fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', fontSize: '1.4vw', padding: '10px' }}>PENDING</h3> */}
+      </div>
+    )
+  }
+
   function a11yProps(index: number) {
     return {
       id: `vertical-tab-${index}`,
@@ -531,31 +590,18 @@ function Account() {
       <>
         <div className="request">
           <h1 style={{ textAlign: 'center', padding: '3%', fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', fontSize: '2.5vw', color: '#fff' }}>Friendship Request</h1>
+          <div className="table_dashboard">
           {friendRequest.map((account) => (
-            <div>
-              <List sx={{ width: '100%', bgcolor: 'transparent', display: 'flex', alignItems: 'center' }} key={account.username}>
-                <ListItem>
-                  <ListItemText primary={account.username} secondary={account.nickname} sx={{ color: '#fff' }} />
-
-
-                </ListItem>
-                <ListItem>
-
-                  {/* {user_id === contextData.username && account.username === user_id ? 'nope' :
-                  (account.friendship && account.friendship.friendship === 'pending') ?
-                    <Pending_b_small username={account.username} /> : (account.friendship && account.friendship.friendship === 'friends') ?
-                      <div style={{ textAlign: 'center', color: '#fff' }} ><CheckCircle sx={{ color: '#6626ee', paddingBottom: '5%' }} />
-                        <p className="p_friendlist" /> FRIEND</div> :
-                      <div style={{ textAlign: 'center', color: '#fff' }} ><IconButton sx={{ color: '#e91e63', paddingBottom: '5%' }} component="label"
-                        onClick={() => addFriend(account.username!)}>
-                        <AddCircle fontSize="medium" />
-                      </IconButton>
-                        <p className="p_friendlist" />ADD FRIEND</div>
-                } */}
-                </ListItem>
-              </List>
+            //<List sx={{ width: '100%', bgcolor: 'transparent', display: 'flex', alignItems: 'center' }} key={account.username}>
+                <div className="request-list">
+                  <div className="avatar__img-request">
+              <img src={account.avatar}></img>
             </div>
+              <p style={{ fontSize: '1vw', fontWeight: '500', color: '#fff' }}>{account.username}</p>
+                  { account.friendship ? <SendNotification_small userToAccept={account.username} /> : '' }
+                </div>       
           ))}
+          </div>
         </div>
       </>
     )
@@ -568,6 +614,7 @@ function Account() {
           <div className="request">
             <div>
               <h1 style={{ textAlign: 'center', padding: '3%', fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', fontSize: '2.5vw', color: '#fff' }}>Friendship</h1>
+              <Block_b />
               {user_id === contextData.username ? '' :
                 friendship === 'pending' ?
                   <Pending_b /> : friendship === 'toReply' ?

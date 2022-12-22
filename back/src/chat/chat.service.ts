@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Socket } from 'socket.io';
 import { User } from 'src/user/user.entity';
@@ -9,7 +9,8 @@ import { PrivateMessages } from './privateMessages.entity';
 import { BanOrMute } from './banOrMute.entity';
 import { createCipheriv, scrypt, randomBytes} from 'crypto';
 import { promisify } from 'util';
-import { channel } from 'diagnostics_channel';
+import { ChatGateWay } from './chat.gateway';
+import { DirectRooms } from './directRooms.entity';
 
 @Injectable()
 export class ChatService {
@@ -18,7 +19,9 @@ export class ChatService {
         @InjectRepository(PrivateMessages) private privateMessagesRepository: Repository<PrivateMessages>,
         @InjectRepository(User) private userRepository: Repository<User>,
         @InjectRepository(Rooms) private roomsRepository: Repository<Rooms>,
-        @InjectRepository(BanOrMute) private banOrMuteRepository: Repository<BanOrMute>,    ) {}
+        @InjectRepository(DirectRooms) private directRoomsRepository: Repository<DirectRooms>,
+        @InjectRepository(BanOrMute) private banOrMuteRepository: Repository<BanOrMute>,
+        @Inject(forwardRef(() => ChatGateWay)) private readonly chatGateway: ChatGateWay    ) {}
 
     //Getters
 
@@ -75,6 +78,14 @@ export class ChatService {
         return Rooms;
     }
 
+    async getDirectChannels(client: string) {
+        const ret = this.directRoomsRepository
+        .createQueryBuilder("direct")
+        .where([{user1: client}, {user2: client}])
+        .getMany();
+        return ret;
+    }
+
     async getChannel(channelName: string){
         //const Room = await this.getRoomByName(channelName);
 
@@ -88,6 +99,16 @@ export class ChatService {
         return Room;
 
         //return Room;
+    }
+
+    async getDirectChat(nameDirectChat: string) {
+        const Room = await this.directRoomsRepository
+        .createQueryBuilder('room')
+        .where({name: nameDirectChat})
+        .select(['room.name', 'room.type'])
+        .getOne()
+
+        return Room;
     }
 
     async getMemberships(client_id: number){
@@ -179,27 +200,67 @@ export class ChatService {
 
     //end work in progress
 
-    async getMessages(roomName: string): Promise<RoomMessages[]> {
-        return await this.roomMessagesRepository.find({
-            where: {
-                room: roomName,
-            }
-        });
+    async getMessages(roomName: string, type: string): Promise<RoomMessages[]> {
+        if (type !== 'direct')    
+            return await this.roomMessagesRepository.find({
+                where: {
+                    room: roomName,
+                }
+            });
+        else
+            return await this.privateMessagesRepository.find({
+                where: {
+                    room: roomName,
+                }
+            });
+    }
+
+    async getChatMembersAndStatus(roomName: string){
+        //const room = await this.roomsRepository.findOne({where: {name: roomName}});
+        /*if (!room)
+        return ;*/
+        
+        //old arrayUser
+        // const arrayUser = (await this.roomsRepository.createQueryBuilder('room')
+        // .leftJoinAndSelect("room.members", "members")
+        // .where({name: roomName})
+        // .getOne()).members;
+        // return arrayUser;
+
+        const arrayUser = await this.roomsRepository
+        .createQueryBuilder('room')
+        .leftJoinAndSelect('room.members', 'user')
+        .leftJoinAndSelect('user.status', 'status')
+        .where({name: roomName})
+        .select(['room.name', 'user.nickname', 'status.status'])
+        .getOne();
+
+        return arrayUser.members;
+		
     }
 
     async getChatMembers(roomName: string){
-        //const room = await this.roomsRepository.findOne({where: {name: roomName}});
+        const room = await this.roomsRepository.findOne({where: {name: roomName}});
         /*if (!room)
         return ;*/
         const arrayUser = (await this.roomsRepository.createQueryBuilder('room')
         .leftJoinAndSelect("room.members", "members")
         .where({name: roomName})
         .getOne()).members;
-        // console.log("");
-        // console.log("[getchatmembers]");
-        //console.log("arr_u: ",arrayUser);
-        // console.log("");
         return arrayUser;
+		
+    }
+
+    async getChatMembersTest(roomName: string){
+        const arrayUser = await this.roomsRepository
+        .createQueryBuilder('room')
+        .leftJoinAndSelect('room.members', 'user')
+        .leftJoinAndSelect('user.status', 'status')
+        .where({name: roomName})
+        .select(['room.name', 'user.nickname', 'status.status'])
+        .getOne();
+
+        return arrayUser.members;
     }
 
     async getRoomAdmins(roomName: string){
@@ -280,7 +341,11 @@ export class ChatService {
             updatingMembers.push(await this.userRepository.findOne({ where: { username: element} }))
         }))
         room.members = updatingMembers;
-        return await this.roomsRepository.save(room);
+        console.log("updating Members   ", updatingMembers)
+        await this.roomsRepository.save(room);
+        console.log("entratissimo")
+        await this.chatGateway.handleUpdateListMembers(nameChannel);
+        //return await this.roomsRepository.save(room);
     }
     
     //Removers
@@ -350,6 +415,8 @@ export class ChatService {
         //if se membro
         else
             await this.removeUser(nameChannel, exMember);
+        await this.chatGateway.handleUpdateListMembers(nameChannel);
+        //this.chatGateway.handleUpdateListMembers(nameChannel);
     }
 
     async kickUsers(users: string[], channelName: string){
@@ -407,15 +474,25 @@ export class ChatService {
 
     //Generaters
 
-    async createMessage(payload: {room: string, username: string, message: string, avatar: string, clientSocket: Socket }): Promise<RoomMessages>{
-        return await this.roomMessagesRepository.save({
-            username: payload.username,
-            userSocket: payload.clientSocket.id,
-            room: payload.room,
-            avatar: payload.avatar,
-            message: payload.message,
-            createdAt: new Date,
-        })
+    async createMessage(payload: {room: string, username: string, message: string, avatar: string, clientSocket: Socket }, type: string): Promise<RoomMessages>{
+        if (type !== 'direct')
+            return await this.roomMessagesRepository.save({
+                username: payload.username,
+                userSocket: payload.clientSocket.id,
+                room: payload.room,
+                avatar: payload.avatar,
+                message: payload.message,
+                createdAt: new Date,
+            })
+        else 
+            return await this.privateMessagesRepository.save({
+                username: payload.username,
+                userSocket: payload.clientSocket.id,
+                room: payload.room,
+                avatar: payload.avatar,
+                message: payload.message,
+                createdAt: new Date,
+            })
     }
     
     async createRoom(client: string, roomName: string, password?: string){
@@ -507,12 +584,30 @@ export class ChatService {
         }
         ///else "room giá esistente";
     }
+
+    async createDirectChat(client: string, userToChatWith: string){
+        const nameDirectChat = (client < userToChatWith) ? client + userToChatWith : userToChatWith + client;
+        let room = await this.getDirectChat(nameDirectChat);
+        if (!room){
+            const user1 = (client < userToChatWith) ? client : userToChatWith;
+            const user2 = (client < userToChatWith) ? userToChatWith : client;
+            room = this.directRoomsRepository.create({
+                name: nameDirectChat,
+                user1: user1,
+                user2: user2
+            });
+            await this.directRoomsRepository.save(room);
+        }
+        console.log("direct room created = ", room);
+        return room;
+    }
     
     //Setters
 
-    async editChannel(channelName: string, type: string, password?: string, newName?: string){
-        //console.log("chname =", channelName, type, password, newName)
-        const room = await this.getRoomByName(channelName);
+    async editChannel(channelName: string, type: string, adminsSetted: string[], password?: string, newName?: string){
+        let room = await this.getRoomByName(channelName);
+        const nameToEmit = room.name;
+        const typeToEmit = room.type;
         //da gestire un eventuale room null?
         if (newName)
         {
@@ -534,7 +629,18 @@ export class ChatService {
             room.type = 'private';
             room.password = null;
         }
-        this.roomsRepository.save(room);
+        room = await this.roomsRepository.save(room);
+        await this.editUsersOnChannel(adminsSetted, room.name);
+        const newDates = await this.roomsRepository
+        .createQueryBuilder('room')
+        .leftJoinAndSelect('room.builder', 'builder')
+        .where({name: room.name})
+        .select(['room.name', 'room.type', 'builder.username'])
+        .getOne();
+        console.log("room ", room);
+        console.log("newdates ", newDates);
+        this.chatGateway.server.emit('update', typeToEmit);
+        this.chatGateway.server.to(nameToEmit).emit('updateChannel', newDates.name, newDates.type, newDates.builder);
     }
  
     async editUsersOnChannel(admins: string[], channelName: string){

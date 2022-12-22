@@ -9,12 +9,26 @@
     
 }
 
+.message_container_sender {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 50%;
+    border: 2px solid var(--purple-color);
+    border-radius: 5px 5px 0px 25px;
+}
+
 .avatarStyle {
     border-right: 2px solid var(--purple-color);
     border-bottom: 2px solid var(--purple-color);
     border-radius: 4px 0 25px 0;
-    cursor: pointer;
 }
+
+.avatarStyle_sender {
+    border-right: 2px solid var(--purple-color);
+    border-bottom: 2px solid var(--purple-color);
+    border-radius: 0 4px 0px 25px;
+}
+
 
 .text_header_container {
     display: flex;
@@ -32,13 +46,53 @@
     border-radius: 0 0 0 0;
 }
 
+.usernameDetails_container_sender {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 100%;
+    font-family: 'Tomorrow', sans-serif !important;
+    text-transform: uppercase;
+    background-color: var(--purple-color);
+    border-bottom: 2px solid var(--purple-color);
+    border-radius: 0 0 0 0;
+}
+
 .usernameHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 50%;
+    font-size: 1.25rem;
+    cursor: pointer;
+    /* border-right: 1px solid black; */
+}
+
+.usernameHeader:after {
+    content: '';
+    position: absolute;
+    left: 20%;
+    height: 0.5em;
+    width: 60%;
+    border-bottom: 1.5px solid;
+    margin-top: 10px;
+    opacity: 0;
+    transition: opacity 0.35s, transform 0.35s;
+    transform: scale(0,1);
+}
+
+.usernameHeader:hover:after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.usernameHeader_sender {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 50%;
     font-size: 1.25rem;
-    cursor: pointer;
+    cursor: default;
     /* border-right: 1px solid black; */
 }
 
@@ -50,6 +104,7 @@
     align-items: flex-end;
     justify-content: flex-end;
     padding-right: 1%;
+    cursor: default;
     /* border-left: 1px solid black; */
 }
 
@@ -72,4 +127,29 @@
     letter-spacing: normal;
     text-align: start;
     word-break: break-all;
+}
+
+.textMessageArea_sender {
+    width: 100%;
+    background: transparent;
+    padding: 1%;
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    font-family: 'Tomorrow', sans-serif;
+    font-weight: 400;
+    letter-spacing: normal;
+    text-align: start;
+    word-break: break-all;
+}
+
+.messageDropMenu_Item {
+    font-family: 'Tomorrow', sans-serif;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.messageDropMenu_Divider {
+    border: none;
+
 }

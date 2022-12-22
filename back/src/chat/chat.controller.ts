@@ -5,6 +5,7 @@ import { AuthGuard } from "src/auth/auth.guard";
 import { Rooms } from "./rooms.entity";
 import { createCipheriv, createDecipheriv, randomBytes, scrypt } from "crypto";
 import { promisify } from "util";
+import { RoomMessages } from "./roomsMessages.entity";
 
 interface DataAdmins{
     value: string,
@@ -78,6 +79,12 @@ export class ChatController {
         return (members);
     }
 
+    @Get('allmembersandstatus/:roomName')
+    async GetAllChatMembersAndStatu(@Param('roomName') roomName: string): Promise<User[]>{
+        const members = await this.chatService.getChatMembersAndStatus(roomName);
+        return (members);
+    }
+
     @Get('members/:roomName')
     async GetChatMembers(@Param('roomName') roomName: string): Promise<User[]>{
         const admins = await this.chatService.getRoomAdmins(roomName);
@@ -111,8 +118,8 @@ export class ChatController {
     @UseGuards(AuthGuard)
     @UseInterceptors(ClassSerializerInterceptor)
     @Post('chrono')
-    async GetChatChronology(@Body('user') username: string, @Body('roomName') roomName: string){
-        const messages = await this.chatService.getMessages(roomName);
+    async GetChatChronology(@Body('user') username: string, @Body('roomName') roomName: string, @Body('type') type: string){
+        const messages = await this.chatService.getMessages(roomName, type);
         return (messages);
     }
     
@@ -135,7 +142,8 @@ export class ChatController {
 
     @Get('getFriendsChatList/:client')
     async GetFriendsChatList(@Param('client') client: string){
-        return await this.chatService.getFriendsRooms(client);
+        return await this.chatService.getDirectChannels(client);
+        //return await this.chatService.getFriendsRooms(client);
     }
 
     @Post('addMembersOptions')
@@ -183,6 +191,8 @@ export class ChatController {
 
     @Post('addMembers')
     async addMembers(@Body('nameChannel') nameChannel: string, @Body('newMembers') newMembers: string[]){
+        console.log("nameChannel   ", nameChannel);
+        console.log("newMembers    ", newMembers);
         return (await this.chatService.addMembers(nameChannel, newMembers));
     }
 
@@ -222,6 +232,12 @@ export class ChatController {
         return room;
     }
 
+    @Post('createDirectChat')
+    async CreateDirectChat(@Body('client') client: string,
+        @Body('userToChatWith') userToChatWith: string){
+            return await this.chatService.createDirectChat(client, userToChatWith);
+        }
+
     //fatto con socket emit... non dovrebbe servire
     // @Get('expiredMuteOrBan/:channelName')
     // async ExpiredMuteOrBan(@Param('channelName') channelName: string){
@@ -234,9 +250,16 @@ export class ChatController {
     async EditChannel(
         @Body('channelName') channelName: string,
         @Body('type') type: string,
+        @Body('adminsSetted') adminsSetted: string[],
         @Body('password') password?: string,
-        @Body('newName') newName?: string){
-            await this.chatService.editChannel(channelName, type, password, newName); //impostare un return?
+        @Body('newName') newName?: string ){
+            console.log("---EditChannel---");
+            console.log("channel name ", channelName);
+            console.log("type ", type);
+            console.log("password ", password);
+            console.log("newName ", newName);
+            console.log("adminsSetted ", adminsSetted);
+            await this.chatService.editChannel(channelName, type, adminsSetted, password, newName); //impostare un return?
     }
 
     @Post('editUsers')
@@ -341,31 +364,6 @@ export class ChatController {
 
     @Get('test')
     async test(){
-         const iv = randomBytes(16); //<Buffer 06 d3 9c 9a 68 d8 4e ba 19 47 3b 49 4c 95 62 fe>
-         //console.log(iv)
-         //console.log(iv.toString('base64'));
-        // console.log(process.env.BUFFER_IV)
-        //console.log(Buffer.from(process.env.BUFFER_IV, 'base64'))
-        //---const iv = Buffer.from(process.env.BUFFER_IV, 'base64')
-        //console.log('IV');
-        //console.log(iv);
-        //console.log('');
-        //---const key = (await promisify(scrypt)(process.env.PASS_TO_ENCRYPT, 'salt', 32)) as Buffer;
-        //console.log('KEY')
-        //console.log(key);
-        //console.log('');
-        //console.log('CIPHER');
-        //---const cipher = createCipheriv(process.env.ALGORITHM_TO_ENCRYPT, key, iv);
-        //---let crypted = cipher.update('Bop Bop Bop', 'utf-8', 'hex') + cipher.final('hex');    
-        //console.log("encrypted ", crypted)
-        //console.log('');
-        //console.log('DECIPHER');
-        //---const decipher = createDecipheriv(process.env.ALGORITHM_TO_ENCRYPT, key, iv);
-        //---let decrypted = decipher.update(crypted, 'hex', 'utf-8') + decipher.final('utf-8');
-        //console.log("decrypted = ", decrypted);
-        
-        //this.chatService.saveEntityProtectedChannel('ciao', iv, key);
-        
-        // return cipher;
+        return await this.chatService.getChatMembersTest("Speramo_bene");
     }
 }

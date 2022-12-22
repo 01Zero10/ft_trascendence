@@ -19,4 +19,14 @@ export class GameController{
     async GetAdvancedRunningMatches(){
         return await this.gameService.getAdvancedRunningMatches();
     }
+
+    @Get('getLeaderBoard')
+    async GetLeaderBoard(){
+        return await this.gameService.getLeaderBoard();
+    }
+
+    @Get('test/:winner')
+    async getTest(@Param('winner') winner: string){
+        return await this.gameService.updatePosition(winner);
+    }
 }

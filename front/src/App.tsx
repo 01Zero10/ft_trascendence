@@ -13,7 +13,7 @@ import Chat from './Chat';
 import Loader from './components/Loader';
 import { io, Socket } from 'socket.io-client';
 import Account from './Account';
-import LeaderBoard2 from './LeaderBoard2';
+import LeaderBoard from './LeaderBoard';
 
 export interface Rooms {
   name: string;
@@ -27,7 +27,8 @@ export interface student {
   nickname: string;
   avatar: string;
   two_fa_auth: boolean;
-  rooms?: Rooms[];
+  blockedUsers?: string[];
+  rooms?: Rooms[] | null;
   twoFaAuthSecret?: string;
   socket_id?: string;
   points: number;
@@ -43,7 +44,8 @@ export const Student = createContext<student>({
   socket_id: undefined, //
   rooms: undefined, //
   two_fa_auth: false,
-  twoFaAuthSecret: undefined,
+  twoFaAuthSecret: undefined, //poi vediamo
+  blockedUsers: undefined,
   points: 0,
   wins: 0,
   losses: 0,
@@ -59,6 +61,7 @@ function App() {
     avatar: "",
     two_fa_auth: false,
     twoFaAuthSecret: undefined,
+    blockedUsers: undefined,
     points: 0,
     wins: 0,
     losses: 0,
@@ -81,6 +84,7 @@ function App() {
             nickname: result.nickname,
             avatar: result.avatar,
             two_fa_auth: result.two_fa_auth,
+            blockedUsers: result.blockedUsers,
             points: result.points,
             wins: result.wins,
             losses: result.losses,
@@ -92,18 +96,18 @@ function App() {
     getUserInfo();
   }, [])
 
-  const [socket, setSocket] = useState<Socket | null>(null);
-  useLayoutEffect(() => {
-    if (contextData.id !== 0) {
-      const url = `http://${process.env.REACT_APP_IP_ADDR}:3001`;
-      const newSocket = io(`http://${process.env.REACT_APP_IP_ADDR}:3001`, { query: { userID: String(contextData.id) } });
-      newSocket.on('connect', () => {
-        setSocket(newSocket);
-        contextData.socket_id = newSocket.id;
-      }
-      )
-    }
-  }, [contextData.id]);
+  // const [socket, setSocket] = useState<Socket | null>(null);
+  // useLayoutEffect(() => {
+  //   if (contextData.id !== 0) {
+  //     const url = `http://${process.env.REACT_APP_IP_ADDR}:3001`;
+  //     const newSocket = io(`http://${process.env.REACT_APP_IP_ADDR}:3001`, { query: { userID: String(contextData.id) } });
+  //     newSocket.on('connect', () => {
+  //       setSocket(newSocket);
+  //       contextData.socket_id = newSocket.id;
+  //     }
+  //     )
+  //   }
+  // }, [contextData.id]);
 
   const [currPath, setCurrPath] = useState(window.location.pathname)
 
@@ -124,11 +128,11 @@ function App() {
                 <Route path="/" element={<Login />} />
                 <Route path="/home" element={<Home />} />
                 <Route path={`/users/:user_id`} element={<Account />} />
-                <Route path="/leaderboard" element={<LeaderBoard2 />} />
+                <Route path="/leaderboard" element={<LeaderBoard />} />
                 <Route path="/logout" element={<Logout />} />
-                <Route path="/game" element={<Game socket={socket} />} />
+                <Route path="/game" element={<Game />} />
                 <Route path="/users/settings" element={<Settings />} />
-                <Route path="/chat" element={<Chat socket={socket} />} />
+                <Route path="/chat" element={<Chat />} />
               </Routes>
             </Student.Provider>
           </>

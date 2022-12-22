@@ -1,4 +1,4 @@
-import { Body, Injectable, Res } from "@nestjs/common";
+import { Body, forwardRef, Inject, Injectable, Res } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Response } from "express";
 import { Repository } from "typeorm";
@@ -8,6 +8,8 @@ import { CreateUserDto } from "./utils/user.dto";
 import { JwtService } from "@nestjs/jwt";
 import { Friendship } from "./friendship.entity";
 import { Online } from "./online.entity";
+import { Notifications } from "src/navigation/notifications.entity";
+import { NavigationGateWay } from "src/navigation/navigation.gateway";
 
 export interface FriendListItem {
   username: string;
@@ -23,6 +25,8 @@ export class UserService {
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Friendship) private friendShipRepository: Repository<Friendship>,
     @InjectRepository(Online) private onlineRepository: Repository<Online>,
+    @InjectRepository(Notifications) private notificationsRepository: Repository<Notifications>,
+    @Inject(forwardRef(() => NavigationGateWay)) private readonly navigationGateway: NavigationGateWay,
     private readonly jwt: JwtService,
   ) {}
 
@@ -134,6 +138,11 @@ export class UserService {
 
   async blockUser(client: string, userToBlock: string){ //da testare
     const User = await this.userRepository.findOne({ where : {username: client}});
+    console.log("ciao");
+    if (!User.blockedUsers){
+      User.blockedUsers = [userToBlock];
+      return await this.userRepository.save(User);
+    }
     const index = User.blockedUsers.indexOf(userToBlock, 0);
     if (index > -1)
         User.blockedUsers.splice(index, 1);
@@ -176,6 +185,14 @@ export class UserService {
     const friend1: string = (client < profileUser) ? client : profileUser;
     const friend2: string = (client == friend1) ? profileUser : client;
     
+    await this.notificationsRepository.save({
+      receiver: profileUser,
+      sender: client,
+      type: 'friendship',
+    })
+
+    await this.navigationGateway.updateBell(profileUser);
+
     return this.friendShipRepository.save({
       user1: friend1,
       user2: friend2,
@@ -192,8 +209,9 @@ export class UserService {
     request.sender = null;
     await this.friendShipRepository.save(request);
   }
-
+  
   async deleteRequestOrFriendship(client: string, profileUser: string){
+    console.log("./ client ", client, " ./ profileUser ", profileUser);
     const userClient = await this.getByUsername(client);
     const userProfileUser = await this.getByUsername(profileUser);
     const friend1: string = (client < profileUser) ? client : profileUser;
@@ -204,13 +222,18 @@ export class UserService {
       userClient.friends.splice(indexClient, 1);
       await this.userRepository.save(userClient);
     }
-    const indexProfileClient = userProfileUser.friends.findIndex(x => x == client);
-    if (indexProfileClient > -1)
+    const indexProfileClient = userProfileUser.friends?.findIndex(x => x == client);
+    if (indexProfileClient != undefined && indexProfileClient > -1)
     {
       userProfileUser.friends.splice(indexProfileClient, 1);
       await this.userRepository.save(userProfileUser);
     }
     await this.friendShipRepository.remove(request);
+
+    const notification = await this.notificationsRepository.findOneBy({ sender: client, receiver: profileUser});
+    if (notification)
+      await this.notificationsRepository.remove(notification);
+      await this.navigationGateway.updateBell(profileUser);
   }
 
   async acceptFriendRequest(client: string, profileUser: string){
@@ -230,6 +253,14 @@ export class UserService {
     await this.userRepository.save(userClient);
     await this.userRepository.save(userProfileUser);
     await this.friendShipRepository.save(request);
+
+    const notification = await this.notificationsRepository.findOneBy({ receiver: client, sender: profileUser});
+    notification.receiver = profileUser;
+    notification.sender = client;
+    notification.type = 'accepted_friendship';
+    notification.seen = false;
+    await this.notificationsRepository.save(notification);
+    await this.navigationGateway.updateBell(profileUser);
   }
 
   async getFriendships(client: string){
@@ -299,23 +330,24 @@ export class UserService {
   }
 
   async setOnlineStatus(userID: string){
-    const client = await this.getById(Number(userID));
     await this.setOfflineStatus(userID);
-    //console.log(userID);
-    if (client){
     const newbie = this.onlineRepository.create();
-    newbie.id = Number(userID)
+    const user = await this.userRepository.findOne({where: {id: Number(userID)}})
+    newbie.user = user;
     newbie.status = 'online'
-    newbie.user = client;
     return await this.onlineRepository.save(newbie);
-    }
-  }
+}
 
-  async setOfflineStatus(userID: string){
-    const toSetOffline = await this.onlineRepository.findOne({ where : { id: Number(userID)} })
-    if (toSetOffline)
-      await this.onlineRepository.remove(toSetOffline);
-  }
+async setOfflineStatus(userID: string){
+  let toSetOffline = await this.onlineRepository
+  .createQueryBuilder('online')
+  .leftJoin('online.user', 'user')
+  .where('user.id = :toSet_n', {toSet_n: Number(userID)})
+  .getOne();
+
+  if (toSetOffline)
+    await this.onlineRepository.remove(toSetOffline);
+}
 
   async getOnlineFriends(client: string){
     //console.log("help", client)
@@ -328,7 +360,6 @@ export class UserService {
     .select(['online.id', 'user.username', 'user.nickname', 'user.avatar'])
     .getMany()
     .catch(() => {return null});
-    //console.log("onlineFriends", onlineFriends);
     return onlineFriends;
   }
   

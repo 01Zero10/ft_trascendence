@@ -12,10 +12,19 @@ export default function ChannelList(props: any) {
 		let response = await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/chat/get${props.card}`);
 		let data = await response.json();
 		let options_: Rooms[] = [];
-		await Promise.all(await data.map(async (element: any) => {
-			if (options_.findIndex(x => x.name === element.name) === -1)
-				options_.push(element);
-		}))
+		console.log("ooooptions ", options_)
+		if(props.card !== `FriendsChatList/${student.username}`) {
+			await Promise.all(await data.map(async (element: any) => {
+				//if (options_.findIndex(x => x.name === element.name) === -1)
+					options_.push(element);
+				}))
+		}
+		else {
+			await Promise.all(await data.map(async (element: any) => {
+				//if (options_.findIndex(x => x.name === element.name) === -1)
+					options_.push({name: element.name, type: 'direct', builder: {username: 'null'}});
+				}))
+		}
 		setChannelList(options_);
 	}
 
@@ -25,8 +34,15 @@ export default function ChannelList(props: any) {
 
 	useEffect(() => {
 		props.socket?.on('update', async (type: string) => {
-			if (props.card !== "direct")
+			if (props.card !== 'FriendsChatList/'+student.username)
 				await getChannels();
+		});
+	}, [props.socket])
+
+	useEffect(() => {
+		props.socket?.on('updateChannel', async(roomName: string, type: string, builder: { username: string }) =>{
+			console.log('canalissimo ', roomName, type, builder);
+			props.setRoom({name: roomName, type: type, builder: builder});
 		});
 	}, [props.socket])
 
@@ -36,9 +52,9 @@ export default function ChannelList(props: any) {
 				// console.log(element)
 				return (
 					element.name?.includes(props.src) ? (
-						<button className="btn" key={id + "channel-selection"} onClick={() => props.setRoom({...element})}>
+						<button className="btn" key={id + "channel-selection"} onClick={() => {console.log (element); console.log(typeof(element)); props.setRoom({...element})}}>
 							<div className="btn__content" key={id + "settings- chat-select"} >
-								{element.name}
+								{element.type === 'direct' ? element.name.replace(student.username, '') : element.name}
 							</div>
 							<span className="btn__label">
 								{element.type === "public" && <Badge className="channnelBadgeStyle" radius="xs">Public</Badge>}

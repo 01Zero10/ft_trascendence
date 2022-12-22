@@ -24,15 +24,40 @@
 	width: 100%;
 	height: 10%;
 
-	background-color: black;
 	color:white;
 	border-top: 2px solid #781C9C;
     border-left: 5px #781C9C;
     border-bottom: 5px #781C9C;
     position: relative;
     border-radius: 15px;
-    border-top-right-radius: 0px;
-    border-top-left-radius: 0px;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
     background-color: #FAFBFF;
 	
+}
+
+.divNameContainer {
+	width: 100%;
+	height: 4.5%;
+	display: flex;
+	flex-display: row;;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.divNameContainer_content {
+	width: 40%;
+}
+
+.divNameContent_name {
+	cursor: pointer;
+	font-family:'Tomorrow', sans-serif;
+	font-weight:400;
+	font-size: 1rem;
+	letter-spacing: 1px;
+	transition: all .2s ease-in-out;
+}
+
+.divNameContent_name:hover {
+	transform: scale(1.05);
 }

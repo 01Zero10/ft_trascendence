@@ -1,0 +1,450 @@
+/* .leaderboard {
+    position: relative;
+    top: 3vh;
+    height: 85vh;
+    margin: 5%;
+
+    display: grid;
+    grid-template-columns: 0.8fr 0.9fr 0.8fr;
+    grid-template-rows: 0.9fr 1fr;
+    gap: 30px 30px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "second first third"
+      "list list list";
+  }
+  
+  .list { 
+    grid-area: list;
+    background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  background-image: radial-gradient(circle at 100% 100%, transparent 13px, #ff555e 13px, #ff555e 15px, transparent 15px), linear-gradient(to right, #ff555e, #6626ee), radial-gradient(circle at 0% 100%, transparent 13px, #6626ee 13px, #6626ee 15px, transparent 15px), linear-gradient(to bottom, #6626ee, #6626ee), radial-gradient(circle at 0% 0%, transparent 13px, #6626ee 13px, #6626ee 15px, transparent 15px), linear-gradient(to left, #6626ee, #ff555e), radial-gradient(circle at 100% 0%, transparent 13px, #ff555e 13px, #ff555e 15px, transparent 15px), linear-gradient(to top, #ff555e, #ff555e);
+  background-size: 15px 15px, calc(100% - 30px) 2px, 15px 15px, 2px calc(100% - 30px);
+  background-position: top left, top center, top right, center right, bottom right, bottom center, bottom left, center left;
+  background-repeat: no-repeat;
+}
+  
+  .second { 
+    grid-area: second;
+    background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  background-image: radial-gradient(circle at 100% 100%, transparent 13px, #ff555e 13px, #ff555e 15px, transparent 15px), linear-gradient(to right, #ff555e, #6626ee), radial-gradient(circle at 0% 100%, transparent 13px, #6626ee 13px, #6626ee 15px, transparent 15px), linear-gradient(to bottom, #6626ee, #6626ee), radial-gradient(circle at 0% 0%, transparent 13px, #6626ee 13px, #6626ee 15px, transparent 15px), linear-gradient(to left, #6626ee, #ff555e), radial-gradient(circle at 100% 0%, transparent 13px, #ff555e 13px, #ff555e 15px, transparent 15px), linear-gradient(to top, #ff555e, #ff555e);
+  background-size: 15px 15px, calc(100% - 30px) 2px, 15px 15px, 2px calc(100% - 30px);
+  background-position: top left, top center, top right, center right, bottom right, bottom center, bottom left, center left;
+  background-repeat: no-repeat;
+}
+  
+  .first { 
+    grid-area: first;
+    background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  background-image: radial-gradient(circle at 100% 100%, transparent 13px, #ff555e 13px, #ff555e 15px, transparent 15px), linear-gradient(to right, #ff555e, #6626ee), radial-gradient(circle at 0% 100%, transparent 13px, #6626ee 13px, #6626ee 15px, transparent 15px), linear-gradient(to bottom, #6626ee, #6626ee), radial-gradient(circle at 0% 0%, transparent 13px, #6626ee 13px, #6626ee 15px, transparent 15px), linear-gradient(to left, #6626ee, #ff555e), radial-gradient(circle at 100% 0%, transparent 13px, #ff555e 13px, #ff555e 15px, transparent 15px), linear-gradient(to top, #ff555e, #ff555e);
+  background-size: 15px 15px, calc(100% - 30px) 2px, 15px 15px, 2px calc(100% - 30px);
+  background-position: top left, top center, top right, center right, bottom right, bottom center, bottom left, center left;
+  background-repeat: no-repeat;
+}
+  
+  .third { 
+    grid-area: third;
+    background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  background-image: radial-gradient(circle at 100% 100%, transparent 13px, #ff555e 13px, #ff555e 15px, transparent 15px), linear-gradient(to right, #ff555e, #6626ee), radial-gradient(circle at 0% 100%, transparent 13px, #6626ee 13px, #6626ee 15px, transparent 15px), linear-gradient(to bottom, #6626ee, #6626ee), radial-gradient(circle at 0% 0%, transparent 13px, #6626ee 13px, #6626ee 15px, transparent 15px), linear-gradient(to left, #6626ee, #ff555e), radial-gradient(circle at 100% 0%, transparent 13px, #ff555e 13px, #ff555e 15px, transparent 15px), linear-gradient(to top, #ff555e, #ff555e);
+  background-size: 15px 15px, calc(100% - 30px) 2px, 15px 15px, 2px calc(100% - 30px);
+  background-position: top left, top center, top right, center right, bottom right, bottom center, bottom left, center left;
+  background-repeat: no-repeat;
+}
+   */
+
+.root-board {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.leaderboard {
+    position: absolute;
+    top: 3vh;
+    height: 85vh;
+    width: 70vw;
+    margin: 5%;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    background-image: radial-gradient(circle at 100% 100%, transparent 13px, #ff555e 13px, #ff555e 15px, transparent 15px), linear-gradient(to right, #ff555e, #6626ee), radial-gradient(circle at 0% 100%, transparent 13px, #6626ee 13px, #6626ee 15px, transparent 15px), linear-gradient(to bottom, #6626ee, #6626ee), radial-gradient(circle at 0% 0%, transparent 13px, #6626ee 13px, #6626ee 15px, transparent 15px), linear-gradient(to left, #6626ee, #ff555e), radial-gradient(circle at 100% 0%, transparent 13px, #ff555e 13px, #ff555e 15px, transparent 15px), linear-gradient(to top, #ff555e, #ff555e);
+    background-size: 15px 15px, calc(100% - 30px) 2px, 15px 15px, 2px calc(100% - 30px);
+    background-position: top left, top center, top right, center right, bottom right, bottom center, bottom left, center left;
+    background-repeat: no-repeat;
+}
+
+.leaderboard .leader {
+    display: flex;
+}
+
+.leaderboard .crown {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.leaderboard .crown svg {
+    width: 3rem;
+}
+
+.leaderboard .image {
+    height: 58px;
+    object-fit: cover;
+    width: 58px;
+    background-color: black;
+    border-radius: 50%;
+}
+
+.leaderboard .topLeadersList {
+    display: flex;
+    position: relative;
+    min-height: 120px;
+    padding-top: 3rem;
+}
+
+.leaderboard .topLeadersList .image {
+    border-radius: 50%;
+    border: 2px solid rgba(255, 85, 94, 1);
+}
+
+.leaderboard .topLeadersList .leader:nth-child(1) {
+    color: black;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.leaderboard .topLeadersList .leader:nth-child(1):after {
+    content: "1";
+    width: 30px;
+    height: 30px;
+    background: #ffc500;
+    border-radius: 50%;
+    position: absolute;
+    right: 0;
+    font-family: sans-serif;
+    text-align: center;
+    line-height: 30px;
+    font-weight: 700;
+    box-shadow: 1px 1px 4px black;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(1) .image {
+    width: 130px;
+    height: 130px;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(1) .crown {
+    top: -20%;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(1) .crown svg {
+    fill: #ffc500;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(2) {
+    color: black;
+    position: absolute;
+    left: 15%;
+    transform: translateX(-15%);
+    bottom: -20%;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(2):after {
+    content: "2";
+    width: 30px;
+    height: 30px;
+    background: #d4d4d4;
+    border-radius: 50%;
+    position: absolute;
+    right: 0;
+    font-family: sans-serif;
+    text-align: center;
+    line-height: 30px;
+    font-weight: 700;
+    box-shadow: 1px 1px 4px black;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(2) .image {
+    width: 110px;
+    height: 110px;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(2) .crown {
+    top: -25%;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(2) .crown svg {
+    fill: #d4d4d4;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(3) {
+    color: black;
+    position: absolute;
+    left: 85%;
+    transform: translateX(-85%);
+    bottom: -20%;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(3):after {
+    content: "3";
+    width: 30px;
+    height: 30px;
+    background: #ab6528;
+    border-radius: 50%;
+    position: absolute;
+    right: 0;
+    font-family: sans-serif;
+    text-align: center;
+    line-height: 30px;
+    font-weight: 700;
+    box-shadow: 1px 1px 4px black;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(3) .image {
+    width: 110px;
+    height: 110px;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(3) .crown {
+    top: -25%;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(3) .crown svg {
+    fill: #ab6528;
+}
+
+.leaderboard .leaderName {
+    position: absolute;
+    font-family: 'Smooch Sans', sans-serif;
+    font-size: 1.7vw;
+    font-weight: 700;
+    letter-spacing: 0.1rem;
+    text-align: center;
+    color: rgba(255, 85, 94, 1);
+    /* background: -webkit-linear-gradient(0deg, rgba(255, 85, 94, 1) 0%, rgba(102, 38, 238, 1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.leaderboard .player {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    align-items: center;
+    min-height: 42px;
+    text-align: center;
+    padding-right: 0.4rem;
+}
+
+.leaderboard .player .image {
+    width: 45px;
+    height: 45px;
+    border: 1.5px solid #6626ee;
+}
+
+.leaderboard .table {
+    margin-right: 0.1rem;
+    display: grid;
+    font-size: 14px;
+    grid-template-columns: 0.4fr 3fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    text-align: center;
+}
+
+.leaderboard .table div:nth-child(2) {
+    text-align: left;
+    margin-left: 5px;
+}
+
+.leaderboard .places-list-container .image {
+    width: 50px;
+    height: 50px;
+    /* border: 1.5px solid #6626ee; */
+}
+
+.leaderboard .playerslist {
+    margin-top: 10rem;
+    font-size: 16px;
+    overflow: hidden;
+    color: white;
+    font-family: 'Smooch Sans', sans-serif;
+}
+
+/* .leaderboard .playerslist .player:nth-child(odd) {
+    background-color: #6626ee;
+    align-items: center;
+  } */
+.leaderboard .user {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.leaderboard .list {
+    overflow: scroll;
+    height: 20rem;
+    overflow-x: hidden;
+}
+
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    background: rgba(0, 0, 0, 0.2);
+    margin-bottom: 1em;
+    height: 5em;
+    position: relative;
+    padding: 0 40px;
+
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    background-image: radial-gradient(circle at 100% 100%, transparent 13px, #ff555e 13px, #ff555e 15px, transparent 15px), linear-gradient(to right, #ff555e, #6626ee), radial-gradient(circle at 0% 100%, transparent 13px, #6626ee 13px, #6626ee 15px, transparent 15px), linear-gradient(to bottom, #6626ee, #6626ee), radial-gradient(circle at 0% 0%, transparent 13px, #6626ee 13px, #6626ee 15px, transparent 15px), linear-gradient(to left, #6626ee, #ff555e), radial-gradient(circle at 100% 0%, transparent 13px, #ff555e 13px, #ff555e 15px, transparent 15px), linear-gradient(to top, #ff555e, #ff555e);
+    background-size: 15px 15px, calc(100% - 30px) 2px, 15px 15px, 2px calc(100% - 30px);
+    background-position: top left, top center, top right, center right, bottom right, bottom center, bottom left, center left;
+    background-repeat: no-repeat;
+}
+
+.list-item .position {
+    position: absolute;
+    /* left : 3em; */
+}
+
+
+.list-item .position {
+    /* position : absolute;
+    left : 1.5em;
+    top : .4em; */
+    font-size: 2.5em;
+    color: rgba(255, 85, 94, 1);
+}
+
+/* .list-item .class-information { 
+    position : absolute;
+    left : 15em;
+    top : .5em;
+  } */
+
+.list-item .steps {
+    /* position : absolute;
+    right : 2em;
+    top : .4em; */
+    font-size: 2.5em;
+    color: #fff;
+}
+
+.list-item .class-information .title {
+    font-size: 1.5em;
+    color: #fff;
+}
+
+.list-item.highlighted,
+.list-item.highlighted .class-information .year,
+.list-item.highlighted .class-information .title,
+.list-item.highlighted .steps {
+    background-color: #E20D18;
+    color: white !important;
+}
+
+
+.p_leaderboard {
+    font-family: 'Smooch Sans', sans-serif;
+    color: #fff;
+    font-size: 1.5vw;
+    letter-spacing: 0.1rem;
+    font-weight: 500;
+    margin: 0 2vw;
+}
+
+.title {
+    margin-left: 5rem;
+    display: flex;
+    align-items: center
+}
+
+.leaderboard .topLeadersList .leader:nth-child(2):after {
+    content: "2";
+    width: 30px;
+    height: 30px;
+    background: #d4d4d4;
+    border-radius: 50%;
+    position: absolute;
+    right: 0;
+    font-family: sans-serif;
+    text-align: center;
+    line-height: 30px;
+    font-weight: 700;
+    box-shadow: 1px 1px 4px black;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(2) .image {
+    width: 110px;
+    height: 110px;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(2) .crown {
+    top: -25%;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(2) .crown svg {
+    fill: #d4d4d4;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(3) {
+    color: black;
+    position: absolute;
+    left: 85%;
+    transform: translateX(-85%);
+    bottom: -20%;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(3):after {
+    content: "3";
+    width: 30px;
+    height: 30px;
+    background: #ab6528;
+    border-radius: 50%;
+    position: absolute;
+    right: 0;
+    font-family: sans-serif;
+    text-align: center;
+    line-height: 30px;
+    font-weight: 700;
+    box-shadow: 1px 1px 4px black;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(3) .image {
+    width: 110px;
+    height: 110px;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(3) .crown {
+    top: -25%;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(3) .crown svg {
+    fill: #ab6528;
+}

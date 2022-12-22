@@ -1,4 +1,4 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { forwardRef, Inject, Injectable, Logger } from "@nestjs/common";
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer, 
   OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, WsResponse} from "@nestjs/websockets";
 import {RoomMessages} from "./roomsMessages.entity"
@@ -7,12 +7,14 @@ import { ChatService } from "./chat.service";
 import { UserService } from "src/user/user.service";
 import { GameService } from "src/game/game.service";
 
-@WebSocketGateway({ cors: true })
+@WebSocketGateway({ cors: true, namespace: '/chat' })
 @Injectable()
 export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-  constructor(private chatService: ChatService,
+  constructor(
+    //@Inject(forwardRef(() => GameService)) private readonly gameService: GameService
+    @Inject(forwardRef(() => ChatService)) private chatService: ChatService,
             private userService: UserService,
-            private gameService: GameService){}
+          ){}
 
   private logger: Logger = new Logger('ChatGateway');
 
@@ -31,16 +33,18 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   @SubscribeMessage('msgToServer')
   async handleMessage(
     @ConnectedSocket() clientSocket: Socket, 
-    @MessageBody() data: {room: string, username: string, message: string, avatar: string}):
+    @MessageBody() data: {room: string, username: string, message: string, avatar: string, type: string}):
     Promise<WsResponse<{room: string, username: string, message: string, avatar: string}>> { 
-      //console.log("Data room ", data);
-      const packMessage = await this.chatService.createMessage({...data, clientSocket})
+    //console.log("Data room ", data);
+    console.log("Entratissimo type = ", data.type, " name = ", data.room);
+      const packMessage = await this.chatService.createMessage({...data, clientSocket}, data.type)
     this.server.to(data.room).emit('msgToClient', packMessage);
     return {event:"msgToServer", data: data}; // equivalent to clientSocket.emit(data);
   }
 
   @SubscribeMessage('joinRoom')
   async handleJoinRoom(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {client: string, room: string}): Promise<any> {
+    console.log("roomie = ", data.room);
     await this.chatService.createRoom(data.client, data.room);
     clientSocket.join(data.room);
     clientSocket.emit('joinedRoom', data.room);
@@ -63,6 +67,10 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
     return data.type;
   }
 
+  async handleUpdateListMembers(channelName: string){
+    this.server.to(channelName).emit('updateListMembers');
+  }
+
   @SubscribeMessage('leaveRoom')
   handleLeaveRoom(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {room: string}): any {
     clientSocket.leave(data.room);
@@ -76,23 +84,27 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   async handleConnection(clientSocket: Socket) {
+    const client_id = String(clientSocket.handshake.query.userID);
+    this.logger.log(`client ${client_id} arrived in /chat`);
     //console.log(String(clientSocket.handshake.query.userID));
-    if (clientSocket.handshake.query.userID !== 'undefined' 
-    && clientSocket.handshake.query.userID !== "null" 
-    )
-    {
-      await this.chatService.updateUserSocket(String(clientSocket.handshake.query.userID), clientSocket.id);
-      await this.userService.setOnlineStatus(String(clientSocket.handshake.query.userID));
-      this.logger.log(`Client connected: ${clientSocket.id}`);
-    }
+    // if (clientSocket.handshake.query.userID !== 'undefined' 
+    // && clientSocket.handshake.query.userID !== "null" 
+    // )
+    // {
+    //   await this.chatService.updateUserSocket(String(clientSocket.handshake.query.userID), clientSocket.id);
+    //   await this.userService.setOnlineStatus(String(clientSocket.handshake.query.userID));
+    //   this.logger.log(`Client connected: ${clientSocket.id}`);
+    // }
   }
 
   async handleDisconnect(clientSocket: Socket) {
-    if (clientSocket.handshake.query.userID !== 'undefined' && clientSocket.handshake.query.userID !== "null")
-    {
-      await this.userService.setOfflineStatus(String(clientSocket.handshake.query.userID));
-      this.logger.log(`clientSocket disconnected: ${clientSocket.id}`);
-    }
+    const client_id = String(clientSocket.handshake.query.userID);
+    this.logger.log(`client ${client_id} left /chat`);
+    // if (clientSocket.handshake.query.userID !== 'undefined' && clientSocket.handshake.query.userID !== "null")
+    // {
+    //   await this.userService.setOfflineStatus(String(clientSocket.handshake.query.userID));
+    //   this.logger.log(`clientSocket disconnected: ${clientSocket.id}`);
+    // }
   }
 
   async sleep(time: number) {

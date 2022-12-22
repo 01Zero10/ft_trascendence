@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/user";
 import { Repository } from "typeorm";
 import { GameGateWay } from "./game.gateway";
+import { Leaderboard } from "./leaderboard.entity";
 import { Match } from "./match.entity";
 import { RunningMatch } from "./runningMatch.entity";
 
@@ -50,6 +51,7 @@ export class GameService{
         @InjectRepository(Match) private matchRepository: Repository<Match>,
         @InjectRepository(RunningMatch) private runningMatches: Repository<RunningMatch>,
         @InjectRepository(User) private userRepository: Repository<User>,
+        @InjectRepository(Leaderboard) private leaderboardRepository: Repository<Leaderboard>,
         @Inject(forwardRef(() => GameGateWay)) private readonly gameGateway: GameGateWay
         ){this.mapPlRoom = new Map<string, plRoom>()}
 
@@ -120,6 +122,7 @@ export class GameService{
         .where("playroom.player1 = :client_n", { client_n: client })
         .orWhere("playroom.player2 = :client_n", { client_n: client })
         .getOne()
+        
         if (playRoom)
         {
             clearInterval(this.mapPlRoom.get(playRoom.playRoom).idInterval)
@@ -277,4 +280,95 @@ export class GameService{
             return roomSaved.player1;
         return roomSaved.player2;
     }
+    
+    // NON SAPPIAMO SE QUESTA PARTE SERVE
+/*
+    async updatePosition(winner: string){
+        const points_to_add = 10;
+        let winnerRow = await this.leaderboardRepository
+        .createQueryBuilder('board')
+        .leftJoin('board.user', 'user')
+        .where("user.username = :winner_n", {winner_n: winner})
+        .getOne();
+
+        if (!winnerRow){    
+            const user = await this.userRepository.findOne({ where: {username: winner}});
+            winnerRow = this.leaderboardRepository.create({
+                user: user,
+                points: points_to_add,
+                position: 0,
+            })
+        }
+        else {
+            winnerRow.points += points_to_add;
+        }
+
+        console.log("step 1 ", winnerRow);
+        const all = await this.leaderboardRepository
+        .createQueryBuilder('board')
+        .leftJoin('board.user', 'user')
+        .orderBy('board.points', 'DESC')
+        .getMany();
+
+        console.log("step 2 ", all);
+
+        if (!all.length)
+        {
+            winnerRow.position = 1;
+            return await this.leaderboardRepository.save(winnerRow);
+        }
+
+        let index = 0;
+        while(all[index] && all[index].points >= winnerRow.points)
+            index++;
+        console.log("step 3 ", all[index]);
+        if (!all[index])
+        {
+            console.log("inside");
+            winnerRow.position = all[index - 1].position + 1;
+            console.log("inside ", winnerRow);
+            return await this.leaderboardRepository.save(winnerRow);
+        }
+        console.log("step 4");
+
+        winnerRow.position = all[index].position;
+        console.log("step 5_1 ", winnerRow);
+        console.log("step 5_2 ", all[index]);
+        console.log(winnerRow.id);
+        console.log(all[index].id);
+        // if (winnerRow.user === all[index].user)
+        //     index++;
+        await this.leaderboardRepository.save(winnerRow);
+
+        while(all[index])
+        {
+            if (winnerRow.user !== all[index].user){
+                all[index].position += 1;
+                await this.leaderboardRepository.save(all[index]);
+            }
+            index++;
+        }
+    }
+
+    async getLeaderBoard(){
+        const board = await this.leaderboardRepository
+        .createQueryBuilder('player')
+        .leftJoinAndSelect('player.user', 'user')
+        .select(['player.points', 'user.avatar', 'user.username', 'user.nickname'])
+        .orderBy('player.points', 'DESC')
+        .limit(10)
+        .getMany();
+
+        return (board);
+    }
+
+    async sleep(time: number) {
+        await new Promise(f => setTimeout(f, time * 1000));
+      }
+
+    // async startTick(namePlayRoom: string){
+    //     const playRoom = this.mapPlRoom.get(namePlayRoom);
+
+    // }
+*/
 }

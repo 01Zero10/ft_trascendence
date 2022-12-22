@@ -1,17 +1,31 @@
-import React, { useContext, useEffect, useState, } from "react"
+import React, { useContext, useEffect, useLayoutEffect, useState, } from "react"
 import "./Chat.css"
 import ChannelBody from "./chat_comp/ChannelBody"
 import ChatMenu from "./chat_comp/ChatMenu"
 import { Rooms, Student } from "./App"
-import ChannelStatus from "./chat_comp/ChannelStatus";
 import { io, Socket } from "socket.io-client"
 import ChannelBodyStatus from "./chat_comp/ChannelBodyStatus"
 
-export default function Chat(props: any) {
+export default function Chat() {
+
 
 	const student = useContext(Student);
 	const [room, setRoom] = useState<Rooms>({ name: "", type: "", builder: { username: "" } })
 	const [chOptions, setChOptions] = useState<Rooms | null>(null)
+	const [card, setCard] = useState("all")
+	const [joined, setJoined] = useState(false)
+
+	const [socket, setSocket] = useState<Socket | null>(null);
+	useLayoutEffect(() => {
+	  if (student.id !== 0) {
+		const newSocket = io(`http://${process.env.REACT_APP_IP_ADDR}:3001/chat`, { query: { userID: String(student.id) } });
+		newSocket.on('connect', () => {
+		  setSocket(newSocket);
+		  student.socket_id = newSocket.id;
+		}
+		)
+	  }
+	}, [student.id]);
 
 
 	// async function SetRoomName(client: string, target: string) {
@@ -63,8 +77,8 @@ export default function Chat(props: any) {
 
 	return (
 		<div className="chat-dashboard">
-			<ChatMenu setRoom={setRoom} socket={props.socket}></ChatMenu>
-			<ChannelBodyStatus room={room} socket={props.socket} setRoom={setRoom}></ChannelBodyStatus>
+			<ChatMenu setRoom={setRoom} socket={socket} setCard={setCard} card={card}></ChatMenu>
+			<ChannelBodyStatus room={room} socket={socket} setRoom={setRoom} setCard={setCard} joined={joined} setJoined={setJoined}></ChannelBodyStatus>
 		</div>
 	)
 }
