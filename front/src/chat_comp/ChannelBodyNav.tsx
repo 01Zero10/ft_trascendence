@@ -78,10 +78,12 @@ export default function ChannelBodyNav(props: any) {
 				<div className="channelTitleContainer">
 					<div className="channelTitleBox">
 						<div className="channelTitleContent">
-							{props.room.name}
+							{/*{props.room.name}*/}
+							{props.room.type === 'direct' ? props.room.name.replace(student.username, '') : props.room.name}
 						</div>
 					</div>
 				</div>
+				{props.room.type === 'direct' ? <div className="channelOptionBar"></div> :
 				<div className="channelOptionBar">
 					{/*TODO: inserire descrizione pulsanti*/}
 					{(props.room.name && props.room.builder.username === student.username)&& <div className={"divIconContainer"}><IconSettings size={20} onClick={() => props.setModalTypeOpen("options")}></IconSettings><p className={"parIconDescription"}>OPTIONS</p></div>}
@@ -90,6 +92,7 @@ export default function ChannelBodyNav(props: any) {
 					{(props.room.name && props.joined) && <div className={"divIconContainer"}><IconDoorExit size={20} onClick={() =>{ SetJoinFetch().then(); props.setRoom((prevState:any) => {return {...prevState, name:""}})}}></IconDoorExit><p className={"parIconDescription"}>LEAVE</p></div>}
 					{(props.room.name && !props.joined) && <div className={"divIconContainer"}><IconDoorEnter size={20} onClick={SetJoinFetch}></IconDoorEnter><p className={"parIconDescription"}>JOIN</p></div>}
 				</div>
+				}
 			</div>
 			{/* <svg style={{ position:"relative", height:"30%", width:"100%", rotate:"180deg", float:"right"}} ><image style={{ width:"20%"}} xlinkHref="/chat_decoration_top_mod_color2.svg"></image></svg> */}
 		</div>
