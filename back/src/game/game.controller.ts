@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { GameService } from "./game.service";
 
 @Controller("game")
@@ -28,5 +28,10 @@ export class GameController{
     @Get('test/:winner')
     async getTest(@Param('winner') winner: string){
         return await this.gameService.updatePosition(winner);
+    }
+
+    @Post('createDirectGame')
+    async CreateDirectGame(@Body('client') client: string, @Body('userToPlayWith') userToPlayWith: string){
+        await this.gameService.createDirectGame(client, userToPlayWith);
     }
 }

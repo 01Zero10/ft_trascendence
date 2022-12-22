@@ -17,4 +17,9 @@ export class NavigationController{
     async MarkSeen(@Body('client') client: string){
       await this.navigationService.markSeen(client);
     }
+
+    @Post('inviteToGame')
+    async InviteToGame(@Body('client') client: string, @Body('userToPlayWith') userToPlayWith: string){
+        await this.navigationService.inviteToGame(client, userToPlayWith);
+    }
 }

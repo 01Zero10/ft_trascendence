@@ -280,6 +280,21 @@ export class GameService{
             return roomSaved.player1;
         return roomSaved.player2;
     }
+
+    async createDirectGame(client: string, userToPlayWith: string){
+        const avatar1 = (await this.userRepository.findOne({ where: {username: client}})).avatar;
+        const avatar2 = (await this.userRepository.findOne({ where: {username: userToPlayWith}})).avatar;
+        let playRoom = this.runningMatches.create({
+            playRoom: 'heldBy' + client,
+            player1: client,
+            leftSide: client,
+            avatar1: avatar1,
+            player2: userToPlayWith,
+            rightSide: userToPlayWith,
+            avatar2: avatar2,
+        })
+        await this.runningMatches.save(playRoom);
+    }
     
     // NON SAPPIAMO SE QUESTA PARTE SERVE
 

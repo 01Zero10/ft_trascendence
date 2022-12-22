@@ -32,6 +32,24 @@ export default function ChannelMessage(props: any) {
 		props.setRoom({ name: ret.name, type: 'direct', builder: {username: null} });
 	}
 
+	async function inviteUserToPlay(userToPlayWith: string){
+		const API_URL_CREATE_DIRECT_GAME = `http://${process.env.REACT_APP_IP_ADDR}:3001/game/createDirectGame`;
+		const API_URL_INVITE_TO_GAME = `http://${process.env.REACT_APP_IP_ADDR}:3001/navigation/inviteToGame`;
+		await fetch(API_URL_CREATE_DIRECT_GAME, {
+			method: 'POST',
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({client: student.username, userToPlayWith: userToPlayWith}),
+		})
+		await fetch(API_URL_INVITE_TO_GAME, {
+			method: 'POST',
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({client: student.username, userToPlayWith: userToPlayWith}),
+		})
+		navigate('/game');
+	}
+
 //  <Menu position={"bottom-start"} closeDelay={400}>
 // 				<Menu.Target>
 // 					<span id={props.id} className="message-user">{props.username}</span>
@@ -74,7 +92,7 @@ export default function ChannelMessage(props: any) {
 					<Menu.Dropdown>
 						<Menu.Item className={"messageDropMenu_Item"} icon={<IconUser size={15} />} onClick={() => navigate(('/users/' + props.username))}>User profile</Menu.Item>
 						<Menu.Item className={"messageDropMenu_Item"} icon={<IconMessage size={15} />} onClick={() => privateChatWithUser(props.username)}>Chat</Menu.Item>
-						<Menu.Item className={"messageDropMenu_Item"} icon={<IconDeviceGamepad2 size={15} />}>Pong</Menu.Item>
+						<Menu.Item className={"messageDropMenu_Item"} icon={<IconDeviceGamepad2 size={15} />} onClick={() => inviteUserToPlay(props.username)}>Pong</Menu.Item>
 						{((props.admin && props.builder !== props.username && props.admins?.indexOf(props.username) === -1) || student.username === props.builder ) &&
 							<>
 								<Menu.Divider className={"messageDropMenu_divider"}></Menu.Divider>

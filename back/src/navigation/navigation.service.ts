@@ -1,9 +1,10 @@
-import { Injectable } from "@nestjs/common";
+import { forwardRef, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Match } from "src/game/match.entity";
 import { RunningMatch } from "src/game/runningMatch.entity";
 import { User } from "src/user";
 import { Repository } from "typeorm";
+import { NavigationGateWay } from "./navigation.gateway";
 import { Notifications } from "./notifications.entity";
 
 @Injectable()
@@ -13,6 +14,7 @@ export class NavigationService{
         //@InjectRepository(Match) private matchRepository: Repository<Match>,
         //@InjectRepository(RunningMatch) private runningMatches: Repository<RunningMatch>,
         @InjectRepository(User) private userRepository: Repository<User>,
+        //@Inject(forwardRef(() => NavigationGateWay)) private readonly navigationGateway: NavigationGateWay,
     ){}
 
     async updateUserSocket(userID: string, userSocket: string){
@@ -35,5 +37,17 @@ export class NavigationService{
         .set({ seen: true })
         .where("receiver = :client_n", { client_n: client })
         .execute()
+    }
+
+    async inviteToGame(client: string, userToPlayWith: string){
+        const notif = this.notificationRepository.create({
+            receiver: userToPlayWith,
+            sender: client,
+            type: 'game_request',
+            sentAt: new Date(),
+        })
+        this.notificationRepository.save(notif)
+        //aggiungere aggiornamento bell
+        //this.navigationGateway.updateBell(userToPlayWith);
     }
 }
