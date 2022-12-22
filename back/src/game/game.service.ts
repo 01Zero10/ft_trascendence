@@ -282,7 +282,7 @@ export class GameService{
     }
     
     // NON SAPPIAMO SE QUESTA PARTE SERVE
-/*
+
     async updatePosition(winner: string){
         const points_to_add = 10;
         let winnerRow = await this.leaderboardRepository
@@ -362,7 +362,7 @@ export class GameService{
         return (board);
     }
 
-    async sleep(time: number) {
+    /*async sleep(time: number) {
         await new Promise(f => setTimeout(f, time * 1000));
       }
 

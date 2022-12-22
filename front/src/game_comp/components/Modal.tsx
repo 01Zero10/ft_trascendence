@@ -125,7 +125,7 @@ function RunningMatchesList(props: any){
   }, [])
 
   useEffect(() => {
-    props.socket.on("watchGameConfirm",
+    props.socket?.on("watchGameConfirm",
         (data: {nameRoom: string, leftClient:string, rightClient:string, leftPoints:number, rightPoints:number}) => {
           props.setGameData({roomName: data.nameRoom, leftPlayer: data.leftClient, rightPlayer: data.rightClient})
           props.setPoint({left: data.leftPoints, right:data.rightPoints})
