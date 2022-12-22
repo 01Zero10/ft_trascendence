@@ -1,95 +1,52 @@
 import { Button, Center, Modal } from "@mantine/core"
-import { positions } from "@mui/system"
-import { useContext, useEffect, useLayoutEffect, useState } from "react"
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Student } from "../App"
-import Loader from "../components/Loader"
 import Canvas from "./Canvas"
-import Score from "./Score"
-
-type Ball = {
-    x: number
-    y: number
-    radius: number
-    dx: number
-    dy: number
-    //start: boolean
-    direction: string | null
-}
-
-type Player = {
-    x: number
-    y: number
-    height: number
-    width: number
-}
 
 type Point = {
     left: number
     right: number
 }
 
-export type Paddle = {
-    name: string,
-    side: string,
-    playRoom: string,
-}
-
 function PlayGround(props: any) {
-
-    //console.log("SOCKET = ", props.socket);
-
     const navigate = useNavigate()
-    const contextData = useContext(Student)
-    // const [loader, setLoader] = useState<boolean>(true);
-    const [clientSide, setClientSide] = useState<Paddle>({ name: contextData.username, side: '', playRoom: '' });
-    const [opponentSide, setOpponentSide] = useState<Paddle>({ name: '', side: '', playRoom: '' });
+    const student = useContext(Student)
+    const [loader, setLoader] = useState<boolean>(true);
+    // const [gameData, setGameData] = useState<{roomName: string, leftPlayer: string, rightPlayer: string}>({
+    //     roomName:"",
+    //     leftPlayer:"",
+    //     rightPlayer:""
+    // })
     const [point, setPoint] = useState<Point>({
         left: 0,
         right: 0
     })
     const [winner, setWinner] = useState("")
-    //const dir: Array<string> = ["l", "r"]
-    const [lastPoint, setLastPoint] = useState<"l" | "r" | null>(null)
-    //const [ballDirection, setBallDirection] = useState<"l" | "r" >(dir[Math.round(Math.random())] as "l" | "r")
-    const [ballDirection, setBallDirection] = useState<"l" | "r" | null>(null)
-    const [dir_y, setDir_y] = useState<-3 | 3 | null>(null);
 
     useEffect(() => {
-        if (clientSide.side === '') {
-            //console.log("stampa npme")
-            props.socket.emit('connectToGame', { username: contextData.username, avatar: contextData.avatar });
-        }
+        props.socket.emit('connectToGame', { username: student.username, avatar: student.avatar });
     }, [])
 
 
     useEffect(() => {
-        props.socket.once('connectedToGame', (namePlayRoom: string, side: string) => {
-            //console.log("once ", side, namePlayRoom)
-            setClientSide((prevState) => { return ({ ...prevState, side: side, playRoom: namePlayRoom }) })
-            //console.log("SIDE ", side);
-            if (side === 'right')
-                props.socket.emit('requestOpponent', { namePlayRoom: namePlayRoom, side: side })
-            //props.socket.emit('joinPlayRoom', { namePlayRoom: namePlayRoom, side: side });
+        props.socket.once('ready', (data: {namePlayRoom: string, leftClient: string, rightClient: string}) => {
+            props.setGameData({
+                roomName: data.namePlayRoom,
+                leftPlayer: data.leftClient,
+                rightPlayer: data.rightClient
+            })
+            setLoader(false);
+            if (student.username === data.rightClient)
+                props.socket.emit('setStart', data.namePlayRoom);
         })
         props.socket.once('endGame', (winner: string) => {
-            //console.log(winner);
             setWinner(winner)
         })
     }, [props.socket])
 
-    useLayoutEffect(() => {
-        if (lastPoint) {
-            setBallDirection((prevState) => {
-                if (prevState === "l")
-                    return "r"
-                return "l"
-            })
-        }
-    }, [lastPoint])
-
     return (
-        <div>
+        <div style={{backgroundColor:"#000000"}}>
             {winner ? <Modal styles={(root) => ({
                 body: {
                     backgroundColor: '#fff',
@@ -97,7 +54,7 @@ function PlayGround(props: any) {
                 },
             })}
                 onClose={() => console.log("si cazzo!!!!!")}
-                opened={winner ? true : false}
+                opened={!!winner}
                 transitionDuration={600}
                 style={{ backgroundColor: "black", zIndex: "5", }}
                 centered
@@ -109,7 +66,7 @@ function PlayGround(props: any) {
                 <div>
                     <div className="inner1">
                         {winner === 'left' ? <h1 style={{ padding: "5%" }}>Opponent left the room! 🤪</h1> :
-                            (contextData.username === winner ? <h1 style={{ padding: "5%" }}>You Won! 🥳</h1> :
+                            (student.username === winner ? <h1 style={{ padding: "5%" }}>You Won! 🥳</h1> :
                                 <h1 style={{ padding: "5%" }}>You Lost.. 😭</h1>)}
                     </div>
                     {/* style={{width:"50%", display:"flex", justifyContent:"center"}} */}
@@ -130,7 +87,6 @@ function PlayGround(props: any) {
                             size="md"
                             variant="gradient"
                             gradient={{ from: 'black', to: 'pink', deg: 55 }}
-                        // onClick={console.log("pipo")}
                         >
                             Rematch
                         </Button>
@@ -138,17 +94,15 @@ function PlayGround(props: any) {
                 </div>
             </Modal> :
                 <Canvas
+                    loader={loader}
                     socket={props.socket}
-                    clientPaddle={clientSide}
-                    opponentPaddle={opponentSide}
-                    dir_y={dir_y as 3 | -3}
                     point={point}
-                    canvasHeight={750}
-                    canvasWidth={1500}
+                    canvasHeight={500}
+                    canvasWidth={1000}
                     setPoint={setPoint}
-                    ballDirection={ballDirection}
-                    setOpponentSide={setOpponentSide}
-                    setLastpoint={setLastPoint}></Canvas>
+                    gameData={props.gameData}
+                    setGameData={props.setGameData}
+                    />
             }
         </div>
     )

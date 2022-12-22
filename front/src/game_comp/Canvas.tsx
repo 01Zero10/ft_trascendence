@@ -1,21 +1,18 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import React from "react";
 import { Socket } from "socket.io-client";
 import Loader from "../components/Loader"
-import { Paddle } from "./PlayGround";
+import {Student} from "../App";
 
 type CanvasProps = {
+  loader: boolean;
   socket: Socket;
-  clientPaddle: Paddle;
-  opponentPaddle: Paddle;
-  dir_y: -3 | 3;
   point: any;
   canvasWidth: number;
   canvasHeight: number;
-  setPoint: React.Dispatch<React.SetStateAction<any>>
-  setOpponentSide: React.Dispatch<React.SetStateAction<Paddle>>
-  ballDirection: string | null
-  setLastpoint: React.Dispatch<React.SetStateAction<any>>
+  setPoint: React.Dispatch<React.SetStateAction<any>>;
+  gameData: {roomName: string, leftPlayer: string, rightPlayer: string};
+  setGameData:  React.Dispatch<React.SetStateAction<{roomName: string, leftPlayer: string, rightPlayer: string}>>;
 };
 
 type Player = {
@@ -35,31 +32,19 @@ type MoveKey = {
 type Ball = {
   x: number
   y: number
-  radius: number
+  width: number
+  height: number
   dx: number
   dy: number
   direction: string | null
 }
 
 export default function Canvas(props: CanvasProps) {
-  const defaultPlayer = { x: 0, y: 0, height: 70, width: 20 }
-  const defaultBall = { x: props.canvasWidth / 2, y: props.canvasHeight / 2, radius: 20, dx: 0, dy: 0, direction: props.ballDirection }
+  const student = useContext(Student)
   const canvasRef = useRef<HTMLCanvasElement>(null);
   let context: CanvasRenderingContext2D | null = null;
-  const [loader, setLoader] = useState<boolean>(true);
+
   let moveKey: MoveKey = { s: false, w: false, ArrowUp: false, ArrowDown: false }
-
-  const rightPlayer = {
-    ...defaultPlayer,
-    y: (props.canvasHeight / 2) - (defaultPlayer.height / 2),
-    x: props.canvasWidth - (defaultPlayer.width)
-  }
-
-  const leftPlayer = {
-    ...defaultPlayer,
-    y: (props.canvasHeight / 2) - (defaultPlayer.height / 2),
-    x: defaultPlayer.x
-  }
   
   function startGame(ball: Ball, left: Player, right: Player) {
     update(context, ball, left, right)
@@ -78,14 +63,20 @@ export default function Canvas(props: CanvasProps) {
 
   const drawBall = (context: CanvasRenderingContext2D, ball: Ball) => {
     context.beginPath()
-    context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
+    context.fillRect(ball.x, ball.y, ball.width, ball.height )
     context.closePath()
   }
 
   // draw
   const draw = (context: CanvasRenderingContext2D | null, ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
     if (context) {
+      context.fillStyle = "#781C9C"
       context.clearRect(0, 0, props.canvasWidth, props.canvasHeight)
+      context.beginPath()
+      context.fillRect(props.canvasWidth / 2 - 2, 0, 4, props.canvasHeight )
+      context.fillRect(0, 0, props.canvasWidth, 4 )
+      context.fillRect(0, props.canvasHeight -4, props.canvasWidth, 4)
+      context.closePath()
       drawPlayer(context, leftPlayer)
       drawPlayer(context, rightPlayer)
       drawBall(context, ball);
@@ -100,48 +91,31 @@ export default function Canvas(props: CanvasProps) {
   function handleKeyPress(e: KeyboardEvent) {
     if (moveKey.hasOwnProperty(e.key)) {
       e.preventDefault();
-      props.socket.emit('onPress', { key: e.key, side: props.clientPaddle.side, playRoom: props.clientPaddle.playRoom });
+      props.socket.emit('onPress', { key: e.key, player: student.username, playRoom: props.gameData.roomName });
     }
   }
 
   function handleKeyRelease(e: KeyboardEvent) {
     if (moveKey.hasOwnProperty(e.key)) {
       e.preventDefault()
-      props.socket.emit('onRelease', { key: e.key, side: props.clientPaddle.side, playRoom: props.clientPaddle.playRoom });
-    }
-  }
+      props.socket.emit('onRelease', { key: e.key, player: student.username, playRoom: props.gameData.roomName})
+  }}
 
   useEffect(() => {
-    props.socket.on('goal', async (data: { namePlayRoom: string, rightPlayer: string, leftPlayer: string }, point: number) => {
-      //console.log('reeeestart0', data);
-      if (point === 1)
-        props.setPoint((prevState: any) => {return {...prevState, right: ++prevState.right}})
-      else
-        props.setPoint((prevState: any) => {return {...prevState, left: ++prevState.left}})
+    props.socket.on('goal', async (data: {roomName: string, leftPoint: number, rightPoint: number }) => {
+      props.setPoint({left:data.leftPoint, right: data.rightPoint})
+      //TODO: impostare conto alla rovescia
       await sleep(3);
-      if (props.clientPaddle.name === data.rightPlayer) {
-        props.socket.emit('restart', data);
+      // console.log()
+      if (props.gameData.rightPlayer === student.username) {
+        props.socket.emit('restart', data.roomName);
       }
     })
-  }, [])
+  }, [props.gameData])
 
   useEffect(() => {
     props.socket.on('update', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
       update(context!, ball, leftPlayer, rightPlayer);
-    })
-    props.socket.once('ready', (namePlayRoom: string, leftClient: string, rightClient: string) => {
-      if (props.clientPaddle.side === 'right')
-        props.setOpponentSide({name:leftClient, side: "left", playRoom: namePlayRoom })
-      else
-        props.setOpponentSide({name:rightClient, side: "right", playRoom: namePlayRoom })
-      //console.log("ricevuto ready ", leftClient, rightClient);
-      setLoader(false);
-      if (props.clientPaddle.side === 'right')
-        props.socket.emit('setStart', {
-          namePlayRoom: namePlayRoom,
-          rightPlayer: rightClient,
-          leftPlayer: leftClient
-        });
     })
     props.socket.once('start', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
       if (canvasRef.current)
@@ -149,45 +123,48 @@ export default function Canvas(props: CanvasProps) {
       startGame(ball, leftPlayer, rightPlayer);
       }
     )
-  }, [props.socket, props.clientPaddle])
+  }, [props.socket, props.gameData])
 
-
-  // add event listener on canvas for mouse position
-
-  useLayoutEffect(() => {
-    document.addEventListener("keydown", handleKeyPress)
-    document.addEventListener("keyup", handleKeyRelease)
-    return () => {
-      document.removeEventListener("keydown", handleKeyPress)
-      document.removeEventListener("keyup", handleKeyRelease)
+  useEffect(() => {
+    if(student.username === props.gameData.leftPlayer || student.username === props.gameData.rightPlayer){
+      document.addEventListener("keydown", handleKeyPress)
+      document.addEventListener("keyup", handleKeyRelease)
+      return () => {
+        document.removeEventListener("keydown", handleKeyPress)
+        document.removeEventListener("keyup", handleKeyRelease)
+      }
     }
-  }, [props.clientPaddle]) // !!! levato context e messo clientPaddle
+  }, [props.gameData])
 
   return (
     <div>
-      {loader ? <Loader /> :
-        <div>
-          <h2 style={{ color: "black" }}>Player L 
-            {props.clientPaddle.side === 'left' ? props.clientPaddle.name : props.opponentPaddle.name}</h2>
-          <div style={{ color: "black" }} className={"player1"}>
-            <h2 style={{ color: "black" }}>{props.point.left}</h2>
+      {props.loader ? <Loader /> :
+        <div style={{width:"100%", height:"100%", position:"relative"}}>
+          <div style={{position:"relative", display:"flex", width:"10%", height:"100%"}}>
+            <h2 style={{ color: "#ffffff" }}>Player L
+              {props.gameData.leftPlayer}</h2>
+            <div style={{ color: "#ffffff" }} className={"player1"}>
+              <h2 style={{ color: "#ffffff" }}>{props.point.left}</h2>
+            </div>
+            <h2 style={{ color: "#ffffff"}}>Player R
+              {props.gameData.rightPlayer}</h2>
+            <div style={{ color: "#ffffff"}} className={"player2"}>
+              <h2 style={{ color: "#ffffff" }}>{props.point.right}</h2>
+            </div>
           </div>
-          <h2 style={{ color: "black" }}>Player R 
-            {props.clientPaddle.side === 'right' ? props.clientPaddle.name : props.opponentPaddle.name}</h2>
-          <div style={{ color: "black" }} className={"player2"}>
-            <h2 style={{ color: "black" }}>{props.point.right}</h2>
+          <div style={{width: "90%"}}>
+            <canvas
+              ref={canvasRef}
+              width={props.canvasWidth}
+              height={props.canvasHeight}
+              style={{
+                border: "2px solid #000",
+                width: `${props.canvasWidth}px`,
+                height: `${props.canvasHeight}px`,
+                margin: "20px"
+              }}
+            ></canvas>
           </div>
-          <canvas
-            ref={canvasRef}
-            width={props.canvasWidth}
-            height={props.canvasHeight}
-            style={{
-              border: "2px solid #000",
-              width: `${props.canvasWidth}px`,
-              height: `${props.canvasHeight}px`,
-              margin: "20px"
-            }}
-          ></canvas>
         </div>
       }
     </div>

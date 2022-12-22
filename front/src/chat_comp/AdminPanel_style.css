@@ -37,7 +37,6 @@
     background-color: var(--black-light-color);
     color: var(--white-color);
 }
-
 .checkbox_element_container {
     width: 100%;
     display: flex;
