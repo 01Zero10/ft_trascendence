@@ -78,10 +78,19 @@ export default function ChannelStatus(props: any) {
 
 	return (
 		<div style={{height:"100%", width:"20%", display:"flex", flexDirection:"column", fontFamily:"'Tomorrow', sans-serif", fontWeight:"400", fontSize:"0.95rem"}}>
+
+			{props.room.type === 'direct' ?
+				<><div className="membersList_header">
+					<div style={{height:"70%", width:"100%", borderBottom:"2px solid #781C9C"}}></div>
+					<div style={{height:"30%", width:"100%", borderLeft:"5px solid #781C9C"}}></div>
+				</div>
+				<div className={"directMessageStatus"}></div></> :
+			<>
 			<div className="membersList_header">
 				<div style={{height:"70%", width:"100%", borderBottom:"2px solid #781C9C"}}></div>
 				<div style={{height:"30%", width:"100%", borderLeft:"5px solid #781C9C"}}></div>
 			</div>
+
 			<div style={{position:"relative", height:"92%", backgroundColor:"black", color:"white", width:"100%", borderLeft:"5px solid #781C9C", borderBottom:"5px solid #781C9C", borderBottomLeftRadius:" 15px"}}>
 				{props.room.name && <div className={"divNameContainer"}>
 					<div className={"divNameContainer_content"} onClick={() => navigate(("/users/" + props.room.builder.username))}>
@@ -99,6 +108,7 @@ export default function ChannelStatus(props: any) {
 						{(props.admins && props.admins.indexOf(element.nickname) !== -1) && <div style={{width:"10%", marginLeft:"10%"}}>admin</div>}
 					</div>)})}
 			</div>
+			</>}
 		</div>
 	)
 }
