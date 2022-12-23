@@ -43,6 +43,11 @@ function PlayGround(props: any) {
         props.socket.once('endGame', (winner: string) => {
             setWinner(winner)
         })
+        props.socket.once('readyFromInvite', ( data: {namePlayRoom: string, rightClient: string}) => {
+            setLoader(false);
+            if (student.username === data.rightClient)
+                props.socket.emit('setStart', data.namePlayRoom);
+        })
     }, [props.socket])
 
     return (

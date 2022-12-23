@@ -22,34 +22,36 @@ export default function Game() {
         leftPlayer:"",
         rightPlayer:""
     })
+    
+    async function checkInvite() {
+        const API_URL_CHECK_INVITE = `http://${process.env.REACT_APP_IP_ADDR}:3001/game/checkInvite/${contextData.username}`;
+        const ret = await fetch(API_URL_CHECK_INVITE, {
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+        }).then(async (response) => await response.json())
+        .catch(() => {return null});
+        //console.log('checkInvite', ret);
+        if(ret){
+            console.log('checkInviteFront');
+            console.log(ret)
+            socket?.emit('connectToInviteGame', { client: contextData.username, playRoom: ret.playRoom })
+            //if (ret.leftPlayer === contextData.username)
+            setGameData({roomName: ret.playRoom, leftPlayer: ret.leftPlayer, rightPlayer: ret.rightPlayer});
+            //setGameData({roomName: ret.playRoom, leftPlayer: ret.leftPlayer, rightPlayer: ''}
+            //setPlay(true);
+        }
+    }
 
     useLayoutEffect(() => {
         const newSocket = io(`http://${process.env.REACT_APP_IP_ADDR}:3001/game`, { query: { username: contextData.username } });
         newSocket.on('connect', () => {
             setSocket(newSocket);
+            checkInvite();
         })
         return () => {
             newSocket.disconnect();
         }
     }, [contextData.username]);
-
-    
-    async function checkInvite() {
-        const API_URL_CHECK_INVITE = `http://${process.env.REACT_APP_IP_ADDR}:3001/game/checkInvite/${contextData.username}`;
-        const ret = await fetch(API_URL_CHECK_INVITE, {
-			credentials: 'include',
-			headers: { 'Content-Type': 'application/json' },
-        }).then(async (response) => await response.json());
-        //console.log('checkInvite', ret);
-        //setPlay({roomName: ret.});
-    }
-    
-    useLayoutEffect(() => {
-        socket?.on('checkInvite', async () => {
-            console.log("entrato checkinvite")
-            await checkInvite();
-        })
-    }, [socket])
 
     return (
         <div className="game_container">

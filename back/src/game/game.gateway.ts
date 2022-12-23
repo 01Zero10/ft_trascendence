@@ -56,6 +56,15 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
     //this.server.to(clientSocket.id).emit('connectedToGame', ret.namePlayRoom, ret.side)
   }
 
+  @SubscribeMessage('connectToInviteGame')
+  async connectToInviteGame(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {client: string, playRoom: string, side: string}){
+    console.log('connectToInviteGame');
+    console.log(data);
+    clientSocket.join(data.playRoom);
+    if (data.side === "right")
+      this.server.to(data.playRoom).emit('readyFromInvite', {namePlayRoom: data.playRoom, rightClient: data.client});
+  }
+
   @SubscribeMessage('watchGameRequest')
   async handleWatchGame(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, username: string}): Promise<any> {
     const ret = await this.gameService.getMatchByName(data.namePlayRoom);
