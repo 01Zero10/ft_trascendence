@@ -23,7 +23,6 @@ export class NavigationGateWay implements OnGatewayInit, OnGatewayConnection, On
   }
 
   async updateBell(receiver: string){
-
     const client = await this.userService.getByUsername(receiver);
     console.log("client = ", client.username, " sock_id = ", client.socket_id);
     this.server.to(client.socket_id).emit('updateBell');

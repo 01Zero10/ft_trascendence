@@ -30,14 +30,11 @@ export default function Game() {
             headers: { 'Content-Type': 'application/json' },
         }).then(async (response) => await response.json())
         .catch(() => {return null});
-        //console.log('checkInvite', ret);
         if(ret){
             console.log('checkInviteFront');
             console.log(ret)
             socket?.emit('connectToInviteGame', { client: contextData.username, playRoom: ret.playRoom })
-            //if (ret.leftPlayer === contextData.username)
             setGameData({roomName: ret.playRoom, leftPlayer: ret.leftPlayer, rightPlayer: ret.rightPlayer});
-            //setGameData({roomName: ret.playRoom, leftPlayer: ret.leftPlayer, rightPlayer: ''}
             setPlay(true);
         }
     }

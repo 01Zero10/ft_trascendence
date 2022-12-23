@@ -46,7 +46,7 @@ export class NavigationService{
             type: 'game_request',
             sentAt: new Date(),
         })
-        this.notificationRepository.save(notif)
+        this.notificationRepository.save(notif);
         //aggiungere aggiornamento bell
         //this.navigationGateway.updateBell(userToPlayWith);
     }

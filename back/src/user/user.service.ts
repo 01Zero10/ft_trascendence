@@ -263,6 +263,10 @@ export class UserService {
     await this.navigationGateway.updateBell(profileUser);
   }
 
+  async updateBell(userBellToUpdate: string){
+    await this.navigationGateway.updateBell(userBellToUpdate);
+  }
+
   async getFriendships(client: string){
     const userClient = await this.getByUsername(client);
     return userClient.friends;

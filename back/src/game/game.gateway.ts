@@ -53,7 +53,6 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
     clientSocket.join(ret.namePlayRoom);
     if (ret.side === "right")
       this.server.to(ret.namePlayRoom).emit('ready', {namePlayRoom: ret.namePlayRoom, leftClient: ret.left, rightClient: ret.right});
-    //this.server.to(clientSocket.id).emit('connectedToGame', ret.namePlayRoom, ret.side)
   }
 
   @SubscribeMessage('connectToInviteGame')
@@ -71,12 +70,6 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
     clientSocket.join(data.namePlayRoom);
       this.server.to(clientSocket.id).emit('watchGameConfirm', {nameRoom: data.namePlayRoom, leftClient: ret.leftPlayer.username , rightClient: ret.rightPlayer.username, leftPoints: ret.leftPoint, rightPoints: ret.rightPoint});
   }
-
-  // @SubscribeMessage('requestOpponent')
-  // async handleJoinPlayRoom(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, side: string}): Promise<any> {
-  //   const playRoom = await this.gameService.getPlayRoomByName(data.namePlayRoom);
-  //   this.server.to(data.namePlayRoom).emit('ready', data.namePlayRoom, playRoom.leftSide, playRoom.rightSide)
-  // }
 
   @SubscribeMessage('setStart')
   async handleSetStart(@ConnectedSocket() clientSocket: Socket, @MessageBody() namePlayRoom: string){//, rightPlayer: string, leftPlayer: string}){

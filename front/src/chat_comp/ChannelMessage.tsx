@@ -35,6 +35,7 @@ export default function ChannelMessage(props: any) {
 	async function inviteUserToPlay(userToPlayWith: string){
 		const API_URL_CREATE_DIRECT_GAME = `http://${process.env.REACT_APP_IP_ADDR}:3001/game/createDirectGame`;
 		const API_URL_INVITE_TO_GAME = `http://${process.env.REACT_APP_IP_ADDR}:3001/navigation/inviteToGame`;
+		const API_URL_UPDATE_BELL = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/bellUserToUpdate`;
 		await fetch(API_URL_CREATE_DIRECT_GAME, {
 			method: 'POST',
 			credentials: 'include',
@@ -46,6 +47,12 @@ export default function ChannelMessage(props: any) {
 			credentials: 'include',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({client: student.username, userToPlayWith: userToPlayWith}),
+		})
+		await fetch( API_URL_UPDATE_BELL, {
+			method: 'POST',
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({bellUserToUpdate: userToPlayWith}),
 		})
 		navigate('/game');
 	}

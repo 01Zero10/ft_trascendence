@@ -100,6 +100,11 @@ export class UsersController {
     return await this.userService.getOnlineFriends(client);
   }
 
+  @Post('bellUserToUpdate')
+  async UpdateBell(@Body('bellUserToUpdate')bellUserToUpdate: string){
+    await this.userService.updateBell(bellUserToUpdate);
+  }
+
   /*@Put("create/:username") //da aggiungere qualcosa qui???
   async createUser(@Param("username") username: string, clientSocket: string) {
     //da aggiungere un secondo @Params???
