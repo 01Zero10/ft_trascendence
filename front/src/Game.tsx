@@ -33,9 +33,11 @@ export default function Game() {
         if(ret){
             console.log('checkInviteFront');
             console.log(ret)
-            socket?.emit('connectToInviteGame', { client: contextData.username, playRoom: ret.playRoom })
-            setGameData({roomName: ret.playRoom, leftPlayer: ret.leftPlayer, rightPlayer: ret.rightPlayer});
-            setPlay(true);
+            if (ret.left === ret.leftPlayer || (ret.right === ret.rightPlayer && ret.invited === 'accepted')) {
+                socket?.emit('connectToInviteGame', { client: contextData.username, playRoom: ret.playRoom })
+                setGameData({roomName: ret.playRoom, leftPlayer: ret.leftPlayer, rightPlayer: ret.rightPlayer});
+                setPlay(true);
+            }
         }
     }
 

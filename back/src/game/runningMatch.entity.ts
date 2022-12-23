@@ -11,6 +11,9 @@ export class RunningMatch {
     @Column({default: 'classic'})
     typo: string;
 
+    @Column({default: 'false'})
+    invited: string;
+
     @Column()
     player1: string;
 

@@ -1,6 +1,7 @@
 import { ActionIcon, Indicator, Menu } from '@mantine/core'
 import { IconBell } from '@tabler/icons'
 import React, { useContext, useEffect, useLayoutEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Student } from './App'
 import "./NotificationBell.css"
 
@@ -16,6 +17,7 @@ export default function NotificationBell(props: any) {
     const [notifications, setNotifications] = useState<iNotifications[]>([]);
     const [seen, setSeen] = useState<number>(0);
     const [count, setCount] = useState<number>(0);
+    let navigate = useNavigate();
 
 
     async function markSeen() {
@@ -51,6 +53,17 @@ export default function NotificationBell(props: any) {
         setNotifications(fetchNotifications);
     }
 
+    async function handleAcceptGame(sender: string) {
+        const API_URL_ACCEPT_GAME_REQUEST = `http://${process.env.REACT_APP_IP_ADDR}:3001/game/acceptGameRequest`;
+        await fetch( API_URL_ACCEPT_GAME_REQUEST, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ client: contextData.username, sender: sender })
+        })
+        navigate('/game');
+    }
+
     useEffect(() => {
         getNotifications();
     }, [])
@@ -82,7 +95,9 @@ export default function NotificationBell(props: any) {
                     <Menu.Label>Notifications menu</Menu.Label>
                     <Menu.Divider />
                     {notifications?.map((element) => (
-                        <Menu.Item component='a' href={'/users/' + element.sender} >• {element.type} request from {element.sender}!</Menu.Item>
+                        (element.type !== 'game_request') ?
+                        <Menu.Item component='a' href={'/users/' + element.sender} >• {element.type} request from {element.sender}!</Menu.Item> :
+                        <Menu.Item onClick={() => handleAcceptGame(element.sender)}>• Game request from {element.sender} </Menu.Item>
                     ))}
                 </Menu.Dropdown>
             </Menu>

@@ -60,9 +60,11 @@ export class GameService{
     }
 
     async getClassicRunningMatches(){
+        const string = 'invited'
         return await this.runningMatches
         .createQueryBuilder('match')
         .where({typo: 'classic'})
+        .andWhere("match.invited != :invited", {string})
         .select(['match.playRoom','match.player1', 'match.player2', 'match.avatar1', 'match.avatar2'])
         .getMany();
     }
@@ -106,14 +108,14 @@ export class GameService{
         let playRoom = await this.runningMatches
         .createQueryBuilder()
         .where({player1: client})
-        .andWhere({player2: ''})
+        //.andWhere({player2: ''})
         .getOne()
         if (playRoom !== null)
         {
             await this.runningMatches.remove(playRoom);
             return ;
         }
-        //this.handleLeavePlayRoom(client).then();
+        this.handleLeavePlayRoom(client).then();
     }
 
     async handleLeavePlayRoom(client: string){
@@ -375,6 +377,10 @@ export class GameService{
         .getMany();
 
         return (board);
+    }
+
+    async acceptGameRequest(client: string, sender: string) {
+        //DA COMPLETARE
     }
 
     async checkInvite(client: string){

@@ -41,4 +41,10 @@ export class GameController{
         console.log(await this.gameService.checkInvite(client))
        return await this.gameService.checkInvite(client);
     }
+
+    @Post('acceptGameRequest')
+    async AcceptGameRequest(@Body('client') client: string, @Body('sender') sender: string){
+      await this.gameService.acceptGameRequest(client, sender);
+      //DA COMPLETARE
+    }
 }
