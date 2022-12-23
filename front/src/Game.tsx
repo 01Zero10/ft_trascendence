@@ -38,7 +38,7 @@ export default function Game() {
             //if (ret.leftPlayer === contextData.username)
             setGameData({roomName: ret.playRoom, leftPlayer: ret.leftPlayer, rightPlayer: ret.rightPlayer});
             //setGameData({roomName: ret.playRoom, leftPlayer: ret.leftPlayer, rightPlayer: ''}
-            //setPlay(true);
+            setPlay(true);
         }
     }
 
