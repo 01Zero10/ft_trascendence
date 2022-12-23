@@ -29,7 +29,7 @@ export default function ChannelList(props: any) {
 	}
 
 	useEffect(() => {
-		getChannels();
+		getChannels().then();
 	}, [props.card]);
 
 	useEffect(() => {

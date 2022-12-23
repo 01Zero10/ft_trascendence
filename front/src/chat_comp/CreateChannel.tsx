@@ -194,7 +194,10 @@ close	.mantine-Modal-close	Close button*/
             opened={props.newChannel} onClose={ () => props.setNewChannel(false) }>
                 <div>
                     <div style={{width:"100%"}}>
-                        <SegmentedControl style={{width:"100%",height: "50px"}} value={newOption.type} data={controlData} onChange={changeType}
+                        <SegmentedControl style={{width:"100%",height: "50px"}}
+                                          value={newOption.type}
+                                          data={controlData}
+                                          onChange={changeType}
                         styles={() => ({
                             root: {
                                 backgroundColor:"transparent",

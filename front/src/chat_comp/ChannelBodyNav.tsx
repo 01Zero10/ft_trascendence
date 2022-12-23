@@ -90,7 +90,7 @@ export default function ChannelBodyNav(props: any) {
 					{(props.room.name && props.room.builder.username === student.username)&& <div className={"divIconContainer"}><IconUserPlus size={20} onClick={() => props.setModalTypeOpen("add")}></IconUserPlus><p className={"parIconDescription"}>ADD USERS</p></div>}
 					{(props.room.name && props.admin) && <div className={"divIconContainer"}><IconGavel size={20} onClick={() => props.setModalTypeOpen("admin")}></IconGavel><p className={"parIconDescription"}>ADMIN</p></div>}
 					{(props.room.name && props.joined) && <div className={"divIconContainer"}><IconDoorExit size={20} onClick={() =>{ SetJoinFetch().then(); props.setRoom((prevState:any) => {return {...prevState, name:""}})}}></IconDoorExit><p className={"parIconDescription"}>LEAVE</p></div>}
-					{(props.room.name && !props.joined) && <div className={"divIconContainer"}><IconDoorEnter size={20} onClick={SetJoinFetch}></IconDoorEnter><p className={"parIconDescription"}>JOIN</p></div>}
+					{(props.room.name && !props.joined && props.room.type !== "protected") && <div className={"divIconContainer"}><IconDoorEnter size={20} onClick={SetJoinFetch}></IconDoorEnter><p className={"parIconDescription"}>JOIN</p></div>}
 				</div>
 				}
 			</div>

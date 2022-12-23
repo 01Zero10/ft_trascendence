@@ -4,9 +4,10 @@ import ChannelMessage from "./ChannelMessage"
 import ChannelInput from "./ChannelInput"
 import { packMessage } from "../About";
 import { Student } from "../App";
-import { Box, Button, Modal, PasswordInput, ScrollArea, Skeleton } from "@mantine/core";
+import {Box, Button, Center, Modal, PasswordInput, ScrollArea, Skeleton} from "@mantine/core";
 import ChannelOptionModal from "./ChannelOptionModal";
 import AdminPanel from "./AdminPanel";
+import PasswordCheck from "./PasswordCheck";
 
 
 /*A ogni click sulla stanza viene aggiornato MyState
@@ -44,27 +45,27 @@ export default function ChannelBody(props: any) {
 	const [myState, setMyState] = useState<MyStateOnChannel | null>(null);
 
 
-	async function checkProtectedPassword() {
-		const API_CHECK_PROTECTED_PASS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/checkProtectedPass`;
-		let response = await fetch(API_CHECK_PROTECTED_PASS, {
-			method: 'POST',
-			credentials: 'include',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ input: inputPwd, channelName: props.room.name })
-		})
-		const data = await response.json()
-		if (data) {
-			const API_SET_JOIN = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/setJoin`;
-			await fetch(API_SET_JOIN, {
-				method: 'POST',
-				credentials: 'include',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ client: student.username, channelName: props.room.name, joined: props.joined }),
-			})
-			props.setJoined((prevJoined: boolean) => !prevJoined);
-			props.socket?.emit('updateList', { type: props.room.type });
-		}
-	}
+	// async function checkProtectedPassword() {
+	// 	const API_CHECK_PROTECTED_PASS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/checkProtectedPass`;
+	// 	let response = await fetch(API_CHECK_PROTECTED_PASS, {
+	// 		method: 'POST',
+	// 		credentials: 'include',
+	// 		headers: { 'Content-Type': 'application/json' },
+	// 		body: JSON.stringify({ input: inputPwd, channelName: props.room.name })
+	// 	})
+	// 	const data = await response.json()
+	// 	if (data) {
+	// 		const API_SET_JOIN = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/setJoin`;
+	// 		await fetch(API_SET_JOIN, {
+	// 			method: 'POST',
+	// 			credentials: 'include',
+	// 			headers: { 'Content-Type': 'application/json' },
+	// 			body: JSON.stringify({ client: student.username, channelName: props.room.name, joined: props.joined }),
+	// 		})
+	// 		props.setJoined((prevJoined: boolean) => !prevJoined);
+	// 		props.socket?.emit('updateList', { type: props.room.type });
+	// 	}
+	// }
 
 	// useEffect(() => {
 	// 	const API_GET_MUTES_BANS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getMyMutesAndBans/${student.username}`;
@@ -119,7 +120,7 @@ export default function ChannelBody(props: any) {
 
 	// //console.log("MyStateOnChannel", myState)
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		async function checkJoined() {
 			const API_CHECK_JOINED = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/checkJoined`;
 			let response = await fetch(API_CHECK_JOINED, {
@@ -160,26 +161,24 @@ export default function ChannelBody(props: any) {
 	}
 
 	const joinRoom = async (roomName: string) => {
-		//console.log(props.room, joined)
 		if (props.room.name && (props.room.type === "public" || props.room.type === 'direct'))
 			props.socket?.emit('joinRoom', { client: student.username, room: props.room.name });
 		else if (props.room.name && props.room.type === "protected" && props.joined)
 			props.socket?.emit('joinRoom', { client: student.username, room: props.room.name });
 	}
 
-	useEffect(() => 
+	useLayoutEffect(() =>
 		{
-			joinRoom(props.room.name)
+			joinRoom(props.room.name).then()
 		}, [props.room, props.joined]
 	)
 
 	useEffect(() => {
-		getChatMessages();
+		getChatMessages().then();
 	}, [props.room.name])
 
 	useEffect(() => {
 		props.socket?.on('msgToClient', (client_message: packMessage) => {
-			//console.log("sono passato da qui")
 			setMessages(messages => [...messages, client_message]);
 		});
 	}, [props.socket])
@@ -210,7 +209,6 @@ export default function ChannelBody(props: any) {
             '&, &:hover': {
               background: "black",
             },
-
             '&[data-orientation="vertical"] .mantine-ScrollArea-thumb': {
               backgroundColor: "#781C9C"
             }
@@ -247,37 +245,50 @@ export default function ChannelBody(props: any) {
 				setJoined={props.setJoined} 
 				setModalTypeOpen={setModalTypeOpen} 
 				/>
-			<div style={{ background:"black",color:"white", position:"relative", height:"92%", width:"100%"}}>
-				<ScrollArea style={{height:"89%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)}>
-				{props.room.name && messages.map((m: packMessage, id: number) => {
-						if (student.blockedUsers && student.blockedUsers.findIndex(x => x === m.username) != -1)
-						{
-							console.log(student.blockedUsers.findIndex(x => x === m.username));
-						}	
-						else
-							return(
-							<ChannelMessage admin={props.admin}
-											key={id}
-											admins={props.admins}
-											builder={props.room.builder.username}
-											username={m.username} message={m.message}
-											createdAt={m.createdAt}
-											avatar={m.avatar}
-											setCard={props.setCard}
-											room={props.room}
-											setRoom={props.setRoom}
-											/>
-						)
-				})}
-				<div ref={bottomRef}></div>
-				</ScrollArea>
-				{(props.room.name && props.joined) && <ChannelInput
-				className="inputTextArea"
-				room={props.room}
-				mute={(myState?.mode === "mute")}
-				socket={props.socket}
-				></ChannelInput>}
-			</div>
+			{(props.room.name && props.joined) ?
+				<div style={{background: "black", color: "white", position: "relative", height: "92%", width: "100%"}}>
+					<ScrollArea style={{height: "89%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)}>
+						{props.room.name && messages.map((m: packMessage, id: number) => {
+							if (student.blockedUsers && student.blockedUsers.findIndex(x => x === m.username) != -1) {
+								console.log(student.blockedUsers.findIndex(x => x === m.username));
+							} else
+								return (
+									<ChannelMessage admin={props.admin}
+													key={id}
+													admins={props.admins}
+													builder={props.room.builder.username}
+													username={m.username} message={m.message}
+													createdAt={m.createdAt}
+													avatar={m.avatar}
+													setCard={props.setCard}
+													room={props.room}
+													setRoom={props.setRoom}
+									/>
+								)
+						})}
+						<div ref={bottomRef}></div>
+					</ScrollArea>
+					{(props.room.name && props.joined) && <ChannelInput
+						className="inputTextArea"
+						room={props.room}
+						mute={(myState?.mode === "mute")}
+						socket={props.socket}
+					></ChannelInput>}
+				</div>
+				:
+				props.room.type === "protected" && !props.joined ?
+					// <div style={{color:"white", position:"relative"}}>
+					// 	<Center style={{flexDirection:"column"}}>
+					// 		<div>This Channel is Protected</div>
+					// 		<div>Insert Password to join</div>
+					// 		<PasswordInput style={{width:"50%"}} autoComplete={"false"}></PasswordInput>
+					// 		<button style={{width:"30%", height:"30%"}}>ciao</button>
+					// 	</Center>
+					// </div>
+					<PasswordCheck room={props.room} setJoined={props.setJoined}/>
+					:
+					<></>
+			}
 		</div>
 	)
 }
