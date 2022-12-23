@@ -22,6 +22,7 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   async handleConnection(clientSocket: Socket) {
       this.logger.log(`connesso al GAME namespace ${clientSocket.id}`);
+      this.server.to(clientSocket.id).emit('checkInvite');
   }
 
   async handleDisconnect(clientSocket: Socket) {

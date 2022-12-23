@@ -113,7 +113,7 @@ export class GameService{
             await this.runningMatches.remove(playRoom);
             return ;
         }
-        this.handleLeavePlayRoom(client).then();
+        //this.handleLeavePlayRoom(client).then();
     }
 
     async handleLeavePlayRoom(client: string){
@@ -375,6 +375,11 @@ export class GameService{
         .getMany();
 
         return (board);
+    }
+
+    async checkInvite(client: string){
+        const playRoom = await this.runningMatches.findOne({where: [{leftSide: client}, {rightSide: client}]})
+        return playRoom;
     }
 
     /*async sleep(time: number) {

@@ -34,4 +34,10 @@ export class GameController{
     async CreateDirectGame(@Body('client') client: string, @Body('userToPlayWith') userToPlayWith: string){
         await this.gameService.createDirectGame(client, userToPlayWith);
     }
+
+    @Get('checkInvite/:client')
+    async CheckInvite(@Param('client') client: string){
+        console.log(await this.gameService.checkInvite(client))
+       return await this.gameService.checkInvite(client);
+    }
 }

@@ -38,7 +38,6 @@ export default function NotificationBell(props: any) {
         let fetchNotifications: iNotifications[] = [];
         setSeen(0)
         await Promise.all(await data?.map(async (element: any) => {
-            console.log(element)
             let singleNotification: iNotifications = {
                 sender: element.sender,
                 type: element.type,
