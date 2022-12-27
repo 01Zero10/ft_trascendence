@@ -70,6 +70,7 @@ export function LeadGrid(props: any) {
           opened={opened_classic}
           onClose={() => { setGameOptions({ type: "" }); setOpened_classic(false) }}
           withCloseButton={false}
+          closeOnClickOutside={false}
           size="40%"
           padding={0}
           id='rgb_modal'
@@ -78,6 +79,7 @@ export function LeadGrid(props: any) {
           overlayOpacity={0.50}
           overlayBlur={5}>
           <ClassicModal setPlay={props.setPlay} setGameOptions={setGameOptions} typo={'classic'} />
+          <button className='gameModalCloseButton_holder' onClick={() => setOpened_classic(false)}><div className='gameModalCloseButton'> CLOSE </div></button>
         </Modal>
         <Modal
         styles={(root) => ({
@@ -102,6 +104,7 @@ export function LeadGrid(props: any) {
           opened={opened_advanced}
           onClose={() => { setGameOptions({ type: "" }); setOpened_advanced(false) }}
           withCloseButton={false}
+          closeOnClickOutside={false}
           size="40%"
           padding={0}
           id='rgb_modal'
@@ -110,6 +113,7 @@ export function LeadGrid(props: any) {
           overlayOpacity={0.50}
           overlayBlur={5}>
           <ClassicModal socket={props.socket} setPlay={props.setPlay} setGameData={props.setGameData} setGameOptions={setGameOptions} typo={'advanced'} />
+          <button className='gameModalCloseButton_holder' onClick={() => setOpened_advanced(false)}><div className='gameModalCloseButton'> CLOSE </div></button>
         </Modal>
         <div className='card_text_container card_1'>
           <div className='card classic_card' ref={hoverRef} onClick={() => { setGameOptions({ type: "classic" }); setOpened_classic(true) }}>
