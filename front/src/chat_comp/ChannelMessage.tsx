@@ -132,7 +132,7 @@ export default function ChannelMessage(props: any) {
 						<div className="text_header_container">
 							<div className="usernameDetails_container_sender">
 								<span id={props.id} className="usernameHeader_sender">{props.username}</span>
-								<span id={props.id} className="detailsHeader">{naturalTime}</span>
+								<span id={props.id} className="detailsHeader_sender">{naturalTime}</span>
 							</div>
 							<div className="messageText">
 								{/* <span id={props.id} className="">{props.message}</span> */}

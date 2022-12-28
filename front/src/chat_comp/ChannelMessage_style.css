@@ -108,6 +108,18 @@
     /* border-left: 1px solid black; */
 }
 
+.detailsHeader_sender {
+    width: 50%;
+    height: 100%;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-right: 1%;
+    cursor: default;
+    /* border-left: 1px solid black; */
+}
+
 .messageText{
     /* height: 70%; */
     width: 100%;
