@@ -121,7 +121,7 @@ export default function ChannelMessage(props: any) {
 						</div>
 					</div>
 		</div > :
-				<div id={props.id} className={props.class} style={{display:"flex", flexDirection:"row-reverse",margin: "0 0 1% 0.5%"}}>
+				<div id={props.id} className={props.class} style={{display:"flex", flexDirection:"row-reverse",margin: "0 0.5% 1% 0%"}}>
 					<div className="message_container_sender">
 						<Avatar
 							className="avatarStyle_sender"
