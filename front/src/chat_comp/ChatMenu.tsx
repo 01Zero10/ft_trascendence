@@ -61,7 +61,7 @@ export default function ChatMenu(props: any) {
 				<img style={{ marginTop:"-10px", float:"right", width:"100%"}} src="/chat_decoration_top_mod_color.svg" alt="img_account" />
 			</div> */}
 			<div style={{ position: "relative", height: "86%", backgroundColor: "black", width: "100%" }}>
-				<Tabs keepMounted={false} variant={"default"} radius="lg" color={"grape"} defaultValue={"all"} style={{position:"relative", height:"90%"}}>
+				<Tabs keepMounted={false} variant={"default"} radius="lg" color={"grape"} defaultValue={"all"} value={props.card} style={{position:"relative", height:"90%"}}>
 					<Tabs.List position="center" grow={true}>
 						<Tabs.Tab style={tabStyle} value="all"  icon={<IconUsers size={14} />} onClick={() => props.setCard("all")}>All Channel</Tabs.Tab>
 						<Tabs.Tab style={tabStyle} value={`membership/${contextData.id}`} icon={<IconUser size={14} />} onClick={() => {props.setCard(`membership/${contextData.id}`)}}>My Channels</Tabs.Tab>
