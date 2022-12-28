@@ -3,7 +3,7 @@
 
 .message_container{
     display: flex;
-    width: 50%;
+    width: 40%;
     border: 2px solid var(--purple-color);
     border-radius: 5px 5px 25px 0;
     
@@ -12,7 +12,7 @@
 .message_container_sender {
     display: flex;
     flex-direction: row-reverse;
-    width: 50%;
+    width: 40%;
     border: 2px solid var(--purple-color);
     border-radius: 5px 5px 0px 25px;
 }
@@ -104,6 +104,18 @@
     align-items: flex-end;
     justify-content: flex-end;
     padding-right: 1%;
+    cursor: default;
+    /* border-left: 1px solid black; */
+}
+
+.detailsHeader_sender {
+    width: 50%;
+    height: 100%;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding-left: 1%;
     cursor: default;
     /* border-left: 1px solid black; */
 }

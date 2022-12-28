@@ -1,6 +1,7 @@
 import React, {useContext, useState} from "react"
 import { Student } from "../App";
 import { Center, PasswordInput } from "@mantine/core";
+import "./PasswordCheck_style.css"
 
 export default function PasswordCheck(props:any){
 	const student = useContext(Student)
@@ -33,12 +34,14 @@ export default function PasswordCheck(props:any){
 	}
 
 	return(
-		<div style={{color:"white", position:"relative"}}>
+		<div className="PasswordCheck_container">
 			<Center style={{flexDirection:"column"}}>
-				<div>This Channel is Protected</div>
-				<div>Insert Password to join</div>
-				<PasswordInput error={error?"Wrong password":undefined} style={{width:"50%"}} value={inputPwd} autoComplete={"false"} onChange={(e) => setInputPwd(e.target.value)}></PasswordInput>
-				<button style={{width:"30%", height:"30%"}} onClick={checkProtectedPassword}>Submit</button>
+				<div className="PasswordCheck_firstRow">This Channel is Protected</div>
+				<div className="PasswordCheck_secondRow">Insert Password to join</div>
+				<PasswordInput error={error?"Wrong password":undefined} style={{width:"30%"}} value={inputPwd} autoComplete={"false"} onChange={(e) => setInputPwd(e.target.value)}></PasswordInput>
+				<button className="passwordButtonCheck" onClick={checkProtectedPassword}>
+					<div className="passwordButtonCheck_content"> SUBMIT </div>
+				</button>
 			</Center>
 		</div>
 	)
