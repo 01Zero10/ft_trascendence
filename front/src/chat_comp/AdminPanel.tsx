@@ -24,7 +24,7 @@ export default function AdminPanel(props: any) {
 	//console.log("srranzoa", props.room.name);
 	//variabili
 	const [action, setAction] = useState<string>('ban');
-	const [data, setData] = useState<TransferListData>([[], []]);
+	const [data, setData] = useState<string[]>([]);
 	// const [members, setMembers] = useState<string[]>([])
 	const [limitedUsers, setLimitedUsers] = useState<{
 		value: string;
@@ -97,7 +97,6 @@ export default function AdminPanel(props: any) {
 		if (props.room.name != '') {
 			let response = await fetch(API_GET_MUTED);
 			let data = await response.json();
-		  //console.log("muuuuuuuuted banned = ", data);
 			let fetchMuted: {
 				value: string;
 				label: string;
@@ -121,7 +120,6 @@ export default function AdminPanel(props: any) {
 		if (props.room.name !== '') {
 			let response = await fetch(API_GET_BANNED);
 			let data = await response.json();
-			// console.log("daaaaaata banned = ", data);
 			let fetchBanned: {
 				value: string;
 				label: string;
@@ -169,6 +167,27 @@ export default function AdminPanel(props: any) {
 		}
 	}
 
+	function handleInternalChange(e: any){
+		let position = data.indexOf(e.target.value)
+		if (position !== -1){
+			let oldData = [...data]
+			oldData.splice(position, 1)
+			setData([...oldData])
+		}
+		else
+			setData((prevState) => [...prevState, e.target.value])
+	}
+
+	function handleChange(e: any){
+		let position = props.usersToBeJudge.indexOf(e.target.value)
+		if (position !== -1){
+			let oldData = [...props.usersToBeJudge]
+			oldData.splice(position, 1)
+			props.setData([...oldData])
+		}
+		else
+			props.setData((prevState: string[]) => [...prevState, e.target.value])
+	}
 	//funzioni gestione tempo e motivazione
 
 	//console.log('time = ', time);
@@ -193,12 +212,12 @@ export default function AdminPanel(props: any) {
 		prepareInitialData();
 	}, [props.room.name])
 
-	useLayoutEffect(() => {
-		async function handleChangeMode() {
-			setData([limitedUsers, options]);
-		}
-		handleChangeMode();
-	}, [limitedUsers])
+	// useLayoutEffect(() => {
+	// 	async function handleChangeMode() {
+	// 		setData([limitedUsers, options]);
+	// 	}
+	// 	handleChangeMode();
+	// }, [limitedUsers])
 
 	useEffect(() => {
 		async function prepareData() {
@@ -220,9 +239,6 @@ export default function AdminPanel(props: any) {
 		prepareData();
 	}, [action])
 
-	//
-
-	// console.log("Admin props.element: ", props.members)
 	return (<>
 			<Modal centered withCloseButton={false} closeOnClickOutside={false} zIndex={1500} overlayBlur={5}
 				   styles={(root) => ({
@@ -303,7 +319,6 @@ export default function AdminPanel(props: any) {
 								type="text"
 								autoComplete="off"
 								value={""}
-								// onChange={(e) => changeName(e.target.value)}
 						/>
 					</div>}
 					<Tabs
@@ -311,32 +326,80 @@ export default function AdminPanel(props: any) {
 						variant={"default"}
 						radius="xs"
 						color={"grape"}
+						value={props.action}
 						defaultValue={"ban"}
 						style={{position:"relative", height:"90%"}}>
 						<Tabs.List style={{display:"flex", flexDirection:"row", border:"none"}}>
-							<Tabs.Tab className={"adminTab_container"} value={"ban"}><div className={"adminTab_content"}>BAN</div></Tabs.Tab>
-							<Tabs.Tab className={"adminTab_container"} value={"mute"}><div className={"adminTab_content"}>MUTE</div></Tabs.Tab>
-							<Tabs.Tab className={"adminTab_container"} value={"kick"}><div className={"adminTab_content"}>KICK</div></Tabs.Tab>
+							<Tabs.Tab className={"adminTab_container"} value={"ban"} onClick={() => props.setAction("ban")}><div className={"adminTab_content"}>BAN</div></Tabs.Tab>
+							<Tabs.Tab className={"adminTab_container"} value={"mute"} onClick={() => props.setAction("mute")}><div className={"adminTab_content"}>MUTE</div></Tabs.Tab>
+							<Tabs.Tab className={"adminTab_container"} value={"kick"} onClick={() => props.setAction("kick")}><div className={"adminTab_content"}>KICK</div></Tabs.Tab>
 						</Tabs.List>
 						<Tabs.List style={{display:"flex", flexDirection:"row", border:"none"}}>
 							<Tabs.Tab className={"adminTab_container"} value={"unban"}><div className={"adminTab_content"}>UNBAN</div></Tabs.Tab>
 							<Tabs.Tab className={"adminTab_container"} value={"unmute"}><div className={"adminTab_content"}>UNMUTE</div></Tabs.Tab>
 						</Tabs.List>
 						<img style={{rotate:"180deg"}}src="/account_decoration_down.svg" alt="" />
-						<Tabs.Panel style={{color:"white"}} value={"ban"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div className={"checkbox_element_container"} key={id}> <div  className={"checkbox_element_input"}><input type={"checkbox"} id={element} /></div><label className={"checkbox_element_label"}>{element}</label> </div>)})}</ScrollArea></Tabs.Panel>
-						<Tabs.Panel style={{color:"white"}} value={"mute"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div className={"checkbox_element_container"} key={id}> <div  className={"checkbox_element_input"}><input type={"checkbox"} id={element} /></div><label className={"checkbox_element_label"}>{element}</label> </div>)})}</ScrollArea></Tabs.Panel>
-						<Tabs.Panel style={{color:"white"}} value={"kick"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div className={"checkbox_element_container"} key={id}> <div  className={"checkbox_element_input"}><input type={"checkbox"} id={element} /></div><label className={"checkbox_element_label"}>{element}</label> </div>)})}</ScrollArea></Tabs.Panel>
-						<Tabs.Panel style={{color:"white"}} value={"unban"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div className={"checkbox_element_container"} key={id}> <div  className={"checkbox_element_input"}><input type={"checkbox"} id={element} /></div><label className={"checkbox_element_label"}>{element}</label> </div>)})}</ScrollArea></Tabs.Panel>
-						<Tabs.Panel style={{color:"white"}} value={"unmute"}><ScrollArea>{props.members.map((element: string, id: number) => {return(<div className={"checkbox_element_container"} key={id}> <div  className={"checkbox_element_input"}><input type={"checkbox"} id={element} /></div><label className={"checkbox_element_label"}>{element}</label> </div>)})}</ScrollArea></Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"ban"}>
+							<ScrollArea>{props.members.map((element: string, id: number) => {return(
+								<div className={"checkbox_element_container"} key={id}> 
+									<div  className={"checkbox_element_input"}>
+										<input type={"checkbox"} id={element} value={element} checked={props.usersToBeJudge.indexOf(element) !== -1 ? true : false} onChange={handleChange}/>
+									</div>
+									<label className={"checkbox_element_label"} htmlFor={element}>{element}</label> 
+								</div>)})}
+							</ScrollArea>
+						</Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"mute"}>
+							<ScrollArea>{props.members.map((element: string, id: number) => {return(
+								<div className={"checkbox_element_container"} key={id}> 
+									<div  className={"checkbox_element_input"}>
+										<input type={"checkbox"} id={element} value={element} checked={props.usersToBeJudge.indexOf(element) !== -1 ? true : false} onChange={handleChange}/>
+									</div>
+									<label className={"checkbox_element_label"} htmlFor={element}>{element}</label> 
+								</div>)})}
+							</ScrollArea>
+						</Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"kick"}>
+							<ScrollArea>{props.members.map((element: string, id: number) => {return(
+								<div className={"checkbox_element_container"} key={id}> 
+									<div  className={"checkbox_element_input"}>
+										<input type={"checkbox"} id={element} value={element} checked={props.usersToBeJudge.indexOf(element) !== -1 ? true : false} onChange={handleChange}/>
+									</div>
+									<label className={"checkbox_element_label"} htmlFor={element}>{element}</label> 
+								</div>)})}
+							</ScrollArea>
+						</Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"unban"}>
+							{/*TODO: modificare props.members con utenti bannati*/}
+							<ScrollArea>{props.members.map((element: string, id: number) => {return(
+								<div className={"checkbox_element_container"} key={id}> 
+									<div  className={"checkbox_element_input"}>
+										<input type={"checkbox"} id={element} value={element} checked={data.indexOf(element) !== -1 ? true : false} onChange={handleInternalChange}/>
+									</div>
+									<label className={"checkbox_element_label"} htmlFor={element}>{element}</label> 
+								</div>)})}
+							</ScrollArea>
+						</Tabs.Panel>
+						<Tabs.Panel style={{color:"white"}} value={"unmute"}>
+							{/*TODO: modificare props.members con utenti mutati*/}
+							<ScrollArea>{props.members.map((element: string, id: number) => {return(
+							<div className={"checkbox_element_container"} key={id}>
+								<div  className={"checkbox_element_input"}>
+									<input type={"checkbox"} id={element} value={element} checked={data.indexOf(element) !== -1 ? true : false} onChange={handleInternalChange}/>
+								</div>
+								<label className={"checkbox_element_label"} htmlFor={element}>{element}</label>
+							</div>)})}
+							</ScrollArea>
+						</Tabs.Panel>
 					</Tabs>
-					{/*<img src="/account_decoration_down.svg" alt="" />*/}
 					<Box>
 						{<button className="btn_createChannel">
+							{/*TODO: svuotare array  (props.setData([]); setData([]))*/}
 							<div className="btn__content_createChannel">{props.modalTypeOpen !== "add" ? "Confirm" : "Add Members"}</div>
 						</button>}
 					</Box>
 					<Box>
-						<button className="btn_close" onClick={() => props.setModalTypeOpen(null)}>
+						<button className="btn_close" onClick={() => {props.setModalTypeOpen(null); props.setData([]); setData([])}}>
 							<div className="btn_close__content">Close</div>
 						</button>
 					</Box>

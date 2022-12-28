@@ -104,8 +104,8 @@ export default function ChannelMessage(props: any) {
 							<>
 								<Menu.Divider className={"messageDropMenu_divider"}></Menu.Divider>
 								<Menu.Label>Admin options</Menu.Label>
-								<Menu.Item className={"messageDropMenu_Item"} icon={<IconBan size={15} />}>Ban</Menu.Item>
-								<Menu.Item className={"messageDropMenu_Item"} icon={<IconMessageOff size={15} />}>Mute</Menu.Item>
+								<Menu.Item className={"messageDropMenu_Item"} icon={<IconBan size={15} />} onClick={() => {props.setAction("ban"); props.setData((prevState: string[]) => [...prevState, props.username]); props.setModalTypeOpen("admin")}}>Ban</Menu.Item>
+								<Menu.Item className={"messageDropMenu_Item"} icon={<IconMessageOff size={15} />} onClick={() => {props.setAction("mute"); props.setData((prevState: string[]) => [...prevState, props.username]); props.setModalTypeOpen("admin")}}>Mute</Menu.Item>
 							</>}
 					</Menu.Dropdown>}
 

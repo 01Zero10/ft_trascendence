@@ -233,7 +233,7 @@ export default function ChannelOptionModal(props: any) {
     }
 
     useEffect(() => {
-        //TODO: collegare tutte le protezioni
+        //TODO: fa cagare
         if (newOption.type !== props.room.type){
             if(newOption.type === "protected"){
                 if(newOption.password && newOption.password === newOption.confirmPass){

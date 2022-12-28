@@ -35,6 +35,8 @@ export interface MutesAndBans {
 export default function ChannelBody(props: any) {
 	const [messages, setMessages] = useState<packMessage[]>([])
 	const bottomRef = useRef<null | HTMLDivElement>(null);
+	const [action, setAction] = useState<string>('ban');
+	const [data, setData] = useState<string[]>([]);
 	//---------------------------------------------------------
 	// const [listUser, setListUser] = useState<string[]>([]);
 	const student = useContext(Student);
@@ -221,9 +223,13 @@ export default function ChannelBody(props: any) {
 		<div style={{ position:"relative", height:"100%", width:"80%"}}>
 			{(props.room.name && modalTypeOpen === "admin") && <AdminPanel
 				room={props.room}
+				action={action}
+				usersToBeJudge={data}
 				members={props.members}
 				setMembers={props.setMembers}
 				setModalTypeOpen={setModalTypeOpen}
+				setAction={setAction}
+				setData={setData}
 				opened={(modalTypeOpen !== null)}
 				socket={props.socket}
 			/>}
@@ -254,6 +260,7 @@ export default function ChannelBody(props: any) {
 							} else
 								return (
 									<ChannelMessage admin={props.admin}
+													data={data}
 													key={id}
 													admins={props.admins}
 													builder={props.room.builder.username}
@@ -263,6 +270,9 @@ export default function ChannelBody(props: any) {
 													setCard={props.setCard}
 													room={props.room}
 													setRoom={props.setRoom}
+													setData={setData}
+													setAction={setAction}
+													setModalTypeOpen={setModalTypeOpen}
 									/>
 								)
 						})}
