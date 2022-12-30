@@ -41,6 +41,11 @@ export default function Game() {
         }
     }
 
+    async function handleSetPlay(state: boolean) {
+        socket?.emit('connectToGame', { username: contextData.username, avatar: contextData.avatar });
+        setPlay(true);
+    }
+
     useLayoutEffect(() => {
         const newSocket = io(`http://${process.env.REACT_APP_IP_ADDR}:3001/game`, { query: { username: contextData.username } });
         newSocket.on('connect', () => {
@@ -56,7 +61,7 @@ export default function Game() {
         <div className="game_container">
             <div className="fake_navbar">
             </div>
-            {!play ? <LeadGrid socket={socket} setGameData={setGameData} setPlay={setPlay}></LeadGrid> :
+            {!play ? <LeadGrid socket={socket} setGameData={setGameData} setPlay={handleSetPlay}></LeadGrid> :
                 <div className="playground">
                     <PlayGround gameData={gameData} socket={socket} setGameData={setGameData}></PlayGround>
                 </div>}

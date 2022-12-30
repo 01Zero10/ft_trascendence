@@ -24,9 +24,9 @@ function PlayGround(props: any) {
     })
     const [winner, setWinner] = useState("")
 
-    useEffect(() => {
-        props.socket.emit('connectToGame', { username: student.username, avatar: student.avatar });
-    }, [])
+    // useEffect(() => {
+    //     props.socket.emit('connectToGame', { username: student.username, avatar: student.avatar });
+    // }, [])
 
 
     useEffect(() => {
