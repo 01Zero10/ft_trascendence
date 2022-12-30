@@ -82,6 +82,7 @@ export class GameService{
     }
 
     async createOrJoinPlayRoom(client: string, avatar: string){
+        console.log('CREATEORJOIN');
         let playRoom = await this.runningMatches
         .createQueryBuilder('runningMatch')
         .where({player2: ''})
@@ -284,6 +285,7 @@ export class GameService{
     }
 
     async createDirectGame(client: string, userToPlayWith: string){
+        console.log('CREATEDIRECTGAME');
         const avatar1 = (await this.userRepository.findOne({ where: {username: client}})).avatar;
         const avatar2 = (await this.userRepository.findOne({ where: {username: userToPlayWith}})).avatar;
         let playRoom = this.runningMatches.create({
@@ -294,6 +296,7 @@ export class GameService{
             player2: userToPlayWith,
             rightSide: userToPlayWith,
             avatar2: avatar2,
+            invited: 'invited',
         })
         await this.runningMatches.save(playRoom);
     }
