@@ -32,10 +32,10 @@ export interface Data{
     members: string[],
 }
 
-export interface Limited{
-    limited: DataLimited[],
-    notLimited: DataNotLimited[],
-}
+// export interface Limited{
+//     limited: string[],
+   
+// }
 
 @Controller("chat")
 export class ChatController {
@@ -279,14 +279,14 @@ export class ChatController {
     @Post('handleMuteBan')
     async HandleMuteBan(
         @Body('channelName') channelName: string,
-        @Body('limited') limited: Limited,
+        @Body('limited') limited: string[],
         @Body('mode') mode: string,
         @Body('time') time: number,
         @Body('reason') reason: string,
     ){
         //console.log("ahahaha, entratio")
         if (mode === 'kick')
-            return await this.chatService.kickUsers(limited[0], channelName);
+            return await this.chatService.kickUsers(limited, channelName);
         const room = await this.chatService.getRoomByName(channelName);
         let currentLimited = (mode === 'ban') ? room.bannedUsers : room.mutedUsers;
         let oppositeLimited = (mode === 'ban') ? room.mutedUsers : room.bannedUsers;
@@ -296,9 +296,9 @@ export class ChatController {
         const rowsToUpdate: string [] = [];
         const rowsToDelete: string [] = [];
         const rowsToAdd: string [] = [];
-        
-        await Promise.all(await limited[0].map(async (element) => {
-            cleanLimited.push(element.value);
+        console.log("time", time)
+        await Promise.all(await limited.map(async (element) => {
+            cleanLimited.push(element);
         }))
 
         //console.log("opposite = ", oppositeLimited);
@@ -329,9 +329,9 @@ export class ChatController {
         //console.log("rowstoAdd = ", rowsToAdd);
         //console.log("");
         const expDate = new Date();
-        //console.log(expDate)
+        console.log("prima", expDate)
         expDate.setSeconds(expDate.getSeconds() + time);
-        //console.log(expDate)
+        console.log("dopo", expDate)
         //console.log(rowsToAdd)
         //console.log(rowsToDelete)
         //console.log(rowsToUpdate)

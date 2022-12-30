@@ -10,6 +10,7 @@ import {
 	TransferList,
 	TransferListData
 } from "@mantine/core";
+import { ConstructionOutlined } from "@mui/icons-material";
 import { IconAt, IconClock } from "@tabler/icons";
 import React, { SetStateAction, useEffect, useLayoutEffect, useState } from "react"
 import "./AdminPanel_style.css"
@@ -75,6 +76,17 @@ export default function AdminPanel(props: any) {
 	// }
 
 	async function handleMuteBan() {
+		console.log(action)
+		var users: string[] = []
+		if(action === "ban")
+			getBanned()
+		else if(action === "mute")
+			getMuted()
+		console.log(limitedUsers)
+		for (let element of limitedUsers)
+			users.push(element.value)
+		for (let element in props.usersToBeJudge)
+			users.push(element)
 		const API_MUTE_BAN = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/handleMuteBan`;
 		await fetch(API_MUTE_BAN, {
 			method: 'POST',
@@ -82,14 +94,35 @@ export default function AdminPanel(props: any) {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
 				channelName: props.room.name,
-				mode: action,
-				limited: data,
+				mode: props.action,
+				limited: users,
 				time: time,
 				reason: reason,
 			})
 		})
 		setTime(undefined);
 		setReason('');
+		props.setData([])
+	}
+
+	async function handleUnMuteUnBan() {
+		console.log(action)
+		// const API_MUTE_BAN = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/handleMuteBan`;
+		// await fetch(API_MUTE_BAN, {
+		// 	method: 'POST',
+		// 	credentials: 'include',
+		// 	headers: { 'Content-Type': 'application/json' },
+		// 	body: JSON.stringify({
+		// 		channelName: props.room.name,
+		// 		mode: props.action,
+		// 		limited: props.usersToBeJudge,
+		// 		time: time,
+		// 		reason: reason,
+		// 	})
+		// })
+		// setTime(undefined);
+		// setReason('');
+		props.setData([])
 	}
 
 	async function getMuted() {
@@ -188,10 +221,6 @@ export default function AdminPanel(props: any) {
 		else
 			props.setData((prevState: string[]) => [...prevState, e.target.value])
 	}
-	//funzioni gestione tempo e motivazione
-
-	//console.log('time = ', time);
-	//console.log('reason = ', reason);
 
 	function checkSettings() {
 		//console.log(reason);
@@ -202,7 +231,12 @@ export default function AdminPanel(props: any) {
 		return true;
 	}
 
-	//useEffects
+
+	const handleKeyDown = (e: any) => {
+		if (e.key === "-" || e.key === "e" || e.key === "," || e.key === "+" || e.key === ".") {
+		  e.preventDefault();
+		}
+	  };
 
 	useLayoutEffect(() => {
 		async function prepareInitialData() {
@@ -222,12 +256,10 @@ export default function AdminPanel(props: any) {
 	useEffect(() => {
 		async function prepareData() {
 			if (action === 'ban') {
-				//console.log('b-b-ban');
 				await getOptions();
 				await getBanned();
 			}
 			else if (action === 'mute') {
-				//console.log('m-m-muted');
 				await getOptions();
 				await getMuted();
 			}
@@ -238,6 +270,8 @@ export default function AdminPanel(props: any) {
 		}
 		prepareData();
 	}, [action])
+
+	console.log(time)
 
 	return (<>
 			<Modal centered withCloseButton={false} closeOnClickOutside={false} zIndex={1500} overlayBlur={5}
@@ -392,10 +426,12 @@ export default function AdminPanel(props: any) {
 							</ScrollArea>
 						</Tabs.Panel>
 					</Tabs>
+					{(props.usersToBeJudge.length !== 0 && (props.action === "ban" || props.action === "mute")) && <Input type={"number"}  min={0} onKeyDown={handleKeyDown} placeholder={"Time*"} value={time} onChange={(e: any) => setTime(e.target.value)}></Input>}
+					{(props.usersToBeJudge.length !== 0 && (props.action === "ban" || props.action === "mute")) && <Input type={"text"} placeholder={"Reason"} value={reason} onChange={(e: any) => setReason(e.target.value)}></Input>}
 					<Box>
-						{<button className="btn_createChannel">
+						{<button className="btn_createChannel" onClick={(props.action !== "unmute" && props.action !== "unban") ? handleMuteBan : handleUnMuteUnBan}>
 							{/*TODO: svuotare array  (props.setData([]); setData([]))*/}
-							<div className="btn__content_createChannel">{props.modalTypeOpen !== "add" ? "Confirm" : "Add Members"}</div>
+							<div className="btn__content_createChannel">Confirm</div>
 						</button>}
 					</Box>
 					<Box>

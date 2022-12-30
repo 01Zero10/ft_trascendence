@@ -69,58 +69,60 @@ export default function ChannelBody(props: any) {
 	// 	}
 	// }
 
-	// useEffect(() => {
-	// 	const API_GET_MUTES_BANS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getMyMutesAndBans/${student.username}`;
-	// 	async function setTimeoutMutesAndBans() {
-	// 		let response = await fetch(API_GET_MUTES_BANS, {
-	// 			credentials: 'include',
-	// 			headers: { 'Content-Type': 'application/json' },
-	// 		})
-	// 		const data = await response.json();
-	// 	  //console.log(data);
-	// 		const now = new Date();
-	// 		for (const element of data) {
-	// 			let timer: any = new Date(element.expireDate).getTime() - now.getTime();
-	// 		  //console.log('elemento === ', element)
-	// 		  //console.log(timer);
-	// 			if (timer < 0)
-	// 				props.socket?.emit('singleMuteOrBanRemove', { channelName: element.channelName, client: student.username, status: element.status });
-	// 			else { //controllare se funziona?
-	// 				setTimeout(() => {
-	// 					props.socket?.emit('singleMuteOrBanRemove', { channelName: element.channelName, client: student.username, status: element.status });
-	// 				}, timer)
-	// 			}
-	// 		}
-	// 	}
-	// 	setTimeoutMutesAndBans().then();
-	// }, [])
+	useEffect(() => {
+		const API_GET_MUTES_BANS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getMyMutesAndBans/${student.username}`;
+		async function setTimeoutMutesAndBans() {
+			let response = await fetch(API_GET_MUTES_BANS, {
+				credentials: 'include',
+				headers: { 'Content-Type': 'application/json' },
+			})
+			const data = await response.json();
+		  console.log(data);
+			const now = new Date();
+			for (const element of data) {
+				let timer: any = now.getTime() - new Date(element.expireDate).getTime();
+				console.log("exp", new Date(element.expireDate).getTime())
+				console.log("now", now.getTime())
+			  console.log('elemento === ', element)
+			  console.log(timer);
+				if (timer < 0)
+					props.socket?.emit('singleMuteOrBanRemove', { channelName: element.channelName, client: student.username, status: element.status });
+				else { //controllare se funziona?
+					setTimeout(() => {
+						props.socket?.emit('singleMuteOrBanRemove', { channelName: element.channelName, client: student.username, status: element.status });
+					}, timer)
+				}
+			}
+		}
+		setTimeoutMutesAndBans().then();
+	}, [])
 
-	// useEffect(() => {
-	// 	async function fillStateOnChannel() {
-	// 		const API_MY_STATE = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getMyState`;
-	// 		let response = await fetch(API_MY_STATE, {
-	// 			method: 'POST',
-	// 			credentials: 'include',
-	// 			headers: { 'Content-Type': 'application/json' },
-	// 			body: JSON.stringify({ channelName: props.room.name, client: student.username })
-	// 		})
-	// 		const data = await response.json();
-	// 		if (data === null || data === undefined) {
-	// 			//console.log("ahahaha, ", response);
-	// 			setMyState(null);
-	// 			return;
-	// 		}
-	// 		setMyState({
-	// 			mode: data.status,
-	// 			reason: data.reason,
-	// 			expire: data.expireDate
-	// 		})
+	useEffect(() => {
+		async function fillStateOnChannel() {
+			const API_MY_STATE = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getMyState`;
+			let response = await fetch(API_MY_STATE, {
+				method: 'POST',
+				credentials: 'include',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ channelName: props.room.name, client: student.username })
+			})
+			const data = await response.json();
+			if (data === null || data === undefined) {
+				//console.log("ahahaha, ", response);
+				setMyState(null);
+				return;
+			}
+			setMyState({
+				mode: data.status,
+				reason: data.reason,
+				expire: data.expireDate
+			})
 
-	// 	}
-	// 	fillStateOnChannel().then()
-	// }, [props.room])
+		}
+		fillStateOnChannel().then()
+	}, [props.room])
 
-	// //console.log("MyStateOnChannel", myState)
+	console.log("MyStateOnChannel", myState)
 
 	useLayoutEffect(() => {
 		async function checkJoined() {
@@ -252,39 +254,40 @@ export default function ChannelBody(props: any) {
 				setModalTypeOpen={setModalTypeOpen} 
 				/>
 			{(props.room.name && props.joined) ?
-				<div style={{background: "black", color: "white", position: "relative", height: "92%", width: "100%"}}>
-					<ScrollArea style={{height: "89%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)}>
-						{props.room.name && messages.map((m: packMessage, id: number) => {
-							if (student.blockedUsers && student.blockedUsers.findIndex(x => x === m.username) != -1) {
-								console.log(student.blockedUsers.findIndex(x => x === m.username));
-							} else
-								return (
-									<ChannelMessage admin={props.admin}
-													data={data}
-													key={id}
-													admins={props.admins}
-													builder={props.room.builder.username}
-													username={m.username} message={m.message}
-													createdAt={m.createdAt}
-													avatar={m.avatar}
-													setCard={props.setCard}
-													room={props.room}
-													setRoom={props.setRoom}
-													setData={setData}
-													setAction={setAction}
-													setModalTypeOpen={setModalTypeOpen}
-									/>
-								)
-						})}
-						<div ref={bottomRef}></div>
-					</ScrollArea>
-					{(props.room.name && props.joined) && <ChannelInput
-						className="inputTextArea"
-						room={props.room}
-						mute={(myState?.mode === "mute")}
-						socket={props.socket}
-					></ChannelInput>}
-				</div>
+				myState?.mode !== "ban" ? 
+					<div style={{background: "black", color: "white", position: "relative", height: "92%", width: "100%"}}>
+						<ScrollArea style={{height: "89%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)}>
+							{props.room.name && messages.map((m: packMessage, id: number) => {
+								if (student.blockedUsers && student.blockedUsers.findIndex(x => x === m.username) != -1) {
+									console.log(student.blockedUsers.findIndex(x => x === m.username));
+								} else
+									return (<ChannelMessage admin={props.admin}
+														data={data}
+														key={id}
+														admins={props.admins}
+														builder={props.room.builder.username}
+														username={m.username} message={m.message}
+														createdAt={m.createdAt}
+														avatar={m.avatar}
+														setCard={props.setCard}
+														room={props.room}
+														setRoom={props.setRoom}
+														setData={setData}
+														setAction={setAction}
+														setModalTypeOpen={setModalTypeOpen}
+										/>
+									)
+									})}
+							<div ref={bottomRef}></div>
+						</ScrollArea>
+						{(props.room.name && props.joined) && <ChannelInput
+							className="inputTextArea"
+							room={props.room}
+							mute={(myState?.mode === "mute")}
+							socket={props.socket}
+						></ChannelInput>}
+					</div> : 
+						<div style={{color:"white"}}>BANNED {myState.reason ? "because " + myState.reason : ""}</div>
 				:
 				props.room.type === "protected" && !props.joined ?
 					// <div style={{color:"white", position:"relative"}}>
