@@ -45,7 +45,7 @@ export default function Leaderboard() {
                 <div className="leaderboard">
                     <div className="topLeadersList">
                         {board.map((leader, index) => (
-                            <div className="leader" key={leader.points}>
+                            <div className="leader" key={leader.user.username}>
                                 {index + 1 <= 3 && (
                                     <div className="containerImage">
                                         <img className="image" loading="lazy" src={leader.user.avatar} />

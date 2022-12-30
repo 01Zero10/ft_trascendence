@@ -78,7 +78,7 @@ export function LeadGrid(props: any) {
           centered
           overlayOpacity={0.50}
           overlayBlur={5}>
-          <ClassicModal setPlay={props.setPlay} setGameOptions={setGameOptions} typo={'classic'} />
+          <ClassicModal socket={props.socket} setPlay={props.setPlay} setGameOptions={setGameOptions} typo={'classic'} />
           <button className='gameModalCloseButton_holder' onClick={() => setOpened_classic(false)}><div className='gameModalCloseButton'> CLOSE </div></button>
         </Modal>
         <Modal

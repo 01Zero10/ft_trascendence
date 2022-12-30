@@ -64,7 +64,7 @@ export class GameService{
         return await this.runningMatches
         .createQueryBuilder('match')
         .where({typo: 'classic'})
-        .andWhere("match.invited != :invited", {string})
+        .andWhere("match.invited != :string_n", {string_n: string})
         .select(['match.playRoom','match.player1', 'match.player2', 'match.avatar1', 'match.avatar2'])
         .getMany();
     }
@@ -142,6 +142,8 @@ export class GameService{
     }
 
     async generateBallDirection(namePlayRoom: string){
+        console.log(namePlayRoom);
+        console.log(this.mapPlRoom.get(namePlayRoom));
         this.mapPlRoom.get(namePlayRoom).ball.dy= array_dir_y[Math.round(Math.random())];
        this.mapPlRoom.get(namePlayRoom).ball.direction = dir[Math.round(Math.random())] as "l" | "r";
         this.mapPlRoom.get(namePlayRoom).ball.direction = "l"
@@ -280,7 +282,11 @@ export class GameService{
         await this.runningMatches.remove(roomToSave);
         delete this.mapPlRoom[namePlayRoom];
         if (roomSaved.points1 > roomSaved.points2)
+        {
+            await this.updatePosition(roomSaved.player1);
             return roomSaved.player1;
+        }
+        await this.updatePosition(roomSaved.player2);
         return roomSaved.player2;
     }
 
@@ -299,6 +305,11 @@ export class GameService{
             invited: 'invited',
         })
         await this.runningMatches.save(playRoom);
+        this.mapPlRoom.set('heldBy' + client, {
+            leftPlayer: {...defaultPlayer, username: client, y: canvasHeight / 2 - defaultPlayer.height / 2},
+            rightPlayer:{...defaultPlayer, x: canvasWidth - defaultPlayer.width, y: canvasHeight / 2 - defaultPlayer.height / 2}, 
+            ball: {...defaultBall}, leftPoint: 0, rightPoint: 0}
+            )
     }
     
     // NON SAPPIAMO SE QUESTA PARTE SERVE
@@ -383,10 +394,14 @@ export class GameService{
     }
 
     async acceptGameRequest(client: string, sender: string) {
+        const playRoom = await this.runningMatches.findOne({where: [{leftSide: client}, {rightSide: client}]});
+        playRoom.invited = 'accepted';
+        await this.runningMatches.save(playRoom);
         //DA COMPLETARE
     }
 
     async checkInvite(client: string){
+        console.log("checkTheInvite ", client);
         const playRoom = await this.runningMatches.findOne({where: [{leftSide: client}, {rightSide: client}]})
         return playRoom;
     }

@@ -32,12 +32,13 @@ export default function Game() {
         .catch(() => {return null});
         if(ret){
             console.log('checkInviteFront');
-            console.log(ret)
-            if (ret.left === ret.leftPlayer || (ret.right === ret.rightPlayer && ret.invited === 'accepted')) {
-                socket?.emit('connectToInviteGame', { client: contextData.username, playRoom: ret.playRoom })
-                setGameData({roomName: ret.playRoom, leftPlayer: ret.leftPlayer, rightPlayer: ret.rightPlayer});
+            if (contextData.username === ret.leftSide || (contextData.username === ret.rightSide && ret.invited === 'accepted')) {
+                console.log("ciao", ret.playRoom, ret.leftSide, ret.rightSide);
+                socket?.emit('connectToInviteGame', { client: contextData.username, playRoom: ret.playRoom, side: (contextData.username === ret.leftSide) ? 'left' : 'right'})
+                setGameData({roomName: ret.playRoom, leftPlayer: ret.leftSide, rightPlayer: ret.rightSide});
                 setPlay(true);
             }
+            console.log(gameData);
         }
     }
 
@@ -50,12 +51,16 @@ export default function Game() {
         const newSocket = io(`http://${process.env.REACT_APP_IP_ADDR}:3001/game`, { query: { username: contextData.username } });
         newSocket.on('connect', () => {
             setSocket(newSocket);
-            checkInvite();
         })
         return () => {
             newSocket.disconnect();
         }
     }, [contextData.username]);
+
+    useEffect(() => {
+        if (socket?.id)
+            checkInvite();
+    }, [socket?.id])
 
     return (
         <div className="game_container">

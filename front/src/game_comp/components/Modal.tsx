@@ -127,6 +127,7 @@ function RunningMatchesList(props: any){
   useEffect(() => {
     props.socket?.on("watchGameConfirm",
         (data: {nameRoom: string, leftClient:string, rightClient:string, leftPoints:number, rightPoints:number}) => {
+          console.log("dati pe guadda", data);
           props.setGameData({roomName: data.nameRoom, leftPlayer: data.leftClient, rightPlayer: data.rightClient})
           props.setPoint({left: data.leftPoints, right:data.rightPoints})
           props.setPlay(true)
@@ -135,7 +136,8 @@ function RunningMatchesList(props: any){
   }, [props.socket])
 
   function handleClick(playRoom: string){
-    props.socket.emit("watchGameRequest", playRoom)
+    console.log("ciao", props.socket);
+    props.socket?.emit("watchGameRequest", playRoom)
   }
 
   return (
@@ -143,7 +145,6 @@ function RunningMatchesList(props: any){
     { runningMatches.map(function(element: any){
         //console.log(element)
         return (
-
           <div className="running_matches_holder" key={element.playRoom} onClick={() => handleClick(element.playRoom)}>
               <div className="running_matches">
                 <Avatar radius={10} style={{marginRight:"1%"}} src={element.avatar1}></Avatar>

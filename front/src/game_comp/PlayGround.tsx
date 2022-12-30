@@ -44,6 +44,7 @@ function PlayGround(props: any) {
             setWinner(winner)
         })
         props.socket.once('readyFromInvite', ( data: {namePlayRoom: string, rightClient: string}) => {
+            console.log("readyy");
             setLoader(false);
             if (student.username === data.rightClient)
                 props.socket.emit('setStart', data.namePlayRoom);

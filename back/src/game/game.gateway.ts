@@ -60,20 +60,28 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
     console.log('connectToInviteGame');
     console.log(data);
     clientSocket.join(data.playRoom);
+    console.log("dataside", data.side)
     if (data.side === "right")
       this.server.to(data.playRoom).emit('readyFromInvite', {namePlayRoom: data.playRoom, rightClient: data.client});
   }
 
   @SubscribeMessage('watchGameRequest')
-  async handleWatchGame(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string, username: string}): Promise<any> {
+  async handleWatchGame(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string}): Promise<any> {
     const ret = await this.gameService.getMatchByName(data.namePlayRoom);
+    //Riprendere da qui
+    //ret esce come undefined... scoprire perché
+    //forse con il seguente console log:
+    //console.log(data.nameplayroom);
+    console.log("ret per spettatore ", ret);
     clientSocket.join(data.namePlayRoom);
-      this.server.to(clientSocket.id).emit('watchGameConfirm', {nameRoom: data.namePlayRoom, leftClient: ret.leftPlayer.username , rightClient: ret.rightPlayer.username, leftPoints: ret.leftPoint, rightPoints: ret.rightPoint});
+    this.server.to(clientSocket.id).emit('watchGameConfirm', {nameRoom: data.namePlayRoom, leftClient: ret.leftPlayer.username , rightClient: ret.rightPlayer.username, leftPoints: ret.leftPoint, rightPoints: ret.rightPoint});
   }
 
   @SubscribeMessage('setStart')
   async handleSetStart(@ConnectedSocket() clientSocket: Socket, @MessageBody() namePlayRoom: string){//, rightPlayer: string, leftPlayer: string}){
+    console.log("arrivato a SetStart");
     const roomInMap = await this.gameService.generateBallDirection(namePlayRoom);
+    console.log(roomInMap);
     this.server.to(namePlayRoom).emit('start', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
     await this.sleep(3);
     this.startTick(namePlayRoom);
