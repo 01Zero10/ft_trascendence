@@ -1,6 +1,6 @@
 import { Box, Center, FocusTrap, Modal, MultiSelect, PasswordInput, SegmentedControl } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { PropaneSharp, Tune } from "@mui/icons-material";
+import { NetworkPing, PropaneSharp, Tune } from "@mui/icons-material";
 import { IconLock, IconShield, IconWorld } from "@tabler/icons";
 import React, {useContext, useEffect, useLayoutEffect, useState} from "react"
 import { Student } from "../App";
@@ -13,7 +13,7 @@ import "./ChannelOptionModal_stye.css"
 export default function ChannelOptionModal(props: any) {
     const contextData = useContext(Student);
     const newOption_basic = {
-        builder: contextData.username,
+        builder: props.room.builder.username,
         nameGroup: "",
         members: [],
         admin: [],
@@ -47,6 +47,12 @@ export default function ChannelOptionModal(props: any) {
     //const [admins, setAdmins] = useState<string[]>([])
     const [optionsFriends, setOptionsFriends] = useState<{ value: string, label: string }[]>([{ value: "", label: "" }]);
 
+
+    useLayoutEffect(() =>{
+        setNewOption({...newOption_basic, 
+                        type: props.room.type,  
+                        builder: props.room.builder.username})
+    }, [props.room.name])
 
     useLayoutEffect(() => {
         if (props.members)
@@ -206,6 +212,7 @@ export default function ChannelOptionModal(props: any) {
 
 	}
 		props.setModalTypeOpen(null)
+        setNewOption({...newOption_basic})
 	}
 
     useEffect( () =>
@@ -233,44 +240,85 @@ export default function ChannelOptionModal(props: any) {
     }
 
     useEffect(() => {
-        //TODO: fa cagare
-        if (newOption.type !== props.room.type){
-            if(newOption.type === "protected"){
-                if(newOption.password && newOption.password === newOption.confirmPass){
-                    setBtnDisabled(false)
-                }
-                else{
-                    setBtnDisabled(true)
-                }
-            }
-            else{
+        setBtnDisabled(true)
+
+        //TODO:MANCA CONTROLLO ADMIN CHANGE, PER IL RESTO FUNZIONA
+
+        if (newOption.type !== props.room.type && newOption.type !== 'protected')
+            setBtnDisabled(false)
+
+        if (props.room.type === 'protected' && newOption.type !== 'protected')
+            setBtnDisabled(false)
+
+        if (newOption.nameGroup && newOption.nameGroup !== props.room.name){
+            if (newOption.type !== 'protected')
                 setBtnDisabled(false)
-            }
-        }
-        if(newOption.nameGroup !== ""){
-            if (newOption.type !== props.room.type){
-                if(newOption.type === "protected"){
-                    if(newOption.password && newOption.password === newOption.confirmPass){
-                        setBtnDisabled(false)
-                    }
-                    else{
-                        setBtnDisabled(true)
-                    }
-                }
-                else
-                    setBtnDisabled(false)
-            }
-            else
+            else if (newOption.password && newOption.password === newOption.confirmPass)
                 setBtnDisabled(false)
         }
-        if(newOption.nameGroup === "")
-            setBtnDisabled(true)
-        if(newOption.members.length !== 0)
-            setBtnDisabled(false)
-        if(newOption.admin.length !== props.admins.length)
-            setBtnDisabled(false)
-    }, [newOption]
-    )
+
+        if (newOption.nameGroup && newOption.nameGroup !== props.room.name && props.room.type === 'protected'){
+                setBtnDisabled(false)
+        }
+
+        if ((newOption.type === 'protected' && newOption.password && newOption.password === newOption.confirmPass) 
+            || (props.room.type === 'protected' && newOption.password && newOption.password === newOption.confirmPass))
+                setBtnDisabled(false)
+    }, [newOption.nameGroup, newOption.password, newOption.confirmPass, newOption.type])
+
+
+
+    // useEffect(() => {
+    //     setBtnDisabled(true)
+    //     if (newOption.type && newOption.type !== 'protected' && newOption.type !== props.room.type)
+    //         setBtnDisabled(false)
+    //     // if (newOption.type && newOption.type === 'protected'){
+    //     //     if (newOption.password && newOption.password === newOption.confirmPass)
+    //     //         setBtnDisabled(false)
+    //     // }
+    //     console.log("--> newOption.type: ",newOption.type)
+    // }, [newOption.type])
+
+
+    // useEffect(() => {
+    //     //TODO: fa cagare
+    //     if (newOption.type !== props.room.type){
+    //         if(newOption.type === "protected"){
+    //             if(newOption.password && newOption.password === newOption.confirmPass){
+    //                 setBtnDisabled(false)
+    //             }
+    //             else{
+    //                 setBtnDisabled(true)
+    //             }
+    //         }
+    //         else{
+    //             setBtnDisabled(false)
+    //         }
+    //     }
+    //     if(newOption.nameGroup !== ""){
+    //         if (newOption.type !== props.room.type){
+    //             if(newOption.type === "protected"){
+    //                 if(newOption.password && newOption.password === newOption.confirmPass){
+    //                     setBtnDisabled(false)
+    //                 }
+    //                 else{
+    //                     setBtnDisabled(true)
+    //                 }
+    //             }
+    //             else
+    //                 setBtnDisabled(false)
+    //         }
+    //         else
+    //             setBtnDisabled(false)
+    //     }
+    //     // if(newOption.nameGroup === "")
+    //         // setBtnDisabled(true)
+    //     if(newOption.members.length !== 0)
+    //         setBtnDisabled(false)
+    //     if(newOption.admin.length !== props.admins.length)
+    //         setBtnDisabled(false)
+    // }, [newOption]
+    // )
 
     return (
         <Modal centered withCloseButton={false} closeOnClickOutside={false} zIndex={1500} overlayBlur={5}
@@ -398,8 +446,8 @@ export default function ChannelOptionModal(props: any) {
                         </MultiSelect>}
                     </div>
                     <Box>
-                    {<button className="btn_createChannel" onClick={handleButtonClick} disabled={btnDisabled} >
-                        <div className="btn__content_createChannel">{props.modalTypeOpen !== "add" ? "Confirm" : "Add Members"}</div>
+                    {<button className="btn_confirmChannel" onClick={handleButtonClick} disabled={btnDisabled}>
+                        <div className="btn__content_confirmChannel">{props.modalTypeOpen !== "add" ? "Confirm" : "Add Members"}</div>
                     </button>}
                     </Box>
                     <Box>
