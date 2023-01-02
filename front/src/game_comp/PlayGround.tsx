@@ -4,24 +4,24 @@ import { useNavigate } from "react-router-dom"
 import { Student } from "../App"
 import Canvas from "./Canvas"
 
-type Point = {
-    left: number
-    right: number
-}
+// type Point = {
+//     left: number
+//     right: number
+// }
 
 function PlayGround(props: any) {
     const navigate = useNavigate()
     const student = useContext(Student)
-    const [loader, setLoader] = useState<boolean>(true);
+    // const [loader, setLoader] = useState<boolean>(true);
     // const [gameData, setGameData] = useState<{roomName: string, leftPlayer: string, rightPlayer: string}>({
     //     roomName:"",
     //     leftPlayer:"",
     //     rightPlayer:""
     // })
-    const [point, setPoint] = useState<Point>({
-        left: 0,
-        right: 0
-    })
+    // const [point, setPoint] = useState<Point>({
+    //     left: 0,
+    //     right: 0
+    // })
     const [winner, setWinner] = useState("")
 
     // useEffect(() => {
@@ -36,7 +36,7 @@ function PlayGround(props: any) {
                 leftPlayer: data.leftClient,
                 rightPlayer: data.rightClient
             })
-            setLoader(false);
+            props.setLoader(false);
             if (student.username === data.rightClient)
                 props.socket.emit('setStart', data.namePlayRoom);
         })
@@ -45,7 +45,7 @@ function PlayGround(props: any) {
         })
         props.socket.once('readyFromInvite', ( data: {namePlayRoom: string, rightClient: string}) => {
             console.log("readyy");
-            setLoader(false);
+            props.setLoader(false);
             if (student.username === data.rightClient)
                 props.socket.emit('setStart', data.namePlayRoom);
         })
@@ -100,12 +100,12 @@ function PlayGround(props: any) {
                 </div>
             </Modal> :
                 <Canvas
-                    loader={loader}
+                    loader={props.loader}
                     socket={props.socket}
-                    point={point}
+                    point={props.point}
                     canvasHeight={500}
                     canvasWidth={1000}
-                    setPoint={setPoint}
+                    setPoint={props.setPoint}
                     gameData={props.gameData}
                     setGameData={props.setGameData}
                     />

@@ -131,13 +131,14 @@ function RunningMatchesList(props: any){
           props.setGameData({roomName: data.nameRoom, leftPlayer: data.leftClient, rightPlayer: data.rightClient})
           props.setPoint({left: data.leftPoints, right:data.rightPoints})
           props.setPlay(true)
+          props.setLoader(false);
     }
   )
   }, [props.socket])
 
   function handleClick(playRoom: string){
     console.log("ciao", props.socket);
-    props.socket?.emit("watchGameRequest", playRoom)
+    props.socket?.emit("watchGameRequest", { namePlayRoom: playRoom})
   }
 
   return (
@@ -167,7 +168,7 @@ export function ClassicModal(props: any) {
 
   return (
     <div className="classic_grid_container" >
-      <div className="grid_item_1" onClick={() => props.setPlay(true)}>
+      <div className="grid_item_1" onClick={() => props.handleSetPlay(true)}>
         <div className="logo_holder">
           <p className="logo">Matchmaking</p>
         </div>
@@ -175,7 +176,7 @@ export function ClassicModal(props: any) {
       <div className="grid_item_2">
         <Demo client={contextData.username} setGameOptions={props.setGameOptions}/>
       </div>
-      <div className="grid_item_3"> LISTA PARTITE IN CORSO <RunningMatchesList socket={props.socket} setPoint={props.setPoint} setGameData={props.setGameData} setPlay={props.setPlay} typo={props.typo}/>
+      <div className="grid_item_3"> LISTA PARTITE IN CORSO <RunningMatchesList socket={props.socket} setLoader={props.setLoader} setPoint={props.setPoint} setGameData={props.setGameData} setPlay={props.setPlay} typo={props.typo}/>
       </div>
     </div>
   )

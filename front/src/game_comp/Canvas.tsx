@@ -114,7 +114,14 @@ export default function Canvas(props: CanvasProps) {
   }, [props.gameData])
 
   useEffect(() => {
+    if (props.gameData.rightPlayer !== student.username && props.gameData.leftPlayer !== student.username)
+      props.socket.emit('makeMeSee', {namePlayRoom: props.gameData.roomName})
+  }, [])
+
+  useEffect(() => {
     props.socket.on('update', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
+      console.log("spectando")
+      console.log(ball);
       update(context!, ball, leftPlayer, rightPlayer);
     })
     props.socket.once('start', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {

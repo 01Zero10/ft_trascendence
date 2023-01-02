@@ -12,6 +12,10 @@ export interface RunningMatches {
     player2: string;
 }
 
+type Point = {
+    left: number
+    right: number
+}
 
 export default function Game() {
     const contextData = useContext(Student)
@@ -22,6 +26,11 @@ export default function Game() {
         leftPlayer:"",
         rightPlayer:""
     })
+    const [point, setPoint] = useState<Point>({
+        left: 0,
+        right: 0
+    })
+    const [loader, setLoader] = useState<boolean>(true);
     
     async function checkInvite() {
         const API_URL_CHECK_INVITE = `http://${process.env.REACT_APP_IP_ADDR}:3001/game/checkInvite/${contextData.username}`;
@@ -66,9 +75,9 @@ export default function Game() {
         <div className="game_container">
             <div className="fake_navbar">
             </div>
-            {!play ? <LeadGrid socket={socket} setGameData={setGameData} setPlay={handleSetPlay}></LeadGrid> :
+            {!play ? <LeadGrid socket={socket} setGameData={setGameData} setPlay={setPlay} handleSetPlay={handleSetPlay} point={point} setPoint={setPoint} loader={loader} setLoader={setLoader} ></LeadGrid> :
                 <div className="playground">
-                    <PlayGround gameData={gameData} socket={socket} setGameData={setGameData}></PlayGround>
+                    <PlayGround gameData={gameData} socket={socket} setGameData={setGameData} point={point} setPoint={setPoint} loader={loader} setLoader={setLoader} ></PlayGround>
                 </div>}
         </div>
     )

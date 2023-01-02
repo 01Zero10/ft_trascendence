@@ -44,7 +44,7 @@ export class GameController{
 
     @Post('acceptGameRequest')
     async AcceptGameRequest(@Body('client') client: string, @Body('sender') sender: string){
-      await this.gameService.acceptGameRequest(client, sender);
+      await this.gameService.acceptGameRequest(client)//, sender);
       //DA COMPLETARE
     }
 }
