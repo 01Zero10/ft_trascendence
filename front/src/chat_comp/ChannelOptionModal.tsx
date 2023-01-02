@@ -1,6 +1,6 @@
 import { Box, Center, FocusTrap, Modal, MultiSelect, PasswordInput, SegmentedControl } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { NetworkPing, PropaneSharp, Tune } from "@mui/icons-material";
+import { NetworkPing, PropaneSharp, Room, Tune } from "@mui/icons-material";
 import { IconLock, IconShield, IconWorld } from "@tabler/icons";
 import React, {useContext, useEffect, useLayoutEffect, useState} from "react"
 import { Student } from "../App";
@@ -67,7 +67,7 @@ export default function ChannelOptionModal(props: any) {
             setNewOption((prevChOptions: NewChannel) => {
                 return ({
                     ...prevChOptions,
-                    admin: [...props.admins],
+                    admin: [...props.admins], 
                 })})
     } , [props.admins])
 
@@ -209,7 +209,7 @@ export default function ChannelOptionModal(props: any) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nameChannel: props.room?.name, newMembers: newOption.members }),
             })
-
+        setBtnDisabled(false)
 	}
 		props.setModalTypeOpen(null)
         setNewOption({...newOption_basic})
@@ -223,16 +223,21 @@ export default function ChannelOptionModal(props: any) {
     )
 
     function handleAdminsChange(value: string[]){
+        setBtnDisabled(true)
         let tmp = [...newOption.admin]
         for (let element of value) {
             let indx = newOption.admin.indexOf(element)
-            if (indx === -1)
+            if ((indx === -1 && newOption.type !== 'protected') || (indx === -1 && newOption.type === 'protected' && newOption.password && newOption.confirmPass) || (indx === -1 && props.room.type === 'protected')){
                 tmp.push(element);
+                setBtnDisabled(false)
+            }
         }
         for (let element of newOption.admin){
             let indx = value.indexOf(element)
-            if (indx === -1)
+            if ((indx === -1 && newOption.type !== 'protected') || (indx === -1 && newOption.type === 'protected' && newOption.password && newOption.confirmPass) || (indx === -1 && props.room.type === 'protected')){
                 tmp.splice(tmp.indexOf(element), 1)
+                setBtnDisabled(false)
+            }
         }
         setNewOption((prevState) => {
             return {...prevState, admin: tmp}

@@ -39,7 +39,11 @@
 }
 
 .btn_confirmChannel:disabled .btn__content_confirmChannel {
-	background-color: red;
+	display: none;
+}
+
+.btn_confirmChannel:disabled {
+	display: none;
 }
 
   
