@@ -35,6 +35,7 @@ interface plRoom {
     leftPoint: number;
     rightPoint: number;
     idInterval?: ReturnType<typeof setInterval>;
+    type?: string;
 }
 
 const canvasHeight = 500
@@ -89,7 +90,7 @@ export class GameService{
         .getOne()
         if (playRoom === null){
             playRoom = this.runningMatches.create({playRoom: 'heldBy' + client, player1: client, leftSide: client, avatar1: avatar});
-            await this.runningMatches.save(playRoom);
+            await this.runningMatches.save(playRoom).then();
             this.mapPlRoom.set('heldBy' + client, {
                 leftPlayer: {...defaultPlayer, username: client, y: canvasHeight / 2 - defaultPlayer.height / 2},
                 rightPlayer:{...defaultPlayer, x: canvasWidth - defaultPlayer.width, y: canvasHeight / 2 - defaultPlayer.height / 2}, 
@@ -220,6 +221,23 @@ export class GameService{
         }
     }
 
+    advancedModeBall(namePlayRoom: string){
+        if (this.mapPlRoom.get(namePlayRoom).type === "advanced"){}
+            if (this.mapPlRoom.get(namePlayRoom).ball.height > 1 &&
+                this.mapPlRoom.get(namePlayRoom).ball.width > 1)
+            {
+                this.mapPlRoom.get(namePlayRoom).ball.width = this.mapPlRoom.get(namePlayRoom).ball.width - 1
+                this.mapPlRoom.get(namePlayRoom).ball.height = this.mapPlRoom.get(namePlayRoom).ball.height - 1
+            }
+            else{
+                if(this.mapPlRoom.get(namePlayRoom).rightPlayer.height > 10 &&
+                    this.mapPlRoom.get(namePlayRoom).leftPlayer.height > 10){
+                    this.mapPlRoom.get(namePlayRoom).rightPlayer.height = this.mapPlRoom.get(namePlayRoom).rightPlayer.height - 1
+                    this.mapPlRoom.get(namePlayRoom).leftPlayer.height = this.mapPlRoom.get(namePlayRoom).leftPlayer.height - 1
+                }
+            }
+    }
+
     async updatePlayer(namePlayRoom: string){
         if (this.mapPlRoom.get(namePlayRoom).leftPlayer.up && this.mapPlRoom.get(namePlayRoom).leftPlayer.y >= 5 )
             this.mapPlRoom.get(namePlayRoom).leftPlayer.y += -5;
@@ -242,6 +260,7 @@ export class GameService{
         if(this.mapPlRoom.get(namePlayRoom).ball.x < this.mapPlRoom.get(namePlayRoom).leftPlayer.x + this.mapPlRoom.get(namePlayRoom).leftPlayer.width) {
             if(this.checkPlayerCollision(this.mapPlRoom.get(namePlayRoom).ball, null, this.mapPlRoom.get(namePlayRoom).leftPlayer)){
                 this.mapPlRoom.get(namePlayRoom).ball.dx = -this.mapPlRoom.get(namePlayRoom).ball.dx + 0.25
+                this.advancedModeBall(namePlayRoom);
                 if (this.mapPlRoom.get(namePlayRoom).ball.dx > 20)
                     this.mapPlRoom.get(namePlayRoom).ball.dx = 20
             }
@@ -255,6 +274,7 @@ export class GameService{
         else if(this.mapPlRoom.get(namePlayRoom).ball.x + this.mapPlRoom.get(namePlayRoom).ball.width >= this.mapPlRoom.get(namePlayRoom).rightPlayer.x) {
             if(this.checkPlayerCollision(this.mapPlRoom.get(namePlayRoom).ball, this.mapPlRoom.get(namePlayRoom).rightPlayer, null)) {
                 this.mapPlRoom.get(namePlayRoom).ball.dx = -this.mapPlRoom.get(namePlayRoom).ball.dx - 0.25
+                this.advancedModeBall(namePlayRoom);
                 if (this.mapPlRoom.get(namePlayRoom).ball.dx < -20)
                     this.mapPlRoom.get(namePlayRoom).ball.dx = -20
             }
@@ -393,7 +413,7 @@ export class GameService{
         return (board);
     }
 
-    async acceptGameRequest(client: string, sender: string) {
+    async acceptGameRequest(client: string){//, sender: string) {
         const playRoom = await this.runningMatches.findOne({where: [{leftSide: client}, {rightSide: client}]});
         playRoom.invited = 'accepted';
         await this.runningMatches.save(playRoom);
@@ -402,8 +422,9 @@ export class GameService{
 
     async checkInvite(client: string){
         console.log("checkTheInvite ", client);
-        const playRoom = await this.runningMatches.findOne({where: [{leftSide: client}, {rightSide: client}]})
-        return playRoom;
+        // const playRoom = await this.runningMatches.findOne({where: [{leftSide: client}, {rightSide: client}]})
+        return (await this.runningMatches.findOne({where: [{leftSide: client}, {rightSide: client}]}))
+        // return playRoom;
     }
 
     /*async sleep(time: number) {
