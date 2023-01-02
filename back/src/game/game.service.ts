@@ -108,9 +108,11 @@ export class GameService{
     }
 
     async handleLeaveQueue(client: string){
+        const string = 'invited'
         let playRoom = await this.runningMatches
-        .createQueryBuilder()
+        .createQueryBuilder('match')
         .where({player1: client})
+        .andWhere("match.invited != :string_n", {string_n: string})
         //.andWhere({player2: ''})
         .getOne()
         console.log("leaveQueue", playRoom, client)
@@ -123,10 +125,13 @@ export class GameService{
     }
 
     async handleLeavePlayRoom(client: string){
+        const string = 'invited'
         let playRoom = await this.runningMatches
         .createQueryBuilder('playroom')
         .where("playroom.player1 = :client_n", { client_n: client })
         .orWhere("playroom.player2 = :client_n", { client_n: client })
+        //.andWhere("match.invited != :string_n", {string_n: string})
+        //da capire come concatenare or and and
         .getOne()
         
         if (playRoom)
@@ -313,12 +318,13 @@ export class GameService{
         return roomSaved.player2;
     }
 
-    async createDirectGame(client: string, userToPlayWith: string){
+    async createDirectGame(client: string, userToPlayWith: string, type: string){
         console.log('CREATEDIRECTGAME');
         const avatar1 = (await this.userRepository.findOne({ where: {username: client}})).avatar;
         const avatar2 = (await this.userRepository.findOne({ where: {username: userToPlayWith}})).avatar;
         let playRoom = this.runningMatches.create({
             playRoom: 'heldBy' + client,
+            typo: type,
             player1: client,
             leftSide: client,
             avatar1: avatar1,
@@ -331,7 +337,7 @@ export class GameService{
         this.mapPlRoom.set('heldBy' + client, {
             leftPlayer: {...defaultPlayer, username: client, y: canvasHeight / 2 - defaultPlayer.height / 2},
             rightPlayer:{...defaultPlayer, x: canvasWidth - defaultPlayer.width, y: canvasHeight / 2 - defaultPlayer.height / 2}, 
-            ball: {...defaultBall}, leftPoint: 0, rightPoint: 0}
+            ball: {...defaultBall}, type: type, leftPoint: 0, rightPoint: 0}
             )
     }
     

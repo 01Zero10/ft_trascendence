@@ -40,7 +40,7 @@ export default function ChannelMessage(props: any) {
 			method: 'POST',
 			credentials: 'include',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({client: student.username, userToPlayWith: userToPlayWith}),
+			body: JSON.stringify({client: student.username, userToPlayWith: userToPlayWith, type: 'classic'}),
 		})
 		await fetch(API_URL_INVITE_TO_GAME, {
 			method: 'POST',

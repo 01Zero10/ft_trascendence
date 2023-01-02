@@ -76,7 +76,7 @@ export default function Game() {
         <div className="game_container">
             <div className="fake_navbar">
             </div>
-            {!play ? <LeadGrid gameOptions={gameOptions} setGameOptions={setGameOptions} socket={socket} setGameData={setGameData} setPlay={setPlay} handleSetPlay={handleSetPlay} point={point} setPoint={setPoint} loader={loader} setLoader={setLoader} ></LeadGrid> :
+            {!play ? <LeadGrid checkInvite={checkInvite} gameOptions={gameOptions} setGameOptions={setGameOptions} socket={socket} setGameData={setGameData} setPlay={setPlay} handleSetPlay={handleSetPlay} point={point} setPoint={setPoint} loader={loader} setLoader={setLoader} ></LeadGrid> :
                 <div className="playground">
                     <PlayGround gameData={gameData} socket={socket} setGameData={setGameData} point={point} setPoint={setPoint} loader={loader} setLoader={setLoader} ></PlayGround>
                 </div>}

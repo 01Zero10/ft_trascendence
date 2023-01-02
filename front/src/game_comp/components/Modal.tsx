@@ -42,6 +42,7 @@ function Demo(props: any) {
     label: string;
     value: string;
   }[]>([])
+  const [userToPlayWith, setUserToPlayWith] = useState<string | null>(null)
 
   useEffect(() => {
     async function getFriensOnline() {
@@ -80,7 +81,7 @@ function Demo(props: any) {
         transitionDuration={200}
         data={friendsOnline}
         itemComponent={SelectItem}
-        onChange={(e) => console.log(e)}
+        onChange={(e) => setUserToPlayWith(e)}
         maxDropdownHeight={400}
         nothingFound="Nobody here"
         styles={() => ({
@@ -92,7 +93,7 @@ function Demo(props: any) {
           }
         })}
       />
-      <Button style={{width:"35%", height:"30px"}}>
+      <Button style={{width:"35%", height:"30px"}} onClick={() => props.inviteUserToPlay(userToPlayWith)} disabled={!Boolean(userToPlayWith)} >
         Confirm
       </Button>
     </div>
@@ -165,6 +166,31 @@ export function ClassicModal(props: any) {
 
   const contextData = useContext(Student)
 
+  async function inviteUserToPlay(userToPlayWith: string){
+    const API_URL_CREATE_DIRECT_GAME = `http://${process.env.REACT_APP_IP_ADDR}:3001/game/createDirectGame`;
+		const API_URL_INVITE_TO_GAME = `http://${process.env.REACT_APP_IP_ADDR}:3001/navigation/inviteToGame`;
+		const API_URL_UPDATE_BELL = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/bellUserToUpdate`;
+		await fetch(API_URL_CREATE_DIRECT_GAME, {
+			method: 'POST',
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({client: contextData.username, userToPlayWith: userToPlayWith, type: props.typo}),
+		})
+		await fetch(API_URL_INVITE_TO_GAME, {
+			method: 'POST',
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({client: contextData.username, userToPlayWith: userToPlayWith}),
+		})
+		await fetch( API_URL_UPDATE_BELL, {
+			method: 'POST',
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({bellUserToUpdate: userToPlayWith}),
+		})
+    props.checkInvite();
+		//navigate('/game');
+	}
 
   return (
     <div className="classic_grid_container" >
@@ -174,7 +200,7 @@ export function ClassicModal(props: any) {
         </div>
       </div>
       <div className="grid_item_2">
-        <Demo client={contextData.username} setGameOptions={props.setGameOptions}/>
+        <Demo client={contextData.username} setGameOptions={props.setGameOptions} inviteUserToPlay={inviteUserToPlay} />
       </div>
       <div className="grid_item_3"> LISTA PARTITE IN CORSO <RunningMatchesList socket={props.socket} setLoader={props.setLoader} setPoint={props.setPoint} setGameData={props.setGameData} setPlay={props.setPlay} typo={props.typo}/>
       </div>

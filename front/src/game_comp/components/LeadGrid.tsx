@@ -77,7 +77,7 @@ export function LeadGrid(props: any) {
           centered
           overlayOpacity={0.50}
           overlayBlur={5}>
-          <ClassicModal socket={props.socket} setPlay={props.setPlay} setLoader={props.setLoader} handleSetPlay={props.handleSetPlay} setGameData={props.setGameData} point={props.point} setPoint={props.setPoint} setGameOptions={props.setGameOptions} typo={'classic'} />
+          <ClassicModal socket={props.socket} checkInvite={props.checkInvite} setPlay={props.setPlay} setLoader={props.setLoader} handleSetPlay={props.handleSetPlay} setGameData={props.setGameData} point={props.point} setPoint={props.setPoint} setGameOptions={props.setGameOptions} typo={'classic'} />
           <button className='gameModalCloseButton_holder' onClick={() => setOpened_classic(false)}><div className='gameModalCloseButton'> CLOSE </div></button>
         </Modal>
         <Modal
@@ -111,7 +111,7 @@ export function LeadGrid(props: any) {
           centered
           overlayOpacity={0.50}
           overlayBlur={5}>
-          <ClassicModal socket={props.socket} setPlay={props.setPlay} setLoader={props.setLoader} handleSetPlay={props.handleSetPlay} setGameData={props.setGameData} point={props.point} setPoint={props.setPoint} setGameOptions={props.setGameOptions} typo={'advanced'} />
+          <ClassicModal socket={props.socket} checkInvite={props.checkInvite} setPlay={props.setPlay} setLoader={props.setLoader} handleSetPlay={props.handleSetPlay} setGameData={props.setGameData} point={props.point} setPoint={props.setPoint} setGameOptions={props.setGameOptions} typo={'advanced'} />
           <button className='gameModalCloseButton_holder' onClick={() => setOpened_advanced(false)}><div className='gameModalCloseButton'> CLOSE </div></button>
         </Modal>
         <div className='card_text_container card_1'>
