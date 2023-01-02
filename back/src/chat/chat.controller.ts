@@ -324,14 +324,35 @@ export class ChatController {
                 rowsToDelete.push(element);
         }))
 
+
+        // Leonardo era qui
+        // function aggiungiSecondi(secondi: number, date: Date) {
+        //     console.log("tempo nella funzione: ", time)
+        //     console.log("secondi nella funzione: ", secondi)
+        //     date = new Date(date.setMilliseconds(secondi * 1000))    
+        // }
+
+        // var expDate = new Date();
+        // console.log("prima", expDate)
+
+        // aggiungiSecondi(time, expDate);
+        
+        // console.log("dopo", expDate)
+        // Leonardo si è fermato qui perchè NON FUNZIONA UN CAZZO
+
+
         //console.log("rowsToUpdate = ", rowsToUpdate);
         //console.log("rowsToDelete = ", rowsToDelete);
         //console.log("rowstoAdd = ", rowsToAdd);
         //console.log("");
+
+        // Daniele era qui
         const expDate = new Date();
         console.log("prima", expDate)
         expDate.setSeconds(expDate.getSeconds() + time);
         console.log("dopo", expDate)
+        // Daniele si è fermato qui
+
         //console.log(rowsToAdd)
         //console.log(rowsToDelete)
         //console.log(rowsToUpdate)
