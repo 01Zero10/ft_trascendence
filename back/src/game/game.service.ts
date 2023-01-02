@@ -221,7 +221,7 @@ export class GameService{
         }
     }
 
-    advancedModeBall(namePlayRoom: string){
+    advancedMode(namePlayRoom: string){
         if (this.mapPlRoom.get(namePlayRoom).type === "advanced"){}
             if (this.mapPlRoom.get(namePlayRoom).ball.height > 1 &&
                 this.mapPlRoom.get(namePlayRoom).ball.width > 1)
@@ -260,7 +260,7 @@ export class GameService{
         if(this.mapPlRoom.get(namePlayRoom).ball.x < this.mapPlRoom.get(namePlayRoom).leftPlayer.x + this.mapPlRoom.get(namePlayRoom).leftPlayer.width) {
             if(this.checkPlayerCollision(this.mapPlRoom.get(namePlayRoom).ball, null, this.mapPlRoom.get(namePlayRoom).leftPlayer)){
                 this.mapPlRoom.get(namePlayRoom).ball.dx = -this.mapPlRoom.get(namePlayRoom).ball.dx + 0.25
-                this.advancedModeBall(namePlayRoom);
+                this.advancedMode(namePlayRoom);
                 if (this.mapPlRoom.get(namePlayRoom).ball.dx > 20)
                     this.mapPlRoom.get(namePlayRoom).ball.dx = 20
             }
@@ -274,7 +274,7 @@ export class GameService{
         else if(this.mapPlRoom.get(namePlayRoom).ball.x + this.mapPlRoom.get(namePlayRoom).ball.width >= this.mapPlRoom.get(namePlayRoom).rightPlayer.x) {
             if(this.checkPlayerCollision(this.mapPlRoom.get(namePlayRoom).ball, this.mapPlRoom.get(namePlayRoom).rightPlayer, null)) {
                 this.mapPlRoom.get(namePlayRoom).ball.dx = -this.mapPlRoom.get(namePlayRoom).ball.dx - 0.25
-                this.advancedModeBall(namePlayRoom);
+                this.advancedMode(namePlayRoom);
                 if (this.mapPlRoom.get(namePlayRoom).ball.dx < -20)
                     this.mapPlRoom.get(namePlayRoom).ball.dx = -20
             }
