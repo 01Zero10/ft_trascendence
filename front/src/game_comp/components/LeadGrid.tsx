@@ -41,8 +41,7 @@ export function LeadGrid(props: any) {
 
   const [opened_classic, setOpened_classic] = useState(false);
   const [opened_advanced, setOpened_advanced] = useState(false);
-
-  const [gameOptions, setGameOptions] = useState<{ type: string, opponent?: string }>({ type: "" })
+  //const [gameOptions, setGameOptions] = useState<{ type: string, opponent?: string }>({ type: "" })
 
   return (
     <Center>
@@ -68,7 +67,7 @@ export function LeadGrid(props: any) {
           },
       })} 
           opened={opened_classic}
-          onClose={() => { setGameOptions({ type: "" }); setOpened_classic(false) }}
+          onClose={() => { props.setGameOptions({ type: "" }); setOpened_classic(false) }}
           withCloseButton={false}
           closeOnClickOutside={false}
           size="40%"
@@ -78,7 +77,7 @@ export function LeadGrid(props: any) {
           centered
           overlayOpacity={0.50}
           overlayBlur={5}>
-          <ClassicModal socket={props.socket} setPlay={props.setPlay} setLoader={props.setLoader} handleSetPlay={props.handleSetPlay} setGameData={props.setGameData} point={props.point} setPoint={props.setPoint} setGameOptions={setGameOptions} typo={'classic'} />
+          <ClassicModal socket={props.socket} setPlay={props.setPlay} setLoader={props.setLoader} handleSetPlay={props.handleSetPlay} setGameData={props.setGameData} point={props.point} setPoint={props.setPoint} setGameOptions={props.setGameOptions} typo={'classic'} />
           <button className='gameModalCloseButton_holder' onClick={() => setOpened_classic(false)}><div className='gameModalCloseButton'> CLOSE </div></button>
         </Modal>
         <Modal
@@ -102,7 +101,7 @@ export function LeadGrid(props: any) {
           },
       })} 
           opened={opened_advanced}
-          onClose={() => { setGameOptions({ type: "" }); setOpened_advanced(false) }}
+          onClose={() => { props.setGameOptions({ type: "" }); setOpened_advanced(false) }}
           withCloseButton={false}
           closeOnClickOutside={false}
           size="40%"
@@ -112,11 +111,11 @@ export function LeadGrid(props: any) {
           centered
           overlayOpacity={0.50}
           overlayBlur={5}>
-          <ClassicModal socket={props.socket} setPlay={props.setPlay} setLoader={props.setLoader} handleSetPlay={props.handleSetPlay} setGameData={props.setGameData} point={props.point} setPoint={props.setPoint} setGameOptions={setGameOptions} typo={'advanced'} />
+          <ClassicModal socket={props.socket} setPlay={props.setPlay} setLoader={props.setLoader} handleSetPlay={props.handleSetPlay} setGameData={props.setGameData} point={props.point} setPoint={props.setPoint} setGameOptions={props.setGameOptions} typo={'advanced'} />
           <button className='gameModalCloseButton_holder' onClick={() => setOpened_advanced(false)}><div className='gameModalCloseButton'> CLOSE </div></button>
         </Modal>
         <div className='card_text_container card_1'>
-          <div className='card classic_card' ref={hoverRef} onClick={() => { setGameOptions({ type: "classic" }); setOpened_classic(true) }}>
+          <div className='card classic_card' ref={hoverRef} onClick={() => { props.setGameOptions({ type: "classic" }); setOpened_classic(true) }}>
             <Card shadow="sm" p="lg" radius={15}>
               <Card.Section>
                 {isHovered ?
@@ -132,7 +131,7 @@ export function LeadGrid(props: any) {
           </Text>
         </div>
         <div className='card_text_container card_2'>
-          <div className='card advanced_card' ref={hoverRef_2} onClick={() => { setGameOptions({ type: "advance" }); setOpened_advanced(true) }}>
+          <div className='card advanced_card' ref={hoverRef_2} onClick={() => { props.setGameOptions({ type: "advanced" }); setOpened_advanced(true) }}>
             <Card shadow="sm" p="lg" radius={15}>
               <Card.Section>
                 {isHovered_2 ?
@@ -151,42 +150,3 @@ export function LeadGrid(props: any) {
     </Center>
   );
 }
-
-
-/*
-const data = [
-  {
-    game_type: 'Classic Pong',
-    video: 'https://cdn.dribbble.com/users/772985/screenshots/2600512/pong.gif',
-  },
-  {
-    game_type: 'Advanced Pong',
-    video: 'https://cdn.dribbble.com/users/1000837/screenshots/4349787/ping-pong-game-2.gif',
-  }
-]
-
-export function LeadGrid() {
-
-  const cards = data.map((games) =>(
-    <div className='card_text_container'>
-      <div className='card'>
-        <Card  shadow="sm" p="lg" radius={15}>
-          <Card.Section component="a" href="#">
-            <Image src={games.video} height={"100%"} />
-          </Card.Section>
-      </Card>
-    </div>
-     <Text className='game_text_style' align="center" color="white">
-        {games.game_type}
-      </Text>
-    </div>
-  ));
-
-  return (
-    <Center>
-       {cards}
-    </Center>
-  );
-}
-
-*/

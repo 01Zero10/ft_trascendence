@@ -82,19 +82,20 @@ export class GameService{
         return this.mapPlRoom.get(namePlayRoom);
     }
 
-    async createOrJoinPlayRoom(client: string, avatar: string){
+    async createOrJoinPlayRoom(client: string, avatar: string, type: string){
         console.log('CREATEORJOIN');
         let playRoom = await this.runningMatches
         .createQueryBuilder('runningMatch')
-        .where({player2: ''})
+        .where({typo: type})
+        .andWhere({player2: ''})
         .getOne()
         if (playRoom === null){
-            playRoom = this.runningMatches.create({playRoom: 'heldBy' + client, player1: client, leftSide: client, avatar1: avatar});
+            playRoom = this.runningMatches.create({playRoom: 'heldBy' + client, typo: type, player1: client, leftSide: client, avatar1: avatar});
             await this.runningMatches.save(playRoom).then();
             this.mapPlRoom.set('heldBy' + client, {
                 leftPlayer: {...defaultPlayer, username: client, y: canvasHeight / 2 - defaultPlayer.height / 2},
                 rightPlayer:{...defaultPlayer, x: canvasWidth - defaultPlayer.width, y: canvasHeight / 2 - defaultPlayer.height / 2}, 
-                ball: {...defaultBall}, leftPoint: 0, rightPoint: 0}
+                ball: {...defaultBall}, type: type, leftPoint: 0, rightPoint: 0}
                 )
             return {namePlayRoom: 'heldBy' + client, side: 'left'};
         }
@@ -112,6 +113,7 @@ export class GameService{
         .where({player1: client})
         //.andWhere({player2: ''})
         .getOne()
+        console.log("leaveQueue", playRoom, client)
         if (playRoom !== null)
         {
             await this.runningMatches.remove(playRoom);
@@ -222,7 +224,7 @@ export class GameService{
     }
 
     advancedMode(namePlayRoom: string){
-        if (this.mapPlRoom.get(namePlayRoom).type === "advanced"){}
+        if (this.mapPlRoom.get(namePlayRoom).type === "advanced"){
             if (this.mapPlRoom.get(namePlayRoom).ball.height > 1 &&
                 this.mapPlRoom.get(namePlayRoom).ball.width > 1)
             {
@@ -236,6 +238,7 @@ export class GameService{
                     this.mapPlRoom.get(namePlayRoom).leftPlayer.height = this.mapPlRoom.get(namePlayRoom).leftPlayer.height - 1
                 }
             }
+        }
     }
 
     async updatePlayer(namePlayRoom: string){

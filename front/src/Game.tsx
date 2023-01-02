@@ -31,6 +31,7 @@ export default function Game() {
         right: 0
     })
     const [loader, setLoader] = useState<boolean>(true);
+    const [gameOptions, setGameOptions] = useState<{ type: string, opponent?: string }>({ type: "" })
     
     async function checkInvite() {
         const API_URL_CHECK_INVITE = `http://${process.env.REACT_APP_IP_ADDR}:3001/game/checkInvite/${contextData.username}`;
@@ -52,7 +53,7 @@ export default function Game() {
     }
 
     async function handleSetPlay(state: boolean) {
-        socket?.emit('connectToGame', { username: contextData.username, avatar: contextData.avatar });
+        socket?.emit('connectToGame', { username: contextData.username, avatar: contextData.avatar, type: gameOptions.type });
         setPlay(true);
     }
 
@@ -75,7 +76,7 @@ export default function Game() {
         <div className="game_container">
             <div className="fake_navbar">
             </div>
-            {!play ? <LeadGrid socket={socket} setGameData={setGameData} setPlay={setPlay} handleSetPlay={handleSetPlay} point={point} setPoint={setPoint} loader={loader} setLoader={setLoader} ></LeadGrid> :
+            {!play ? <LeadGrid gameOptions={gameOptions} setGameOptions={setGameOptions} socket={socket} setGameData={setGameData} setPlay={setPlay} handleSetPlay={handleSetPlay} point={point} setPoint={setPoint} loader={loader} setLoader={setLoader} ></LeadGrid> :
                 <div className="playground">
                     <PlayGround gameData={gameData} socket={socket} setGameData={setGameData} point={point} setPoint={setPoint} loader={loader} setLoader={setLoader} ></PlayGround>
                 </div>}
