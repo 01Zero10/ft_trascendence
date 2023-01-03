@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useLayoutEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Student } from "../App"
 import Canvas from "./Canvas"
+import Canvas2 from "./canvas2"
 
 // type Point = {
 //     left: number
@@ -12,6 +13,7 @@ import Canvas from "./Canvas"
 function PlayGround(props: any) {
     const navigate = useNavigate()
     const student = useContext(Student)
+
     // const [loader, setLoader] = useState<boolean>(true);
     // const [gameData, setGameData] = useState<{roomName: string, leftPlayer: string, rightPlayer: string}>({
     //     roomName:"",
@@ -27,6 +29,7 @@ function PlayGround(props: any) {
     // useEffect(() => {
     //     props.socket.emit('connectToGame', { username: student.username, avatar: student.avatar });
     // }, [])
+
 
 
     useEffect(() => {
@@ -100,6 +103,8 @@ function PlayGround(props: any) {
                 </div>
             </Modal> :
                 <Canvas
+                    // dir_y={-3}
+                    // ballDirection={"r"}
                     loader={props.loader}
                     socket={props.socket}
                     point={props.point}

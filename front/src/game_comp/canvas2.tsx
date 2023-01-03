@@ -1,18 +1,20 @@
-import { useEffect,  useRef, } from "react";
+import { useEffect,  useRef, useState, } from "react";
 import React from "react";
 import { Socket } from "socket.io-client";
-
+import "./Canvas.css"
+import async from "react-select/dist/declarations/src/async/index";
+import { avatarClasses } from "@mui/material";
 
 type CanvasProps = {
     socket: Socket;
-
+    avatar: {avatar1: string, avatar2: string}
     dir_y: -3 | 3;
     point: any;
     canvasWidth: number;
     canvasHeight: number;
-    setPoint: React.Dispatch<React.SetStateAction<any>>
+    setPoint?: React.Dispatch<React.SetStateAction<any>>
     ballDirection: string | null
-    setLastpoint: React.Dispatch<React.SetStateAction<any>>
+    setLastpoint?: React.Dispatch<React.SetStateAction<any>>
 };
 
 type Player = {
@@ -38,6 +40,7 @@ export default function Canvas2(props: CanvasProps) {
     const defaultPlayer = { x: 0, y: 0, height: 70, width: 20 }
     const defaultBall = { x: props.canvasWidth / 2 - 15, y: props.canvasHeight / 2 - 15, width: 30, height: 30, dx: 0, dy: 0, direction: props.ballDirection }
     const canvasRef = useRef<HTMLCanvasElement>(null);
+
     let context: CanvasRenderingContext2D | null = null;
 
     const rightPlayer = {
@@ -100,9 +103,9 @@ export default function Canvas2(props: CanvasProps) {
 
 
     return (
-        <div>
-                <div style={{width:"100%", height:"100%", position:"relative"}}>
-                    <div style={{position:"relative", display:"flex", width:"10%", height:"100%"}}>
+        <div className="canvasPongWindow">
+                <div className={"canvasPongContainer"}>
+                    <div style={{position:"relative", display:"flex", width:"10%"}}>
                         <h2 style={{ color: "#ffffff" }}>Player L
                             {"dbalducc"}</h2>
                         <div style={{ color: "#ffffff" }} className={"player1"}>

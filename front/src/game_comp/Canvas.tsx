@@ -41,12 +41,14 @@ type Ball = {
 
 export default function Canvas(props: CanvasProps) {
   const student = useContext(Student)
+  const [avatar, setAvatar] = useState<{avatarL: string, avatarR: string}>({avatarL: "", avatarR: ""})
   const canvasRef = useRef<HTMLCanvasElement>(null);
   let context: CanvasRenderingContext2D | null = null;
 
   let moveKey: MoveKey = { s: false, w: false, ArrowUp: false, ArrowDown: false }
   
   function startGame(ball: Ball, left: Player, right: Player) {
+    getAvatars();
     update(context, ball, left, right)
   }
 
@@ -101,6 +103,18 @@ export default function Canvas(props: CanvasProps) {
       props.socket.emit('onRelease', { key: e.key, player: student.username, playRoom: props.gameData.roomName})
   }}
 
+  async function getAvatars() {
+    console.log("la playroom è: ", props.gameData.roomName)
+    if (props.gameData.roomName !== ""){
+      let response = await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/game/getAvatars/${props.gameData.roomName}`);
+      let data = await response.json();
+      console.log("data :", data)
+      if (data){
+        setAvatar({avatarL: data.avatar1, avatarR:data.avatar2});
+      }
+  }
+}
+
   useEffect(() => {
     props.socket.on('goal', async (data: {roomName: string, leftPoint: number, rightPoint: number }) => {
       props.setPoint({left:data.leftPoint, right: data.rightPoint})
@@ -150,11 +164,13 @@ export default function Canvas(props: CanvasProps) {
           <div style={{position:"relative", display:"flex", width:"10%", height:"100%"}}>
             <h2 style={{ color: "#ffffff" }}>Player L
               {props.gameData.leftPlayer}</h2>
+              <img src={avatar.avatarL} alt={props.gameData.leftPlayer} />
             <div style={{ color: "#ffffff" }} className={"player1"}>
               <h2 style={{ color: "#ffffff" }}>{props.point.left}</h2>
             </div>
             <h2 style={{ color: "#ffffff"}}>Player R
               {props.gameData.rightPlayer}</h2>
+              <img src={avatar.avatarR} alt={props.gameData.rightPlayer} />
             <div style={{ color: "#ffffff"}} className={"player2"}>
               <h2 style={{ color: "#ffffff" }}>{props.point.right}</h2>
             </div>
