@@ -31,6 +31,9 @@ export default function AdminPanel(props: any) {
 		value: string;
 		label: string;
 	}[]>([]);
+
+	const [bannedUsers, setBannedUsers] = useState<string[]>([])
+	const [mutedUsers, setMutedUsers] = useState<string[]>([])
 	const [options, setOptions] = useState<{
 		value: string;
 		label: string;
@@ -38,6 +41,7 @@ export default function AdminPanel(props: any) {
 
 	const [time, setTime] = useState<number | undefined>(undefined);
 	const [reason, setReason] = useState<string>('');
+	const  [members, setMembers] = useState<string[]>([])
 
 
 	// async function getChannelMembers() {
@@ -75,18 +79,11 @@ export default function AdminPanel(props: any) {
 	// 	setAction(value);
 	// }
 
+
+	//TODO: rivedere
 	async function handleMuteBan() {
-		console.log(action)
-		var users: string[] = []
-		if(action === "ban")
-			getBanned()
-		else if(action === "mute")
-			getMuted()
-		console.log(limitedUsers)
-		for (let element of limitedUsers)
-			users.push(element.value)
-		for (let element in props.usersToBeJudge)
-			users.push(element)
+		//_________ERRATO_________//
+		//________________________//
 		const API_MUTE_BAN = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/handleMuteBan`;
 		await fetch(API_MUTE_BAN, {
 			method: 'POST',
@@ -95,7 +92,7 @@ export default function AdminPanel(props: any) {
 			body: JSON.stringify({
 				channelName: props.room.name,
 				mode: props.action,
-				limited: users,
+				limited: props.usersToBeJudge ,
 				time: time,
 				reason: reason,
 			})
@@ -130,21 +127,11 @@ export default function AdminPanel(props: any) {
 		if (props.room.name != '') {
 			let response = await fetch(API_GET_MUTED);
 			let data = await response.json();
-			let fetchMuted: {
-				value: string;
-				label: string;
-			}[] = [];
+			let fetchMuted: string[] = []
 			await Promise.all(await data?.map(async (element: any) => {
-				let iMember: {
-					value: string;
-					label: string;
-				} = {
-					value: element,
-					label: element,
-				};
-				fetchMuted.push(iMember);
+				fetchMuted.push(element);
 			}))
-			setLimitedUsers(fetchMuted);
+			setMutedUsers([...fetchMuted]);
 		}
 	}
 
@@ -153,21 +140,12 @@ export default function AdminPanel(props: any) {
 		if (props.room.name !== '') {
 			let response = await fetch(API_GET_BANNED);
 			let data = await response.json();
-			let fetchBanned: {
-				value: string;
-				label: string;
-			}[] = [];
+			let fetchBanned: string[] = [];
 			await Promise.all(await data?.map(async (element: any) => {
-				let iMember: {
-					value: string;
-					label: string;
-				} = {
-					value: element,
-					label: element,
-				};
-				fetchBanned.push(iMember);
+				fetchBanned.push(element);
 			}))
-			setLimitedUsers(fetchBanned);
+			//setBannedUsers(fetchBanned);
+			return fetchBanned;
 		}
 	}
 
@@ -238,13 +216,30 @@ export default function AdminPanel(props: any) {
 		}
 	  };
 
-	useLayoutEffect(() => {
-		async function prepareInitialData() {
-			await getOptions();
-			await getBanned()
-		}
-		prepareInitialData();
-	}, [props.room.name])
+	// useLayoutEffect(() => {
+	// 	async function prepareInitialData() {
+	// 		let m = [...props.members]
+	// 		if (props.action === 'ban' || props.action === "mute") {
+	// 			let blockedUsers: string[] = []
+				
+	// 			if (props.action === 'ban')
+	// 				blockedUsers = await getBanned().then()
+	// 			else
+	// 				blockedUsers = await getMuted().then()
+	// 			for (let element of bannedUsers){
+	// 				let pos = m.indexOf(element)
+	// 				if (pos !== -1){
+	// 					let oldData = [...m]
+	// 					oldData.splice(pos, 1)
+	// 					console.log("oldData", oldData)
+	// 					setMembers([...oldData])
+	// 				}
+	// 			}
+	// 		}
+	// 		setMembers([...m])
+	// 	}
+	// 	prepareInitialData();
+	// }, [props.room.name])
 
 	// useLayoutEffect(() => {
 	// 	async function handleChangeMode() {
@@ -253,25 +248,51 @@ export default function AdminPanel(props: any) {
 	// 	handleChangeMode();
 	// }, [limitedUsers])
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		async function prepareData() {
-			if (action === 'ban') {
-				await getOptions();
-				await getBanned();
-			}
-			else if (action === 'mute') {
-				await getOptions();
-				await getMuted();
-			}
-			else {
-				await getOptions();
-				setLimitedUsers([]);
-			}
-		}
+			if (props.action === 'ban' || props.action === "mute") {
+				let m = [...props.members]
+				// console.log("banned", banned)
+				for (let element of props.bannedUsers){
+					console.log(element)
+					let pos = m.indexOf(element)
+					if (pos !== -1){
+						let oldData = [...m]
+						oldData.splice(pos, 1)
+						console.log("oldData", oldData)
+						setMembers([...oldData])
+					}
+				}}}
+		// 	if (props.action === 'ban' || props.action === "mute") {
+		// 		let m = [...props.members]
+		// 		let banned: string[] = await getBanned().then()
+		// 		console.log("banned", banned)
+		// 		for (let element of banned){
+		// 			console.log(element)
+		// 			let pos = m.indexOf(element)
+		// 			if (pos !== -1){
+		// 				let oldData = [...m]
+		// 				oldData.splice(pos, 1)
+		// 				console.log("oldData", oldData)
+		// 				setMembers([...oldData])
+		// 			}
+		// 		}
+		// 		// await getOptions();
+		// 		// await getBanned();
+		// 	}
+		// 	else if (action === 'mute') {
+		// 		await getOptions();
+		// 		await getMuted();
+		// 	}
+		// 	else {
+		// 		await getOptions();
+		// 		setLimitedUsers([]);
+		// 	}
+		// }
 		prepareData();
 	}, [action])
 
-	console.log(time)
+	console.log(members)
 
 	return (<>
 			<Modal centered withCloseButton={false} closeOnClickOutside={false} zIndex={1500} overlayBlur={5}
@@ -374,7 +395,7 @@ export default function AdminPanel(props: any) {
 						</Tabs.List>
 						<img style={{rotate:"180deg"}}src="/account_decoration_down.svg" alt="" />
 						<Tabs.Panel style={{color:"white"}} value={"ban"}>
-							<ScrollArea>{props.members.map((element: string, id: number) => {return(
+							<ScrollArea>{members.map((element: string, id: number) => {return(
 								<div className={"checkbox_element_container"} key={id}> 
 									<div  className={"checkbox_element_input"}>
 										<input type={"checkbox"} id={element} value={element} checked={props.usersToBeJudge.indexOf(element) !== -1 ? true : false} onChange={handleChange}/>
@@ -384,8 +405,7 @@ export default function AdminPanel(props: any) {
 							</ScrollArea>
 						</Tabs.Panel>
 						<Tabs.Panel style={{color:"white"}} value={"mute"}>
-							<ScrollArea>{props.members.map((element: string, id: number) => {return(
-								<div className={"checkbox_element_container"} key={id}> 
+							<ScrollArea>{props.members.map((element: string, id: number) => {if(mutedUsers.indexOf(element) === -1) return( <div className={"checkbox_element_container"} key={id}> 
 									<div  className={"checkbox_element_input"}>
 										<input type={"checkbox"} id={element} value={element} checked={props.usersToBeJudge.indexOf(element) !== -1 ? true : false} onChange={handleChange}/>
 									</div>

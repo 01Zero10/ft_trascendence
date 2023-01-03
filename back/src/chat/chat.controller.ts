@@ -326,18 +326,18 @@ export class ChatController {
 
 
         // Leonardo era qui
-        // function aggiungiSecondi(secondi: number, date: Date) {
-        //     console.log("tempo nella funzione: ", time)
-        //     console.log("secondi nella funzione: ", secondi)
-        //     date = new Date(date.setMilliseconds(secondi * 1000))    
-        // }
+        function aggiungiSecondi(secondi: number, date: Date) {
+            console.log("tempo nella funzione: ", time)
+            console.log("secondi nella funzione: ", secondi)
+            date = new Date(date.setMilliseconds(secondi * 1000))    
+        }
 
-        // var expDate = new Date();
-        // console.log("prima", expDate)
+        var expDate = new Date();
+        console.log("prima", expDate)
 
-        // aggiungiSecondi(time, expDate);
+        aggiungiSecondi(time, expDate);
         
-        // console.log("dopo", expDate)
+        console.log("dopo", expDate)
         // Leonardo si è fermato qui perchè NON FUNZIONA UN CAZZO
 
 
@@ -347,10 +347,10 @@ export class ChatController {
         //console.log("");
 
         // Daniele era qui
-        const expDate = new Date();
-        console.log("prima", expDate)
-        expDate.setSeconds(expDate.getSeconds() + time);
-        console.log("dopo", expDate)
+        // const expDate = new Date();
+        // console.log("prima", expDate)
+        // expDate.setSeconds(expDate.getSeconds() + time);
+        // console.log("dopo", expDate)
         // Daniele si è fermato qui
 
         //console.log(rowsToAdd)

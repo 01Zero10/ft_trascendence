@@ -45,6 +45,7 @@ export default function ChannelBody(props: any) {
 	const [checkPwd, setCheckPwd] = useState(false)
 	const [inputPwd, setInputPwd] = useState("")
 	const [myState, setMyState] = useState<MyStateOnChannel | null>(null);
+	const [bannedUsers, setBannedUsers] = useState<string[]>([])
 
 
 	// async function checkProtectedPassword() {
@@ -208,6 +209,60 @@ export default function ChannelBody(props: any) {
 
 	//-----------------------------------------------------------
 
+	// async function getMuted() {
+	// 	const API_GET_MUTED = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getMutedUsers/${props.room.name}`;
+	// 	if (props.room.name != '') {
+	// 		let response = await fetch(API_GET_MUTED);
+	// 		let data = await response.json();
+	// 		let fetchMuted: string[] = []
+	// 		await Promise.all(await data?.map(async (element: any) => {
+	// 			fetchMuted.push(element);
+	// 		}))
+	// 		setMutedUsers([...fetchMuted]);
+	// 	}
+	// }
+
+	async function getBanned() {
+		const API_GET_BANNED = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getBannedUsers/${props.room.name}`;
+		if (props.room.name !== '') {
+			let response = await fetch(API_GET_BANNED);
+			let data = await response.json();
+			let fetchBanned: string[] = [];
+			await Promise.all(await data?.map(async (element: any) => {
+				fetchBanned.push(element);
+			}))
+			setBannedUsers(fetchBanned);
+			// return fetchBanned;
+		}
+	}
+
+	useLayoutEffect(() => {
+		async function prepareInitialData() {
+			await getBanned();
+		// 	let m = [...props.members]
+		// 	if (props.action === 'ban' || props.action === "mute") {
+		// 		let blockedUsers: string[] = []
+				
+		// 		if (props.action === 'ban')
+		// 			blockedUsers = await getBanned().then()
+		// 		else
+		// 			blockedUsers = await getMuted().then()
+		// 		for (let element of bannedUsers){
+		// 			let pos = m.indexOf(element)
+		// 			if (pos !== -1){
+		// 				let oldData = [...m]
+		// 				oldData.splice(pos, 1)
+		// 				console.log("oldData", oldData)
+		// 				setMembers([...oldData])
+		// 			}
+		// 		}
+		// 	}
+		// 	setMembers([...m])
+		}
+		prepareInitialData();
+	}, [props.room.name])
+
+
 	const scrollAreaStyle = {
 		scrollbar: {
             '&, &:hover': {
@@ -228,10 +283,12 @@ export default function ChannelBody(props: any) {
 				action={action}
 				usersToBeJudge={data}
 				members={props.members}
+				bannedUsers={bannedUsers}
 				setMembers={props.setMembers}
 				setModalTypeOpen={setModalTypeOpen}
 				setAction={setAction}
 				setData={setData}
+				setBannedUsers={setBannedUsers}
 				opened={(modalTypeOpen !== null)}
 				socket={props.socket}
 			/>}
