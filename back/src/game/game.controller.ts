@@ -42,6 +42,11 @@ export class GameController{
        return await this.gameService.checkInvite(client);
     }
 
+    @Get('getAvatars/:namePlayRoom')
+    async GetAvatars(@Param('namePlayRoom') namePlayRoom: string){
+        return await this.gameService.getAvatars(namePlayRoom);
+    }
+
     @Post('acceptGameRequest')
     async AcceptGameRequest(@Body('client') client: string, @Body('sender') sender: string){
       await this.gameService.acceptGameRequest(client)//, sender);
