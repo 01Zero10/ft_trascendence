@@ -437,10 +437,11 @@ export class GameService{
     }
 
     async getAvatars(namePlayRoom: string){
-        const ret = this.runningMatches.createQueryBuilder('match')
+        const ret = await this.runningMatches.createQueryBuilder('match')
         .where({playRoom: namePlayRoom})
         .select(['match.avatar1', 'match.avatar2'])
         .getOne();
+        return ret;
     }
 
     /*async sleep(time: number) {
