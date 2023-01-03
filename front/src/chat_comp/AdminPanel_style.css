@@ -60,3 +60,27 @@
     display: flex;
     /*background-color: aquamarine;*/
 }
+
+.inputTimeText {
+    background-color: transparent;
+    color: lightgrey;
+}
+
+.inputTimeText input {
+    background-color: transparent;
+    border-radius: 0;
+    color: white;
+    border-color: var(--purple-color);
+}
+
+.inputTimeText input:focus{
+    border-color: white;
+    caret-color: white;
+}
+
+.inputTimeText.time {
+    margin: 1% auto 1%;
+}
+.inputTimeText.text {
+    margin: 1% auto 0;
+}

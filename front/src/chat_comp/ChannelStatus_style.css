@@ -38,9 +38,9 @@
 
 .divNameContainer {
 	width: 100%;
-	height: 4.5%;
+	height: 3.5%;
 	display: flex;
-	flex-display: row;;
+	flex-direction: row;;
 	align-items: center;
 	justify-content: flex-start;
 }
@@ -53,9 +53,17 @@
 	cursor: pointer;
 	font-family:'Tomorrow', sans-serif;
 	font-weight:400;
-	font-size: 1rem;
+	font-size: 1.15rem;
 	letter-spacing: 1px;
 	transition: all .2s ease-in-out;
+}
+
+.divNameContent_name.builder {
+	color: rgb(255, 42, 0);
+}
+
+.divNameContent_name.admin {
+	color: rgb(255, 179, 0);
 }
 
 .divNameContent_name:hover {

@@ -426,8 +426,8 @@ export default function AdminPanel(props: any) {
 							</ScrollArea>
 						</Tabs.Panel>
 					</Tabs>
-					{(props.usersToBeJudge.length !== 0 && (props.action === "ban" || props.action === "mute")) && <Input type={"number"}  min={0} onKeyDown={handleKeyDown} placeholder={"Time*"} value={time} onChange={(e: any) => setTime(e.target.value)}></Input>}
-					{(props.usersToBeJudge.length !== 0 && (props.action === "ban" || props.action === "mute")) && <Input type={"text"} placeholder={"Reason"} value={reason} onChange={(e: any) => setReason(e.target.value)}></Input>}
+					{(props.usersToBeJudge.length !== 0 && (props.action === "ban" || props.action === "mute")) && <Input className="inputTimeText time" type={"number"}  min={0} onKeyDown={handleKeyDown} placeholder={"Time*"} value={time} onChange={(e: any) => setTime(e.target.value)}></Input>}
+					{(props.usersToBeJudge.length !== 0 && (props.action === "ban" || props.action === "mute")) && <Input className="inputTimeText text" type={"text"} placeholder={"Reason"} value={reason} onChange={(e: any) => setReason(e.target.value)}></Input>}
 					<Box>
 						{<button className="btn_createChannel" onClick={(props.action !== "unmute" && props.action !== "unban") ? handleMuteBan : handleUnMuteUnBan}>
 							{/*TODO: svuotare array  (props.setData([]); setData([]))*/}
