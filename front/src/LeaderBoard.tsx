@@ -1,4 +1,3 @@
-
 import { Student } from "./App";
 import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import './LeaderBoard.css'
@@ -63,20 +62,21 @@ export default function Leaderboard() {
                                                 />
                                             </svg>
                                         </div>
-                                        <div className="leaderName">{leader.user.nickname}</div>
+                                        
+                                        <div className="leaderName">{leader.user.username}</div>
+                                        <div className="leaderPoints">{leader.points}</div>
                                     </div>
                                 )}
                             </div>
                         ))}
                     </div>
                     <div className="playerslist">
-                        <h1 style={{ textAlign: 'center', padding: '3%', fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', fontSize: '2vw', color: '#fff' }}>TOP 10</h1>
+                        <h1 style={{ textAlign: 'center', padding: '3%', fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', fontSize: '2vw', color: '#fff', marginTop: '8vh' }}>TOP 10</h1>
                         <div className="table">
                         </div>
                         <div className='places-list-container'>
                             {
-
-                                board.slice(3).map((element) => (<div className='list-item'>
+                                board.slice(3).map((element) => (<div className='list-item' key={element.user.username}>
                                     <div className='position'>
                                         {afterPodio++}
                                     </div>

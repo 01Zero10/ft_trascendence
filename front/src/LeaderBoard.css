@@ -67,7 +67,7 @@
 }
    */
 
-.root-board {
+   .root-board {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -117,7 +117,7 @@
     display: flex;
     position: relative;
     min-height: 120px;
-    padding-top: 3rem;
+    padding-top: 8rem;
 }
 
 .leaderboard .topLeadersList .image {
@@ -130,30 +130,89 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    bottom: -145px;
 }
 
 .leaderboard .topLeadersList .leader:nth-child(1):after {
     content: "1";
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     background: #ffc500;
     border-radius: 50%;
     position: absolute;
     right: 0;
     font-family: sans-serif;
     text-align: center;
-    line-height: 30px;
+    line-height: 40px;
     font-weight: 700;
     box-shadow: 1px 1px 4px black;
 }
 
+.leaderboard .topLeadersList .leader:nth-child(1) .leaderPoints {
+    content: "";
+    width: 60px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 5px;
+    background: #ffc500;
+    font-size: 1.3rem;
+    font-family: sans-serif;
+    text-align: center;
+    box-shadow: 1px 1px 4px black;
+    font-weight: 700;
+    position: absolute;
+    transform: translateX(-50%);
+    left: 50%;
+    bottom: -5%;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(2) .leaderPoints {
+    content: "";
+    width: 60px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 5px;
+    background: #d4d4d4;
+    font-size: 1.3rem;
+    font-family: sans-serif;
+    text-align: center;
+    box-shadow: 1px 1px 4px black;
+    font-weight: 700;
+    position: absolute;
+    transform: translateX(-50%);
+    left: 50%;
+    bottom: -5%;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(3) .leaderPoints {
+    content: "";
+    width: 60px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 5px;
+    background: #ab6528;
+    font-size: 1.3rem;
+    font-family: sans-serif;
+    text-align: center;
+    box-shadow: 1px 1px 4px black;
+    font-weight: 700;
+    position: absolute;
+    transform: translateX(-50%);
+    left: 50%;
+    bottom: -5%;
+}
+
 .leaderboard .topLeadersList .leader:nth-child(1) .image {
-    width: 130px;
-    height: 130px;
+    width: 180px;
+    height: 180px;
+}
+
+.leaderboard .topLeadersList .leader:nth-child(1) .crown svg {
+    width: 4rem;
 }
 
 .leaderboard .topLeadersList .leader:nth-child(1) .crown {
-    top: -20%;
+    top: -25%;
 }
 
 .leaderboard .topLeadersList .leader:nth-child(1) .crown svg {
@@ -165,27 +224,27 @@
     position: absolute;
     left: 15%;
     transform: translateX(-15%);
-    bottom: -20%;
+    bottom: -155%;
 }
 
 .leaderboard .topLeadersList .leader:nth-child(2):after {
     content: "2";
-    width: 30px;
-    height: 30px;
+    width: 38px;
+    height: 38px;
     background: #d4d4d4;
     border-radius: 50%;
     position: absolute;
     right: 0;
     font-family: sans-serif;
     text-align: center;
-    line-height: 30px;
+    line-height: 38px;
     font-weight: 700;
     box-shadow: 1px 1px 4px black;
 }
 
 .leaderboard .topLeadersList .leader:nth-child(2) .image {
-    width: 110px;
-    height: 110px;
+    width: 160px;
+    height: 160px;
 }
 
 .leaderboard .topLeadersList .leader:nth-child(2) .crown {
@@ -194,6 +253,7 @@
 
 .leaderboard .topLeadersList .leader:nth-child(2) .crown svg {
     fill: #d4d4d4;
+    width: 3.5rem;
 }
 
 .leaderboard .topLeadersList .leader:nth-child(3) {
@@ -201,27 +261,27 @@
     position: absolute;
     left: 85%;
     transform: translateX(-85%);
-    bottom: -20%;
+    bottom: -155%;
 }
 
 .leaderboard .topLeadersList .leader:nth-child(3):after {
     content: "3";
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     background: #ab6528;
     border-radius: 50%;
     position: absolute;
     right: 0;
     font-family: sans-serif;
     text-align: center;
-    line-height: 30px;
+    line-height: 35px;
     font-weight: 700;
     box-shadow: 1px 1px 4px black;
 }
 
 .leaderboard .topLeadersList .leader:nth-child(3) .image {
-    width: 110px;
-    height: 110px;
+    width: 135px;
+    height: 135px;
 }
 
 .leaderboard .topLeadersList .leader:nth-child(3) .crown {
@@ -235,8 +295,8 @@
 .leaderboard .leaderName {
     position: absolute;
     font-family: 'Smooch Sans', sans-serif;
-    font-size: 1.7vw;
-    font-weight: 700;
+    font-size: 2.5rem;
+    font-weight: 500;
     letter-spacing: 0.1rem;
     text-align: center;
     color: rgba(255, 85, 94, 1);
@@ -245,6 +305,7 @@
     -webkit-text-fill-color: transparent; */
     left: 50%;
     transform: translateX(-50%);
+    margin-top: 8%;
 }
 
 .leaderboard .player {
@@ -283,7 +344,7 @@
 
 .leaderboard .playerslist {
     margin-top: 10rem;
-    font-size: 16px;
+    font-size: 1.3rem;
     overflow: hidden;
     color: white;
     font-family: 'Smooch Sans', sans-serif;
@@ -385,66 +446,305 @@
     align-items: center
 }
 
-.leaderboard .topLeadersList .leader:nth-child(2):after {
-    content: "2";
-    width: 30px;
-    height: 30px;
-    background: #d4d4d4;
-    border-radius: 50%;
-    position: absolute;
-    right: 0;
-    font-family: sans-serif;
-    text-align: center;
-    line-height: 30px;
-    font-weight: 700;
-    box-shadow: 1px 1px 4px black;
-}
+/****************** RESPONSIVE **************/
 
-.leaderboard .topLeadersList .leader:nth-child(2) .image {
-    width: 110px;
-    height: 110px;
-}
+@media screen and (max-width: 1030px) {
 
-.leaderboard .topLeadersList .leader:nth-child(2) .crown {
-    top: -25%;
-}
+    .leaderboard .topLeadersList .leader:nth-child(1) .image {
+        width: 160px;
+        height: 160px;
+    }
 
-.leaderboard .topLeadersList .leader:nth-child(2) .crown svg {
-    fill: #d4d4d4;
-}
+    .leaderboard .topLeadersList .leader:nth-child(2) .image {
+        width: 140px;
+        height: 140px;
+    }
 
-.leaderboard .topLeadersList .leader:nth-child(3) {
-    color: black;
-    position: absolute;
-    left: 85%;
-    transform: translateX(-85%);
-    bottom: -20%;
-}
+    .leaderboard .topLeadersList .leader:nth-child(3) .image {
+        width: 120px;
+        height: 120px;
+    }
 
-.leaderboard .topLeadersList .leader:nth-child(3):after {
-    content: "3";
-    width: 30px;
-    height: 30px;
-    background: #ab6528;
-    border-radius: 50%;
-    position: absolute;
-    right: 0;
-    font-family: sans-serif;
-    text-align: center;
-    line-height: 30px;
-    font-weight: 700;
-    box-shadow: 1px 1px 4px black;
-}
+    .leaderboard .topLeadersList .leader:nth-child(3) .leaderPoints {
+        font-size: 1rem;
+    }
 
-.leaderboard .topLeadersList .leader:nth-child(3) .image {
-    width: 110px;
-    height: 110px;
-}
+    .leaderboard .topLeadersList .leader:nth-child(2) .leaderPoints {
+        font-size: 1rem;
+    }
 
-.leaderboard .topLeadersList .leader:nth-child(3) .crown {
-    top: -25%;
-}
+    .leaderboard .topLeadersList .leader:nth-child(1) .leaderPoints {
+        font-size: 1rem;
+    }
 
-.leaderboard .topLeadersList .leader:nth-child(3) .crown svg {
-    fill: #ab6528;
-}
+    .leaderboard .topLeadersList .leader:nth-child(1):after {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        right: 5%;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(2):after {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(3):after {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .leaderboard .leaderName {
+        font-size: 1.7rem;
+    }
+
+    .leaderboard .playerslist {
+        font-size: 1rem;
+    }
+  }
+  
+  /**** LAPTOP MAC ****/
+  
+  /* @media screen and (min-width: 2570px) {
+    .avatar__img-account {
+      width: 430px;
+      height: 430px;
+    }
+  
+    .avatar__img-request {
+      width: 150px;
+      height: 150px;
+    }
+  } */
+  
+  
+  /**** LAPTOP ****/
+  
+  @media screen and (max-width: 1380px) {
+
+    .leaderboard {
+        position: absolute;
+        top: 10vh;
+        height: 80vh;
+        width: 78vw;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(1) .image {
+        width: 140px;
+        height: 140px;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(2) .image {
+        width: 110px;
+        height: 110px;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(3) .image {
+        width: 100px;
+        height: 100px;
+    }
+
+
+  }
+
+  @media screen and (max-width: 855px) {
+
+    
+    .leaderboard .topLeadersList .leader:nth-child(1) .image {
+        width: 120px;
+        height: 120px;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(2) .image {
+        width: 100px;
+        height: 100px;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(3) .image {
+        width: 100px;
+        height: 100px;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(1) .crown svg {
+        width: 3rem;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(2) .crown svg {
+        width: 3rem;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(3) .crown svg {
+        width: 3rem;
+    }
+
+    .leaderboard .playerslist {
+        font-size: 0.7rem;
+    }
+
+  }
+  
+  /*** TABLET ***/
+  @media screen and (max-width: 510px) {
+
+    .leaderboard {
+        position: absolute;
+        top: 8vh;
+        height: 80vh;
+        width: 78vw;
+    }
+    .leaderboard .topLeadersList .leader:nth-child(1) .image {
+        width: 100px;
+        height: 100px;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(2) .image {
+        width: 80px;
+        height: 80px;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(3) .image {
+        width: 80px;
+        height: 80px;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(1) .leaderPoints {
+        width: 40px;
+        height: 25px;
+        line-height: 25px;
+        font-size: 1rem;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(2) .leaderPoints {
+        width: 40px;
+        height: 25px;
+        line-height: 25px;
+        font-size: 1rem;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(3) .leaderPoints {
+        width: 40px;
+        height: 25px;
+        line-height: 25px;
+        font-size: 1rem;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(1) .crown svg {
+        width: 2rem;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(2) .crown svg {
+        width: 2rem;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(3) .crown svg {
+        width: 2rem;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(1):after {
+        width: 25px;
+        height: 25px;
+        line-height: 25px;
+        right: 5%;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(2):after {
+        width: 25px;
+        height: 25px;
+        line-height: 25px;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(3):after {
+        width: 25px;
+        height: 25px;
+        line-height: 25px;
+    }
+
+    .leaderboard .playerslist {
+        font-size: 0.4rem;
+    }
+    .leaderboard .places-list-container .image {
+        width: 28px;
+        height: 28px;
+    }
+  
+    .leaderboard .leaderName {
+        font-size: 1.3rem;
+    }
+  }
+
+  @media screen and (max-width: 390px) {
+
+    .leaderboard {
+        position: absolute;
+        top: 10vh;
+        height: 80vh;
+        width: 78vw;
+    }
+    .leaderboard .topLeadersList .leader:nth-child(1) .image {
+        width: 80px;
+        height: 80px;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(2) {
+        display: none;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(3) {
+        display: none;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(1) .leaderPoints {
+        width: 40px;
+        height: 20px;
+        line-height: 20px;
+        font-size: 0.8rem;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(1) .crown svg {
+        width: 2rem;
+    }
+
+    .leaderboard .topLeadersList .leader:nth-child(1):after {
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        right: 5%;
+        font-size: 0.7rem;
+    }
+
+    .leaderboard .leaderName {
+        font-size: 1.5rem;
+    }
+    
+    .leaderboard .playerslist {
+        font-size: 0.4rem;
+    }
+    .leaderboard .places-list-container .image {
+        display: none;
+    }
+
+    .p_leaderboard {
+        font-size: 0.8rem;
+    }
+  
+    .list-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 75%;
+    }
+
+    .list-item .position {
+        position : absolute;
+        left : 1.5em;
+        top : .4em; 
+        font-size: 2.5em;
+        color: rgba(255, 85, 94, 1);
+    }
+
+    .title {
+        margin-left: 0;
+    }
+  }
