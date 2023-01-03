@@ -93,13 +93,30 @@ function Navigation() {
   const contextData = useContext(Student)
   const [socket, setSocket] = useState<Socket | null>(null);
 
+  async function updateChannelUsersList() {
+    const API_URL_UPDATE_CHANNEL_USERS_LIST = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/updateChannelUsersList`;
+    await fetch(API_URL_UPDATE_CHANNEL_USERS_LIST, {
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+    })
+  }
+
+  useLayoutEffect(() => {
+      socket?.on('updateAllChannelList', async () => {
+        console.log('qualcuno ha lasciato');
+        updateChannelUsersList();
+      })
+  }, [socket])
+
   useLayoutEffect(() => {
       const newSocket = io(`http://${process.env.REACT_APP_IP_ADDR}:3001`, { query: { userID: String(contextData.id) } });
       newSocket.on('connect', () => {
           setSocket(newSocket);
+          updateChannelUsersList();
       })
       return () => {
-          newSocket.disconnect();
+        //updateChannelUsersList();
+        socket?.disconnect();
       }
   }, [contextData.id]);
   
