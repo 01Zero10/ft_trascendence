@@ -1,5 +1,5 @@
 import { TextField } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import './Login.css';
@@ -7,6 +7,19 @@ import './Login.css';
 
 
 function Login() {
+
+	  async function updateChannelUsersList() {
+		const API_URL_UPDATE_CHANNEL_USERS_LIST = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/updateChannelUsersList`;
+		await fetch(API_URL_UPDATE_CHANNEL_USERS_LIST, {
+		credentials: 'include',
+		headers: { 'Content-Type': 'application/json' },
+		})
+	}
+
+	useLayoutEffect(() => {
+		console.log('logout');
+		updateChannelUsersList();
+	}, [])
 
 	function login42() {
 		window.location.href = `${process.env.REACT_APP_REDIRECT_URI}`

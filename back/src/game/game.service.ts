@@ -436,6 +436,14 @@ export class GameService{
         // return playRoom;
     }
 
+    async getAvatars(namePlayRoom: string){
+        const ret = await this.runningMatches.createQueryBuilder('match')
+        .where({playRoom: namePlayRoom})
+        .select(['match.avatar1', 'match.avatar2'])
+        .getOne();
+        return ret;
+    }
+
     /*async sleep(time: number) {
         await new Promise(f => setTimeout(f, time * 1000));
       }

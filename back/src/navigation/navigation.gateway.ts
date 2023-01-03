@@ -21,34 +21,35 @@ export class NavigationGateWay implements OnGatewayInit, OnGatewayConnection, On
   afterInit(server: Server) {
     this.logger.log('Notification Gateway On')
   }
-
+  
+  async handleConnection(clientSocket: Socket) {
+    if (clientSocket.handshake.query.userID !== 'undefined' 
+    && clientSocket.handshake.query.userID !== "null" 
+    )
+    {
+      String(clientSocket.handshake.query.userID), clientSocket.id
+      await this.navigationService.updateUserSocket(String(clientSocket.handshake.query.userID), clientSocket.id);
+      await this.userService.setOnlineStatus(String(clientSocket.handshake.query.userID));
+      this.logger.log(`Client connected: ${clientSocket.id}`);
+    }
+  }
+  
+  async handleDisconnect(clientSocket: Socket) {
+    if (clientSocket.handshake.query.userID !== 'undefined' && clientSocket.handshake.query.userID !== "null")
+    {
+      await this.userService.setOfflineStatus(String(clientSocket.handshake.query.userID));
+      this.logger.log(`clientSocket disconnected: ${clientSocket.id}`);
+      this.server.emit('updateAllChannelList');
+    }
+    const client = String(clientSocket.handshake.query.userID);
+    this.logger.log(`disconesso dal sito ${client}`);
+  }
+  
   async updateBell(receiver: string){
     const client = await this.userService.getByUsername(receiver);
     console.log("client = ", client.username, " sock_id = ", client.socket_id);
     this.server.to(client.socket_id).emit('updateBell');
     //const id_socket = (await this.userService.getByUsername(receiver)).socket_id;
     //this.server.to(id_socket).emit('updateBell');
-  }
-
-  async handleConnection(clientSocket: Socket) {
-    if (clientSocket.handshake.query.userID !== 'undefined' 
-    && clientSocket.handshake.query.userID !== "null" 
-    )
-    {
-        String(clientSocket.handshake.query.userID), clientSocket.id
-      await this.navigationService.updateUserSocket(String(clientSocket.handshake.query.userID), clientSocket.id);
-      await this.userService.setOnlineStatus(String(clientSocket.handshake.query.userID));
-      this.logger.log(`Client connected: ${clientSocket.id}`);
-    }
-  }
-
-  async handleDisconnect(clientSocket: Socket) {
-    if (clientSocket.handshake.query.userID !== 'undefined' && clientSocket.handshake.query.userID !== "null")
-    {
-      await this.userService.setOfflineStatus(String(clientSocket.handshake.query.userID));
-      this.logger.log(`clientSocket disconnected: ${clientSocket.id}`);
-    }
-    const client = String(clientSocket.handshake.query.userID);
-    this.logger.log(`disconesso dal sito ${client}`);
   }
 }

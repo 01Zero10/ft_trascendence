@@ -383,8 +383,9 @@ export class ChatController {
     //     await this.chatService.expiredMuteOrBan();
     // }
 
-    @Get('test')
-    async test(){
-        return await this.chatService.getChatMembersTest("Speramo_bene");
+    @Get('updateChannelUsersList')
+    async UpdateChannelUsersList(){
+        console.log("me-e-e")
+        await this.chatService.updateChannelUsersList();
     }
 }

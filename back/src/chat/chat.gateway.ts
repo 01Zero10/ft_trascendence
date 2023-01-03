@@ -71,6 +71,10 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
     this.server.to(channelName).emit('updateListMembers');
   }
 
+  async updateAllListMembers(){
+    this.server.emit('updateAllListMembers');
+  }
+
   @SubscribeMessage('leaveRoom')
   handleLeaveRoom(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {room: string}): any {
     clientSocket.leave(data.room);

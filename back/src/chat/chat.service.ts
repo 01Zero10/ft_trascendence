@@ -724,6 +724,10 @@ export class ChatService {
         .getOne()).rooms.findIndex(x => x.name === channelName);
         return (index > -1 ? true : false);
     }
+
+    async updateChannelUsersList(){
+        await this.chatGateway.updateAllListMembers();
+    }
     // ???
 
     async updateUserSocket(userID: string, userSocket: string){

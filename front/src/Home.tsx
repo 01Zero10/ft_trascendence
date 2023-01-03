@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useLayoutEffect } from 'react';
 import './Home.css';
 import { Link } from "react-router-dom";
 import { Avatar, Box, IconButton, Tooltip } from '@mui/material';
