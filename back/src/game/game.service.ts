@@ -136,7 +136,8 @@ export class GameService{
         
         if (playRoom)
         {
-            clearInterval(this.mapPlRoom.get(playRoom.playRoom).idInterval)
+            if (this.mapPlRoom.get(playRoom.playRoom).idInterval)
+                clearInterval(this.mapPlRoom.get(playRoom.playRoom).idInterval)
             await this.gameGateway.handleLeftGame(playRoom.playRoom)
             await this.matchRepository.save({player1: playRoom.player1,
                 avatar1: playRoom.avatar1,

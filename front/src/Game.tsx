@@ -72,6 +72,17 @@ export default function Game() {
             checkInvite();
     }, [socket?.id])
 
+    useEffect(() => {
+        socket?.on('dropQueue', async() => {
+            setPlay(false);
+            setGameData({
+                roomName:"",
+                leftPlayer:"",
+                rightPlayer:""
+            })
+        })
+    }, [socket])
+
     return (
         <div className="game_container">
             <div className="fake_navbar">
@@ -80,6 +91,7 @@ export default function Game() {
                 <div className="playground">
                     <PlayGround gameData={gameData} socket={socket} setGameData={setGameData} point={point} setPoint={setPoint} loader={loader} setLoader={setLoader} ></PlayGround>
                 </div>}
+        <div className='_prv_'></div>
         </div>
     )
 }

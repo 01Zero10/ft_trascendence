@@ -51,6 +51,10 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   async handleClientSide(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {username: string, avatar: string, type: string}): Promise<any> {
     const ret = await this.gameService.createOrJoinPlayRoom(data.username, data.avatar, data.type)
     clientSocket.join(ret.namePlayRoom);
+    if (ret.side === "left")
+      setTimeout(() => {
+        this.dropQueue(ret.namePlayRoom, clientSocket.id);
+     }, 10000);
     if (ret.side === "right")
       this.server.to(ret.namePlayRoom).emit('ready', {namePlayRoom: ret.namePlayRoom, leftClient: ret.left, rightClient: ret.right});
   }
@@ -61,6 +65,10 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
     console.log(data);
     clientSocket.join(data.playRoom);
     console.log("dataside", data.side)
+    if (data.side !== "right")
+      setTimeout(() => {
+        this.dropQueue(data.playRoom, clientSocket.id);
+    }, 10000);
     if (data.side === "right")
       this.server.to(data.playRoom).emit('readyFromInvite', {namePlayRoom: data.playRoom, rightClient: data.client});
   }
@@ -125,6 +133,16 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
       else
         this.server.to(namePlayRoom).emit('update', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
     }, 10)
+  }
+
+  async dropQueue(namePlayRoom: string, leftPlayerSocket: string) {
+    const playRoom = await this.gameService.getPlayRoomByName(namePlayRoom);
+    console.log("player2", playRoom.player2)
+    console.log("invited", playRoom.invited)
+    if (playRoom.player2 === '' || (playRoom.player2 !== '' && playRoom.invited === 'invited')) {
+      await this.gameService.handleLeaveQueue(playRoom.player1);
+      this.server.to(leftPlayerSocket).emit('dropQueue');
+    }
   }
 
   async sleep(time: number) {
