@@ -4,6 +4,7 @@ import { Socket } from "socket.io-client";
 import Loader from "../components/Loader"
 import {Student} from "../App";
 import { PongTitle } from "./components/PongTitle";
+import "./Canvas.css"
 
 type CanvasProps = {
   loader: boolean;
@@ -159,36 +160,39 @@ export default function Canvas(props: CanvasProps) {
   }, [props.gameData])
 
   return (
-    <div className="canvasPongWindow">
-      <PongTitle/>
-      <div className="canvasPongPoints">
-        <h2 className="playerLeftPoints">{props.point.left}</h2>
-        <h2 className="playerRightPoints">{props.point.right}</h2>
-      </div>
-      <div className={"canvasPongContainer"}>
-        <div className="playerAvatarName">
-            <img className="playerAvatarDimension" src={avatar.avatarL} loading="lazy" />
-            <h2>{props.gameData.leftPlayer}</h2>
+    <div style={{position:"relative", width:"100%"}}>
+      {props.loader ? <Loader /> :
+      <div className="canvasPongWindow">
+        <PongTitle/>
+        <div className="canvasPongPoints">
+          <h2 className="playerLeftPoints">{props.point.left}</h2>
+          <h2 className="playerRightPoints">{props.point.right}</h2>
         </div>
-        <div className="canvasDraw">
-            <canvas
-                ref={canvasRef}
-                width={props.canvasWidth}
-                height={props.canvasHeight}
-                style={{
-                    border: "2px solid #000",
-                    width: `${props.canvasWidth}px`,
-                    height: `${props.canvasHeight}px`,
-                    margin: "20px"
-                }}
-            />
+        <div className={"canvasPongContainer"}>
+          <div className="playerAvatarName">
+              <img className="playerAvatarDimension" src={avatar.avatarL} loading="lazy" />
+              <h2>{props.gameData.leftPlayer}</h2>
+          </div>
+          <div className="canvasDraw">
+              <canvas
+                  ref={canvasRef}
+                  width={props.canvasWidth}
+                  height={props.canvasHeight}
+                  style={{
+                      border: "2px solid #000",
+                      width: `${props.canvasWidth}px`,
+                      height: `${props.canvasHeight}px`,
+                      margin: "20px"
+                  }}
+              />
+          </div>
+          <div className="playerAvatarName">
+              <img className="playerAvatarDimension" src={avatar.avatarR} loading="lazy" />
+              <h2>{props.gameData.rightPlayer}</h2>
+          </div>
         </div>
-        <div className="playerAvatarName">
-            <img className="playerAvatarDimension" src={avatar.avatarR} loading="lazy" />
-            <h2>{props.gameData.rightPlayer}</h2>
-        </div>
-    </div>
-</div>
+      </div>}
+  </div>
     // <div>
     //   {props.loader ? <Loader /> :
     //     <div style={{width:"100%", height:"100%", position:"relative"}}>
