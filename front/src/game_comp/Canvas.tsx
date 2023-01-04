@@ -77,10 +77,21 @@ export default function Canvas(props: CanvasProps) {
       context.fillStyle = "#781C9C"
       context.clearRect(0, 0, props.canvasWidth, props.canvasHeight)
       context.beginPath()
-      context.fillRect(props.canvasWidth / 2 - 2, 0, 4, props.canvasHeight )
+      // context.fillRect(props.canvasWidth / 2 - 2, 0, 4, props.canvasHeight ) vecchia linea mediana
       context.fillRect(0, 0, props.canvasWidth, 4 )
       context.fillRect(0, props.canvasHeight -4, props.canvasWidth, 4)
       context.closePath()
+      
+
+      // Linea mediana tratteggiata
+      context.strokeStyle = "#781C9C";
+      context.beginPath()
+      context.setLineDash([10,10])
+      context.moveTo(props.canvasWidth /2, 0)
+      context.lineTo(props.canvasWidth /2, props.canvasHeight)
+      context.stroke()
+      context.closePath()
+
       drawPlayer(context, leftPlayer)
       drawPlayer(context, rightPlayer)
       drawBall(context, ball);

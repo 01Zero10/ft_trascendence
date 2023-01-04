@@ -88,9 +88,24 @@ export default function Canvas2(props: CanvasProps) {
             context.fillRect(0, 0, props.canvasWidth, 4 )
             context.fillRect(0, props.canvasHeight -4, props.canvasWidth, 4)
             context.closePath()
-            context.beginPath()
             
+            context.strokeStyle = "#781C9C";
+            context.beginPath()
+            context.setLineDash([10,10])
+            context.moveTo(props.canvasWidth /2, 0)
+            context.lineTo(props.canvasWidth /2, props.canvasHeight)
+            context.stroke()
             context.closePath()
+
+            // context.beginPath()
+            // context.setLineDash([0])
+            // context.moveTo(0,0)
+            // context.lineTo(0, props.canvasHeight)
+            // context.moveTo(props.canvasWidth ,0)
+            // context.lineTo(props.canvasWidth, props.canvasHeight)
+            // context.stroke()
+            // context.closePath()
+            
             drawPlayer(context, leftPlayer)
             drawPlayer(context, rightPlayer)
             drawBall(context, ball);
@@ -107,7 +122,6 @@ export default function Canvas2(props: CanvasProps) {
 
     return (
         <div className="canvasPongWindow">
-                <PongTitle/>
                 <div className="canvasPongPoints">
                     <h2 className="playerLeftPoints">{props.point.left}</h2>
                     <h2 className="playerRightPoints">{props.point.right}</h2>

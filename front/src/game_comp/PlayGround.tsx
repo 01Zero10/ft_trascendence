@@ -102,17 +102,17 @@ function PlayGround(props: any) {
                     </div>
                 </div>
             </Modal> :
-                <Canvas
-                    // dir_y={-3}
-                    // ballDirection={"r"}
-                    loader={props.loader}
+                <Canvas2
+                    dir_y={-3}
+                    ballDirection={"r"}
+                    // loader={props.loader}
                     socket={props.socket}
                     point={props.point}
                     canvasHeight={500}
                     canvasWidth={1000}
                     setPoint={props.setPoint}
-                    gameData={props.gameData}
-                    setGameData={props.setGameData}
+                    // gameData={props.gameData}
+                    // setGameData={props.setGameData}
                     />
             }
         </div>
