@@ -4,10 +4,10 @@ import { Socket } from "socket.io-client";
 import "./Canvas.css"
 import async from "react-select/dist/declarations/src/async/index";
 import { avatarClasses } from "@mui/material";
+import { PongTitle } from "./components/PongTitle";
 
 type CanvasProps = {
     socket: Socket;
-    avatar: {avatar1: string, avatar2: string}
     dir_y: -3 | 3;
     point: any;
     canvasWidth: number;
@@ -84,9 +84,12 @@ export default function Canvas2(props: CanvasProps) {
             context.fillStyle = "#781C9C"
             context.clearRect(0, 0, props.canvasWidth, props.canvasHeight)
             context.beginPath()
-            context.fillRect(props.canvasWidth / 2 - 2, 0, 4, props.canvasHeight )
+            // context.fillRect(props.canvasWidth / 2 - 2, 0, 4, props.canvasHeight)
             context.fillRect(0, 0, props.canvasWidth, 4 )
             context.fillRect(0, props.canvasHeight -4, props.canvasWidth, 4)
+            context.closePath()
+            context.beginPath()
+            
             context.closePath()
             drawPlayer(context, leftPlayer)
             drawPlayer(context, rightPlayer)
@@ -104,20 +107,20 @@ export default function Canvas2(props: CanvasProps) {
 
     return (
         <div className="canvasPongWindow">
+                <PongTitle/>
+                <div className="canvasPongPoints">
+                    <h2 className="playerLeftPoints">{props.point.left}</h2>
+                    <h2 className="playerRightPoints">{props.point.right}</h2>
+                </div>
                 <div className={"canvasPongContainer"}>
-                    <div style={{position:"relative", display:"flex", width:"10%"}}>
-                        <h2 style={{ color: "#ffffff" }}>Player L
-                            {"dbalducc"}</h2>
-                        <div style={{ color: "#ffffff" }} className={"player1"}>
+                    <div className="playerAvatarName">
+                        <img className="playerAvatarDimension" src="https://cdn.intra.42.fr/users/1edb1efcad75aa0d9700b011d7f3a355/lmizzoni.jpeg" loading="lazy" />
+                        <h2>{"dbalducc"}</h2>
+                        {/* <div style={{ color: "#ffffff" }} className={"player1"}>
                             <h2 style={{ color: "#ffffff" }}>{props.point.left}</h2>
-                        </div>
-                        <h2 style={{ color: "#ffffff"}}>Player R
-                            {"mobrychi"}</h2>
-                        <div style={{ color: "#ffffff"}} className={"player2"}>
-                            <h2 style={{ color: "#ffffff" }}>{props.point.right}</h2>
-                        </div>
+                        </div> */}
                     </div>
-                    <div style={{width: "90%"}}>
+                    <div className="canvasDraw">
                         <canvas
                             ref={canvasRef}
                             width={props.canvasWidth}
@@ -129,6 +132,13 @@ export default function Canvas2(props: CanvasProps) {
                                 margin: "20px"
                             }}
                         ></canvas>
+                    </div>
+                    <div className="playerAvatarName">
+                        <img className="playerAvatarDimension" src="https://cdn.intra.42.fr/users/1edb1efcad75aa0d9700b011d7f3a355/lmizzoni.jpeg" loading="lazy" />
+                        <h2>{"mobrychi"}</h2>
+                        {/* <div style={{ color: "#ffffff"}} className={"player2"}>
+                            <h2 style={{ color: "#ffffff" }}>{props.point.right}</h2>
+                        </div> */}
                     </div>
                 </div>
         </div>

@@ -1,23 +1,60 @@
-.player1 {
-	font-family: 'Tomorrow', sans-serif;
-	font-weight: 400;
-}
-
-.player2 {
-	font-family: 'Tomorrow', sans-serif;
-	font-weight: 400;
-}
-
 .canvasPongWindow {
 	width: 100%;
 	height: 100%;
+	display: flex;
+	flex-direction: column;
+	/* background-color: brown; */
+}
+
+.canvasPongContainer {
+	/* background-color: lime; */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
+	width: 100%;
+}
+
+.canvasPongPoints {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	color: white;
+	font-size: 3.5rem;
+	font-family:'Tomorrow', sans-serif;
+}
+
+.playerLeftPoints {
+	margin-right: 2%;
+}
+
+.playerRightPoints {
+	margin-left: 2%;
+}
+
+.canvasDraw {
+	width: 70%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
 
-.canvasPongContainer {
-	background-color: lime;
-	width: 100%;
-	height: 100%;
+.playerAvatarName {
+	width: 15%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	color: white;
+	font-size: 1.85rem;
+	font-family:'Tomorrow', sans-serif;
+}
+.playerAvatarDimension {
+    object-fit: cover;
+    width: 250px;
+	height: 250px;
+    background-color: black;
+    border-radius: 50%;
+	border: 2px solid #781C9C;
 }

@@ -55,7 +55,7 @@ function PlayGround(props: any) {
     }, [props.socket])
 
     return (
-        <div style={{backgroundColor:"#000000"}}>
+        <div style={{backgroundColor:"#000000", width:"100%", display:"flex", justifyContent:"center", justifyItems:"center"}}>
             {winner ? <Modal styles={(root) => ({
                 body: {
                     backgroundColor: '#fff',
@@ -102,17 +102,17 @@ function PlayGround(props: any) {
                     </div>
                 </div>
             </Modal> :
-                <Canvas
-                    // dir_y={-3}
-                    // ballDirection={"r"}
-                    loader={props.loader}
+                <Canvas2
+                    dir_y={-3}
+                    ballDirection={"r"}
+                    // loader={props.loader}
                     socket={props.socket}
                     point={props.point}
                     canvasHeight={500}
                     canvasWidth={1000}
                     setPoint={props.setPoint}
-                    gameData={props.gameData}
-                    setGameData={props.setGameData}
+                    // gameData={props.gameData}
+                    // setGameData={props.setGameData}
                     />
             }
         </div>
