@@ -1,20 +1,14 @@
-import { forwardRef, Inject, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Match } from "src/game/match.entity";
-import { RunningMatch } from "src/game/runningMatch.entity";
 import { User } from "src/user";
 import { Repository } from "typeorm";
-import { NavigationGateWay } from "./navigation.gateway";
 import { Notifications } from "./notifications.entity";
 
 @Injectable()
 export class NavigationService{
     constructor(
         @InjectRepository(Notifications) private notificationRepository: Repository<Notifications>,
-        //@InjectRepository(Match) private matchRepository: Repository<Match>,
-        //@InjectRepository(RunningMatch) private runningMatches: Repository<RunningMatch>,
         @InjectRepository(User) private userRepository: Repository<User>,
-        //@Inject(forwardRef(() => NavigationGateWay)) private readonly navigationGateway: NavigationGateWay,
     ){}
 
     async updateUserSocket(userID: string, userSocket: string){
@@ -31,7 +25,7 @@ export class NavigationService{
     }
 
     async markSeen(client: string) {
-        this.notificationRepository
+        await this.notificationRepository
         .createQueryBuilder()
         .update(Notifications)
         .set({ seen: true })
@@ -47,5 +41,23 @@ export class NavigationService{
             sentAt: new Date(),
         })
         this.notificationRepository.save(notif);
+    }
+
+    async removeNotif(client: string){
+        const notif = await this.notificationRepository
+        .createQueryBuilder('notif')
+        .where("sender = :client_n", { client_n: client})
+        .getOne();
+
+        if (notif)
+        {
+            const ret = notif.receiver;
+            await this.notificationRepository.remove(notif)
+            return ret;
+        }
+        return null;
+        //Riprendere da qui
+        //da testare se dopo invito non accettato
+        //la notifica viene rimossa nel database e la campanella aggiornata
     }
 }

@@ -76,11 +76,7 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   @SubscribeMessage('watchGameRequest')
   async handleWatchGame(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string}): Promise<any> {
     const ret = await this.gameService.getMatchByName(data.namePlayRoom);
-    //Riprendere da qui
-    //ret esce come undefined... scoprire perché
-    //forse con il seguente console log:
     console.log("ret per spettatore 1", data.namePlayRoom);
-    //console.log("ret per spettatore 2", ret);
     clientSocket.join(data.namePlayRoom);
     this.server.to(clientSocket.id).emit('watchGameConfirm', {nameRoom: data.namePlayRoom, leftClient: ret.leftPlayer.username , rightClient: ret.rightPlayer.username, leftPoints: ret.leftPoint, rightPoints: ret.rightPoint});
   }

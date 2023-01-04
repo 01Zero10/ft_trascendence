@@ -52,6 +52,15 @@ export default function Game() {
         }
     }
 
+    // async function removeNotif() {
+    //     const API_URL_REMOVE_NOTIF = `http://${process.env.REACT_APP_IP_ADDR}:3001/navigation/removeNotif/${contextData.username}`;
+    //     await fetch(API_URL_REMOVE_NOTIF, {
+    //         credentials: 'include',
+    //         headers: { 'Content-Type': 'application/json' },
+
+    //     }).then();
+    // }
+
     async function handleSetPlay(state: boolean) {
         socket?.emit('connectToGame', { username: contextData.username, avatar: contextData.avatar, type: gameOptions.type });
         setPlay(true);
@@ -80,6 +89,7 @@ export default function Game() {
                 leftPlayer:"",
                 rightPlayer:""
             })
+            socket.emit('removeNotif');
         })
     }, [socket])
 

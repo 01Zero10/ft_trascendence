@@ -10,7 +10,7 @@ export class NavigationController{
     @Get('notifications/:client')
     async GetNotifications(@Param('client') client: string){
         console.log(client)
-        return this.navigationService.getNotifications(client);
+        return await this.navigationService.getNotifications(client);
     }
 
     @Post('notifications/seen')
@@ -21,5 +21,10 @@ export class NavigationController{
     @Post('inviteToGame')
     async InviteToGame(@Body('client') client: string, @Body('userToPlayWith') userToPlayWith: string){
         await this.navigationService.inviteToGame(client, userToPlayWith);
+    }
+
+    @Get('removeNotif/:client')
+    async RemoveNotif(@Param('client') client: string){
+        await this.navigationService.removeNotif(client);
     }
 }

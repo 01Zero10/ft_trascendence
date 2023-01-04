@@ -52,4 +52,11 @@ export class NavigationGateWay implements OnGatewayInit, OnGatewayConnection, On
     //const id_socket = (await this.userService.getByUsername(receiver)).socket_id;
     //this.server.to(id_socket).emit('updateBell');
   }
+
+  @SubscribeMessage('removeNotif')
+  async removeNotif(client: string){
+    const receiver = await this.navigationService.removeNotif(client);
+    if (receiver)
+      await this.updateBell(receiver);
+  }
 }
