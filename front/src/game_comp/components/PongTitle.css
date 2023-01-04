@@ -27,7 +27,7 @@
 
 .glowing_page_title span {
     animation: glow 8s linear infinite;
-    animation-delay: calc(0.3s * var(--i));
+    /* animation-delay: calc(0.3s * var(--i)); */
 }
 
 @keyframes glow {

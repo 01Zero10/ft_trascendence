@@ -163,7 +163,6 @@ export default function Canvas(props: CanvasProps) {
     <div style={{position:"relative", width:"100%"}}>
       {props.loader ? <Loader /> :
       <div className="canvasPongWindow">
-        <PongTitle/>
         <div className="canvasPongPoints">
           <h2 className="playerLeftPoints">{props.point.left}</h2>
           <h2 className="playerRightPoints">{props.point.right}</h2>
