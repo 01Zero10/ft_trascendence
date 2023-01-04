@@ -54,6 +54,7 @@ export default function CreateChannel(props: any) {
     });
     const [pass, setPass] = useState("")
     const [visible, { toggle }] = useDisclosure(false);
+    const [checkName, setCheckName] = useState<boolean>(false);
 
     const [optionsFriends, setOptionsFriends] = useState<{ value: string, label: string }[]>([{ value: "", label: "" }]);
 
@@ -87,13 +88,24 @@ export default function CreateChannel(props: any) {
         })
     }
 
-    function changeName(name: string) {
+    async function changeName(name: string) {
         setNewOption((prevNewOptions: NewChannel) => {
             return ({
                 ...prevNewOptions,
                 nameGroup: name
             })
         })
+        const API_CHECK_CHANNEL_NAME = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/checkChannelName/${name}`;
+        if (name !== '') {
+            const ret = await fetch(API_CHECK_CHANNEL_NAME, {
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+            })
+            .then((response) => response.json())
+            setCheckName(ret.ret);
+        }
+        //console.log("ret-t-t ", ret.ret);
+
     }
 
     function changePassword(pass: string) {
@@ -124,6 +136,8 @@ export default function CreateChannel(props: any) {
     }
 
     function checkProtectedChannel() {
+        if (checkName)
+            return false;
         if (newOption.type === 'protected' && newOption.confirmPass === '') {
             return false;
         }
@@ -259,7 +273,7 @@ close	.mantine-Modal-close	Close button*/
                                 type="text"
                                 autoComplete="off"
                                 value={newOption.nameGroup}
-                                onChange={(e) => changeName(e.target.value)}
+                                onChange={async (e) => await changeName(e.target.value)}
                         />
                     </div>
                     <img src="/account_decoration_down.svg" alt="" />
@@ -296,7 +310,7 @@ close	.mantine-Modal-close	Close button*/
                         </MultiSelect>
                     </div>
                     <Box>
-                    {(newOption.nameGroup) && <button className="btn_createChannel" onClick={handleConfirm} disabled={!checkProtectedChannel()}>
+                    {(newOption.nameGroup && !checkName) && <button className="btn_createChannel" onClick={handleConfirm} disabled={!checkProtectedChannel()}>
                         <div className="btn__content_createChannel">Create Channel</div>
                     </button>}
                     </Box>

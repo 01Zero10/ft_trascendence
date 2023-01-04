@@ -372,6 +372,13 @@ export class ChatController {
             return false;
     }
 
+    @Get('checkChannelName/:channelName')
+    async CheckChannelName(@Param('channelName') channelName: string) {
+        //console.log('nuovo nome ', channelName);
+        //console.log(await this.chatService.checkChannelName(channelName));
+        return {'ret': await this.chatService.checkChannelName(channelName)}
+    }
+
     @Post('checkJoined')
     async checkJoined(@Body('client') client: string, @Body('channelName') channelName: string){
         return await this.chatService.checkJoined(client, channelName);

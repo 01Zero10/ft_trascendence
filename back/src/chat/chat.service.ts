@@ -725,6 +725,13 @@ export class ChatService {
         return (index > -1 ? true : false);
     }
 
+    async checkChannelName(channelName){
+        console.log(await this.getRoomByName(channelName))
+        if (await this.getRoomByName(channelName))
+            return true;
+        return false;
+    }
+
     async updateChannelUsersList(){
         await this.chatGateway.updateAllListMembers();
     }
