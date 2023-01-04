@@ -139,6 +139,7 @@
     letter-spacing: normal;
     text-align: start;
     word-break: break-all;
+    white-space: pre-line;
 }
 
 .textMessageArea_sender {
@@ -153,6 +154,7 @@
     letter-spacing: normal;
     text-align: start;
     word-break: break-all;
+    white-space: pre-line;
 }
 
 .messageDropMenu_Item {

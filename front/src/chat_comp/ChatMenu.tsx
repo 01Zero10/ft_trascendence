@@ -27,7 +27,8 @@ export default function ChatMenu(props: any) {
 
 	const tabStyle = {
 		color:"#781C9C",
-		fontWeight:"bold",
+		fontWeight:"700",
+		fontFamily: "'Tomorrow', sans-serif",
 	}
 
 	const tabPanelStyle = {

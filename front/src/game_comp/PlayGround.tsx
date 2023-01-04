@@ -55,7 +55,7 @@ function PlayGround(props: any) {
     }, [props.socket])
 
     return (
-        <div style={{backgroundColor:"#000000", width:"100%", display:"flex", justifyContent:"center", justifyItems:"center"}}>
+        <div style={{backgroundColor:"transparent", width:"100%", display:"flex", justifyContent:"center", justifyItems:"center"}}>
             {winner ? <Modal styles={(root) => ({
                 body: {
                     backgroundColor: '#fff',

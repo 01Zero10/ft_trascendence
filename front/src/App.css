@@ -18,7 +18,7 @@
     height: 100%;
     z-index: 999;
     position: absolute;
-    background-color: black;
+    background-color: transparent;
 }
 
 .lds-ripple {
