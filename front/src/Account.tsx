@@ -9,6 +9,7 @@ import Tabs from '@mui/material/Tabs';
 
 import { red } from "@mui/material/colors";
 import { FocusTrap } from "@mantine/core";
+import Navigation from "./Navigation";
 
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -609,6 +610,7 @@ function Account() {
 
   return (
     <>
+      <Navigation />
       <div className="wrap">
         {contextData.username !== user_id ?
           <div className="request">

@@ -1,6 +1,7 @@
 import { Student } from "./App";
 import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import './LeaderBoard.css'
+import Navigation from "./Navigation";
 
 export interface PlayerInBoard {
     points: number;
@@ -39,7 +40,7 @@ export default function Leaderboard() {
     }, [])
 
     return (
-        <>
+        <><Navigation />
             <div className="root-board">
                 <div className="leaderboard">
                     <div className="topLeadersList">

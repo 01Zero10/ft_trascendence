@@ -5,6 +5,7 @@ import ChatMenu from "./chat_comp/ChatMenu"
 import { Rooms, Student } from "./App"
 import { io, Socket } from "socket.io-client"
 import ChannelBodyStatus from "./chat_comp/ChannelBodyStatus"
+import Navigation from "./Navigation"
 
 export default function Chat() {
 
@@ -76,9 +77,12 @@ export default function Chat() {
 	// };
 
 	return (
+		<>
+		<Navigation />
 		<div className="chat-dashboard">
 			<ChatMenu setRoom={setRoom} socket={socket} setCard={setCard} card={card}></ChatMenu>
 			<ChannelBodyStatus room={room} socket={socket} setRoom={setRoom} setCard={setCard} joined={joined} setJoined={setJoined}></ChannelBodyStatus>
 		</div>
+		</>
 	)
 }

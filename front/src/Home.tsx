@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Avatar, Box, IconButton, Tooltip } from '@mui/material';
 import { Student } from './App';
 import Holder from './Holder';
+import Navigation from './Navigation';
 
 /* NavLink 
 mettere il wrapper (componente) così rimane la Navbar ma la pagina cambia */
@@ -30,7 +31,7 @@ function Home() {
 
   return (
     <>
-
+      <Navigation />
       <div className='homeContainer'>
 
         {/* <div className='radial-gradient'> */}

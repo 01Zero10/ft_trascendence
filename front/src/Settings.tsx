@@ -5,6 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import React, { useContext, useRef, useState } from 'react';
 import { Student } from './App';
 import './Settings.css'
+import Navigation from './Navigation';
 
 
 const style2 = {
@@ -292,6 +293,7 @@ function Settings() {
   }
   return (
     <>
+      <Navigation />
       <div className="wrapper_settings">
         <div className="profile-card_settings">
 

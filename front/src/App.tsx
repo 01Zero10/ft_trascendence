@@ -1,6 +1,6 @@
 import React, { Children, Component, createContext, useContext, useEffect, useLayoutEffect, useState } from 'react';
 import './App.css';
-import { BrowserRouter, BrowserRouter as Router, Route, Routes, useParams } from "react-router-dom";
+import { BrowserRouter, BrowserRouter as Router, Navigate, Outlet, Route, Routes, useParams } from "react-router-dom";
 import Home from './Home';
 import About from './About';
 import Navigation from './Navigation';
@@ -11,6 +11,7 @@ import Login from './Login';
 import Settings from './Settings';
 import Chat from './Chat';
 import Loader from './components/Loader';
+import PageNotFound from './PageNotFound';
 import { io, Socket } from 'socket.io-client';
 import Account from './Account';
 import LeaderBoard from './LeaderBoard';
@@ -114,6 +115,18 @@ function App() {
   useEffect(() => {
     setCurrPath(window.location.pathname)
   }, [])
+  
+
+  const ProtectedRoute = ({contextData} : {contextData: student}) => {
+    console.log("lo studente dentro protected è: ", contextData)
+    if (!contextData.id || contextData.id === 0 || contextData.id === null) {
+      console.log("sto per fare Navigate, questo è il context: ", contextData)
+      return <Navigate to={"/"} replace />;
+    }
+    return <Outlet />;
+  };
+
+  console.log("lo studente ccontext è: ", contextData)
 
   return (
     <div className="App">
@@ -121,10 +134,24 @@ function App() {
         {showLoader ? <Loader /> :
           <>
             <Student.Provider value={contextData}>
-              {currPath !== "/" && <><Navigation /></>}
+              {/* {currPath !== "/" && <><Navigation /></>} */}
               {/* {currPath !== "/" && <><Chat2 /></>} */}
-
+              
               <Routes>
+                <Route path="/" element={<Login />} />
+                <Route element={<ProtectedRoute contextData={contextData} />}>
+                  <Route path="home" element={<Home />} />
+                  <Route path={`/users/:user_id`} element={<Account />} />
+                  <Route path="/leaderboard" element={<LeaderBoard />} />
+                  <Route path="/logout" element={<Logout />} />
+                  <Route path="/game" element={<Game />} />
+                  <Route path="/users/settings" element={<Settings />} />
+                  <Route path="/chat" element={<Chat />} />
+                </Route>
+                <Route path='*' element={<PageNotFound />}/>
+              </Routes>
+
+              {/* <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/home" element={<Home />} />
                 <Route path={`/users/:user_id`} element={<Account />} />
@@ -133,7 +160,7 @@ function App() {
                 <Route path="/game" element={<Game />} />
                 <Route path="/users/settings" element={<Settings />} />
                 <Route path="/chat" element={<Chat />} />
-              </Routes>
+              </Routes> */}
             </Student.Provider>
           </>
         }

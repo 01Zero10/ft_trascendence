@@ -4,6 +4,7 @@ import { Student } from "./App";
 import "./Game.css"
 import { LeadGrid } from "./game_comp/components/LeadGrid";
 import PlayGround from "./game_comp/PlayGround";
+import Navigation from "./Navigation";
 
 export interface RunningMatches {
     playRoom: string;
@@ -94,6 +95,7 @@ export default function Game() {
     }, [socket])
 
     return (
+        <><Navigation />
         <div className="game_container">
             <div className="fake_navbar">
             </div>
@@ -103,5 +105,6 @@ export default function Game() {
                 </div>}
         <div className='_prv_'></div>
         </div>
+        </>
     )
 }
