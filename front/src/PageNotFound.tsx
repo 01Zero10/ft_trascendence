@@ -22,6 +22,7 @@ export default function PageNotFound() {
 					</div>
 				</button>
 			</div>
+			<div className='_prv_'></div>
 		</>
 	)
 }
