@@ -1,16 +1,24 @@
-FROM node:12
+# FROM node:12
 
-# In our container
-WORKDIR /usr/src/app
+# # In our container
+# WORKDIR /usr/src/app
 
-COPY package*.json ./
+# COPY package*.json ./
 
-RUN npm install
+# RUN npm install
 
-COPY . .
+# COPY . .
 
-RUN npm run build
+# RUN npm run build
 
-EXPOSE 3001
+# EXPOSE 3001
 
-CMD ["node", "dist/main"]
+# CMD ["node", "dist/main"]
+
+FROM node:latest
+
+WORKDIR /app
+
+RUN mkdir imgs
+
+COPY ./package*.json .
