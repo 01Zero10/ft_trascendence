@@ -81,12 +81,14 @@ export class ChatController {
 
     @Get('allmembersandstatus/:roomName')
     async GetAllChatMembersAndStatu(@Param('roomName') roomName: string): Promise<User[]>{
+        console.log(roomName);
         const members = await this.chatService.getChatMembersAndStatus(roomName);
         return (members);
     }
 
     @Get('members/:roomName')
     async GetChatMembers(@Param('roomName') roomName: string): Promise<User[]>{
+        console.log(roomName);
         const admins = await this.chatService.getRoomAdmins(roomName);
         const members = await this.chatService.getChatMembers(roomName);
         const owner = await this.chatService.getRoomOwner(roomName);
@@ -154,9 +156,35 @@ export class ChatController {
 
     //work in progress
 
+    @Get('getNotBannedUsers/:channelName')
+    async GetNotBannedUsers(@Param('channelName') channelName: string) {
+        const usersToSplice = await this.GetChatMembers(channelName);
+        const banned = await this.GetBannedUsers(channelName);
+        await Promise.all(await banned.map(async (element) => {
+            const index = usersToSplice.findIndex(x => x.username === element)
+            if (index != -1)
+                usersToSplice.splice(index, 1);
+        }))
+        return (usersToSplice);
+    }
+
     @Get('getBannedUsers/:channelName')
     async GetBannedUsers(@Param('channelName') channelName: string) {
         return this.chatService.getBannedUsers(channelName);        
+    }
+
+    @Get('getNotMutedUsers/:channelName')
+    async GetNotMutedUsers(@Param('channelName') channelName: string) {
+        const usersToSplice = await this.GetChatMembers(channelName);
+        const muted = await this.GetMutedUsers(channelName);
+        console.log(channelName);
+        console.log(muted);
+        await Promise.all(await muted.map(async (element) => {
+            const index = usersToSplice.findIndex(x => x.username === element)
+            if (index != -1)
+                usersToSplice.splice(index, 1);
+        }))
+        return (usersToSplice);
     }
 
     @Get('getMutedUsers/:channelName')
