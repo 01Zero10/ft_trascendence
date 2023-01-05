@@ -9,15 +9,6 @@ import ChannelOptionModal from "./ChannelOptionModal";
 import AdminPanel from "./AdminPanel";
 import PasswordCheck from "./PasswordCheck";
 
-
-/*A ogni click sulla stanza viene aggiornato MyState
-myState viene riempito con un oggetto myStateOnChannel se
-l'utente e' bannato o mutato nella stanza
-se non ha nessun tipo di limitazione viene impostata a null
-come per il join, lo state é stato messo qui in modo che possa
-essere passato come prop ai componenti figli channel input e 
-channelmessage*/
-
 export interface MyStateOnChannel {
 	mode: string,
 	reason: string,
@@ -29,46 +20,25 @@ export interface MutesAndBans {
 	expire: Date,
 }
 
-//mood-silence, ban, user-search || user
-
+export interface AdminData{
+	banList: string[],
+	muteList: string[],
+	kickList: string[], 
+	unbanList: string[], 
+	unmuteList: string[]
+}
 
 export default function ChannelBody(props: any) {
+	const iniAdminData: AdminData = {banList:[], muteList:[], kickList: [], unbanList: [], unmuteList: []}
 	const [messages, setMessages] = useState<packMessage[]>([])
 	const bottomRef = useRef<null | HTMLDivElement>(null);
 	const [action, setAction] = useState<string>('ban');
 	const [data, setData] = useState<string[]>([]);
-	//---------------------------------------------------------
-	// const [listUser, setListUser] = useState<string[]>([]);
 	const student = useContext(Student);
-	//const [joined, setJoined] = useState(false)
 	const [modalTypeOpen, setModalTypeOpen] = useState<null | "admin" | "options" | "add">(null)
-	const [checkPwd, setCheckPwd] = useState(false)
-	const [inputPwd, setInputPwd] = useState("")
 	const [myState, setMyState] = useState<MyStateOnChannel | null>(null);
-	const [bannedUsers, setBannedUsers] = useState<string[]>([])
 
-
-	// async function checkProtectedPassword() {
-	// 	const API_CHECK_PROTECTED_PASS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/checkProtectedPass`;
-	// 	let response = await fetch(API_CHECK_PROTECTED_PASS, {
-	// 		method: 'POST',
-	// 		credentials: 'include',
-	// 		headers: { 'Content-Type': 'application/json' },
-	// 		body: JSON.stringify({ input: inputPwd, channelName: props.room.name })
-	// 	})
-	// 	const data = await response.json()
-	// 	if (data) {
-	// 		const API_SET_JOIN = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/setJoin`;
-	// 		await fetch(API_SET_JOIN, {
-	// 			method: 'POST',
-	// 			credentials: 'include',
-	// 			headers: { 'Content-Type': 'application/json' },
-	// 			body: JSON.stringify({ client: student.username, channelName: props.room.name, joined: props.joined }),
-	// 		})
-	// 		props.setJoined((prevJoined: boolean) => !prevJoined);
-	// 		props.socket?.emit('updateList', { type: props.room.type });
-	// 	}
-	// }
+	const [adminData, setAdminData] = useState<AdminData>({...iniAdminData})
 
 	useEffect(() => {
 		const API_GET_MUTES_BANS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getMyMutesAndBans/${student.username}`;
@@ -78,17 +48,12 @@ export default function ChannelBody(props: any) {
 				headers: { 'Content-Type': 'application/json' },
 			})
 			const data = await response.json();
-		  console.log(data);
 			const now = new Date();
 			for (const element of data) {
 				let timer: any = now.getTime() - new Date(element.expireDate).getTime();
-				console.log("exp", new Date(element.expireDate).getTime())
-				console.log("now", now.getTime())
-			  console.log('elemento === ', element)
-			  console.log(timer);
 				if (timer < 0)
 					props.socket?.emit('singleMuteOrBanRemove', { channelName: element.channelName, client: student.username, status: element.status });
-				else { //controllare se funziona?
+				else {
 					setTimeout(() => {
 						props.socket?.emit('singleMuteOrBanRemove', { channelName: element.channelName, client: student.username, status: element.status });
 					}, timer)
@@ -109,7 +74,6 @@ export default function ChannelBody(props: any) {
 			})
 			const data = await response.json();
 			if (data === null || data === undefined) {
-				//console.log("ahahaha, ", response);
 				setMyState(null);
 				return;
 			}
@@ -123,8 +87,6 @@ export default function ChannelBody(props: any) {
 		fillStateOnChannel().then()
 	}, [props.room])
 
-	console.log("MyStateOnChannel", myState)
-
 	useLayoutEffect(() => {
 		async function checkJoined() {
 			const API_CHECK_JOINED = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/checkJoined`;
@@ -135,7 +97,6 @@ export default function ChannelBody(props: any) {
 				body: JSON.stringify({ client: student.id, channelName: props.room.name })
 			})
 			const data = await response.json();
-			//console.log("DATA: ",data)
 			props.setJoined(data);
 		}
 		if (props.room.type === 'direct')
@@ -192,75 +153,93 @@ export default function ChannelBody(props: any) {
 		bottomRef.current?.scrollIntoView()
 	}, [messages])
 
-	// useLayoutEffect(
-	// 	() => { setCheckPwd(props.room.type === "protected") },
-	// 	[props.room]
-	// )
-
-	// function checkIfProtected(element: any){
-	// 	//console.log("cazzo")
-	// 	if (element.type === "protected")
-	// 	{
-	// 		props.setCheckPwd(true);
-	// 	}
-	// 	else
-	// 		props.setRoom(element.name)
-	// }
-
-	//-----------------------------------------------------------
-
-	// async function getMuted() {
-	// 	const API_GET_MUTED = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getMutedUsers/${props.room.name}`;
-	// 	if (props.room.name != '') {
-	// 		let response = await fetch(API_GET_MUTED);
-	// 		let data = await response.json();
-	// 		let fetchMuted: string[] = []
-	// 		await Promise.all(await data?.map(async (element: any) => {
-	// 			fetchMuted.push(element);
-	// 		}))
-	// 		setMutedUsers([...fetchMuted]);
-	// 	}
-	// }
-
 	async function getBanned() {
+		let fetchBanned: string[] = [];
 		const API_GET_BANNED = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getBannedUsers/${props.room.name}`;
 		if (props.room.name !== '') {
 			let response = await fetch(API_GET_BANNED);
 			let data = await response.json();
-			let fetchBanned: string[] = [];
 			await Promise.all(await data?.map(async (element: any) => {
 				fetchBanned.push(element);
 			}))
-			setBannedUsers(fetchBanned);
-			// return fetchBanned;
 		}
+		return fetchBanned;
 	}
 
-	useLayoutEffect(() => {
-		async function prepareInitialData() {
-			await getBanned();
-		// 	let m = [...props.members]
-		// 	if (props.action === 'ban' || props.action === "mute") {
-		// 		let blockedUsers: string[] = []
-				
-		// 		if (props.action === 'ban')
-		// 			blockedUsers = await getBanned().then()
-		// 		else
-		// 			blockedUsers = await getMuted().then()
-		// 		for (let element of bannedUsers){
-		// 			let pos = m.indexOf(element)
-		// 			if (pos !== -1){
-		// 				let oldData = [...m]
-		// 				oldData.splice(pos, 1)
-		// 				console.log("oldData", oldData)
-		// 				setMembers([...oldData])
-		// 			}
-		// 		}
-		// 	}
-		// 	setMembers([...m])
+	async function getMuted() {
+		let fetchMuted: string[] = []
+		const API_GET_MUTED = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getMutedUsers/${props.room.name}`;
+		if (props.room.name != '') {
+			let response = await fetch(API_GET_MUTED);
+			let data = await response.json();
+			await Promise.all(await data?.map(async (element: any) => {
+				fetchMuted.push(element);
+			}))
 		}
-		prepareInitialData();
-	}, [props.room.name])
+		console.log("muted", fetchMuted)
+		return fetchMuted;
+	}
+
+	async function getNotBanned() {
+		let fetchBanned: string[] = [];
+		const API_GET_BANNED = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getNotBannedUsers/${props.room.name}`;
+		if (props.room.name !== '') {
+			let response = await fetch(API_GET_BANNED);
+			let data = await response.json();
+			await Promise.all(await data?.map(async (element: any) => {
+				fetchBanned.push(element);
+			}))
+		}
+		return fetchBanned;
+	}
+
+	async function getNotMuted() {
+		let fetchMuted: string[] = []
+		const API_GET_MUTED = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getNotMutedUsers/${props.room.name}`;
+		if (props.room.name != '') {
+			let response = await fetch(API_GET_MUTED);
+			let data = await response.json();
+			await Promise.all(await data?.map(async (element: any) => {
+				fetchMuted.push(element);
+			}))
+		}
+		console.log("notmuted", fetchMuted)
+		return fetchMuted;
+	}
+
+	async function getChannelMembers() {
+		const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/allmembersandstatus/${props.room.name}`;
+		let fetchMember: string[] = [];
+		if (props.room.name) {
+			let response = await fetch(API_GET_MEMBERS);
+			let data = await response.json();
+			await Promise.all(await data?.map(async (element: any) => {
+				let iMember: {nickname: string, status: boolean} = {nickname : element.nickname, status: element.status ? true : false}
+				if(element.nickname !== props.room.builder.username)
+					fetchMember.push(iMember.nickname);
+			}))
+		}
+		return fetchMember
+	}
+
+	async function prepareInitialData() {
+		setAdminData(
+			{
+				banList: [...await getNotBanned().then()],
+				muteList: [...await getNotMuted().then()],
+				kickList : [...await getChannelMembers().then()],
+				unbanList: [...await getBanned().then()],
+				unmuteList: [...await getMuted().then()]
+			}
+		)
+	}
+
+	useEffect(() => {
+		setAdminData({...iniAdminData})
+		console.log("[radmin",props.admin)
+		if (props.room.name && props.admin)
+			prepareInitialData();
+	}, [props.admin, props.room])
 
 
 	const scrollAreaStyle = {
@@ -274,7 +253,7 @@ export default function ChannelBody(props: any) {
 		}
 	}
 
-	console.log("members:",props.members )
+	console.log("adminData:", adminData )
 
 	return (
 		<div style={{ position:"relative", height:"100%", width:"80%"}}>
@@ -283,12 +262,11 @@ export default function ChannelBody(props: any) {
 				action={action}
 				usersToBeJudge={data}
 				members={props.members}
-				bannedUsers={bannedUsers}
+				adminData={adminData}
 				setMembers={props.setMembers}
 				setModalTypeOpen={setModalTypeOpen}
 				setAction={setAction}
 				setData={setData}
-				setBannedUsers={setBannedUsers}
 				opened={(modalTypeOpen !== null)}
 				socket={props.socket}
 			/>}
@@ -318,20 +296,21 @@ export default function ChannelBody(props: any) {
 								if (student.blockedUsers && student.blockedUsers.findIndex(x => x === m.username) != -1) {
 									console.log(student.blockedUsers.findIndex(x => x === m.username));
 								} else
-									return (<ChannelMessage admin={props.admin}
-														data={data}
-														key={id}
-														admins={props.admins}
-														builder={props.room.builder.username}
-														username={m.username} message={m.message}
-														createdAt={m.createdAt}
-														avatar={m.avatar}
-														setCard={props.setCard}
-														room={props.room}
-														setRoom={props.setRoom}
-														setData={setData}
-														setAction={setAction}
-														setModalTypeOpen={setModalTypeOpen}
+									return (<ChannelMessage 
+											admin={props.admin}
+											data={data}
+											key={id}
+											admins={props.admins}
+											builder={props.room.builder.username}
+											username={m.username} message={m.message}
+											createdAt={m.createdAt}
+											avatar={m.avatar}
+											setCard={props.setCard}
+											room={props.room}
+											setRoom={props.setRoom}
+											setData={setData}
+											setAction={setAction}
+											setModalTypeOpen={setModalTypeOpen}
 										/>
 									)
 									})}
@@ -347,14 +326,6 @@ export default function ChannelBody(props: any) {
 						<div style={{color:"white"}}>BANNED {myState.reason ? "because " + myState.reason : ""}</div>
 				:
 				props.room.type === "protected" && !props.joined ?
-					// <div style={{color:"white", position:"relative"}}>
-					// 	<Center style={{flexDirection:"column"}}>
-					// 		<div>This Channel is Protected</div>
-					// 		<div>Insert Password to join</div>
-					// 		<PasswordInput style={{width:"50%"}} autoComplete={"false"}></PasswordInput>
-					// 		<button style={{width:"30%", height:"30%"}}>ciao</button>
-					// 	</Center>
-					// </div>
 					<PasswordCheck room={props.room} setJoined={props.setJoined}/>
 					:
 					<></>

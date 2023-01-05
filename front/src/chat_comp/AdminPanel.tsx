@@ -15,25 +15,13 @@ import { IconAt, IconClock } from "@tabler/icons";
 import React, { SetStateAction, useEffect, useLayoutEffect, useState } from "react"
 import "./AdminPanel_style.css"
 export default function AdminPanel(props: any) {
-
-
-	/*TODO: implementare bene con owner
-	con il pulsante admin la stanza e' sbagliata*/
-
-	//🔇🚫
-
-	//console.log("srranzoa", props.room.name);
-	//variabili
 	const [action, setAction] = useState<string>('ban');
 	const [data, setData] = useState<string[]>([]);
-	// const [members, setMembers] = useState<string[]>([])
 	const [limitedUsers, setLimitedUsers] = useState<{
 		value: string;
 		label: string;
 	}[]>([]);
 
-	const [bannedUsers, setBannedUsers] = useState<string[]>([])
-	const [mutedUsers, setMutedUsers] = useState<string[]>([])
 	const [options, setOptions] = useState<{
 		value: string;
 		label: string;
@@ -122,32 +110,32 @@ export default function AdminPanel(props: any) {
 		props.setData([])
 	}
 
-	async function getMuted() {
-		const API_GET_MUTED = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getMutedUsers/${props.room.name}`;
-		if (props.room.name != '') {
-			let response = await fetch(API_GET_MUTED);
-			let data = await response.json();
-			let fetchMuted: string[] = []
-			await Promise.all(await data?.map(async (element: any) => {
-				fetchMuted.push(element);
-			}))
-			setMutedUsers([...fetchMuted]);
-		}
-	}
+	// async function getMuted() {
+	// 	const API_GET_MUTED = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getMutedUsers/${props.room.name}`;
+	// 	if (props.room.name != '') {
+	// 		let response = await fetch(API_GET_MUTED);
+	// 		let data = await response.json();
+	// 		let fetchMuted: string[] = []
+	// 		await Promise.all(await data?.map(async (element: any) => {
+	// 			fetchMuted.push(element);
+	// 		}))
+	// 		setMutedUsers([...fetchMuted]);
+	// 	}
+	// }
 
-	async function getBanned() {
-		const API_GET_BANNED = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getBannedUsers/${props.room.name}`;
-		if (props.room.name !== '') {
-			let response = await fetch(API_GET_BANNED);
-			let data = await response.json();
-			let fetchBanned: string[] = [];
-			await Promise.all(await data?.map(async (element: any) => {
-				fetchBanned.push(element);
-			}))
-			//setBannedUsers(fetchBanned);
-			return fetchBanned;
-		}
-	}
+	// async function getBanned() {
+	// 	const API_GET_BANNED = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getBannedUsers/${props.room.name}`;
+	// 	if (props.room.name !== '') {
+	// 		let response = await fetch(API_GET_BANNED);
+	// 		let data = await response.json();
+	// 		let fetchBanned: string[] = [];
+	// 		await Promise.all(await data?.map(async (element: any) => {
+	// 			fetchBanned.push(element);
+	// 		}))
+	// 		//setBannedUsers(fetchBanned);
+	// 		return fetchBanned;
+	// 	}
+	// }
 
 	async function getOptions() {
 		const API_GET_MUTE_BAN_OPTIONS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getMuteBanOptions`;
@@ -405,7 +393,7 @@ export default function AdminPanel(props: any) {
 							</ScrollArea>
 						</Tabs.Panel>
 						<Tabs.Panel style={{color:"white"}} value={"mute"}>
-							<ScrollArea>{props.members.map((element: string, id: number) => {if(mutedUsers.indexOf(element) === -1) return( <div className={"checkbox_element_container"} key={id}> 
+							<ScrollArea>{props.adminData.muteList.map((element: string, id: number) => {return( <div className={"checkbox_element_container"} key={id}> 
 									<div  className={"checkbox_element_input"}>
 										<input type={"checkbox"} id={element} value={element} checked={props.usersToBeJudge.indexOf(element) !== -1 ? true : false} onChange={handleChange}/>
 									</div>
