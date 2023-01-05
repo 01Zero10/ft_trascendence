@@ -165,7 +165,7 @@ export class ChatController {
             if (index != -1)
                 usersToSplice.splice(index, 1);
         }))
-        return (usersToSplice);
+        return (usersToSplice.map(a => a.username));
     }
 
     @Get('getBannedUsers/:channelName')
@@ -184,7 +184,7 @@ export class ChatController {
             if (index != -1)
                 usersToSplice.splice(index, 1);
         }))
-        return (usersToSplice);
+        return (usersToSplice.map(a => a.username));
     }
 
     @Get('getMutedUsers/:channelName')
