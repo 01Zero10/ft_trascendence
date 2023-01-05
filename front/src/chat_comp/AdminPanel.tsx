@@ -280,7 +280,7 @@ export default function AdminPanel(props: any) {
 		prepareData();
 	}, [action])
 
-	console.log(members)
+	console.log("lllllllllll",(props.adminData.unbanList.length > 0))
 
 	return (<>
 			<Modal centered withCloseButton={false} closeOnClickOutside={false} zIndex={1500} overlayBlur={5}
@@ -378,12 +378,12 @@ export default function AdminPanel(props: any) {
 							<Tabs.Tab className={"adminTab_container"} value={"kick"} onClick={() => props.setAction("kick")}><div className={"adminTab_content"}>KICK</div></Tabs.Tab>
 						</Tabs.List>
 						<Tabs.List style={{display:"flex", flexDirection:"row", border:"none"}}>
-							<Tabs.Tab className={"adminTab_container"} value={"unban"}><div className={"adminTab_content"}>UNBAN</div></Tabs.Tab>
-							<Tabs.Tab className={"adminTab_container"} value={"unmute"}><div className={"adminTab_content"}>UNMUTE</div></Tabs.Tab>
+							<Tabs.Tab className={"adminTab_container"} value={"unban"} onClick={() => props.setAction("unban")}><div className={"adminTab_content"}>UNBAN</div></Tabs.Tab>
+							<Tabs.Tab className={"adminTab_container"} value={"unmute"} onClick={() => props.setAction("unmute")}><div className={"adminTab_content"}>UNMUTE</div></Tabs.Tab>
 						</Tabs.List>
 						<img style={{rotate:"180deg"}}src="/account_decoration_down.svg" alt="" />
 						<Tabs.Panel style={{color:"white"}} value={"ban"}>
-							<ScrollArea>{members.map((element: string, id: number) => {return(
+							<ScrollArea>{props.adminData.banList.map((element: string, id: number) => {return(
 								<div className={"checkbox_element_container"} key={id}> 
 									<div  className={"checkbox_element_input"}>
 										<input type={"checkbox"} id={element} value={element} checked={props.usersToBeJudge.indexOf(element) !== -1 ? true : false} onChange={handleChange}/>
@@ -402,7 +402,7 @@ export default function AdminPanel(props: any) {
 							</ScrollArea>
 						</Tabs.Panel>
 						<Tabs.Panel style={{color:"white"}} value={"kick"}>
-							<ScrollArea>{props.members.map((element: string, id: number) => {return(
+							<ScrollArea>{props.adminData.kickList.map((element: string, id: number) => {return(
 								<div className={"checkbox_element_container"} key={id}> 
 									<div  className={"checkbox_element_input"}>
 										<input type={"checkbox"} id={element} value={element} checked={props.usersToBeJudge.indexOf(element) !== -1 ? true : false} onChange={handleChange}/>
@@ -413,24 +413,30 @@ export default function AdminPanel(props: any) {
 						</Tabs.Panel>
 						<Tabs.Panel style={{color:"white"}} value={"unban"}>
 							{/*TODO: modificare props.members con utenti bannati*/}
-							<ScrollArea>{props.members.map((element: string, id: number) => {return(
+							<ScrollArea>{props.adminData.unbanList.length > 0 ? props.adminData.unbanList.map((element: string, id: number) => {return(
 								<div className={"checkbox_element_container"} key={id}> 
 									<div  className={"checkbox_element_input"}>
 										<input type={"checkbox"} id={element} value={element} checked={data.indexOf(element) !== -1 ? true : false} onChange={handleInternalChange}/>
 									</div>
 									<label className={"checkbox_element_label"} htmlFor={element}>{element}</label> 
-								</div>)})}
+								</div>)})
+								:
+									<div style={{color:"white"}}> no banned user</div>	
+							}
 							</ScrollArea>
 						</Tabs.Panel>
 						<Tabs.Panel style={{color:"white"}} value={"unmute"}>
 							{/*TODO: modificare props.members con utenti mutati*/}
-							<ScrollArea>{props.members.map((element: string, id: number) => {return(
-							<div className={"checkbox_element_container"} key={id}>
-								<div  className={"checkbox_element_input"}>
-									<input type={"checkbox"} id={element} value={element} checked={data.indexOf(element) !== -1 ? true : false} onChange={handleInternalChange}/>
-								</div>
-								<label className={"checkbox_element_label"} htmlFor={element}>{element}</label>
-							</div>)})}
+							<ScrollArea>{props.adminData.unmuteList.length > 0 ? props.adminData.unmuteList.map((element: string, id: number) => {return(
+								<div className={"checkbox_element_container"} key={id}>
+									<div  className={"checkbox_element_input"}>
+										<input type={"checkbox"} id={element} value={element} checked={data.indexOf(element) !== -1 ? true : false} onChange={handleInternalChange}/>
+									</div>
+									<label className={"checkbox_element_label"} htmlFor={element}>{element}</label>
+								</div>)})
+							:
+								<div style={{color:"white"}}> no muted user</div>	
+							}
 							</ScrollArea>
 						</Tabs.Panel>
 					</Tabs>
