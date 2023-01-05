@@ -232,7 +232,7 @@ export class ChatService {
         .leftJoinAndSelect('room.members', 'user')
         .leftJoinAndSelect('user.status', 'status')
         .where({name: roomName})
-        .select(['room.name', 'user.nickname', 'status.status'])
+        .select(['room.name', 'user.username', 'user.nickname', 'status.status'])
         .getOne();
 
         return arrayUser.members;

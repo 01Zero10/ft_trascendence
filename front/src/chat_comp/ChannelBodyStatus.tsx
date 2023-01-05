@@ -5,6 +5,7 @@ import ChannelBody from "./ChannelBody";
 
 // interfaccia per testare nickname e status
 export interface element_status {
+    username: string,
     nickname: string,
     status:boolean,
 }

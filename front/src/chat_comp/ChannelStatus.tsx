@@ -21,13 +21,13 @@ export default function ChannelStatus(props: any) {
 			let response = await fetch(API_GET_MEMBERS);
 			let data = await response.json();
 			//console.log("data: ", data)
-			let fetchMember: {nickname: string, status: boolean}[] = [];
+			let fetchMember: {username: string, nickname: string, status: boolean}[] = [];
 			// let fetchMember: string[] = [];
 			await Promise.all(await data?.map(async (element: any) => {
 				// let iMember: string = element.nickname;
-				let iMember: {nickname: string, status: boolean} = {nickname : element.nickname, status: element.status ? true : false}
+				let iMember: {username: string, nickname: string, status: boolean} = {username: element.username, nickname : element.nickname, status: element.status ? true : false}
 
-				if(element.nickname !== props.room.builder.username)
+				if(element.username !== props.room.builder.username)
 					fetchMember.push(iMember);
 				else
 					setOwnerOnline(element.status ? true : false);
@@ -116,12 +116,11 @@ export default function ChannelStatus(props: any) {
 					</div>
 					<div style={{width:"10%", marginLeft:"10%", display:"flex", alignItems:"center", justifyContent:"center"}}><IconCrown></IconCrown></div>
 				</div>}
-				{props.room.name && props.members?.map((element: {nickname: string, status: boolean}, id: number) => {return(
+				{props.room.name && props.members?.map((element: {username: string, nickname: string, status: boolean}, id: number) => {return(
 					<div className={"divNameContainer"} key={id}>
-						{/* <div className={"divNameContainer_content"} onClick={() => navigate(("/users/" + element.nickname))}> */}
-						<div className={"divNameContainer_content"} onClick={() => navi_gate(element.nickname)}>
-							{element.status ? <Indicator color={"green"} size={14} processing position={"middle-end"} zIndex={0}> <p className={props.admins.indexOf(element.nickname) !== -1 ? "divNameContent_name admin" : "divNameContent_name"}>{element.nickname}</p></Indicator> :
-								<Indicator color={"red"} size={14} processing position={"middle-end"} zIndex={0}> <p className={props.admins.indexOf(element.nickname) !== -1 ? "divNameContent_name admin" : "divNameContent_name"}>{element.nickname}</p></Indicator>}
+						<div className={"divNameContainer_content"} onClick={() => navigate(("/users/" + element.username))}>
+							{element.status ? <Indicator color={"green"} size={14} processing position={"middle-end"} zIndex={0}> <p className={props.admins.indexOf(element.username) !== -1 ? "divNameContent_name admin" : "divNameContent_name"}>{element.nickname}</p></Indicator> :
+								<Indicator color={"red"} size={14} processing position={"middle-end"} zIndex={0}> <p className={props.admins.indexOf(element.username) !== -1 ? "divNameContent_name admin" : "divNameContent_name"}>{element.nickname}</p></Indicator>}
 						</div>
 						{(props.admins && props.admins.indexOf(element.nickname) !== -1) && <div style={{width:"10%", marginLeft:"10%", display:"flex", alignItems:"center", justifyContent:"center"}}><IconGavel></IconGavel></div>}
 					</div>)})}
