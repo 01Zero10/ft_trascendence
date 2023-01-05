@@ -16,6 +16,7 @@ export default function ChannelList(props: any) {
 		if(props.card !== `FriendsChatList/${student.username}`) {
 			await Promise.all(await data.map(async (element: any) => {
 				//if (options_.findIndex(x => x.name === element.name) === -1)
+				console.log("elemento", element)
 					options_.push(element);
 				}))
 		}

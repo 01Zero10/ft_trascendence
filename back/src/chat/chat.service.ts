@@ -41,7 +41,7 @@ export class ChatService {
         .createQueryBuilder('room')
         .leftJoinAndSelect('room.builder', 'builder')
         .where("room.type != :type_n", {type_n: 'private'})
-        .select(['room.name', 'room.type', 'builder.username'])
+        .select(['room.name', 'room.type', 'builder.username', 'builder.nickname'])
         .getMany()
         return Rooms;
     }

@@ -19,7 +19,7 @@ import LeaderBoard from './LeaderBoard';
 export interface Rooms {
   name: string;
   type: string;
-  builder: { username: string };
+  builder: { username: string, nickname?: string };
 }
 
 export interface student {

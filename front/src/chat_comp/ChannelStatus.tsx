@@ -111,8 +111,8 @@ export default function ChannelStatus(props: any) {
 			<div style={{position:"relative", height:"92%", backgroundColor:"black", color:"white", width:"100%", borderLeft:"5px solid #781C9C", borderBottom:"5px solid #781C9C", borderBottomLeftRadius:" 15px"}}>
 				{props.room.name && <div className={"divNameContainer"}>
 					<div className={"divNameContainer_content"} onClick={() => navigate(("/users/" + props.room.builder.username))}>
-						{ownerOnline ? <Indicator color={"green"} size={14} processing position={"middle-end"} zIndex={0}> <p className={"divNameContent_name builder"}>{props.room.builder.username}</p></Indicator> :
-							<Indicator color={"red"} size={14} processing position={"middle-end"} zIndex={0}> <p className={"divNameContent_name builder"}>{props.room.builder.username}</p></Indicator>}
+						{ownerOnline ? <Indicator color={"green"} size={14} processing position={"middle-end"} zIndex={0}> <p className={"divNameContent_name builder"}>{props.room.builder.nickname}</p></Indicator> :
+							<Indicator color={"red"} size={14} processing position={"middle-end"} zIndex={0}> <p className={"divNameContent_name builder"}>{props.room.builder.nickname }</p></Indicator>}
 					</div>
 					<div style={{width:"10%", marginLeft:"10%", display:"flex", alignItems:"center", justifyContent:"center"}}><IconCrown></IconCrown></div>
 				</div>}

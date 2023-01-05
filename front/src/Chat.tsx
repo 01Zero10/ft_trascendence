@@ -11,7 +11,7 @@ export default function Chat() {
 
 
 	const student = useContext(Student);
-	const [room, setRoom] = useState<Rooms>({ name: "", type: "", builder: { username: "" } })
+	const [room, setRoom] = useState<Rooms>({ name: "", type: "", builder: { username: "", nickname: ""} })
 	const [chOptions, setChOptions] = useState<Rooms | null>(null)
 	const [card, setCard] = useState("all")
 	const [joined, setJoined] = useState(false)
