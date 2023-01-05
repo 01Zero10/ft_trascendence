@@ -208,7 +208,7 @@ function Settings() {
     //console.log("pp ===", newPP);
 
     if (newPP) {
-      await fetch(`http://${process.env.REACT_APP_IP_ADDR}/users/changeAvatar`, {
+      await fetch(API_URL_AVATAR, {
         method: 'POST',
         credentials: 'include',
         //headers: { 'Content-Type': 'nessuno, lol' },
@@ -243,7 +243,7 @@ function Settings() {
 
   // @function  App
 
-  const API_URL_USER = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/changeUsername`
+  const API_URL_USER = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/changeNickname`
 
   function UnauthApp() {
     const [name, setName] = React.useState(contextData.username)
@@ -259,13 +259,13 @@ function Settings() {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ oldname: `${contextData.username}`, newname: `${name}` })
+        body: JSON.stringify({ username: `${contextData.username}`, newNickname: `${name}` })
       })
         .then((response) => response.json())
         .then((data) => contextData.username = (data.res))
         .catch((error) => console.log("An error occured: ", error));
 
-      contextData.username = name
+      contextData.nickname = name
       // fetchUser();
     }
 
@@ -329,7 +329,7 @@ function Settings() {
           </div>
 
           <div className="profile-card__cnt">
-            <div className="profile-card__txt" id='chance_username'>User <strong className="username">{contextData.username}</strong>
+            <div className="profile-card__txt" id='chance_username'>User <strong className="username">{contextData.nickname}</strong>
               <input
                 hidden
                 type="text"

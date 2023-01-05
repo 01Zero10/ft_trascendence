@@ -17,19 +17,19 @@ export class UsersController {
     return res;
   }
 
-  @Post('changeUsername')
-  async changeUsername(@Body('newname') newname: string, @Body('oldname') oldname: string) {
-    await this.userService.changeName(newname, oldname);
+  @Post('changeNickname') //quii
+  async changeUsername(@Body('username') username: string, @Body('newNickname') newNickname: string) {
+    await this.userService.changeNickname(username, newNickname);
   }
 
   @Post('changeAvatar')
   @UseInterceptors(FileInterceptor('file'))
   async changeAvatar(@UploadedFile() file: Express.Multer.File, @Body() body){
-    //console.log ("");
-    //console.log ("[changeAvatar]");
-    //console.log(body.client);
+    console.log ("");
+    console.log ("[changeAvatar]");
+    console.log(body.client);
     const base64string = btoa(String.fromCharCode(...new Uint8Array(file.buffer)));
-    //console.log(base64string);
+    console.log(base64string);
     return {img: await this.userService.changeAvatar(Number(body.client), base64string)};
   }
 
@@ -104,6 +104,14 @@ export class UsersController {
   async UpdateBell(@Body('bellUserToUpdate')bellUserToUpdate: string){
     await this.userService.updateBell(bellUserToUpdate);
   }
+
+  @Get('getUserFromNick/:nickname')
+  async GetUserFromNick(@Param('nickname') nickname: string) {
+    console.log('arivato');
+    return {'username': await this.userService.getUserFromNick(nickname)};
+  }
+
+
 
   /*@Put("create/:username") //da aggiungere qualcosa qui???
   async createUser(@Param("username") username: string, clientSocket: string) {

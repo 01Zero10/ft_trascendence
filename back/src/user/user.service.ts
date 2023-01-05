@@ -38,15 +38,15 @@ export class UserService {
     return this.userRepository.findOne({ where: { username: login } });
   }
 
-  async changeName(newName: string, oldName: string) {
+  async changeNickname(username: string, newNickname: string) {
     //console.log("entrato change name");
     //console.log(newName);
     //console.log(oldName);
-    if (newName !== "")
+    if (newNickname !== "")
     {
-      const user: User = await this.userRepository.findOne({where: {username: oldName}});
+      const user: User = await this.userRepository.findOne({where: {username: username}});
       //console.log(user);
-      user.username = newName;
+      user.nickname = newNickname;
       this.userRepository.save(user);
     }
   }
@@ -265,6 +265,11 @@ export class UserService {
 
   async updateBell(userBellToUpdate: string){
     await this.navigationGateway.updateBell(userBellToUpdate);
+  }
+
+  async getUserFromNick(nickname: string) {
+    const username = await (await this.userRepository.findOneBy({nickname: nickname})).username;
+    return username;
   }
 
   async getFriendships(client: string){

@@ -53,6 +53,17 @@ export default function ChannelStatus(props: any) {
         }
     }
 
+	async function navi_gate(nickname: string) {
+		const API_GET_USERNAME_FROM_NICK = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/getUserFromNick/${nickname}`;
+		let response = await fetch(API_GET_USERNAME_FROM_NICK, {
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+		});
+		let data = await response.json();
+		navigate(("/users/" + data.username))
+		console.log(data);
+	}
+
 	useEffect(() => {
 		props.socket?.on('updateListMembers', async() => {
 				await getChannelMembers();
@@ -107,7 +118,8 @@ export default function ChannelStatus(props: any) {
 				</div>}
 				{props.room.name && props.members?.map((element: {nickname: string, status: boolean}, id: number) => {return(
 					<div className={"divNameContainer"} key={id}>
-						<div className={"divNameContainer_content"} onClick={() => navigate(("/users/" + element.nickname))}>
+						{/* <div className={"divNameContainer_content"} onClick={() => navigate(("/users/" + element.nickname))}> */}
+						<div className={"divNameContainer_content"} onClick={() => navi_gate(element.nickname)}>
 							{element.status ? <Indicator color={"green"} size={14} processing position={"middle-end"} zIndex={0}> <p className={props.admins.indexOf(element.nickname) !== -1 ? "divNameContent_name admin" : "divNameContent_name"}>{element.nickname}</p></Indicator> :
 								<Indicator color={"red"} size={14} processing position={"middle-end"} zIndex={0}> <p className={props.admins.indexOf(element.nickname) !== -1 ? "divNameContent_name admin" : "divNameContent_name"}>{element.nickname}</p></Indicator>}
 						</div>
