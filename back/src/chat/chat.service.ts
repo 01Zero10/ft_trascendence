@@ -202,17 +202,47 @@ export class ChatService {
 
     async getMessages(roomName: string, type: string): Promise<RoomMessages[]> {
         if (type !== 'direct')    
-            return await this.roomMessagesRepository.find({
-                where: {
-                    room: roomName,
-                }
-            });
+            // return await this.roomMessagesRepository.find({
+            //     where: {
+            //         room: roomName,
+            //     }
+            // });
+            return await this.roomMessagesRepository
+        .createQueryBuilder('message')
+        .leftJoinAndSelect('message.userInfo', 'userInfo')
+        .where({ room: roomName})
+        .select(['message.id',
+            'message.username',
+            'message.room',
+            'message.message',
+            'message.createdAt',
+            'userInfo.username',
+            'userInfo.nickname',
+            'userInfo.avatar'
+        ])
+        .orderBy('message.createdAt', 'ASC')
+        .getMany()
         else
-            return await this.privateMessagesRepository.find({
-                where: {
-                    room: roomName,
-                }
-            });
+            // return await this.privateMessagesRepository.find({
+            //     where: {
+            //         room: roomName,
+            //     }
+            // });
+            return await this.privateMessagesRepository
+            .createQueryBuilder('message')
+            .leftJoinAndSelect('message.userInfo', 'userInfo')
+            .where({ room: roomName})
+            .select(['message.id',
+                'message.username',
+                'message.room',
+                'message.message',
+                'message.createdAt',
+                'userInfo.username',
+                'userInfo.nickname',
+                'userInfo.avatar'
+            ])
+            .orderBy('message.createdAt', 'ASC')
+            .getMany()
     }
 
     async getChatMembersAndStatus(roomName: string){
@@ -475,6 +505,10 @@ export class ChatService {
     //Generaters
 
     async createMessage(payload: {room: string, username: string, message: string, avatar: string, clientSocket: Socket }, type: string): Promise<RoomMessages>{
+        
+        const infoUser = await this.userRepository.findOne({where: {username: payload.username}});
+
+
         if (type !== 'direct')
             return await this.roomMessagesRepository.save({
                 username: payload.username,
@@ -482,6 +516,7 @@ export class ChatService {
                 room: payload.room,
                 avatar: payload.avatar,
                 message: payload.message,
+                userInfo: infoUser,
                 createdAt: new Date,
             })
         else 
@@ -491,6 +526,7 @@ export class ChatService {
                 room: payload.room,
                 avatar: payload.avatar,
                 message: payload.message,
+                userInfo: infoUser,
                 createdAt: new Date,
             })
     }
@@ -752,5 +788,30 @@ export class ChatService {
         if (cipherInput === (await this.getRoomByName(channel)).password)
             return true;
         return false;
+    }
+
+    async test(nameChannel: string) {
+        // return await this.roomMessagesRepository.find({
+        //     where: {
+        //         room: nameChannel,
+        //     }
+        // })
+
+        const messages = await this.roomMessagesRepository
+        .createQueryBuilder('message')
+        .leftJoinAndSelect('message.userInfo', 'userInfo')
+        .where({ room: nameChannel})
+        .select(['message.id',
+            'message.username',
+            'message.room',
+            'message.message',
+            'message.createdAt',
+            'userInfo.username',
+            'userInfo.nickname',
+            'userInfo.avatar'
+        ])
+        .getMany()
+
+        return messages;
     }
 }

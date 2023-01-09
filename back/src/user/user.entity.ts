@@ -1,4 +1,5 @@
 import { Rooms } from "src/chat/rooms.entity";
+import { RoomMessages } from "src/chat/roomsMessages.entity";
 import {
   Column,
   Entity,
@@ -35,6 +36,12 @@ export class User {
 
   @OneToMany(() => Rooms, (rooms) => rooms.builder)
   ownedRooms: Rooms[];
+
+  @OneToMany(() => RoomMessages, (roomMessages) => roomMessages.avatar)
+  sentChannelMessage: RoomMessages[];
+
+  @OneToMany(() => RoomMessages, (roomMessages) => roomMessages.avatar)
+  sentPrivateMessage: RoomMessages[];
 
   @ManyToMany(() => Rooms, (rooms) => rooms.admins) //non impostato ancora
   @JoinTable()

@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/user";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity ("roomMessages")
 export class RoomMessages {
@@ -19,6 +20,9 @@ export class RoomMessages {
 
     @Column({nullable: true})
     avatar: string;
+
+    @ManyToOne(() => User, user => user.sentChannelMessage)
+    userInfo: User;
 
     @Column()
     createdAt: Date;
