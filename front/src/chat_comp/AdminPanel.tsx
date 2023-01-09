@@ -15,21 +15,21 @@ import { IconAt, IconClock } from "@tabler/icons";
 import React, { SetStateAction, useEffect, useLayoutEffect, useState } from "react"
 import "./AdminPanel_style.css"
 export default function AdminPanel(props: any) {
-	const [action, setAction] = useState<string>('ban');
+	// const [action, setAction] = useState<string>('ban');
 	const [data, setData] = useState<string[]>([]);
-	const [limitedUsers, setLimitedUsers] = useState<{
-		value: string;
-		label: string;
-	}[]>([]);
+	// const [limitedUsers, setLimitedUsers] = useState<{  z
+	// 	value: string;
+	// 	label: string;
+	// }[]>([]);
 
-	const [options, setOptions] = useState<{
-		value: string;
-		label: string;
-	}[]>([]);
+	// const [options, setOptions] = useState<{
+	// 	value: string;
+	// 	label: string;
+	// }[]>([]);
 
 	const [time, setTime] = useState<number | undefined>(undefined);
 	const [reason, setReason] = useState<string>('');
-	const  [members, setMembers] = useState<string[]>([])
+	// const [members, setMembers] = useState<string[]>([])
 
 
 	// async function getChannelMembers() {
@@ -70,8 +70,6 @@ export default function AdminPanel(props: any) {
 
 	//TODO: rivedere
 	async function handleMuteBan() {
-		//_________ERRATO_________//
-		//________________________//
 		const API_MUTE_BAN = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/handleMuteBan`;
 		await fetch(API_MUTE_BAN, {
 			method: 'POST',
@@ -80,7 +78,7 @@ export default function AdminPanel(props: any) {
 			body: JSON.stringify({
 				channelName: props.room.name,
 				mode: props.action,
-				limited: props.usersToBeJudge ,
+				limited: props.adminData.unbanList.concat(props.data) ,
 				time: time,
 				reason: reason,
 			})
@@ -90,25 +88,8 @@ export default function AdminPanel(props: any) {
 		props.setData([])
 	}
 
-	async function handleUnMuteUnBan() {
-		console.log(action)
-		// const API_MUTE_BAN = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/handleMuteBan`;
-		// await fetch(API_MUTE_BAN, {
-		// 	method: 'POST',
-		// 	credentials: 'include',
-		// 	headers: { 'Content-Type': 'application/json' },
-		// 	body: JSON.stringify({
-		// 		channelName: props.room.name,
-		// 		mode: props.action,
-		// 		limited: props.usersToBeJudge,
-		// 		time: time,
-		// 		reason: reason,
-		// 	})
-		// })
-		// setTime(undefined);
-		// setReason('');
-		props.setData([])
-	}
+	
+
 
 	// async function getMuted() {
 	// 	const API_GET_MUTED = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getMutedUsers/${props.room.name}`;
@@ -137,34 +118,33 @@ export default function AdminPanel(props: any) {
 	// 	}
 	// }
 
-	async function getOptions() {
-		const API_GET_MUTE_BAN_OPTIONS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getMuteBanOptions`;
-		if (props.room.name != '') {
-			let response = await fetch(API_GET_MUTE_BAN_OPTIONS, {
-				method: 'POST',
-				credentials: 'include',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ channelName: props.room.name, mode: action }),
-			});
-			let data = await response.json();
-			// console.log("daaaaaata options = ", data);
-			let fetchOptions: {
-				value: string;
-				label: string;
-			}[] = [];
-			await Promise.all(await data?.map(async (element: any) => {
-				let iMember: {
-					value: string;
-					label: string;
-				} = {
-					value: element,
-					label: element,
-				};
-				fetchOptions.push(iMember);
-			}))
-			setOptions(fetchOptions);
-		}
-	}
+	// async function getOptions() {
+	// 	const API_GET_MUTE_BAN_OPTIONS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/getMuteBanOptions`;
+	// 	if (props.room.name != '') {
+	// 		let response = await fetch(API_GET_MUTE_BAN_OPTIONS, {
+	// 			method: 'POST',
+	// 			credentials: 'include',
+	// 			headers: { 'Content-Type': 'application/json' },
+	// 			body: JSON.stringify({ channelName: props.room.name, mode: action }),
+	// 		});
+	// 		let data = await response.json();
+	// 		let fetchOptions: {
+	// 			value: string;
+	// 			label: string;
+	// 		}[] = [];
+	// 		await Promise.all(await data?.map(async (element: any) => {
+	// 			let iMember: {
+	// 				value: string;
+	// 				label: string;
+	// 			} = {
+	// 				value: element,
+	// 				label: element,
+	// 			};
+	// 			fetchOptions.push(iMember);
+	// 		}))
+	// 		setOptions(fetchOptions);
+	// 	}
+	// }
 
 	function handleInternalChange(e: any){
 		let position = data.indexOf(e.target.value)
@@ -178,9 +158,9 @@ export default function AdminPanel(props: any) {
 	}
 
 	function handleChange(e: any){
-		let position = props.usersToBeJudge.indexOf(e.target.value)
+		let position = props.data.indexOf(e.target.value)
 		if (position !== -1){
-			let oldData = [...props.usersToBeJudge]
+			let oldData = [...props.data]
 			oldData.splice(position, 1)
 			props.setData([...oldData])
 		}
@@ -188,14 +168,14 @@ export default function AdminPanel(props: any) {
 			props.setData((prevState: string[]) => [...prevState, e.target.value])
 	}
 
-	function checkSettings() {
-		//console.log(reason);
-		if (action !== ('kick') && time === undefined)
-			return false;
-		else if (data[0].length === 0)
-			return false;
-		return true;
-	}
+	// function checkSettings() {
+	// 	//console.log(reason);
+	// 	if (action !== ('kick') && time === undefined)
+	// 		return false;
+	// 	else if (data[0].length === 0)
+	// 		return false;
+	// 	return true;
+	// }
 
 
 	const handleKeyDown = (e: any) => {
@@ -235,52 +215,6 @@ export default function AdminPanel(props: any) {
 	// 	}
 	// 	handleChangeMode();
 	// }, [limitedUsers])
-
-	useLayoutEffect(() => {
-		async function prepareData() {
-			if (props.action === 'ban' || props.action === "mute") {
-				let m = [...props.members]
-				// console.log("banned", banned)
-				for (let element of props.bannedUsers){
-					console.log(element)
-					let pos = m.indexOf(element)
-					if (pos !== -1){
-						let oldData = [...m]
-						oldData.splice(pos, 1)
-						console.log("oldData", oldData)
-						setMembers([...oldData])
-					}
-				}}}
-		// 	if (props.action === 'ban' || props.action === "mute") {
-		// 		let m = [...props.members]
-		// 		let banned: string[] = await getBanned().then()
-		// 		console.log("banned", banned)
-		// 		for (let element of banned){
-		// 			console.log(element)
-		// 			let pos = m.indexOf(element)
-		// 			if (pos !== -1){
-		// 				let oldData = [...m]
-		// 				oldData.splice(pos, 1)
-		// 				console.log("oldData", oldData)
-		// 				setMembers([...oldData])
-		// 			}
-		// 		}
-		// 		// await getOptions();
-		// 		// await getBanned();
-		// 	}
-		// 	else if (action === 'mute') {
-		// 		await getOptions();
-		// 		await getMuted();
-		// 	}
-		// 	else {
-		// 		await getOptions();
-		// 		setLimitedUsers([]);
-		// 	}
-		// }
-		prepareData();
-	}, [action])
-
-	console.log("lllllllllll",(props.adminData.unbanList.length > 0))
 
 	return (<>
 			<Modal centered withCloseButton={false} closeOnClickOutside={false} zIndex={1500} overlayBlur={5}
@@ -386,7 +320,7 @@ export default function AdminPanel(props: any) {
 							<ScrollArea>{props.adminData.banList.map((element: string, id: number) => {return(
 								<div className={"checkbox_element_container"} key={id}> 
 									<div  className={"checkbox_element_input"}>
-										<input type={"checkbox"} id={element} value={element} checked={props.usersToBeJudge.indexOf(element) !== -1 ? true : false} onChange={handleChange}/>
+										<input type={"checkbox"} id={element} value={element} checked={props.data.indexOf(element) !== -1 ? true : false} onChange={handleChange}/>
 									</div>
 									<label className={"checkbox_element_label"} htmlFor={element}>{element}</label> 
 								</div>)})}
@@ -395,7 +329,7 @@ export default function AdminPanel(props: any) {
 						<Tabs.Panel style={{color:"white"}} value={"mute"}>
 							<ScrollArea>{props.adminData.muteList.map((element: string, id: number) => {return( <div className={"checkbox_element_container"} key={id}> 
 									<div  className={"checkbox_element_input"}>
-										<input type={"checkbox"} id={element} value={element} checked={props.usersToBeJudge.indexOf(element) !== -1 ? true : false} onChange={handleChange}/>
+										<input type={"checkbox"} id={element} value={element} checked={props.data.indexOf(element) !== -1 ? true : false} onChange={handleChange}/>
 									</div>
 									<label className={"checkbox_element_label"} htmlFor={element}>{element}</label> 
 								</div>)})}
@@ -405,14 +339,13 @@ export default function AdminPanel(props: any) {
 							<ScrollArea>{props.adminData.kickList.map((element: string, id: number) => {return(
 								<div className={"checkbox_element_container"} key={id}> 
 									<div  className={"checkbox_element_input"}>
-										<input type={"checkbox"} id={element} value={element} checked={props.usersToBeJudge.indexOf(element) !== -1 ? true : false} onChange={handleChange}/>
+										<input type={"checkbox"} id={element} value={element} checked={props.data.indexOf(element) !== -1 ? true : false} onChange={handleChange}/>
 									</div>
 									<label className={"checkbox_element_label"} htmlFor={element}>{element}</label> 
 								</div>)})}
 							</ScrollArea>
 						</Tabs.Panel>
 						<Tabs.Panel style={{color:"white"}} value={"unban"}>
-							{/*TODO: modificare props.members con utenti bannati*/}
 							<ScrollArea>{props.adminData.unbanList.length > 0 ? props.adminData.unbanList.map((element: string, id: number) => {return(
 								<div className={"checkbox_element_container"} key={id}> 
 									<div  className={"checkbox_element_input"}>
@@ -426,7 +359,6 @@ export default function AdminPanel(props: any) {
 							</ScrollArea>
 						</Tabs.Panel>
 						<Tabs.Panel style={{color:"white"}} value={"unmute"}>
-							{/*TODO: modificare props.members con utenti mutati*/}
 							<ScrollArea>{props.adminData.unmuteList.length > 0 ? props.adminData.unmuteList.map((element: string, id: number) => {return(
 								<div className={"checkbox_element_container"} key={id}>
 									<div  className={"checkbox_element_input"}>
@@ -440,10 +372,10 @@ export default function AdminPanel(props: any) {
 							</ScrollArea>
 						</Tabs.Panel>
 					</Tabs>
-					{(props.usersToBeJudge.length !== 0 && (props.action === "ban" || props.action === "mute")) && <Input className="inputTimeText time" type={"number"}  min={0} onKeyDown={handleKeyDown} placeholder={"Time*"} value={time} onChange={(e: any) => setTime(e.target.value)}></Input>}
-					{(props.usersToBeJudge.length !== 0 && (props.action === "ban" || props.action === "mute")) && <Input className="inputTimeText text" type={"text"} placeholder={"Reason"} value={reason} onChange={(e: any) => setReason(e.target.value)}></Input>}
+					{(props.data.length !== 0 && (props.action === "ban" || props.action === "mute")) && <Input className="inputTimeText time" type={"number"}  min={0} onKeyDown={handleKeyDown} placeholder={"Time*"} value={time} onChange={(e: any) => setTime(e.target.value)}></Input>}
+					{(props.data.length !== 0 && (props.action === "ban" || props.action === "mute")) && <Input className="inputTimeText text" type={"text"} placeholder={"Reason"} value={reason} onChange={(e: any) => setReason(e.target.value)}></Input>}
 					<Box>
-						{<button className="btn_createChannel" onClick={(props.action !== "unmute" && props.action !== "unban") ? handleMuteBan : handleUnMuteUnBan}>
+						{<button className="btn_createChannel" onClick={(props.action !== "unmute" && props.action !== "unban") ? handleMuteBan : handleMuteBan}>
 							{/*TODO: svuotare array  (props.setData([]); setData([]))*/}
 							<div className="btn__content_createChannel">Confirm</div>
 						</button>}

@@ -260,7 +260,7 @@ export default function ChannelBody(props: any) {
 			{(props.room.name && modalTypeOpen === "admin") && <AdminPanel
 				room={props.room}
 				action={action}
-				usersToBeJudge={data}
+				data={data}
 				members={props.members}
 				adminData={adminData}
 				setMembers={props.setMembers}
