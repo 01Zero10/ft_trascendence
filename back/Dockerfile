@@ -19,6 +19,6 @@ FROM node:latest
 
 WORKDIR /app
 
-RUN mkdir imgs
+RUN mkdir vol
 
 COPY ./package*.json .

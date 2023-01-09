@@ -29,7 +29,7 @@ version: "3"
 
 services:
   nginx:
-    build: "./src/proxy/"
+    build: "./proxy/"
     container_name: nginx
     ports:
       - "80:80"
@@ -44,7 +44,7 @@ services:
       - "back"
 
   front:
-    build: "./src/front/"
+    build: "./front/"
     container_name: front_react
     restart: always
     image: react
@@ -57,7 +57,7 @@ services:
       REACT_APP_REDIRECT_URI: "${REACT_APP_REDIRECT_URI}"
       REACT_APP_IP_ADDR: "${IP_ADDR}"
     volumes:
-      - ./src/front:/app
+      - ./front:/app
       - /app/node_modules
     networks:
       - transcendence
@@ -65,7 +65,7 @@ services:
       - "back"
 
   back:
-    build: "./src/back/"
+    build: "./back/"
     container_name: back_nest
     restart: always
     expose:
@@ -79,13 +79,13 @@ services:
       CLIENT_ID: "${CLIENT_ID}"
       CLIENT_SECRET: "${CLIENT_SECRET}"
       REACT_APP_REDIRECT_URI: "${REACT_APP_REDIRECT_URI}"
-      IP_ADDR: ${IP_ADDR}
-      JWT_ACCESS_TOKEN_SECRET: ${JWT_ACCESS_TOKEN_SECRET}
-      JWT_ACCESS_TOKEN_EXPIRATION_TIME: ${JWT_ACCESS_TOKEN_EXPIRATION_TIME}
+      IP_ADDR: "${IP_ADDR}"
+      JWT_ACCESS_TOKEN_SECRET: "${JWT_ACCESS_TOKEN_SECRET}"
+      JWT_ACCESS_TOKEN_EXPIRATION_TIME: "${JWT_ACCESS_TOKEN_EXPIRATION_TIME}"
     volumes:
-      - ./src/back:/app
+      - ./back:/app
       - /app/node_modules
-      - ./src/back/imgs:/app/imgs
+      - ./back/vol:/app/vol
     networks:
       - transcendence
     depends_on:

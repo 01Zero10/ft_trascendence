@@ -23,8 +23,8 @@ import { NavigationModule } from "./navigation/navigation.module";
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      //host: 'postgres',
-      host: 'localhost',
+      host: 'postgres',
+      // host: 'localhost',
       port: 5432,
       username: process.env.DB_USER,
       password:  process.env.DB_PASS,
