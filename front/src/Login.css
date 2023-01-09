@@ -8,9 +8,11 @@
 .welcome {
   position: absolute;
   color: white;
-	font-family: 'Odibee Sans', sans-serif;
-	letter-spacing: 0.2em;
-	font-size: 350%;
+	/* font-family: 'Odibee Sans', sans-serif; */
+  font-family:'Tomorrow', sans-serif;
+	letter-spacing: 0.1em;
+	/* font-size: 350%; */
+  font-size: 4.5rem;
 	margin-bottom: 15rem;
   text-align: center;
 }
@@ -18,8 +20,11 @@
   width: 380px;
   height: 86px;
   font-size: 36px;
-  font-family:'Smooch Sans', sans-serif;
-  background:  #BA30F0 5%;
+  /* font-family:'Smooch Sans', sans-serif; */
+  font-family:'Tomorrow', sans-serif;
+  /* background:  #BA30F0 5%; */
+  background:  #781C9C 5%;
+  text-transform: uppercase;
   align-items: center;
   border-radius: 6px;
   /* background: linear-gradient(45deg, transparent 5%, #BA30F0 5%); */

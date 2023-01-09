@@ -28,6 +28,7 @@ function Login() {
 		<div className='box'>
 			<h1 className='welcome'>Welcome!</h1>
 			<button className='button_login' onClick={login42} type="button">Sign In</button>
+			<div className='_prv_'></div>
 		</div>
 		// <div className="login-box">
 		// 	 <h2>Choose your avatar</h2>
