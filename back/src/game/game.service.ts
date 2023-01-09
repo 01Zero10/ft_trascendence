@@ -62,6 +62,8 @@ export class GameService{
         .createQueryBuilder('match')
         .leftJoinAndSelect('match.player1', 'player1')
         .leftJoinAndSelect('match.player2', 'player2')
+        .where("player1.username = :client_n", { client_n: client })
+        .orWhere("player2.username = :client_n", { client_n: client })
         .select(['match.id',
             'player1.nickname',
             'player1.username',

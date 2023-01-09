@@ -46,6 +46,12 @@ export class UsersController {
     //return ();
   }
 
+  @Post('checkBlock')
+  async checkBlock(@Body('client') client: string, @Body('userToCheck') userToCheck: string){
+    console.log(await this.userService.checkBlock(client, userToCheck))
+    return await this.userService.checkBlock(client, userToCheck);
+  }
+
   // @Post('blockUser') //on-off
   // async BlockUser(@Body('client') client: string, @Body('userToBlock') userToBlock: string){
   //   return await this.userService.blockUser(client, userToBlock);

@@ -154,6 +154,7 @@ function Account() {
   const contextData = useContext(Student)
   const [showLoader, setShowLoader] = useState(true);
   const [friendship, setFriendship] = useState("nope");
+  const [blocked, setBlocked] = useState<boolean>(false);
 
   const [client, setClient] = useState<student>({
     id: 0,
@@ -225,6 +226,26 @@ function Account() {
     }
     getFriendshipInfo();
   }, [user_id])
+
+  async function checkBlocked(){
+  const API_URL = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/checkBlock`
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      credentials: "include",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ client: contextData.username, userToCheck: user_id }),
+    })
+    const data = await res.json();
+    setBlocked(data.blocked);
+  }
+
+  useEffect(() => {
+    checkBlocked();
+  }, [user_id])
+
+  useEffect(() => {
+    console.log("utente bloccato? ", blocked)
+  }, [blocked]); //stampa se utente visualizzato é stato bloccato dal client oppure no
 
   /* prende l'object intero */
   /*   const ciao = useParams<"user_id">();
@@ -323,11 +344,19 @@ function Account() {
         let data = await response.json();
         let fetchMatches: Match[] = [];
 
-        await data.forEach((element: Match) => {
-          let iMatch: Match = element;
+        await Promise.all(await data.map(async (element: Match) => {
+        //await data.forEach((element: Match) => {
+          console.log(element);
+          let iMatch: Match = {
+            id: element.id,
+            player1: element.player1,
+            player2: element.player2,
+            points1: element.points1,
+            points2: element.points2
+          };
           fetchMatches.push(iMatch);
-          setMatches(fetchMatches);
-        })
+        }))
+        setMatches(fetchMatches);
       }
       getMatches();
     }, [props.client])
@@ -478,6 +507,7 @@ function Account() {
       body: JSON.stringify({ client: contextData.username, userToBlock: userToBlock })
     })
     setFriendship("nope");
+    await checkBlocked();
   }
 
   function Pending_b() {

@@ -151,6 +151,13 @@ export class UserService {
     await this.userRepository.save(User)
   }
 
+  async checkBlock(client: string, userToCheck: string) {
+    const blockedUsers = (await this.userRepository.findOne({ where : {username: client}})).blockedUsers;
+    if (blockedUsers.findIndex(x => x === userToCheck) > -1)
+      return {'blocked': true}
+    return {'blocked': false}
+  }
+
   async checkFriendship(client1: string, client2: string){
     
     //const nofriend: {friendship: string} = {friendship: "nope"};

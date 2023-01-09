@@ -59,15 +59,11 @@ export class AuthController {
     @Query("state") path: string,
     @Res({ passthrough: true }) response: Response
   ): Promise<any> {
-    //console.log("uno");
     const { user, first } = await this.user.login(code, response);
-    //if (first)
-      //return response.redirect('http://localhost:3000/user/prova');
-      return response.redirect(
-        `http://${process.env.IP_ADDR}:3000/home`
-        
-      );
-    //else return response.redirect(`http://${process.env.BASE_IP}${path}`);
+    if (first)
+      return response.redirect(`http://${process.env.IP_ADDR}:3000/users/settings`);
+    else 
+      return response.redirect(`http://${process.env.IP_ADDR}:3000/home`);
   }
 
   @Get("logout") //Vanno aggiunte altre cose???
