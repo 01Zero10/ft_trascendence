@@ -13,7 +13,7 @@ export class Online {
     //@JoinColumn()
     //user: User;
 
-    @OneToOne(() => User, (user) => user.status, {cascade: true})
+    @OneToOne(() => User, (user) => user.status)//, {cascade: true})
     @JoinColumn()
     user: User;
 }

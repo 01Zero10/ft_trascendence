@@ -27,8 +27,11 @@ export class NavigationGateWay implements OnGatewayInit, OnGatewayConnection, On
     && clientSocket.handshake.query.userID !== "null" 
     )
     {
-      String(clientSocket.handshake.query.userID), clientSocket.id
+      console.log("query = ", String(clientSocket.handshake.query.userID))
+      console.log("socket = ", clientSocket.id)
+      //String(clientSocket.handshake.query.userID), clientSocket.id
       await this.navigationService.updateUserSocket(String(clientSocket.handshake.query.userID), clientSocket.id);
+      await this.userService.setOfflineStatus(String(clientSocket.handshake.query.userID));
       await this.userService.setOnlineStatus(String(clientSocket.handshake.query.userID));
       this.logger.log(`Client connected: ${clientSocket.id}`);
     }

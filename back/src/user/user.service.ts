@@ -346,11 +346,12 @@ export class UserService {
   }
 
   async setOnlineStatus(userID: string){
-    await this.setOfflineStatus(userID);
+    //await this.setOfflineStatus(userID);
     const newbie = this.onlineRepository.create();
     const user = await this.userRepository.findOne({where: {id: Number(userID)}})
     newbie.user = user;
     newbie.status = 'online'
+    console.log("creato")
     return await this.onlineRepository.save(newbie);
 }
 
@@ -361,8 +362,10 @@ async setOfflineStatus(userID: string){
   .where('user.id = :toSet_n', {toSet_n: Number(userID)})
   .getOne();
 
-  if (toSetOffline)
+  if (toSetOffline) {
+    console.log("cancellato")
     await this.onlineRepository.remove(toSetOffline);
+  }
 }
 
   async getOnlineFriends(client: string){
