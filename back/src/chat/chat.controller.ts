@@ -413,10 +413,10 @@ export class ChatController {
     }
 
     //path per test
-    // @Get('test')
-    // async test(){
-    //     await this.chatService.expiredMuteOrBan();
-    // }
+    @Get('test/:nameChannel')
+    async test(@Param('nameChannel') nameChannel: string){
+        return await this.chatService.test(nameChannel);
+    }
 
     @Get('updateChannelUsersList')
     async UpdateChannelUsersList(){

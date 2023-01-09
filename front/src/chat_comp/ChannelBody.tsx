@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 
 import ChannelBodyNav from "./ChannelBodyNav"
 import ChannelMessage from "./ChannelMessage"
 import ChannelInput from "./ChannelInput"
-import { packMessage } from "../About";
+//import { packMessage } from "../About";
 import { Student } from "../App";
 import {Box, Button, Center, Modal, PasswordInput, ScrollArea, Skeleton} from "@mantine/core";
 import ChannelOptionModal from "./ChannelOptionModal";
@@ -26,6 +26,17 @@ export interface AdminData{
 	kickList: string[], 
 	unbanList: string[], 
 	unmuteList: string[]
+}
+
+export interface packMessage {
+    id: number,
+    room: string,
+    message: string,
+    createdAt: Date,
+	userInfo: { username: string,
+		nickname: string,
+		avatar: string,
+	}
 }
 
 export default function ChannelBody(props: any) {
@@ -293,8 +304,8 @@ export default function ChannelBody(props: any) {
 					<div style={{background: "black", color: "white", position: "relative", height: "92%", width: "100%"}}>
 						<ScrollArea style={{height: "89%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)}>
 							{props.room.name && messages.map((m: packMessage, id: number) => {
-								if (student.blockedUsers && student.blockedUsers.findIndex(x => x === m.username) != -1) {
-									console.log(student.blockedUsers.findIndex(x => x === m.username));
+								if (student.blockedUsers && student.blockedUsers.findIndex(x => x === m.userInfo.username) != -1) {
+									console.log(student.blockedUsers.findIndex(x => x === m.userInfo.username));
 								} else
 									return (<ChannelMessage 
 											admin={props.admin}
@@ -302,9 +313,11 @@ export default function ChannelBody(props: any) {
 											key={id}
 											admins={props.admins}
 											builder={props.room.builder.username}
-											username={m.username} message={m.message}
+											username={m.userInfo.username}
+											nickname={m.userInfo.nickname}
+											message={m.message}
 											createdAt={m.createdAt}
-											avatar={m.avatar}
+											avatar={m.userInfo.avatar}
 											setCard={props.setCard}
 											room={props.room}
 											setRoom={props.setRoom}

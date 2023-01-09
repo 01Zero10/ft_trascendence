@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/user";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity ("privateMessages")
 export class PrivateMessages {
@@ -19,6 +20,9 @@ export class PrivateMessages {
 
     @Column()
     message: string;
+
+    @ManyToOne(() => User, user => user.sentPrivateMessage)
+    userInfo: User;
 
     @Column()
     createdAt: Date;

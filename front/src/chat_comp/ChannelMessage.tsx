@@ -93,7 +93,7 @@ export default function ChannelMessage(props: any) {
 								{/* <span id={props.id} className="usernameHeader">{props.username}</span> */}
 								<Menu position={"bottom-start"} width="target" closeDelay={400}>
 				<Menu.Target>
-					<span id={props.id} className="usernameHeader">{props.username}</span>
+					<span id={props.id} className="usernameHeader">{props.nickname}</span>
 				</Menu.Target>
 				{student.username !== props.username &&
 					<Menu.Dropdown>
@@ -131,7 +131,7 @@ export default function ChannelMessage(props: any) {
 						/>
 						<div className="text_header_container">
 							<div className="usernameDetails_container_sender">
-								<span id={props.id} className="usernameHeader_sender">{props.username}</span>
+								<span id={props.id} className="usernameHeader_sender">{props.nickname}</span>
 								<span id={props.id} className="detailsHeader_sender">{naturalTime}</span>
 							</div>
 							<div className="messageText">
