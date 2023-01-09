@@ -1,5 +1,6 @@
 import { Rooms } from "src/chat/rooms.entity";
 import { RoomMessages } from "src/chat/roomsMessages.entity";
+import { Match } from "src/game/match.entity";
 import {
   Column,
   Entity,

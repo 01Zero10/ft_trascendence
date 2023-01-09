@@ -105,10 +105,16 @@ function useModal() {
 //fill table
 interface Match {
   id: number, //con Number rompe le scatole / si potrebbe mettere any
-  player1: string;
-  player2: string;
-  avatar1: string;
-  avatar2: string;
+  // player1: string;
+  // player2: string;
+  // avatar1: string;
+  // avatar2: string;
+  player1: {username: string,
+    nickname: string,
+    avatar: string},
+  player2: {username: string,
+    nickname: string,
+    avatar: string},
   points1: number,
   points2: number,
 }
@@ -334,8 +340,8 @@ function Account() {
             <List sx={{ width: '100%', bgcolor: 'transparent', display: 'flex' }} key={p.id}>
               <ListItem>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <Avatar sx={{ width: 56, height: 56 }} src={p.avatar1} />
-                  <ListItemText sx={{ color: '#fff' }} primary={p.player1} />
+                  <Avatar sx={{ width: 56, height: 56 }} src={p.player1.avatar} />
+                  <ListItemText sx={{ color: '#fff' }} primary={p.player1.nickname} />
                 </div>
               </ListItem>
               <ListItem>
@@ -345,8 +351,8 @@ function Account() {
               </ListItem>
               <ListItem>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <Avatar sx={{ width: 56, height: 56 }} src={p.avatar2} />
-                  <ListItemText sx={{ color: '#fff' }} primary={p.player2} />
+                  <Avatar sx={{ width: 56, height: 56 }} src={p.player2.avatar} />
+                  <ListItemText sx={{ color: '#fff' }} primary={p.player2.nickname} />
                 </div>
               </ListItem>
             </List>

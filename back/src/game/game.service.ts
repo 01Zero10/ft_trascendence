@@ -57,7 +57,21 @@ export class GameService{
         ){this.mapPlRoom = new Map<string, plRoom>()}
 
     async getMatches(client: string){
-        return await this.matchRepository.find({ where : [{ player1: client}, {player2: client} ]})
+        //return await this.matchRepository.find({ where : [{ player1: client}, {player2: client} ]})
+        return await this.matchRepository
+        .createQueryBuilder('match')
+        .leftJoinAndSelect('match.player1', 'player1')
+        .leftJoinAndSelect('match.player2', 'player2')
+        .select(['match.id',
+            'player1.nickname',
+            'player1.username',
+            'player1.avatar',
+            'player2.nickname',
+            'player2.username',
+            'player2.avatar',
+            'match.points1',
+            'match.points2'])
+        .getMany();
     }
 
     async getClassicRunningMatches(){
@@ -136,13 +150,18 @@ export class GameService{
         
         if (playRoom)
         {
+            const player1 = await this.userRepository.findOne({ where: { username: playRoom.player1 } })
+            const player2 = await this.userRepository.findOne({ where: { username: playRoom.player2 } })
             if (this.mapPlRoom.get(playRoom.playRoom).idInterval)
                 clearInterval(this.mapPlRoom.get(playRoom.playRoom).idInterval)
             await this.gameGateway.handleLeftGame(playRoom.playRoom)
-            await this.matchRepository.save({player1: playRoom.player1,
-                avatar1: playRoom.avatar1,
-                player2: playRoom.player2,
-                avatar2: playRoom.avatar2,
+            await this.matchRepository.save({
+                // player1: playRoom.player1,
+                // avatar1: playRoom.avatar1,
+                // player2: playRoom.player2,
+                // avatar2: playRoom.avatar2,
+                player1: player1,
+                player2: player2,
                 points1: (playRoom.player1 === client ? this.mapPlRoom.get(playRoom.playRoom).leftPoint : -42),
                 points2: (playRoom.player2 === client ? this.mapPlRoom.get(playRoom.playRoom).rightPoint : -42),
             })
@@ -301,10 +320,15 @@ export class GameService{
 
     async saveMatch(namePlayRoom: string, leftPoints: number, rightPoints: number){
         const roomToSave = await this.getPlayRoomByName(namePlayRoom);
-        const roomSaved = await this.matchRepository.save({player1: roomToSave.player1,
-            avatar1: roomToSave.avatar1,
-            player2: roomToSave.player2,
-            avatar2: roomToSave.avatar2,
+        const player1 = await this.userRepository.findOne({ where: { username: roomToSave.player1 } })
+        const player2 = await this.userRepository.findOne({ where: { username: roomToSave.player2 } })
+        const roomSaved = await this.matchRepository.save({
+            // player1: roomToSave.player1,
+            // avatar1: roomToSave.avatar1,
+            // player2: roomToSave.player2,
+            // avatar2: roomToSave.avatar2,
+            player1: player1,
+            player2: player2,
             points1: leftPoints,
             points2: rightPoints,
         })
@@ -312,10 +336,10 @@ export class GameService{
         delete this.mapPlRoom[namePlayRoom];
         if (roomSaved.points1 > roomSaved.points2)
         {
-            await this.updatePosition(roomSaved.player1);
+            await this.updatePosition(player1.username);
             return roomSaved.player1;
         }
-        await this.updatePosition(roomSaved.player2);
+        await this.updatePosition(player2.username);
         return roomSaved.player2;
     }
 
