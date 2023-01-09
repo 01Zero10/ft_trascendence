@@ -71,6 +71,13 @@ export default function AdminPanel(props: any) {
 	//TODO: rivedere
 	async function handleMuteBan() {
 		const API_MUTE_BAN = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/handleMuteBan`;
+		let limited: string[] = []
+		if (props.action === "ban")
+			limited = props.adminData.unbanList.concat(props.data)
+		else if (props.action === "mute")
+			limited = props.adminData.unmuteList.concat(props.data)
+		else
+			limited = props.data
 		await fetch(API_MUTE_BAN, {
 			method: 'POST',
 			credentials: 'include',
@@ -78,7 +85,7 @@ export default function AdminPanel(props: any) {
 			body: JSON.stringify({
 				channelName: props.room.name,
 				mode: props.action,
-				limited: props.adminData.unbanList.concat(props.data) ,
+				limited: limited ,
 				time: time,
 				reason: reason,
 			})
@@ -88,7 +95,26 @@ export default function AdminPanel(props: any) {
 		props.setData([])
 	}
 
-	
+	async function handleUnMuteUnBan() {
+		const API_MUTE_BAN = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/handleMuteBan`;
+		let limited: string[] = []
+		limited = props.adminData.unmuteList.filter( (user: string) => (props.data.indexOf(user) === -1) )
+		console.log("limited", limited)
+		await fetch(API_MUTE_BAN, {
+			method: 'POST',
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				channelName: props.room.name,
+				mode: props.action,
+				limited: props.action === "unban" ? props.adminData.unbanList.filter( (user: string) => (props.data.indexOf(user) === -1)) : 
+				props.adminData.unmuteList.filter( (user: string) => (props.data.indexOf(user) === -1) ),
+				time: 1,
+				reason: "",
+			})
+		})
+		props.setData([])
+	}
 
 
 	// async function getMuted() {
@@ -147,14 +173,14 @@ export default function AdminPanel(props: any) {
 	// }
 
 	function handleInternalChange(e: any){
-		let position = data.indexOf(e.target.value)
+		let position = props.data.indexOf(e.target.value)
 		if (position !== -1){
-			let oldData = [...data]
+			let oldData = [...props.data]
 			oldData.splice(position, 1)
-			setData([...oldData])
+			props.setData([...oldData])
 		}
 		else
-			setData((prevState) => [...prevState, e.target.value])
+			props.setData((prevState: any) => [...prevState, e.target.value])
 	}
 
 	function handleChange(e: any){
@@ -349,7 +375,7 @@ export default function AdminPanel(props: any) {
 							<ScrollArea>{props.adminData.unbanList.length > 0 ? props.adminData.unbanList.map((element: string, id: number) => {return(
 								<div className={"checkbox_element_container"} key={id}> 
 									<div  className={"checkbox_element_input"}>
-										<input type={"checkbox"} id={element} value={element} checked={data.indexOf(element) !== -1 ? true : false} onChange={handleInternalChange}/>
+										<input type={"checkbox"} id={element} value={element} checked={props.data.indexOf(element) !== -1 ? true : false} onChange={handleInternalChange}/>
 									</div>
 									<label className={"checkbox_element_label"} htmlFor={element}>{element}</label> 
 								</div>)})
@@ -362,7 +388,7 @@ export default function AdminPanel(props: any) {
 							<ScrollArea>{props.adminData.unmuteList.length > 0 ? props.adminData.unmuteList.map((element: string, id: number) => {return(
 								<div className={"checkbox_element_container"} key={id}>
 									<div  className={"checkbox_element_input"}>
-										<input type={"checkbox"} id={element} value={element} checked={data.indexOf(element) !== -1 ? true : false} onChange={handleInternalChange}/>
+										<input type={"checkbox"} id={element} value={element} checked={props.data.indexOf(element) !== -1 ? true : false} onChange={handleInternalChange}/>
 									</div>
 									<label className={"checkbox_element_label"} htmlFor={element}>{element}</label>
 								</div>)})
@@ -375,7 +401,7 @@ export default function AdminPanel(props: any) {
 					{(props.data.length !== 0 && (props.action === "ban" || props.action === "mute")) && <Input className="inputTimeText time" type={"number"}  min={0} onKeyDown={handleKeyDown} placeholder={"Time*"} value={time} onChange={(e: any) => setTime(e.target.value)}></Input>}
 					{(props.data.length !== 0 && (props.action === "ban" || props.action === "mute")) && <Input className="inputTimeText text" type={"text"} placeholder={"Reason"} value={reason} onChange={(e: any) => setReason(e.target.value)}></Input>}
 					<Box>
-						{<button className="btn_createChannel" onClick={(props.action !== "unmute" && props.action !== "unban") ? handleMuteBan : handleMuteBan}>
+						{<button className="btn_createChannel" onClick={(props.action !== "unmute" && props.action !== "unban") ? handleMuteBan : handleUnMuteUnBan}>
 							{/*TODO: svuotare array  (props.setData([]); setData([]))*/}
 							<div className="btn__content_createChannel">Confirm</div>
 						</button>}
