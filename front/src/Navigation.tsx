@@ -41,6 +41,7 @@ const ListSearch = () => {
       })
     }
     getUserNavBar();
+    //console.log(options);
   }, []) //[] ?
 
 
@@ -68,17 +69,22 @@ const ListSearch = () => {
     <div className='filter-search-bar'>
       <div className="search-box">
         <button className="btn-search"><i className="fas fa-search"><SearchIcon sx={{ fontSize: 30, color: 'linear-gradient(to right bottom, #FD297B, #FF5864, #FF655B' }} /></i></button>
-        <input className='input-search' placeholder="Type an username" type="text" value={search.query} onChange={searchChange} onBlur={resetValue}/>
-        <ul className="filter-search-results">
+        <input className='input-search' placeholder="Type an username" type="text" value={search.query} onChange={searchChange} />
+        <ul className="filter-search-results" >
           {(search.query === '' ? "" : !search.list.length ? <li className="filter-search-results-item"><h3 className='err_msg'>Your query did not return any results</h3></li> : search.list.map(option => {
             return (
-              <ListItemAvatar>
-                <Link to={`/users/${option.username}`} onClick={resetValue} onMouseDown={(e) => e.preventDefault()}>
-                  <li className="filter-search-results-item" key={option.username}>{option.username}
+              // <ListItemAvatar key={option.username}>
+                <Link to={`/users/${option.username}`}>
+                  <div className="filter-search-results-item" style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between'}}>
+                  <img className='avatar_search' alt="user_avatar" src={option.avatar} />
+                  <h5 style={{ fontWeight: 'normal'}}>{option.username}</h5>  
+                  </div>
+                  
+                  {/* <li className="filter-search-results-item">{option.username}
                     <img className='avatar_search' alt="user_avatar" src={option.avatar} />
-                  </li>
+                  </li> */}
                 </Link>
-              </ListItemAvatar>
+             // </ListItemAvatar>
             )
           }))}
         </ul>
@@ -102,6 +108,7 @@ function Navigation() {
 
   useLayoutEffect(() => {
       socket?.on('updateAllChannelList', async () => {
+        console.log('qualcuno ha lasciato');
         updateChannelUsersList();
       })
   }, [socket])

@@ -12,14 +12,8 @@ import { promisify } from 'util';
 import { ChatGateWay } from './chat.gateway';
 import { DirectRooms } from './directRooms.entity';
 
-interface BanOrMuteTimer {
-    username: string;
-    idTimer: ReturnType<typeof setInterval>;
-}
-
 @Injectable()
 export class ChatService {
-                mapBanOrMuteTimer: Map<string, BanOrMuteTimer>
     constructor(
         @InjectRepository(RoomMessages) private roomMessagesRepository: Repository<RoomMessages>,
         @InjectRepository(PrivateMessages) private privateMessagesRepository: Repository<PrivateMessages>,
@@ -28,7 +22,7 @@ export class ChatService {
         @InjectRepository(DirectRooms) private directRoomsRepository: Repository<DirectRooms>,
         @InjectRepository(BanOrMute) private banOrMuteRepository: Repository<BanOrMute>,
         @Inject(forwardRef(() => ChatGateWay)) private readonly chatGateway: ChatGateWay
-        ){this.mapBanOrMuteTimer = new Map<string, BanOrMuteTimer>()}
+        ){}
 
     //Getters
 
@@ -648,7 +642,7 @@ export class ChatService {
         .createQueryBuilder('room')
         .leftJoinAndSelect('room.builder', 'builder')
         .where({name: room.name})
-        .select(['room.name', 'room.type', 'builder.username'])
+        .select(['room.name', 'room.type', 'builder.username', 'builder.nickname'])
         .getOne();
         this.chatGateway.server.emit('update', typeToEmit);
         this.chatGateway.server.to(nameToEmit).emit('updateChannel', newDates.name, newDates.type, newDates.builder);
@@ -693,7 +687,8 @@ export class ChatService {
         expirationDate: Date){
         
         console.log(rowsToDelete);
-        console.log()
+        console.log(rowsToUpdate);
+        console.log(rowsToAdd);
 
         //remove rows phase
         Promise.all(await rowsToDelete.map(async (element) => {
@@ -709,10 +704,12 @@ export class ChatService {
             index.reason = reason;
             index.expireDate = expirationDate;
             await this.banOrMuteRepository.save(index);
+            this.setUnbanOrUnmute(element, channelName, mode, expirationDate);
         }))
 
         //add rows phase
         Promise.all(await rowsToAdd.map(async (element) => {
+            console.log("entrato");
             await this.banOrMuteRepository.save({
                 channelName: channelName,
                 username: element,
@@ -720,12 +717,36 @@ export class ChatService {
                 reason: reason,
                 expireDate: expirationDate,
             })
+            this.setUnbanOrUnmute(element, channelName, mode, expirationDate);
         }))
 
     }
 
-    async setUnbanOrUnmute(){
-        
+    async setUnbanOrUnmute(username: string, channelName: string, mode: string, expirationDate: Date){
+        const timer = expirationDate.getTime() - new Date().getTime();
+        setTimeout(async () => {
+            let row = await this.banOrMuteRepository
+            .createQueryBuilder('banOrMute')
+            .where({ channelName: channelName})
+            .andWhere({ username: username })
+            .andWhere({ status: mode })
+            .getOne();
+            //findOne({ where: [{channelName: channelName}, {username: username}, {status: mode}]});
+            console.log("row === ", row);
+            if (row) {
+                await this.banOrMuteRepository.remove(row)
+                const channel = await this.roomsRepository.findOne({ where: [{ name: channelName}] });
+                const arrayToSplice = (mode === 'ban') ? channel.bannedUsers : channel.mutedUsers;
+                const index = arrayToSplice.findIndex(x => x === username);
+                if (index > -1)
+                    arrayToSplice.splice(index, 1);
+                if (mode === 'ban')
+                    channel.bannedUsers = arrayToSplice;
+                else
+                    channel.mutedUsers = arrayToSplice;
+                await this.roomsRepository.save(channel);
+            }
+        }, timer)
     }
 
     //Checkers

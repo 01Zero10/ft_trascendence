@@ -215,22 +215,6 @@ nav {
 	font-weight: 400;
 }
 
-.btn-search{
-	width: 55px;
-	height: 55px;
-	border-style: none;
-	font-size: 20px;
-	font-weight: bold;
-	outline: none;
-	cursor: pointer;
-	border-radius: 50%;
-	position: absolute;
-	right: 50%;
-	color: #fff;
-	background-color: transparent;
-	pointer-events: painted;
-}
-
 .btn-search {
 	width: 50px;
 	height: 50px;
@@ -300,8 +284,8 @@ nav {
 	object-fit: cover;
 	color: transparent;
 	border-radius: 50%;
-	margin-left: 50%;
-	top: 80%;
+	/* margin-left: 50%;
+	top: 80%; */
 }
 
 .filter-search-bar .search-box {
@@ -313,6 +297,7 @@ nav {
 .filter-search-bar .filter-search-results {
 	position: absolute;
 	top: 120%;
+	z-index: 100;
 	width: 100%;
 	margin: 0;
 	padding: 0;
