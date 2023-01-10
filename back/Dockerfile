@@ -15,10 +15,14 @@
 
 # CMD ["node", "dist/main"]
 
-FROM node:latest
+FROM node:14.17.1-alpine
 
 WORKDIR /app
+COPY . /app/
 
-RUN mkdir vol
+RUN apk update && apk add bash
+RUN apk --no-cache add --virtual builds-deps build-base python
+RUN yarn install
+RUN yarn build
 
-COPY ./package*.json .
+EXPOSE 3001

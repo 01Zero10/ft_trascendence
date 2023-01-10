@@ -9,9 +9,9 @@ module.exports = function (app) {
     }),
   );
   app.use(
-    '/graphql',
+    '/postgres',
     createProxyMiddleware({
-      target: `${process.env.REACT_APP_SERVER_URL}/graphql`,
+      target: `${process.env.REACT_APP_SERVER_URL}/postgres`,
       changeOrigin: true,
     }),
   );

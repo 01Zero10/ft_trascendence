@@ -1,0 +1,85 @@
+version: "3"
+
+services:
+  nginx:
+    build: "./proxy/"
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "3001:3001"
+    expose:
+      - "80"
+      - "3001"
+    networks:
+      - transcendence
+    depends_on:
+      - "front"
+      - "back"
+
+  front:
+    build: "./front/"
+    container_name: front_react
+    restart: always
+    image: react
+    expose:
+      - "3000"
+    #command: sh -c "npm install; npm run start"
+    command: sh -c "npm install; npm run build; npm install serve; npx serve -s build"
+    environment:
+      CLIENT_ID: "${CLIENT_ID}"
+      REACT_APP_REDIRECT_URI: "${REACT_APP_REDIRECT_URI}"
+      REACT_APP_IP_ADDR: "${IP_ADDR}"
+    volumes:
+      - ./front:/app
+      - /app/node_modules
+    networks:
+      - transcendence
+    depends_on:
+      - "back"
+
+  back:
+    build: "./back/"
+    container_name: back_nest
+    restart: always
+    expose:
+      - "3001"
+    command: sh -c "npm install; npm run build; npm run start:prod"
+    #command: sh -c "npm install; npm run start:dev"
+    environment:
+      DB_DB: "${DB_DB}"
+      DB_USER: "${DB_USER}"
+      DB_PASS: "${DB_PASS}"
+      CLIENT_ID: "${CLIENT_ID}"
+      CLIENT_SECRET: "${CLIENT_SECRET}"
+      REACT_APP_REDIRECT_URI: "${REACT_APP_REDIRECT_URI}"
+      IP_ADDR: "${IP_ADDR}"
+      JWT_ACCESS_TOKEN_SECRET: "${JWT_ACCESS_TOKEN_SECRET}"
+      JWT_ACCESS_TOKEN_EXPIRATION_TIME: "${JWT_ACCESS_TOKEN_EXPIRATION_TIME}"
+    volumes:
+      - ./back:/app
+      - /app/node_modules
+      - ./back/vol:/app/vol
+    networks:
+      - transcendence
+    depends_on:
+      - "db"
+
+  db:
+    image: postgres:latest
+    container_name: database
+    restart: always
+    expose:
+      - "5432"
+    environment:
+      DB_DB: "${DB_DB}"
+      DB_USER: "${DB_USER}"
+      DB_PASS: "${DB_PASS}"
+      PG_DATA: /var/lib/postgresql/data
+    networks:
+      - transcendence
+    env_file:
+      - .env
+
+networks:
+  transcendence:
+    driver: bridge
