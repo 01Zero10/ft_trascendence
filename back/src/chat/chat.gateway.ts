@@ -84,7 +84,7 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   async handleConnection(clientSocket: Socket) {
     const client_id = String(clientSocket.handshake.query.userID);
-    this.logger.log(`client ${client_id} arrived in /chat`);
+    this.logger.log(`client ${client_id} ${clientSocket.id} arrived in /chat`);
     // if (clientSocket.handshake.query.userID !== 'undefined' 
     // && clientSocket.handshake.query.userID !== "null" 
     // )
@@ -97,7 +97,7 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   async handleDisconnect(clientSocket: Socket) {
     const client_id = String(clientSocket.handshake.query.userID);
-    this.logger.log(`client ${client_id} left /chat`);
+    this.logger.log(`client ${client_id} ${clientSocket.id} left /chat`);
     // if (clientSocket.handshake.query.userID !== 'undefined' && clientSocket.handshake.query.userID !== "null")
     // {
     //   await this.userService.setOfflineStatus(String(clientSocket.handshake.query.userID));

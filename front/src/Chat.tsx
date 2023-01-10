@@ -18,14 +18,16 @@ export default function Chat() {
 
 	const [socket, setSocket] = useState<Socket | null>(null);
 	useLayoutEffect(() => {
-	  if (student.id !== 0) {
-		const newSocket = io(`http://${process.env.REACT_APP_IP_ADDR}:3001/chat`, { query: { userID: String(student.id) } });
-		newSocket.on('connect', () => {
-		  setSocket(newSocket);
-		  student.socket_id = newSocket.id;
+	 	if (student.id !== 0) {
+			const newSocket = io(`http://${process.env.REACT_APP_IP_ADDR}:3001/chat`, { query: { userID: String(student.id) } });
+			newSocket.on('connect', () => {
+		  		setSocket(newSocket);
+		//   student.socket_id = newSocket.id;
+			})
+		return () => {
+			newSocket.disconnect();
 		}
-		)
-	  }
+	}
 	}, [student.id]);
 
 

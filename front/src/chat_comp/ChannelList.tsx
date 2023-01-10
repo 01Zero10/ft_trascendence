@@ -39,7 +39,7 @@ export default function ChannelList(props: any) {
 	}, [props.socket])
 
 	useEffect(() => {
-		props.socket?.on('updateChannel', async(roomName: string, type: string, builder: { username: string }) =>{
+		props.socket?.on('updateChannel', async(roomName: string, type: string, builder: { username: string, nickname: string }) =>{
 			props.setRoom({name: roomName, type: type, builder: builder});
 		});
 	}, [props.socket])

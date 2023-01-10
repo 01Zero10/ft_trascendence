@@ -65,12 +65,14 @@ export default function Game() {
     }
 
     useLayoutEffect(() => {
-        const newSocket = io(`http://${process.env.REACT_APP_IP_ADDR}:3001/game`, { query: { username: contextData.username } });
+    if (contextData.id !== 0 && contextData.username !== null && contextData.username !== "" && contextData.username !== undefined){
+        const newSocket = io(`http://${process.env.REACT_APP_IP_ADDR}:3001/game`, { query: { username: String(contextData.username) }, forceNew: true });
         newSocket.on('connect', () => {
             setSocket(newSocket);
         })
         return () => {
             newSocket.disconnect();
+        }
         }
     }, [contextData.username]);
 

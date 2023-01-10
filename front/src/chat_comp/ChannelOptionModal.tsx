@@ -13,7 +13,7 @@ import "./ChannelOptionModal_stye.css"
 export default function ChannelOptionModal(props: any) {
     const contextData = useContext(Student);
     const newOption_basic = {
-        builder: props.room.builder.username,
+        builder: props.room.builder,
         nameGroup: "",
         members: [],
         admin: [],
@@ -70,7 +70,7 @@ export default function ChannelOptionModal(props: any) {
     useLayoutEffect(() =>{
         setNewOption({...newOption_basic, 
                         type: props.room.type,  
-                        builder: props.room.builder.username})
+                        builder: props.room.builder})
         getChannelMembers()
     }, [props.room.name])
 
@@ -201,7 +201,7 @@ export default function ChannelOptionModal(props: any) {
                     newName: newOption.nameGroup,
                     adminsSetted: newOption.admin,
                 })
-            }) 
+            })
         // if(newOption.admin.length !== props.admins){
         //     const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/editUsers`;
         //     await fetch(API_GET_MEMBERS, {

@@ -50,7 +50,6 @@ export default function Canvas(props: CanvasProps) {
   let moveKey: MoveKey = { s: false, w: false, ArrowUp: false, ArrowDown: false }
   
   function startGame(ball: Ball, left: Player, right: Player) {
-    getAvatars();
     update(context, ball, left, right)
   }
 
@@ -120,6 +119,8 @@ export default function Canvas(props: CanvasProps) {
     if (props.gameData.roomName !== ""){
       let response = await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/game/getAvatars/${props.gameData.roomName}`);
       let data = await response.json();
+      console.log("Avatar: ", data
+      )
       if (data){
         setAvatar({avatarL: data.avatar1, avatarR:data.avatar2});
       }
@@ -143,6 +144,7 @@ export default function Canvas(props: CanvasProps) {
   }, [])
 
   useEffect(() => {
+    getAvatars();
     props.socket.on('update', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
       update(context!, ball, leftPlayer, rightPlayer);
     })
