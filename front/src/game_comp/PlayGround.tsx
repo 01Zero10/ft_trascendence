@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { Student } from "../App"
 import Canvas from "./Canvas"
 import Canvas2 from "./canvas2"
+import "./PlayGround.css"
 
 // type Point = {
 //     left: number
@@ -64,14 +65,14 @@ function PlayGround(props: any) {
                 onClose={() => console.log("Console.log del modal onClose() Playground.tsx")}
                 opened={!!winner}
                 transitionDuration={600}
-                style={{ backgroundColor: "black", zIndex: "5", }}
+                style={{ backgroundColor: "transparent", zIndex: "5", }}
                 centered
                 withCloseButton={false}
                 size="lg"
                 overlayOpacity={0.50}
                 overlayBlur={5}
             >
-                <div>
+                <div style={{display:"flex", justifyContent:"center", justifyItems:"center", flexDirection:"column"}}>
                     <div className="inner1">
                         {winner === 'left' ? <h1 style={{ padding: "5%" }}>Opponent left the room! 🤪</h1> :
                             (student.username === winner ? <h1 style={{ padding: "5%" }}>You Won! 🥳</h1> :
@@ -80,7 +81,7 @@ function PlayGround(props: any) {
                     {/* style={{width:"50%", display:"flex", justifyContent:"center"}} */}
                     <div className="inner2">
                         <Button
-                            style={{ margin: "1%" }}
+                            className="inner2_button"
                             radius="lg"
                             size="md"
                             variant="gradient"
@@ -88,15 +89,6 @@ function PlayGround(props: any) {
                             onClick={() => navigate('/home')}
                         >
                             Back to home
-                        </Button>
-                        <Button
-                            style={{ margin: "1%" }}
-                            radius="lg"
-                            size="md"
-                            variant="gradient"
-                            gradient={{ from: 'black', to: 'pink', deg: 55 }}
-                        >
-                            Rematch
                         </Button>
                     </div>
                 </div>

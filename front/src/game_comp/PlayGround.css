@@ -1,13 +1,25 @@
 
-#inner1 {
+.inner1 {
 	float:left;
 	text-align: center;
  }
  
- #inner2{
-	float:left; 
-	clear: left;
+ .inner2{
+	display: flex;
 	align-items: center;
+	justify-content: center;
+ }
+
+ .inner2_button {
+	margin: 1%;
+ }
+
+ .inner2_button:focus {
+	outline: none;
+ }
+
+ .inner2_button:focus:not(:focus-visible){
+	outline: none;
  }
 
 
