@@ -44,14 +44,34 @@ export default function ChannelOptionModal(props: any) {
     const [newOption, setNewOption] = useState<NewChannel>({...newOption_basic});
     const [btnDisabled, setBtnDisabled] = useState(true)
     const [visible, { toggle }] = useDisclosure(false);
+    const [members, setMembers] = useState<{value: string, label: string}[]>([])
     //const [admins, setAdmins] = useState<string[]>([])
     const [optionsFriends, setOptionsFriends] = useState<{ value: string, label: string }[]>([{ value: "", label: "" }]);
+
+    async function getChannelMembers() {
+		const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/allmembersandstatus/${props.room.name}`;
+		if (props.room.name) {
+			let response = await fetch(API_GET_MEMBERS);
+			let data = await response.json();
+			let fetchMember: {value: string, label: string}[] = [];
+			// let fetchMember: string[] = [];
+			await Promise.all(await data?.map(async (element: any) => {
+				// let iMember: string = element.nickname;
+                
+				let iMember: {value: string, label: string} = {value: element.username, label: element.nickname}
+				if(element.username !== props.room.builder.username)
+					fetchMember.push(iMember);
+			}))
+			setMembers(fetchMember);
+		}
+	}
 
 
     useLayoutEffect(() =>{
         setNewOption({...newOption_basic, 
                         type: props.room.type,  
                         builder: props.room.builder.username})
+        getChannelMembers()
     }, [props.room.name])
 
     useLayoutEffect(() => {
@@ -166,30 +186,22 @@ export default function ChannelOptionModal(props: any) {
         }
     }
 
-
-    function checkProtectedChannel() {
-        if (newOption.type === 'protected' && newOption.confirmPass === '') {
-            return false;
-        }
-        else return !(newOption.type === 'protected' && newOption.confirmPass !== '' && newOption.confirmPass !== newOption.password);
-    }
-
     async function handleButtonClick() {
         //modifica il canale
         if (props.modalTypeOpen === "options"){
-		const API_EDIT_CHAT = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/editChannel`;
-		await fetch(API_EDIT_CHAT, {
-			method: 'POST',
-			credentials: 'include',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				channelName: props.room.name,
-				type: newOption.type,
-				password: newOption.confirmPass,
-				newName: newOption.nameGroup,
-                adminsSetted: newOption.admin,
-			})
-		}) 
+            const API_EDIT_CHAT = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/editChannel`;
+            await fetch(API_EDIT_CHAT, {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    channelName: props.room.name,
+                    type: newOption.type,
+                    password: newOption.confirmPass,
+                    newName: newOption.nameGroup,
+                    adminsSetted: newOption.admin,
+                })
+            }) 
         // if(newOption.admin.length !== props.admins){
         //     const API_GET_MEMBERS = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/editUsers`;
         //     await fetch(API_GET_MEMBERS, {
@@ -214,6 +226,7 @@ export default function ChannelOptionModal(props: any) {
 		props.setModalTypeOpen(null)
         setNewOption({...newOption_basic})
 	}
+
 
     useEffect( () =>
         {
@@ -441,7 +454,7 @@ export default function ChannelOptionModal(props: any) {
                             onChange={changeMembers}>
                         </MultiSelect>}
                         {props.modalTypeOpen === "options" && <MultiSelect style={{ width:"90%", margin:"auto"}} 
-                            data={props.members}
+                            data={members}
                             value={newOption.admin}
                             placeholder={"Select Admins"}
                             searchable

@@ -68,8 +68,8 @@ export default function CreateChannel(props: any) {
             })
                 .then((response) => response.json())
                 .then(async (result) => {
-                    await Promise.all(await result.map(async (element: string) => {
-                        fetchOptions.push({ value: element, label: element });
+                    await Promise.all(await result.map(async (element: {username: string, nickname: string}) => {
+                        fetchOptions.push({ value: element.username, label: element.nickname });
                     }))
                     setOptionsFriends(fetchOptions);
                 })
