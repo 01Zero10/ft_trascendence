@@ -12,7 +12,6 @@ export default function ChatInput(props: any) {
     }
 
     function sendWithEnter(e: any) {
-        //console.log(e)
         if (!e.shiftKey && e.key === "Enter") {
             e.preventDefault()
             props.handleSend();

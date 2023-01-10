@@ -18,11 +18,9 @@ export default function ChatMessageBody(props: any) {
         )
                 }
     else {
-        //console.log(props.arr)
         return (
             <div id="list">
                 {props.arr.map(function (item: string, id: number): any {
-                        //console.log(item)
                         if (item.includes(props.src)) {
                             return <SceltaStanza key={id}
                                                  main={props.main}

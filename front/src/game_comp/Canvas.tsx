@@ -117,11 +117,9 @@ export default function Canvas(props: CanvasProps) {
   }}
 
   async function getAvatars() {
-    console.log("la playroom è: ", props.gameData.roomName)
     if (props.gameData.roomName !== ""){
       let response = await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/game/getAvatars/${props.gameData.roomName}`);
       let data = await response.json();
-      console.log("data :", data)
       if (data){
         setAvatar({avatarL: data.avatar1, avatarR:data.avatar2});
       }
@@ -133,7 +131,6 @@ export default function Canvas(props: CanvasProps) {
       props.setPoint({left:data.leftPoint, right: data.rightPoint})
       //TODO: impostare conto alla rovescia
       await sleep(3);
-      // console.log()
       if (props.gameData.rightPlayer === student.username) {
         props.socket.emit('restart', data.roomName);
       }
@@ -147,8 +144,6 @@ export default function Canvas(props: CanvasProps) {
 
   useEffect(() => {
     props.socket.on('update', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {
-      console.log("spectando")
-      console.log(ball);
       update(context!, ball, leftPlayer, rightPlayer);
     })
     props.socket.once('start', (ball: Ball, leftPlayer: Player, rightPlayer: Player) => {

@@ -3,10 +3,7 @@ import React, { useState } from "react"
 
 export default function ChatHeader(props: any) {
     const [open, setOpen] = useState(false)
-    //console.log("main: ", props.main)
-    //console.log(props.gruppo)
     function chiudiGruppo(){
-       //console.log("CAZZO!!!!!")
         props.setGruppo(false)
     }
     function indietro() {
@@ -16,7 +13,6 @@ export default function ChatHeader(props: any) {
     
 
     function creaGruppo(){
-       //console.log("TUA NONNA")
         props.setGruppo((prevGruppo: boolean) => !prevGruppo)
     }
 

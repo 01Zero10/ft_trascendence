@@ -6,7 +6,6 @@ export default function LeaderBoard2() {
 
     useEffect(() => {
         gameSocket = io(`http://${process.env.REACT_APP_IP_ADDR}:3001/game`);
-        //console.log("porco dio", gameSocket);
         return () => {
             gameSocket.disconnect();
         }
@@ -14,7 +13,6 @@ export default function LeaderBoard2() {
 
     useEffect(() => {
         gameSocket?.on('ciao', () => {
-            //console.log('ricevuto ciao');
         })
     }, [])
     return (<></>);

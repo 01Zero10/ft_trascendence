@@ -47,7 +47,6 @@ function PlayGround(props: any) {
             setWinner(winner)
         })
         props.socket.once('readyFromInvite', ( data: {namePlayRoom: string, rightClient: string}) => {
-            console.log("readyy");
             props.setLoader(false);
             if (student.username === data.rightClient)
                 props.socket.emit('setStart', data.namePlayRoom);
@@ -62,7 +61,7 @@ function PlayGround(props: any) {
                     textAlign: 'center',
                 },
             })}
-                onClose={() => console.log("si cazzo!!!!!")}
+                onClose={() => console.log("Console.log del modal onClose() Playground.tsx")}
                 opened={!!winner}
                 transitionDuration={600}
                 style={{ backgroundColor: "black", zIndex: "5", }}

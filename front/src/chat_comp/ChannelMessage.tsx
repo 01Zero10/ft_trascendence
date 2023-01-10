@@ -27,7 +27,6 @@ export default function ChannelMessage(props: any) {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({client: student.username, userToChatWith: userToChatWith}),
 		}).then((response) => response.json())
-		console.log('---------', ret);
 		props.setCard(`FriendsChatList/${student.username}`);
 		props.setRoom({ name: ret.name, type: 'direct', builder: {username: null} });
 	}

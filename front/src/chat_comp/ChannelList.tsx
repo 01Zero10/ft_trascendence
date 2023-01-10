@@ -12,11 +12,9 @@ export default function ChannelList(props: any) {
 		let response = await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/chat/get${props.card}`);
 		let data = await response.json();
 		let options_: Rooms[] = [];
-		console.log("ooooptions ", options_)
 		if(props.card !== `FriendsChatList/${student.username}`) {
 			await Promise.all(await data.map(async (element: any) => {
 				//if (options_.findIndex(x => x.name === element.name) === -1)
-				console.log("elemento", element)
 					options_.push(element);
 				}))
 		}
@@ -42,7 +40,6 @@ export default function ChannelList(props: any) {
 
 	useEffect(() => {
 		props.socket?.on('updateChannel', async(roomName: string, type: string, builder: { username: string }) =>{
-			console.log('canalissimo ', roomName, type, builder);
 			props.setRoom({name: roomName, type: type, builder: builder});
 		});
 	}, [props.socket])
@@ -50,10 +47,9 @@ export default function ChannelList(props: any) {
 	return (
 		<div style={{display: "flex", flexDirection: "column"}}>
 			{channelList.map(function (element: any, id: number) {
-				// console.log(element)
 				return (
 					element.name?.includes(props.src) ? (
-						<button className="btn" key={id + "channel-selection"} onClick={() => {console.log (element); console.log(typeof(element)); props.setRoom({...element})}}>
+						<button className="btn" key={id + "channel-selection"} onClick={props.setRoom({...element})}>
 							<div className="btn__content" key={id + "settings- chat-select"} >
 								{element.type === 'direct' ? element.name.replace(student.username, '') : element.name}
 							</div>

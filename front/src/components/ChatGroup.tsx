@@ -22,7 +22,6 @@ export default function ChatGroup(props: any) {
         password: ""
     })
     const [options_, setOptions_] = React.useState<string[]>([])
-    //console.log("name: ", name);
 
 
     function setPass(e: React.ChangeEvent<HTMLInputElement>) {
@@ -51,7 +50,6 @@ export default function ChatGroup(props: any) {
                 if (element.username != contextData.username)
                     setOptions_((prevOptions) => [...prevOptions, element.username])
             });
-            //console.log("options===", options_);
         }
         getUsersOnDB();
     }, [groupName]);

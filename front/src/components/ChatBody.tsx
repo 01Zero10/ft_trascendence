@@ -12,9 +12,7 @@ export default function ChatBody(props: any) {
     const bottomRef = useRef<null | HTMLDivElement>(null);
     const id = useId()
     const key = useId()
-    //console.log(props.arr);
 
-    //console.log("id: ", id, "key: ", key)
     useEffect(() => {
         bottomRef.current?.scrollIntoView()
     }, [props.arrMessaggi])
@@ -29,12 +27,7 @@ export default function ChatBody(props: any) {
                 {
                     props.arrMessaggi.map(
                         (m: any) => {
-
-                            //console.log(m.username)
-                            //console.log(user)
-                            //console.log(m.username === user)
                             // setUser((prevUsername) => m.username !== prevUsername ? m.username : prevUsername)
-                            //console.log(userAvavtar)
                             return (<>
                                 <img src={m.avatar} className={props.user !== m.username ? "body-photo-right" : "body-photo-left"} />
                                 <Message class={props.user !== m.username ? "messaggio assistente" : "messaggio utente"} username={m.username} createdAt={m.createdAt} message={m.message} />

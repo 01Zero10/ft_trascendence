@@ -2,25 +2,21 @@ import { CheckBox } from "@mui/icons-material";
 import React, {useId}from "react"
 
 export default function SceltaStanza(props: any) {
-    //console.log("groupMembers: ", props.groupMembers)
     let [cazz1, setCazz1] = React.useState(false)
 	let id = useId()
 
 
     //let arr: string[] = [];
     function scelta() {
-       //console.log("scelta")
         props.setStanza(props.name)
     }
 
     function ciao(e: React.ChangeEvent<HTMLInputElement>) {
-        //console.log("e: ", e.target.value)
         if (!props.groupMembers.find((x: string) => x === e.target.value)){
             props.setGroupMembers((prevGroupMembers: string[]) => [...prevGroupMembers, e.target.value]);
             setCazz1(true)
         }
         else {
-            //console.log("index: ", props.groupMembers.indexOf(e.target.value))
             if(props.groupMembers.indexOf(e.target.value) !== -1){
                 let arr = [...props.groupMembers]
                 arr.splice(props.groupMembers.indexOf(e.target.value), 1)

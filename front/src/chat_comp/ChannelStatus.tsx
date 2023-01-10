@@ -20,7 +20,6 @@ export default function ChannelStatus(props: any) {
 		if (props.room.name) {
 			let response = await fetch(API_GET_MEMBERS);
 			let data = await response.json();
-			//console.log("data: ", data)
 			let fetchMember: {username: string, nickname: string, status: boolean}[] = [];
 			// let fetchMember: string[] = [];
 			await Promise.all(await data?.map(async (element: any) => {
@@ -61,7 +60,6 @@ export default function ChannelStatus(props: any) {
 		});
 		let data = await response.json();
 		navigate(("/users/" + data.username))
-		console.log(data);
 	}
 
 	useEffect(() => {
@@ -88,10 +86,6 @@ export default function ChannelStatus(props: any) {
 		getRoomAdmins()
 	}, [props.room.name]
 	)
-
-	useEffect(() => {
-		console.log(props.members);
-	}, [props.members])
 
 	return (
 		<div style={{height:"100%", width:"20%", display:"flex", flexDirection:"column", fontFamily:"'Tomorrow', sans-serif", fontWeight:"400", fontSize:"0.95rem"}}>

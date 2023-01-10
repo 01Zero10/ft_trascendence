@@ -187,7 +187,6 @@ export default function ChannelBody(props: any) {
 				fetchMuted.push(element);
 			}))
 		}
-		console.log("muted", fetchMuted)
 		return fetchMuted;
 	}
 
@@ -214,7 +213,6 @@ export default function ChannelBody(props: any) {
 				fetchMuted.push(element);
 			}))
 		}
-		console.log("notmuted", fetchMuted)
 		return fetchMuted;
 	}
 
@@ -247,7 +245,6 @@ export default function ChannelBody(props: any) {
 
 	useEffect(() => {
 		setAdminData({...iniAdminData})
-		console.log("[radmin",props.admin)
 		if (props.room.name && props.admin)
 			prepareInitialData();
 	}, [props.admin, props.room])
@@ -264,7 +261,6 @@ export default function ChannelBody(props: any) {
 		}
 	}
 
-	console.log("adminData:", adminData )
 
 	return (
 		<div style={{ position:"relative", height:"100%", width:"80%"}}>

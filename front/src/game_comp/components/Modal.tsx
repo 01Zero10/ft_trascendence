@@ -48,7 +48,6 @@ function Demo(props: any) {
     async function getFriensOnline() {
       let response = await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/users/getOnlineFriends/${props.client}`);
       let data = await response.json();
-      //console.log(response);
       let fetchFriendsOnline: {
         image: string;
         label: string;
@@ -105,7 +104,6 @@ function RunningMatchesList(props: any){
 
   useEffect(() => {
     async function getRunningMatches() {
-      //console.log(`http://${process.env.REACT_APP_IP_ADDR}:3001/game/get${props.typo}RunningMatches`)
       let response = await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/game/get${props.typo}RunningMatches`);
       let data = await response.json();
       let fetchRunningMatches: RunningMatches[] = [];
@@ -128,7 +126,6 @@ function RunningMatchesList(props: any){
   useEffect(() => {
     props.socket?.on("watchGameConfirm",
         (data: {nameRoom: string, leftClient:string, rightClient:string, leftPoints:number, rightPoints:number}) => {
-          console.log("dati pe guadda", data);
           props.setGameData({roomName: data.nameRoom, leftPlayer: data.leftClient, rightPlayer: data.rightClient})
           props.setPoint({left: data.leftPoints, right:data.rightPoints})
           props.setPlay(true)
@@ -138,14 +135,12 @@ function RunningMatchesList(props: any){
   }, [props.socket])
 
   function handleClick(playRoom: string){
-    console.log("ciao", props.socket);
     props.socket?.emit("watchGameRequest", { namePlayRoom: playRoom})
   }
 
   return (
     <>
     { runningMatches.map(function(element: any){
-        //console.log(element)
         return (
           <div className="running_matches_holder" key={element.playRoom} onClick={() => handleClick(element.playRoom)}>
               <div className="running_matches">

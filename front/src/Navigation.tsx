@@ -41,7 +41,6 @@ const ListSearch = () => {
       })
     }
     getUserNavBar();
-    //console.log(options);
   }, []) //[] ?
 
 
@@ -103,7 +102,6 @@ function Navigation() {
 
   useLayoutEffect(() => {
       socket?.on('updateAllChannelList', async () => {
-        console.log('qualcuno ha lasciato');
         updateChannelUsersList();
       })
   }, [socket])

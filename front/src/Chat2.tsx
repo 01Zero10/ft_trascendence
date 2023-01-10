@@ -43,7 +43,6 @@ function Chat() {
   const [optLoad, setOptLoad] = useState(false);
 
   const contextData = useContext(Student);
-  //console.log(contextData.socket_id);
   //const name: string = contextData.username; //va messo Nickname?
 
   const [loggedIn, setLoggedIn] = useState(false);
@@ -63,27 +62,13 @@ function Chat() {
       if (!options_[element.username])
         options_.push(dropDown);
     });
-    //console.log(options_);
-    //console.log(typeof (options_));
     setOptLoad(true);
   }
 
   let flagToDelete = true;
 
-  useEffect(() => {
-    //console.log('name= ', contextData.username)
-  }, [contextData.username]);
-
-  useEffect(() => {
-    //console.log('room= ', room)
-  }, [room]);
-
-  useEffect(() => {
-    //console.log('input= ', input)
-  }, [input]);
 
   const setChrono = async (data: string) => {
-    //console.log("joined room " + data);
     await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/chat/chrono/${data}`, {
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
@@ -91,7 +76,6 @@ function Chat() {
       .then(response => {
         response.json().then(pack => {
           pack.forEach((element: packMessage) => {
-            //console.log(element.username, "", element.message);
             setMessages(messages => [...messages, [element.username, element.message]]);
           });
         })
@@ -102,8 +86,6 @@ function Chat() {
     e.preventDefault();
     setLoggedIn(true);
     //socket?.connect();
-    //console.log("handle submit");
-    //console.log(socket?.id);
     socket?.emit(
       'addUser',
       { usr: contextData.username },
@@ -134,31 +116,14 @@ function Chat() {
     newSocket.on('connect', () => {
       setSocket(newSocket);
       contextData.socket_id = newSocket.id;
-      //console.log(newSocket.id);
-      //console.log(contextData.socket_id);
     })
     //setSocket(newSocket);
-    //console.log(newSocket.id);
     //socket?.connect();
     getUsersOnDB();
   }, []);
 
   useEffect(() => {
-    socket?.on('newUser', (usr_name: string) => {
-      //console.log(usr_name + " connected.");
-    });
-    socket?.on('lostUser', (usr_name: string) => {
-      //console.log(usr_name + " disconconnected.");
-    });
-    socket?.on('joinedRoom', (usr_room: string) => {
-      setRoom(usr_room);
-      //console.log(usr_room + " entered.");
-    });
-    socket?.on('leftRoom', (usr_name: string) => {
-      //console.log(usr_name + " exited.");
-    });
     socket?.on('msgToClient', (client_message: { room: string, name: string, message: string }) => {
-      //console.log("received from server: ", client_message);
       setMessages(messages => [...messages, [client_message.name, client_message.message]]);
     });
     socket?.on('disconnect', () => {

@@ -69,7 +69,6 @@ export default function ChannelBodyNav(props: any) {
 	// }
 
 
-	console.log("room: ",props.joined)
 	return (
 		<div className="channelNavContainer">
 			<CreateChannel modalTypeOpen={props.modalTypeOpen} room={props.room}/>

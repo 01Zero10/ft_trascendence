@@ -42,14 +42,11 @@ export default function Game() {
         }).then(async (response) => await response.json())
         .catch(() => {return null});
         if(ret){
-            console.log('checkInviteFront');
             if (contextData.username === ret.leftSide || (contextData.username === ret.rightSide && ret.invited === 'accepted')) {
-                console.log("ciao", ret.playRoom, ret.leftSide, ret.rightSide);
                 socket?.emit('connectToInviteGame', { client: contextData.username, playRoom: ret.playRoom, side: (contextData.username === ret.leftSide) ? 'left' : 'right'})
                 setGameData({roomName: ret.playRoom, leftPlayer: ret.leftSide, rightPlayer: ret.rightSide});
                 setPlay(true);
             }
-            console.log(gameData);
         }
     }
 

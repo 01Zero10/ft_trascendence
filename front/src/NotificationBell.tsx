@@ -70,7 +70,6 @@ export default function NotificationBell(props: any) {
 
     useEffect(() => {
         props.socket?.on('updateBell', async () => {
-            console.log("hey, hey, hey");
             await getNotifications();
         });
     }, [props.socket])

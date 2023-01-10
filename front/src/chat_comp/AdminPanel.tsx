@@ -50,7 +50,6 @@ export default function AdminPanel(props: any) {
 
 
 	useLayoutEffect(() => {
-	  //console.log("metti il controllo sui bannati e mutati")
 		props.socket.emit('expiredMuteOrBan', { channelName: props.room.name });
 		//const API_EXPIRED_MUTE_OR_BAN = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/expiredMuteOrBan/ancora`;
 	}, [props.opened])
@@ -99,7 +98,6 @@ export default function AdminPanel(props: any) {
 		const API_MUTE_BAN = `http://${process.env.REACT_APP_IP_ADDR}:3001/chat/handleMuteBan`;
 		let limited: string[] = []
 		limited = props.adminData.unmuteList.filter( (user: string) => (props.data.indexOf(user) === -1) )
-		console.log("limited", limited)
 		await fetch(API_MUTE_BAN, {
 			method: 'POST',
 			credentials: 'include',

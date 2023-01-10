@@ -7,7 +7,6 @@ export default function ChannelInput(props: any) {
 
     const handleSend = () => {
 		if (input !== '') {
-            console.log("Entratissimo");
 			props.socket?.emit(
 				'msgToServer',
 				{ room: props.room.name, username: student.username, message: input, avatar: student.avatar, type: props.room.type }

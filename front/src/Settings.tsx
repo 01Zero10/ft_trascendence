@@ -41,12 +41,10 @@ const PinComponent = (prop: { setOpen: any, setChecked: any, checked: boolean })
   const pinInput = (e: React.ChangeEvent<HTMLInputElement>) => {
 
     setPin(e.target.value)
-    //console.log(e.target.value)
   }
 
   const clickPin = async (e: React.MouseEvent) => {
     e.preventDefault();
-    //console.log('handleClick 👉️', pin);
 
     await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/enable2fa`, {
       method: 'POST',
@@ -57,16 +55,13 @@ const PinComponent = (prop: { setOpen: any, setChecked: any, checked: boolean })
       .then(data => contextData.two_fa_auth = (data.res));
 
     if (contextData.two_fa_auth == true) {
-      //console.log("Context True");
       prop.setOpen(false);
       prop.setChecked(true);
     }
     else {
-      //console.log("Context False");
       prop.setOpen(false);
       prop.setChecked(false);
     }
-    //console.log(contextData);
   }
 
 
@@ -201,11 +196,8 @@ function Settings() {
   const fileUpload = async (e: React.MouseEvent) => {
     e.preventDefault();
     if (null !== inputRef.current) {
-      //console.log("img :", selectedImage);
       inputRef.current.click();
     }
-
-    //console.log("pp ===", newPP);
 
     if (newPP) {
       await fetch(API_URL_AVATAR, {
@@ -220,7 +212,6 @@ function Settings() {
         body: newPP,
       })
         .then((response) => { (response.json().then(function (data) { contextData.avatar = data.img })) })
-      //console.log(contextData);
     }
   }
 
@@ -254,7 +245,6 @@ function Settings() {
 
     const fetchUser = async (e: React.MouseEvent) => {
       e.preventDefault();
-      //console.log('newname 👉️', name);
       await fetch(API_URL_USER, {
         method: 'POST',
         credentials: 'include',

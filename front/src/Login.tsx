@@ -17,7 +17,6 @@ function Login() {
 	}
 
 	useLayoutEffect(() => {
-		console.log('logout');
 		updateChannelUsersList();
 	}, [])
 

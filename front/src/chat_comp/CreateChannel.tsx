@@ -104,7 +104,6 @@ export default function CreateChannel(props: any) {
             .then((response) => response.json())
             setCheckName(ret.ret);
         }
-        //console.log("ret-t-t ", ret.ret);
 
     }
 
@@ -173,7 +172,6 @@ export default function CreateChannel(props: any) {
         props.setNewChannel(false)
     }
 
-    //console.log(optionsFriends)
 
 /*root	.mantine-Modal-root	Root element, contains modal and overlay
 inner	.mantine-Modal-inner	Modal wrapper, centers modal

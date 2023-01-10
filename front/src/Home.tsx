@@ -13,7 +13,7 @@ mettere il wrapper (componente) così rimane la Navbar ma la pagina cambia */
 // background = addEventListener('move', handleMove)
 
 // const function handleMove() {
-//   //console.log("ao")
+//
 // }
 // $(background).mousemove(function(event) {
 //   windowWidth = $(window).width();

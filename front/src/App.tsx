@@ -118,15 +118,11 @@ function App() {
   
 
   const ProtectedRoute = ({contextData} : {contextData: student}) => {
-    console.log("lo studente dentro protected è: ", contextData)
     if (!contextData.id || contextData.id === 0 || contextData.id === null) {
-      console.log("sto per fare Navigate, questo è il context: ", contextData)
       return <Navigate to={"/"} replace />;
     }
     return <Outlet />;
   };
-
-  console.log("lo studente ccontext è: ", contextData)
 
   return (
     <div className="App">

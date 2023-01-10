@@ -32,8 +32,6 @@ function Chat2(props: any) {
 
     let options_: string[] = [];
 
-    //console.log("stanza===", stanza);
-
     const [listUser, setListUser] = useState<string[]>([]);
     const [messages, setMessages] = useState<packMessage[]>([]);
 
@@ -49,11 +47,8 @@ function Chat2(props: any) {
         newSocket.on('connect', () => {
             setSocket(newSocket);
             contextData.socket_id = newSocket.id;
-            //console.log(newSocket.id);
-            //console.log(contextData.socket_id);
         })
         //setSocket(newSocket);
-        //console.log(newSocket.id);
         //socket?.connect();
         //getUsersOnDB();
     }, []);
@@ -61,7 +56,6 @@ function Chat2(props: any) {
     useEffect(() => {
         async function getUsersOnDB() {
 
-            //console.log(contextData.id);
             //if (contextData.id != 0) {
             let respose = await fetch(`http://${process.env.REACT_APP_IP_ADDR}:3001/chat/clientrooms/${contextData.id}`);
 
@@ -131,25 +125,18 @@ function Chat2(props: any) {
 
     useEffect(() => {
         socket?.on('newUser', (usr_name: string) => {
-            //console.log(usr_name + " connected.");
         });
         socket?.on('lostUser', (usr_name: string) => {
-            //console.log(usr_name + " disconconnected.");
         });
         socket?.on('joinedRoom', (usr_room: string) => {
-            //console.log(usr_room + " entered.");
         });
         socket?.on('leftRoom', (usr_name: string) => {
-            //console.log(usr_name + " exited.");
         });
         socket?.on('msgToClient', (client_message: packMessage) => {
-            //console.log("received from server: ", client_message);
-            //console.log("msgtoclient:", client_message.room);
-            //console.log(client_message);
             setMessages(messages => [...messages, client_message]);
         });
         socket?.on('disconnect', () => {
-            socket?.emit('deleteUser', { usr: contextData.username }, (data: string) => console.log("deleteuser: ", data));
+            socket?.emit('deleteUser', { usr: contextData.username }, (data: string) => {});
         })
     }, [socket]);
 
@@ -158,7 +145,6 @@ function Chat2(props: any) {
     }
 
     function close() {
-        //console.log("chiudo")
         status === "aperta" && setStatus("chiusa")
     }
 
@@ -181,8 +167,6 @@ function Chat2(props: any) {
     const joinRoom = async (roomName: string) => {
 
         const room = await SetRoomName(contextData.username, roomName);
-        //console.log("joooooooin === ", room)
-        //console.log(stanza);
         socket?.emit('joinRoom', { client: contextData.username, room: room });
     }
 
