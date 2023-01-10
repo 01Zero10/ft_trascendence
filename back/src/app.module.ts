@@ -16,6 +16,7 @@ import { Friendship } from "./user/friendship.entity";
 import { GameGateWay } from "./game/game.gateway";
 import { NavigationModule } from "./navigation/navigation.module";
 
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -24,11 +25,9 @@ import { NavigationModule } from "./navigation/navigation.module";
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'db',
-      // host: 'localhost',
-      port: 5432,
-      username: process.env.DB_USER,
-      password:  process.env.DB_PASS,
-      database:  process.env.DB_DB,
+      username: "postgres",
+      password:  "mysecretpassword",
+      database:  "nestjs",
       entities: [User, Chat, Match, Friendship],
       autoLoadEntities: true,
       synchronize: true,
@@ -40,7 +39,7 @@ import { NavigationModule } from "./navigation/navigation.module";
     NavigationModule,
     JwtModule.register({
       secret: "Segreto243",
-      signOptions: {expiresIn: "1d",}
+      signOptions: {expiresIn: "99d",}
     })
   ],
   controllers: [AuthController, ChatController], 

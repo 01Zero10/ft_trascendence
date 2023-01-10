@@ -24,11 +24,17 @@ services:
     networks:
       - webapp
     ports:
-      - 8080:8080
+      # - 8080:8080
+      - 3000:3000
     restart: always
-    command: ['./wait-for-it.sh', 'back:3001', '--', 'nginx', '-g', 'pid /tmp/nginx.pid; daemon off;']
+    command: ['./wait-for-it.sh', 'back:3001', '--', 'serve', '-s', 'build']
     container_name: front
     hostname: front
+    environment:
+      CLIENT_ID: "${CLIENT_ID}"
+      REACT_APP_REDIRECT_URI: "${REACT_APP_REDIRECT_URI}"
+      REACT_APP_IP_ADDR: "${IP_ADDR}"
+
   back:
     build:
       context: ./back
@@ -44,6 +50,8 @@ services:
     command: ['./wait-for-it.sh', 'db:5432', '--', 'yarn', 'start']
     container_name: back
     hostname: back
+    env_file:
+      - .env
 
 networks:
   webapp:
