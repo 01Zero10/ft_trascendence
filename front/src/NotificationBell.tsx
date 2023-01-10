@@ -93,10 +93,10 @@ export default function NotificationBell(props: any) {
                 <Menu.Dropdown>
                     <Menu.Label>Notifications menu</Menu.Label>
                     <Menu.Divider />
-                    {notifications?.map((element) => (
+                    {notifications?.map((element, id) => (
                         (element.type !== 'game_request') ?
-                        <Menu.Item component='a' href={'/users/' + element.sender} >• {element.type} request from {element.sender}!</Menu.Item> :
-                        <Menu.Item onClick={() => handleAcceptGame(element.sender)}>• Game request from {element.sender} </Menu.Item>
+                        <Menu.Item key={id} component='a' href={'/users/' + element.sender} >• {element.type} request from {element.sender}!</Menu.Item> :
+                        <Menu.Item key={id} onClick={() => handleAcceptGame(element.sender)}>• Game request from {element.sender} </Menu.Item>
                     ))}
                 </Menu.Dropdown>
             </Menu>
