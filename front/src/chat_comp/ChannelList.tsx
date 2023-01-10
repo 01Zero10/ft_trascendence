@@ -29,7 +29,7 @@ export default function ChannelList(props: any) {
 
 	useEffect(() => {
 		getChannels().then();
-	}, [props.card]);
+	}, [props.card, channelList]);
 
 	useEffect(() => {
 		props.socket?.on('update', async (type: string) => {
@@ -49,7 +49,7 @@ export default function ChannelList(props: any) {
 			{channelList.map(function (element: any, id: number) {
 				return (
 					element.name?.includes(props.src) ? (
-						<button className="btn" key={id + "channel-selection"} onClick={props.setRoom({...element})}>
+						<button className="btn" key={id + "channel-selection"} onClick={() => props.setRoom({...element})}>
 							<div className="btn__content" key={id + "settings- chat-select"} >
 								{element.type === 'direct' ? element.name.replace(student.username, '') : element.name}
 							</div>
@@ -65,7 +65,7 @@ export default function ChannelList(props: any) {
 			)}
 		</div>
 	)
-
+{/*onClick={props.setRoom({...element})*/}
 	// return (
 	// 	// <div style={{width:"100%", height:"100%", position:"relative", background:"lime", color:"red"}}>
 	// 	<>
