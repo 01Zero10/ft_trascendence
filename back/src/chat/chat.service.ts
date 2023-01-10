@@ -12,8 +12,14 @@ import { promisify } from 'util';
 import { ChatGateWay } from './chat.gateway';
 import { DirectRooms } from './directRooms.entity';
 
+interface BanOrMuteTimer {
+    username: string;
+    idTimer: ReturnType<typeof setInterval>;
+}
+
 @Injectable()
 export class ChatService {
+                mapBanOrMuteTimer: Map<string, BanOrMuteTimer>
     constructor(
         @InjectRepository(RoomMessages) private roomMessagesRepository: Repository<RoomMessages>,
         @InjectRepository(PrivateMessages) private privateMessagesRepository: Repository<PrivateMessages>,
@@ -21,7 +27,8 @@ export class ChatService {
         @InjectRepository(Rooms) private roomsRepository: Repository<Rooms>,
         @InjectRepository(DirectRooms) private directRoomsRepository: Repository<DirectRooms>,
         @InjectRepository(BanOrMute) private banOrMuteRepository: Repository<BanOrMute>,
-        @Inject(forwardRef(() => ChatGateWay)) private readonly chatGateway: ChatGateWay    ) {}
+        @Inject(forwardRef(() => ChatGateWay)) private readonly chatGateway: ChatGateWay
+        ){this.mapBanOrMuteTimer = new Map<string, BanOrMuteTimer>()}
 
     //Getters
 
@@ -684,10 +691,15 @@ export class ChatService {
         mode: string,
         reason: string,
         expirationDate: Date){
+        
+        console.log(rowsToDelete);
+        console.log()
+
         //remove rows phase
         Promise.all(await rowsToDelete.map(async (element) => {
             let index = await this.banOrMuteRepository.findOne({ where: [{channelName: channelName}, {username: element}]});
             await this.banOrMuteRepository.remove(index)
+            // await this.setUnbanOrUnmute()
         }))
 
         //update rows phase

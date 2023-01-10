@@ -324,11 +324,12 @@ export class UserService {
 
   async getListFriends(client: string){
     const arrayFriends = (await this.getByUsername(client)).friends;
-    const response: string[] = [];
+    const response: {username: string, nickname: string}[] = [];
     if (arrayFriends)
     {
-      await Promise.all(await arrayFriends.map(async (element) => {
-        response.push(element);
+      await Promise.all(await arrayFriends.map(async (element: string) => {
+        const user = await this.getByUsername(element);
+        response.push({username: user.username, nickname: user.nickname});
       }))
     }
     return response;
