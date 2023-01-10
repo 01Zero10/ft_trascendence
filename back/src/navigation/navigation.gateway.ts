@@ -27,8 +27,6 @@ export class NavigationGateWay implements OnGatewayInit, OnGatewayConnection, On
     && clientSocket.handshake.query.userID !== "null" 
     )
     {
-      console.log("query = ", String(clientSocket.handshake.query.userID))
-      console.log("socket = ", clientSocket.id)
       //String(clientSocket.handshake.query.userID), clientSocket.id
       await this.navigationService.updateUserSocket(String(clientSocket.handshake.query.userID), clientSocket.id);
       await this.userService.setOfflineStatus(String(clientSocket.handshake.query.userID));
@@ -50,7 +48,6 @@ export class NavigationGateWay implements OnGatewayInit, OnGatewayConnection, On
   
   async updateBell(receiver: string){
     const client = await this.userService.getByUsername(receiver);
-    console.log("client = ", client.username, " sock_id = ", client.socket_id);
     this.server.to(client.socket_id).emit('updateBell');
     //const id_socket = (await this.userService.getByUsername(receiver)).socket_id;
     //this.server.to(id_socket).emit('updateBell');

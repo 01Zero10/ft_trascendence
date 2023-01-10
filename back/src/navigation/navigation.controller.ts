@@ -9,7 +9,6 @@ export class NavigationController{
     
     @Get('notifications/:client')
     async GetNotifications(@Param('client') client: string){
-        console.log(client)
         return await this.navigationService.getNotifications(client);
     }
 

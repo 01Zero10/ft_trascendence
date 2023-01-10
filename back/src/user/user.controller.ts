@@ -25,11 +25,7 @@ export class UsersController {
   @Post('changeAvatar')
   @UseInterceptors(FileInterceptor('file'))
   async changeAvatar(@UploadedFile() file: Express.Multer.File, @Body() body){
-    console.log ("");
-    console.log ("[changeAvatar]");
-    console.log(body.client);
     const base64string = btoa(String.fromCharCode(...new Uint8Array(file.buffer)));
-    console.log(base64string);
     return {img: await this.userService.changeAvatar(Number(body.client), base64string)};
   }
 
@@ -40,15 +36,12 @@ export class UsersController {
 
   @Post('blockUser')
   async blockUser(@Body('client') client: string, @Body('userToBlock')userToBlock: string){
-    //console.log(["___blockUser"]);
-    console.log("client = ", client, "userToBlock = ", userToBlock);
     await this.userService.blockUser(client, userToBlock);
     //return ();
   }
 
   @Post('checkBlock')
   async checkBlock(@Body('client') client: string, @Body('userToCheck') userToCheck: string){
-    console.log(await this.userService.checkBlock(client, userToCheck))
     return await this.userService.checkBlock(client, userToCheck);
   }
 
@@ -59,7 +52,6 @@ export class UsersController {
 
   @Post('checkFriendship')
   async checkFriendship(@Body('client1') client1: string, @Body('client2')client2: string){
-    //console.log("[__checkFriendship]");
     return await this.userService.checkFriendship(client1, client2);
     //return ()
   }
@@ -91,8 +83,6 @@ export class UsersController {
 
   @Post('getFriendsRequest')
   async GetFriendsRequest(@Body('client') client: string, @Body('profileUser') profileUser: string){
-    //console.log(client);
-    //console.log(profileUser);
     return await this.userService.getFriendsRequest(client, profileUser);
   }
 
@@ -113,7 +103,6 @@ export class UsersController {
 
   @Get('getUserFromNick/:nickname')
   async GetUserFromNick(@Param('nickname') nickname: string) {
-    console.log('arivato');
     return {'username': await this.userService.getUserFromNick(nickname)};
   }
 

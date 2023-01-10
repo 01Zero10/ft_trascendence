@@ -37,8 +37,6 @@ export class GameController{
 
     @Get('checkInvite/:client')
     async CheckInvite(@Param('client') client: string){
-        console.log("passaggio 1");
-        console.log(await this.gameService.checkInvite(client))
        return await this.gameService.checkInvite(client);
     }
 
