@@ -336,10 +336,12 @@ export class GameService{
         if (roomSaved.points1 > roomSaved.points2)
         {
             await this.updatePosition(player1.username);
-            return roomSaved.player1;
+            return roomSaved.player1.username;
         }
-        await this.updatePosition(player2.username);
-        return roomSaved.player2;
+        else {
+            await this.updatePosition(player2.username);
+            return roomSaved.player2.username;
+        }
     }
 
     async createDirectGame(client: string, userToPlayWith: string, type: string){
