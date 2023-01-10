@@ -7,7 +7,6 @@ import {Fab} from "@mui/material";
 import {positions} from "@mui/system";
 import ChannelList from "./ChannelList";
 import { Padding } from "@mui/icons-material";
-import Textbox from "../components/Textbox";
 import SearchIcon from '@mui/icons-material/Search';
 import "./ChatMenu_style.css"
 import CreateChannel from "./CreateChannel";

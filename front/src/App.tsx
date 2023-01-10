@@ -2,7 +2,6 @@ import React, { Children, Component, createContext, useContext, useEffect, useLa
 import './App.css';
 import { BrowserRouter, BrowserRouter as Router, Navigate, Outlet, Route, Routes, useParams } from "react-router-dom";
 import Home from './Home';
-import About from './About';
 import Navigation from './Navigation';
 import Game from './Game';
 import Logout from './Logout';
@@ -10,7 +9,7 @@ import Login from './Login';
 //import Account from './Account';
 import Settings from './Settings';
 import Chat from './Chat';
-import Loader from './components/Loader';
+import Loader from './Loader';
 import PageNotFound from './PageNotFound';
 import { io, Socket } from 'socket.io-client';
 import Account from './Account';

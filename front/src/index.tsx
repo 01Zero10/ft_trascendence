@@ -6,7 +6,6 @@ import reportWebVitals from './reportWebVitals';
 
 export { default as Logout } from "./Logout";
 export { default as Home } from "./Home";
-export { default as About } from "./About";
 export { default as Game } from "./Game";
 
 const root = ReactDOM.createRoot(

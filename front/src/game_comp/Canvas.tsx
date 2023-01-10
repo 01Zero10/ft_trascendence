@@ -1,7 +1,7 @@
 import {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import React from "react";
 import { Socket } from "socket.io-client";
-import Loader from "../components/Loader"
+import Loader from "../Loader"
 import {Student} from "../App";
 import { PongTitle } from "./components/PongTitle";
 import "./Canvas.css"
