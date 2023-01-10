@@ -299,13 +299,13 @@ export default function ChannelBody(props: any) {
 				setJoined={props.setJoined} 
 				setModalTypeOpen={setModalTypeOpen} 
 				/>
-			{(props.room.name && props.joined) ?
+			{(props.room.name && (props.joined || props.room.type === "public")) ?
 				myState?.mode !== "ban" ? 
 					<div style={{background: "black", color: "white", position: "relative", height: "92%", width: "100%"}}>
 						<ScrollArea style={{height: "89%"}} styles={scrollAreaStyle} type="hover" scrollHideDelay={(100)}>
 							{props.room.name && messages.map((m: packMessage, id: number) => {
 								if (student.blockedUsers && student.blockedUsers.findIndex(x => x === m.userInfo.username) != -1) {
-									console.log(student.blockedUsers.findIndex(x => x === m.userInfo.username));
+									<></>
 								} else
 									return (<ChannelMessage 
 											admin={props.admin}
