@@ -89,6 +89,7 @@ export default function CreateChannel(props: any) {
     }
 
     async function changeName(name: string) {
+        console.log("name",name)
         setNewOption((prevNewOptions: NewChannel) => {
             return ({
                 ...prevNewOptions,
@@ -172,6 +173,11 @@ export default function CreateChannel(props: any) {
         props.setNewChannel(false)
     }
 
+    const handleKeyDown = (e: any) => {
+		if (e.key === "?") {
+		  e.preventDefault();
+		}
+	  };
 
 /*root	.mantine-Modal-root	Root element, contains modal and overlay
 inner	.mantine-Modal-inner	Modal wrapper, centers modal
@@ -271,6 +277,7 @@ close	.mantine-Modal-close	Close button*/
                                 type="text"
                                 autoComplete="off"
                                 value={newOption.nameGroup}
+                                onKeyDown={handleKeyDown}
                                 onChange={async (e) => await changeName(e.target.value)}
                         />
                     </div>
