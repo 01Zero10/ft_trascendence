@@ -24,6 +24,8 @@
   height: 100vh;
   box-sizing: border-box;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   align-content: center;
 }
@@ -35,7 +37,7 @@
   /*60vh*/
   max-width: 35%;
   /*700px*/
-  margin: auto;
+  /* margin: auto; */
   display: flex;
   flex-direction: column;
   background: rgba(0, 0, 0, 0.2);
@@ -51,27 +53,30 @@
 
 .username {
   background: linear-gradient(90deg, rgba(255, 85, 94, 1) 0%, rgba(102, 38, 238, 1) 100%);
-  font-family: 'Odibee Sans', sans-serif;
+  /* font-family: 'Odibee Sans', sans-serif; */
+  font-family: 'Tomorrow', sans-serif;
   background-clip: inherit;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  letter-spacing: 0.2rem;
-  font-weight: 700;
+  letter-spacing: 0rem;
+  font-weight: 400;
 }
 
 .switch {
   color: #fff;
-  font-family: 'Smooch Sans', sans-serif;
-  font-size: 1.3rem;
-  letter-spacing: 0.2rem;
+  /* font-family: 'Smooch Sans', sans-serif; */
+  font-family: 'Tomorrow', sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 0rem;
 }
 
 .profile-card__txt {
   color: #fff;
-  letter-spacing: 0.2rem;
-  font-family: 'Smooch Sans', sans-serif;
-  font-size: 2rem;
-  font-weight: 600;
+  letter-spacing: 0;
+  /* font-family: 'Smooch Sans', sans-serif; */
+  font-family: 'Tomorrow', sans-serif;
+  font-size: 1.7rem;
+  font-weight: 400;
 }
 
 .avatar__img {
@@ -165,4 +170,18 @@
   .profile-card-ctr {
     flex-wrap: wrap;
   }
+}
+
+.myButton.settings {
+  font-family: 'Tomorrow', sans-serif;
+  width: 25%;
+  letter-spacing: 0;
+  padding: 1%;
+  margin: 4% auto 0;
+  font-size: 1.5rem;
+}
+
+.myButton.settings:hover {
+  outline: 0;
+	transform: scale(1.05);
 }

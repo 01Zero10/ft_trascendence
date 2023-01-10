@@ -6,6 +6,8 @@ import React, { useContext, useRef, useState } from 'react';
 import { Student } from './App';
 import './Settings.css'
 import Navigation from './Navigation';
+import { useNavigate } from 'react-router-dom';
+import { IconArrowBack } from '@tabler/icons';
 
 
 const style2 = {
@@ -151,7 +153,7 @@ function Settings() {
 
   function SimpleFade() {
     return (
-      <Box sx={{ height: 180 }}>
+      <Box sx={{ height: 100 }}>
         <Box sx={{ display: 'flex' }}>
           <Fade in={checked}>{qrcode}</Fade>
         </Box>
@@ -236,8 +238,10 @@ function Settings() {
 
   const API_URL_USER = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/changeNickname`
 
+	let navigate = useNavigate(); 
+
   function UnauthApp() {
-    const [name, setName] = React.useState(contextData.username)
+    const [name, setName] = React.useState("")
 
     const testOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setName(event.target.value)
@@ -256,17 +260,18 @@ function Settings() {
         .catch((error) => console.log("An error occured: ", error));
 
       contextData.nickname = name
+      AnchorClose()
       // fetchUser();
     }
 
     return (
       <>
-        <TextField value={name} type="text" onChange={testOnChange} inputProps={{ maxLength: 15, minLength: 1, }}
+        <TextField value={name} placeholder="nickname" type="text" onChange={testOnChange} inputProps={{ maxLength: 15, minLength: 1}}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton sx={{ color: 'rgba(102,38,238,1)' }}
-                  onClick={(event) => { fetchUser(event) }}
+                <IconButton sx={{ color: 'rgba(102,38,238,1)'}}
+                  onClick={(event) => {fetchUser(event)}}
                   disabled={name.length !== 0 && 2 ? false : true}
                   edge="end"
                 ><SendIcon />
@@ -274,7 +279,7 @@ function Settings() {
               </InputAdornment>
             )
 
-          }} />
+          }}/>
         {/* <IconButton sx={style2} onClick={(event) => { fetchUser(event) }} disabled={name.length !== 0 && 2 ? false : true}>
           <SendIcon />
         </IconButton> */}
@@ -319,7 +324,7 @@ function Settings() {
           </div>
 
           <div className="profile-card__cnt">
-            <div className="profile-card__txt" id='chance_username'>User <strong className="username">{contextData.nickname}</strong>
+            <div className="profile-card__txt" id='chance_username'>User : <strong className="username">{contextData.nickname}</strong>
               <input
                 hidden
                 type="text"
@@ -342,6 +347,11 @@ function Settings() {
 
               </Popover>
             </div>
+
+            <button className="myButton settings" onClick={() => navigate('/home')}>
+						    BACK HOME <IconArrowBack size={"1.5rem"}/>
+				    </button>
+
             <div className="profile-card-ctr">
               <div className="switch">Two factor auth
                 <Switch checked={checked} onClick={handleOpen} onChange={() => { }} /></div>
