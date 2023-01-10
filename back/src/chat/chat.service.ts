@@ -91,7 +91,7 @@ export class ChatService {
         .createQueryBuilder('room')
         .leftJoinAndSelect('room.builder', 'builder')
         .where({name: channelName})
-        .select(['room.name', 'room.type', 'builder.username'])
+        .select(['room.name', 'room.type', 'builder.username', 'builder.nickname'])
         .getOne()
         return Room;
 
@@ -709,6 +709,11 @@ export class ChatService {
                 expireDate: expirationDate,
             })
         }))
+
+    }
+
+    async setUnbanOrUnmute(){
+        
     }
 
     //Checkers
