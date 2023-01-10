@@ -19,8 +19,6 @@ const button_join_red = document.getElementById('JoinRed');
 
 const username = prompt('Enter your username: ');
 
-//console.log(username);
-
 let client_room = "Black";
 
 socket.on('connect', () => {

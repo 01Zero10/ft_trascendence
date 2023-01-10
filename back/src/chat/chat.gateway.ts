@@ -23,8 +23,6 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   @SubscribeMessage('deleteUser')
   handleDeleteUser(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {usr: string}): any {
-    //console.log("");
-    //console.log("[deleteUser]");
     //capire cosa aggiungere
     this.server.emit('lostUser', data.usr);
     return data.usr;
@@ -35,16 +33,13 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
     @ConnectedSocket() clientSocket: Socket, 
     @MessageBody() data: {room: string, username: string, message: string, avatar: string, type: string}):
     Promise<WsResponse<{room: string, username: string, message: string, avatar: string}>> { 
-    //console.log("Data room ", data);
-    console.log("Entratissimo type = ", data.type, " name = ", data.room);
-      const packMessage = await this.chatService.createMessage({...data, clientSocket}, data.type)
+    const packMessage = await this.chatService.createMessage({...data, clientSocket}, data.type)
     this.server.to(data.room).emit('msgToClient', packMessage);
     return {event:"msgToServer", data: data}; // equivalent to clientSocket.emit(data);
   }
 
   @SubscribeMessage('joinRoom')
   async handleJoinRoom(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {client: string, room: string}): Promise<any> {
-    console.log("roomie = ", data.room);
     await this.chatService.createRoom(data.client, data.room);
     clientSocket.join(data.room);
     clientSocket.emit('joinedRoom', data.room);
@@ -90,7 +85,6 @@ export class ChatGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   async handleConnection(clientSocket: Socket) {
     const client_id = String(clientSocket.handshake.query.userID);
     this.logger.log(`client ${client_id} arrived in /chat`);
-    //console.log(String(clientSocket.handshake.query.userID));
     // if (clientSocket.handshake.query.userID !== 'undefined' 
     // && clientSocket.handshake.query.userID !== "null" 
     // )

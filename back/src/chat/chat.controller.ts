@@ -81,14 +81,12 @@ export class ChatController {
 
     @Get('allmembersandstatus/:roomName')
     async GetAllChatMembersAndStatu(@Param('roomName') roomName: string): Promise<User[]>{
-        console.log(roomName);
         const members = await this.chatService.getChatMembersAndStatus(roomName);
         return (members);
     }
 
     @Get('members/:roomName')
     async GetChatMembers(@Param('roomName') roomName: string): Promise<User[]>{
-        console.log(roomName);
         const admins = await this.chatService.getRoomAdmins(roomName);
         const members = await this.chatService.getChatMembers(roomName);
         const owner = await this.chatService.getRoomOwner(roomName);
@@ -100,15 +98,11 @@ export class ChatController {
         const index2 = await members.findIndex(x => x.username == owner.username);
         if (index2 != -1)
             members.splice(index2, 1);
-        //admins.splice(admins.indexOf(owner), 1); //da levare per includere owner negli admin.. se serve
-        //console.log("admins = ", admins);
-        //console.log("members = ", members);
         return (members);
     }
 
     @Get('admins/:roomName')
     async GetRoomAdmins(@Param('roomName') roomName: string): Promise<User[]>{
-        //console.log("startRoomAdmins");
         const owner = await this.chatService.getRoomOwner(roomName);
         const admins = await this.chatService.getRoomAdmins(roomName);
         const index = admins.findIndex(x => x.username === owner.username);
@@ -177,8 +171,6 @@ export class ChatController {
     async GetNotMutedUsers(@Param('channelName') channelName: string) {
         const usersToSplice = await this.GetChatMembers(channelName);
         const muted = await this.GetMutedUsers(channelName);
-        console.log(channelName);
-        console.log(muted);
         await Promise.all(await muted.map(async (element) => {
             const index = usersToSplice.findIndex(x => x.username === element)
             if (index != -1)
@@ -199,9 +191,6 @@ export class ChatController {
 
     @Post('getMyState')
     async GetMyState(@Body('channelName') channelName: string, @Body('client') client: string){
-        //console.log("[@GMS]");
-        //console.log(client);
-        //console.log(channelName);
         return this.chatService.getMyState(channelName, client);
     }
 
@@ -219,8 +208,6 @@ export class ChatController {
 
     @Post('addMembers')
     async addMembers(@Body('nameChannel') nameChannel: string, @Body('newMembers') newMembers: string[]){
-        console.log("nameChannel   ", nameChannel);
-        console.log("newMembers    ", newMembers);
         return (await this.chatService.addMembers(nameChannel, newMembers));
     }
 
@@ -251,11 +238,6 @@ export class ChatController {
     @Body('members') members: string[],
     @Body('type') type: string,
     @Body('password') password: string){
-        //console.log("builder", builder);
-        //console.log("nameGroup", nameGroup);
-        //console.log("members", members);
-        //console.log("type", type);
-        //console.log("pwd", password);
         const room = await this.chatService.createGroupChat2(builder, nameGroup, members, type, password);
         return room;
     }
@@ -269,7 +251,6 @@ export class ChatController {
     //fatto con socket emit... non dovrebbe servire
     // @Get('expiredMuteOrBan/:channelName')
     // async ExpiredMuteOrBan(@Param('channelName') channelName: string){
-    //     //console.log("canalisssimo = ", channelName);
     //     await this.chatService.expiredMuteOrBan(channelName);
     // }
 
@@ -281,18 +262,11 @@ export class ChatController {
         @Body('adminsSetted') adminsSetted: string[],
         @Body('password') password?: string,
         @Body('newName') newName?: string ){
-            console.log("---EditChannel---");
-            console.log("channel name ", channelName);
-            console.log("type ", type);
-            console.log("password ", password);
-            console.log("newName ", newName);
-            console.log("adminsSetted ", adminsSetted);
             await this.chatService.editChannel(channelName, type, adminsSetted, password, newName); //impostare un return?
     }
 
     @Post('editUsers')
     async editUsersOnChannel(@Body('data') data: string[], @Body('channelName') channelName: string){
-        console.log("data:", data)
         this.chatService.editUsersOnChannel(data, channelName);
     }
 
@@ -312,7 +286,6 @@ export class ChatController {
         @Body('time') time: number,
         @Body('reason') reason: string,
     ){
-        //console.log("ahahaha, entratio")
         if (mode === 'kick')
             return await this.chatService.kickUsers(limited, channelName);
         const room = await this.chatService.getRoomByName(channelName);
@@ -324,12 +297,9 @@ export class ChatController {
         const rowsToUpdate: string [] = [];
         const rowsToDelete: string [] = [];
         const rowsToAdd: string [] = [];
-        console.log("time", time)
         await Promise.all(await limited.map(async (element) => {
             cleanLimited.push(element);
         }))
-
-        //console.log("opposite = ", oppositeLimited);
 
         await Promise.all(await cleanLimited.map(async (element) => {
             const index = oppositeLimited.findIndex(x => x === element);
@@ -355,36 +325,10 @@ export class ChatController {
 
         // Leonardo era qui
         function aggiungiSecondi(secondi: number, date: Date) {
-            console.log("tempo nella funzione: ", time)
-            console.log("secondi nella funzione: ", secondi)
             date = new Date(date.setMilliseconds(secondi * 1000))    
         }
-
         var expDate = new Date();
-        console.log("prima", expDate)
-
         aggiungiSecondi(time, expDate);
-        
-        console.log("dopo", expDate)
-        // Leonardo si è fermato qui perchè NON FUNZIONA UN CAZZO
-
-
-        //console.log("rowsToUpdate = ", rowsToUpdate);
-        //console.log("rowsToDelete = ", rowsToDelete);
-        //console.log("rowstoAdd = ", rowsToAdd);
-        //console.log("");
-
-        // Daniele era qui
-        // const expDate = new Date();
-        // console.log("prima", expDate)
-        // expDate.setSeconds(expDate.getSeconds() + time);
-        // console.log("dopo", expDate)
-        // Daniele si è fermato qui
-
-        //console.log(rowsToAdd)
-        //console.log(rowsToDelete)
-        //console.log(rowsToUpdate)
-        //console.log(mode)
         await this.chatService.updateMuteBanTable(channelName, rowsToDelete, rowsToUpdate, rowsToAdd, mode, reason, expDate);
         await this.chatService.handleMuteBan(room, mode, cleanLimited, oppositeLimited);
     }
@@ -402,8 +346,6 @@ export class ChatController {
 
     @Get('checkChannelName/:channelName')
     async CheckChannelName(@Param('channelName') channelName: string) {
-        //console.log('nuovo nome ', channelName);
-        //console.log(await this.chatService.checkChannelName(channelName));
         return {'ret': await this.chatService.checkChannelName(channelName)}
     }
 
@@ -420,7 +362,6 @@ export class ChatController {
 
     @Get('updateChannelUsersList')
     async UpdateChannelUsersList(){
-        console.log("me-e-e")
         await this.chatService.updateChannelUsersList();
     }
 }

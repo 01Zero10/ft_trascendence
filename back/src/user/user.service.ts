@@ -39,13 +39,9 @@ export class UserService {
   }
 
   async changeNickname(username: string, newNickname: string) {
-    //console.log("entrato change name");
-    //console.log(newName);
-    //console.log(oldName);
     if (newNickname !== "")
     {
       const user: User = await this.userRepository.findOne({where: {username: username}});
-      //console.log(user);
       user.nickname = newNickname;
       this.userRepository.save(user);
     }
@@ -123,7 +119,6 @@ export class UserService {
       headers: { Authorization: 'Bearer ' + token },
     });
     data = await response.json();
-    //console.log(data);
     const user: User = await this.getById(data.id);
     token = await this.jwt.signAsync({
       id: data.id,
@@ -138,7 +133,6 @@ export class UserService {
 
   async blockUser(client: string, userToBlock: string){ //da testare
     const User = await this.userRepository.findOne({ where : {username: client}});
-    console.log("ciao");
     if (!User.blockedUsers){
       User.blockedUsers = [userToBlock];
       return await this.userRepository.save(User);
@@ -171,7 +165,6 @@ export class UserService {
       };
     const param1 = (client1 < client2) ? client1 : client2;
     const param2 = (param1 == client1) ? client2 : client1;
-    //console.log("param", param1, param2)
     const response = await this.friendShipRepository
     .createQueryBuilder("friend")
     .where("friend.user1 = :param1", { param1 })
@@ -179,7 +172,6 @@ export class UserService {
     .select(['friend.friendship', 'friend.sender'])
     .getOne()
     .catch(() => { //pare non faccia niente
-      //console.log("dentro no friend")
      return nofriend;
     });
     if (response == null) 
@@ -218,7 +210,6 @@ export class UserService {
   }
   
   async deleteRequestOrFriendship(client: string, profileUser: string){
-    console.log("./ client ", client, " ./ profileUser ", profileUser);
     const userClient = await this.getByUsername(client);
     const userProfileUser = await this.getByUsername(profileUser);
     const friend1: string = (client < profileUser) ? client : profileUser;
@@ -313,7 +304,6 @@ export class UserService {
     .andWhere("request.sender != :sender_n", { sender_n: client })
     .getMany()
 
-    //console.log(arrayRequest);
     const response: FriendListItem[] = [];
     if (arrayRequest && arrayRequest.length > 0)
     {
@@ -334,7 +324,6 @@ export class UserService {
 
   async getListFriends(client: string){
     const arrayFriends = (await this.getByUsername(client)).friends;
-    //console.log(arrayFriends);
     const response: string[] = [];
     if (arrayFriends)
     {
@@ -351,7 +340,6 @@ export class UserService {
     const user = await this.userRepository.findOne({where: {id: Number(userID)}})
     newbie.user = user;
     newbie.status = 'online'
-    console.log("creato")
     return await this.onlineRepository.save(newbie);
 }
 
@@ -363,13 +351,11 @@ async setOfflineStatus(userID: string){
   .getOne();
 
   if (toSetOffline) {
-    console.log("cancellato")
     await this.onlineRepository.remove(toSetOffline);
   }
 }
 
   async getOnlineFriends(client: string){
-    //console.log("help", client)
     const clientFriends = (await this.getByUsername(client)).friends;
     const onlineFriends = await this.onlineRepository
     .createQueryBuilder('online')

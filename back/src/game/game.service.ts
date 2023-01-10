@@ -99,7 +99,6 @@ export class GameService{
     }
 
     async createOrJoinPlayRoom(client: string, avatar: string, type: string){
-        console.log('CREATEORJOIN');
         let playRoom = await this.runningMatches
         .createQueryBuilder('runningMatch')
         .where({typo: type})
@@ -131,7 +130,6 @@ export class GameService{
         .andWhere("match.invited != :string_n", {string_n: string})
         //.andWhere({player2: ''})
         .getOne()
-        console.log("leaveQueue", playRoom, client)
         if (playRoom !== null)
         {
             await this.runningMatches.remove(playRoom);
@@ -172,8 +170,7 @@ export class GameService{
     }
 
     async generateBallDirection(namePlayRoom: string){
-        console.log(namePlayRoom);
-        console.log(this.mapPlRoom.get(namePlayRoom));
+        (namePlayRoom);
         this.mapPlRoom.get(namePlayRoom).ball.dy= array_dir_y[Math.round(Math.random())];
        this.mapPlRoom.get(namePlayRoom).ball.direction = dir[Math.round(Math.random())] as "l" | "r";
         this.mapPlRoom.get(namePlayRoom).ball.direction = "l"
@@ -346,7 +343,6 @@ export class GameService{
     }
 
     async createDirectGame(client: string, userToPlayWith: string, type: string){
-        console.log('CREATEDIRECTGAME');
         const avatar1 = (await this.userRepository.findOne({ where: {username: client}})).avatar;
         const avatar2 = (await this.userRepository.findOne({ where: {username: userToPlayWith}})).avatar;
         let playRoom = this.runningMatches.create({
@@ -389,40 +385,26 @@ export class GameService{
         else {
             winnerRow.points += points_to_add;
         }
-
-        console.log("step 1 ", winnerRow);
         const all = await this.leaderboardRepository
         .createQueryBuilder('board')
         .leftJoin('board.user', 'user')
         .orderBy('board.points', 'DESC')
         .getMany();
-
-        console.log("step 2 ", all);
-
         if (!all.length)
         {
             winnerRow.position = 1;
             return await this.leaderboardRepository.save(winnerRow);
         }
-
         let index = 0;
         while(all[index] && all[index].points >= winnerRow.points)
             index++;
-        console.log("step 3 ", all[index]);
         if (!all[index])
         {
-            console.log("inside");
             winnerRow.position = all[index - 1].position + 1;
-            console.log("inside ", winnerRow);
             return await this.leaderboardRepository.save(winnerRow);
         }
-        console.log("step 4");
 
         winnerRow.position = all[index].position;
-        console.log("step 5_1 ", winnerRow);
-        console.log("step 5_2 ", all[index]);
-        console.log(winnerRow.id);
-        console.log(all[index].id);
         // if (winnerRow.user === all[index].user)
         //     index++;
         await this.leaderboardRepository.save(winnerRow);
@@ -457,7 +439,6 @@ export class GameService{
     }
 
     async checkInvite(client: string){
-        console.log("checkTheInvite ", client);
         // const playRoom = await this.runningMatches.findOne({where: [{leftSide: client}, {rightSide: client}]})
         return (await this.runningMatches.findOne({where: [{leftSide: client}, {rightSide: client}]}))
         // return playRoom;

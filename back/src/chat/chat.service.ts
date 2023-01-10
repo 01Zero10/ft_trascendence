@@ -63,7 +63,6 @@ export class ChatService {
         .where({type: 'private'})
         .select(['room.name', 'room.type', 'builder.username'])
         .getMany()
-        //console.log(Rooms);
         return Rooms;
     }
 
@@ -74,7 +73,6 @@ export class ChatService {
         .where({type: 'protected'})
         .select(['room.name', 'room.type', 'builder.username'])
         .getMany()
-        //console.log(Rooms);
         return Rooms;
     }
 
@@ -95,7 +93,6 @@ export class ChatService {
         .where({name: channelName})
         .select(['room.name', 'room.type', 'builder.username'])
         .getOne()
-        //console.log(Rooms);
         return Room;
 
         //return Room;
@@ -138,7 +135,6 @@ export class ChatService {
 
     async getFriendsRooms(client: string){
         const arrayFriends = (await this.userRepository.findOne({ where: { username: client } })).friends;
-        //console.log(arrayFriends);
         const response: {name: string, type: string, builder: {username: string}}[] = [];
         if (arrayFriends)
         {
@@ -169,7 +165,6 @@ export class ChatService {
         const options: string[] = [];
         const usersOnChannel = await this.getChatMembers(channelName);
         const adminsOnChannel = await this.getRoomAdmins(channelName);
-        //console.log("aaadmins", adminsOnChannel);
         await Promise.all(await usersOnChannel.map(async (element) => {
             if (adminsOnChannel.findIndex( x => x.username == element.username) === -1)
             //{
@@ -184,17 +179,11 @@ export class ChatService {
         const limitedUsers = (mode === 'ban') ? await this.getBannedUsers(channelName) : await this.getMutedUsers(channelName);
         //const oppositeLimited = (mode === 'mute') ? await this.getBannedUsers(channelName) : await this.getMutedUsers(channelName);
         //const emoticon = (mode === 'ban') ? '🚫' : '🔇';
-        //console.log(limitedUsers);
-        //console.log("questo", options);
-        //console.log(mode);
-        //console.log(limitedUsers);
         await Promise.all(await limitedUsers.map(async (element) => {
             const index = options.findIndex( x => x === element)
-            //console.log("index = ", index, "element = ", element)
             if (index > -1)
                 options.splice(index, 1);
         }))
-        //console.log('options = ', options)
         return options;
     }
 
@@ -302,7 +291,6 @@ export class ChatService {
     }
 
     async getRoomOwner(roomName: string){
-        console.log(roomName)
         const owner = (await this.roomsRepository.createQueryBuilder("room")
         .leftJoinAndSelect("room.builder", "builder")
         .where({name: roomName})
@@ -313,7 +301,6 @@ export class ChatService {
     //da gestire anche i bannati?
     async getAddMembersOptions(channelName: string, client: string){
         const clientFriends = (await this.userRepository.findOne({where: {username: client}})).friends;
-        //console.log("adiadi = ", channelName);
         const chatMembers = await this.getChatMembers(channelName);
         const addMembersOptions : string[] = [];
         await Promise.all(await clientFriends.map(async (element) => {
@@ -371,9 +358,7 @@ export class ChatService {
             updatingMembers.push(await this.userRepository.findOne({ where: { username: element} }))
         }))
         room.members = updatingMembers;
-        console.log("updating Members   ", updatingMembers)
         await this.roomsRepository.save(room);
-        console.log("entratissimo")
         await this.chatGateway.handleUpdateListMembers(nameChannel);
         //return await this.roomsRepository.save(room);
     }
@@ -422,7 +407,6 @@ export class ChatService {
         const updatingMembers = await this.getChatMembers(nameChannel);
         const index = updatingMembers.findIndex(x => x.username === oldUser);
         updatingMembers.splice(index, 1);
-        //console.log("lunghezza = ", updatingMembers.length)
         if (updatingMembers.length)
         {
             room.members = updatingMembers;
@@ -433,7 +417,6 @@ export class ChatService {
     }
     
     async leaveChannel(nameChannel: string, exMember: string){
-        //console.log(nameChannel, exMember);
         //se Owner -> removeOwner
         const owner = await this.getRoomOwner(nameChannel);
         const admins = await this.getRoomAdmins(nameChannel);
@@ -451,7 +434,6 @@ export class ChatService {
 
     async kickUsers(users: string[], channelName: string){
         await Promise.all(await users.map(async (element) => {
-            //console.log(element);
             this.leaveChannel(channelName, element);
         }));
     }
@@ -464,12 +446,9 @@ export class ChatService {
         .andWhere("banOrMute.channelName = :channel", {channel})
         .getMany();
         for (const element of rows) {
-            //console.log("--------")
-            //console.log(element);
             const channel = await this.getRoomByName(element.channelName);
             const arrayToSplice = (element.status === 'ban') ? channel.bannedUsers : channel.mutedUsers;
             const index = arrayToSplice.findIndex(x => x === element.username);
-            //console.log("index = ", index);
             if (index > -1)
                 arrayToSplice.splice(index, 1);
             if (element.status === 'ban')
@@ -498,7 +477,6 @@ export class ChatService {
                 channel.mutedUsers = arrayToSplice;
             await this.roomsRepository.save(channel);
         }
-        //console.log(row);
         await this.banOrMuteRepository.remove(row);
     }
 
@@ -535,7 +513,6 @@ export class ChatService {
         const user = await this.userRepository.findOne({where: {username: client}});
         const room = await this.roomsRepository.findOne({where: {name: roomName}});
         if (!room){
-            //console.log("ciao");
             const newRoom = await this.roomsRepository.create({name: roomName});
             if (password?.length > 0)
             {
@@ -547,7 +524,6 @@ export class ChatService {
             // return await this.roomsRepository.save(newRoom);
         }
         else {
-            //console.log("stringa unica");
             // const arrayUser = (await this.roomsRepository.createQueryBuilder('room')
             //         .leftJoinAndSelect("room.members", "members")
             //         .where({name: roomName})
@@ -567,13 +543,11 @@ export class ChatService {
         const key = (await promisify(scrypt)("process.env.PASS_TO_ENCRYPT", 'salt', 32)) as Buffer;
         const cipher = createCipheriv("aes-256-gcm", key, iv);
         let crypted = cipher.update(pass, 'utf-8', 'hex') + cipher.final('hex');
-        //console.log("cripted", crypted)
         return crypted;
     }
 
     async createRoom2(builder: string, roomName: string, type: string, password: string){
         //const user = await this.userRepository.findOne({where: {username: client}});
-        //console.log(client, roomName, type, password)
         const room = await this.roomsRepository.findOne({where: {name: roomName}});
         if (!room){
             const newRoom = await this.roomsRepository.create({name: roomName});
@@ -582,9 +556,6 @@ export class ChatService {
                 newRoom.password = await this.buildCipherPass(builder, password, roomName);
             return newRoom;
         }
-        else {
-                //TODO:decidere quando fare controllo nome chat
-            }
         }
 
         
@@ -634,7 +605,6 @@ export class ChatService {
             });
             await this.directRoomsRepository.save(room);
         }
-        console.log("direct room created = ", room);
         return room;
     }
     
@@ -673,14 +643,11 @@ export class ChatService {
         .where({name: room.name})
         .select(['room.name', 'room.type', 'builder.username'])
         .getOne();
-        console.log("room ", room);
-        console.log("newdates ", newDates);
         this.chatGateway.server.emit('update', typeToEmit);
         this.chatGateway.server.to(nameToEmit).emit('updateChannel', newDates.name, newDates.type, newDates.builder);
     }
  
     async editUsersOnChannel(admins: string[], channelName: string){
-        console.log("ADMINS: ", admins)
         const room = await this.roomsRepository.findOne({where : {name: channelName}});
         let updatingAdmins: User[] = [(await this.getRoomOwner(channelName))];
         await Promise.all(await admins.map(async (element) => {
@@ -726,7 +693,6 @@ export class ChatService {
         //update rows phase
         Promise.all(await rowsToUpdate.map(async (element) => {
             let index = await this.banOrMuteRepository.findOne({ where: [{channelName: channelName}, {username: element}]});
-            //console.log(index)
             index.status = mode,
             index.reason = reason;
             index.expireDate = expirationDate;
@@ -753,7 +719,6 @@ export class ChatService {
     }
 
     async checkJoined(client: string, channelName: string) {
-        //console.log(client, channelName);
         const index = (await this.userRepository.createQueryBuilder('user')
         .leftJoinAndSelect("user.rooms", "rooms")
         .where({id: client})
@@ -762,7 +727,6 @@ export class ChatService {
     }
 
     async checkChannelName(channelName){
-        console.log(await this.getRoomByName(channelName))
         if (await this.getRoomByName(channelName))
             return true;
         return false;
@@ -780,7 +744,6 @@ export class ChatService {
 
     async checkProtectedPassword(input: string, channel: string){
         const iv = Buffer.from('ciao', 'base64');
-        //console.log(iv)
         // const iv = randomBytes(16);
         const key = (await promisify(scrypt)("process.env.PASS_TO_ENCRYPT", 'salt', 32)) as Buffer;
         const cipher = createCipheriv("aes-256-gcm", key, iv);
@@ -791,12 +754,6 @@ export class ChatService {
     }
 
     async test(nameChannel: string) {
-        // return await this.roomMessagesRepository.find({
-        //     where: {
-        //         room: nameChannel,
-        //     }
-        // })
-
         const messages = await this.roomMessagesRepository
         .createQueryBuilder('message')
         .leftJoinAndSelect('message.userInfo', 'userInfo')

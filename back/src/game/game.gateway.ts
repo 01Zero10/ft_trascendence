@@ -61,10 +61,7 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   @SubscribeMessage('connectToInviteGame')
   async connectToInviteGame(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {client: string, playRoom: string, side: string}){
-    console.log('connectToInviteGame');
-    console.log(data);
     clientSocket.join(data.playRoom);
-    console.log("dataside", data.side)
     if (data.side !== "right")
       setTimeout(() => {
         this.dropQueue(data.playRoom, clientSocket.id);
@@ -76,15 +73,12 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   @SubscribeMessage('watchGameRequest')
   async handleWatchGame(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string}): Promise<any> {
     const ret = await this.gameService.getMatchByName(data.namePlayRoom);
-    console.log("ret per spettatore 1", data.namePlayRoom);
     clientSocket.join(data.namePlayRoom);
     this.server.to(clientSocket.id).emit('watchGameConfirm', {nameRoom: data.namePlayRoom, leftClient: ret.leftPlayer.username , rightClient: ret.rightPlayer.username, leftPoints: ret.leftPoint, rightPoints: ret.rightPoint});
   }
 
   @SubscribeMessage('makeMeSee')
   async handleMakeMeSee(@ConnectedSocket() clientSocket: Socket, @MessageBody() data: {namePlayRoom: string}){
-    console.log("makeMeSee");
-    console.log(data);
     if (data.namePlayRoom !== ''){
       const roomInMap = await this.gameService.getMatchByName(data.namePlayRoom);
       this.server.to(clientSocket.id).emit('start', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
@@ -93,9 +87,7 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   @SubscribeMessage('setStart')
   async handleSetStart(@ConnectedSocket() clientSocket: Socket, @MessageBody() namePlayRoom: string){//, rightPlayer: string, leftPlayer: string}){
-    console.log("arrivato a SetStart");
     const roomInMap = await this.gameService.generateBallDirection(namePlayRoom);
-    console.log(roomInMap);
     this.server.to(namePlayRoom).emit('start', roomInMap.ball, roomInMap.leftPlayer, roomInMap.rightPlayer);
     await this.sleep(3);
     this.startTick(namePlayRoom);
@@ -133,8 +125,6 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   async dropQueue(namePlayRoom: string, leftPlayerSocket: string) {
     const playRoom = await this.gameService.getPlayRoomByName(namePlayRoom);
-    console.log("player2", playRoom.player2)
-    console.log("invited", playRoom.invited)
     if (playRoom.player2 === '' || (playRoom.player2 !== '' && playRoom.invited === 'invited')) {
       await this.gameService.handleLeaveQueue(playRoom.player1);
       this.server.to(leftPlayerSocket).emit('dropQueue');
