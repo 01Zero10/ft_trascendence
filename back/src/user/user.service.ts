@@ -297,10 +297,18 @@ export class UserService {
 
   async getFriendsRequest(client: string, profileUser: string){
     const arrayRequest = await this.friendShipRepository
+    // .createQueryBuilder('request')
+    // .where("request.user1 = :client_n", { client_n: client })
+          //.orWhere("request.user2 = :client_n", { client_n: client })
+    // .andWhere("request.friendship = :state", { state: "pending" })
+    // .andWhere("request.sender != :sender_n", { sender_n: client })
+    // .getMany()
     .createQueryBuilder('request')
-    .where("request.user1 = :client_n", { client_n: client })
-    //.orWhere("request.user2 = :client_n", { client_n: client })
-    .andWhere("request.friendship = :state", { state: "pending" })
+    .having("request.user1 = :client_n", { client_n: client })
+    .orHaving("request.user2 = :client_n", { client_n: client })
+    //.where("request.user1 = :client_n", { client_n: client })
+    //      .orWhere("request.user2 = :client_n", { client_n: client })
+    .where("request.friendship = :state", { state: "pending" })
     .andWhere("request.sender != :sender_n", { sender_n: client })
     .getMany()
 

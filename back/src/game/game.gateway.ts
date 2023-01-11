@@ -124,8 +124,10 @@ export class GameGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   async dropQueue(namePlayRoom: string, leftPlayerSocket: string) {
+    console.log("namePlayRoom ", namePlayRoom);
     const playRoom = await this.gameService.getPlayRoomByName(namePlayRoom);
-    if (playRoom.player2 === '' || (playRoom.player2 !== '' && playRoom.invited === 'invited')) {
+    console.log(playRoom);
+    if (playRoom && (playRoom.player2 === '' || (playRoom.player2 !== '' && playRoom.invited === 'invited'))) {
       await this.gameService.handleLeaveQueue(playRoom.player1);
       this.server.to(leftPlayerSocket).emit('dropQueue');
     }

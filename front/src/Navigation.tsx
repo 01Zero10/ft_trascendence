@@ -209,7 +209,7 @@ function Navigation() {
           </IconButton>
           <Typography
             component="div"
-            sx={{ flexGrow: 2, alignItems: 'center', width: '100%', justifyContent: 'flex-end', alignContent: 'center', display: { xs: 'none', md: 'flex' } }}
+            sx={{ flexGrow: 2, width: '100%', display: { xs: 'none', md: 'flex' } }}
           >
             <div className='navigation'>
 
