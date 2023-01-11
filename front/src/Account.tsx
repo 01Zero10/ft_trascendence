@@ -399,12 +399,12 @@ function Account() {
       <>
         {/* <Modal isOpen={isOpen} toggle={toggle}>
           <button className="modal_close_button" type="button" onClick={handleClose}>X</button> */}
-        <div className="table_dashboard">
+        <div id="idea" className="table_dashboard">
           {friendsUser.map((f) => (
             <List sx={{ width: '100%', bgcolor: 'transparent', display: 'flex', alignItems: 'center' }} key={f.friendship?.friendship}>
               <ListItem>
                 <Avatar sx={{ width: 56, height: 56 }} src={f.avatar} />
-                <ListItemText primary={f.username} secondary={f.nickname} sx={{ color: '#fff' }} />
+                <ListItemText primary={f.username} secondary={f.nickname} sx={{ color: '#fff !important' }} />
               </ListItem>
               <ListItem>
                 <div style={{ textAlign: 'center' }}>
@@ -550,7 +550,7 @@ function Account() {
   function Add_b() {
     return (
       <div style={{ textAlign: 'center' }}>
-        <h3 style={{ fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', padding: '1.5rem', fontSize: '1.4vw' }}>Add <strong className="txt-account-strong"> {client.username}</strong> as a friend?</h3>
+        <h3 className="txt-account">Add <strong className="txt-account-strong"> {client.username}</strong> as a friend?</h3>
         <Fab color="secondary" aria-label="user" onClick={() => addFriend(user_id!)}>
           <PersonAddAlt1 fontSize="large" />
         </Fab>
@@ -598,10 +598,13 @@ function Account() {
   function Block_b() {
     return (
       <div style={{ textAlign: 'center' }}>
-        <Fab color="secondary" aria-label="user" onClick={() => blockOrUnblockUser(user_id!)}>
+        <Fab color="secondary" aria-label="user" onClick={() => {blockOrUnblockUser(user_id!)}}>
           <Block fontSize="large" />
         </Fab>
-        {/* <h3 style={{ fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', fontSize: '1.4vw', padding: '10px' }}>PENDING</h3> */}
+        {blocked === false ? 
+        <h3 className="block-button-txt">BLOCK</h3>
+      : <h3 className="block-button-txt">UNBLOCK</h3>}
+        
       </div>
     )
   }
@@ -644,6 +647,33 @@ function Account() {
     )
   }
 
+  function DisplayNone () {
+    const none = document.getElementById('idea');
+
+    if (none != null) {
+      none.style.display = 'none';  
+    }
+    return (
+      <><h1 style={{ color: '#fff', fontFamily: 'Smooch Sans, sans-serif', textAlign: 'center' }}>This User is blocked</h1></>
+    )
+  }
+
+  function DisplayBlock () {
+    const none_2 = document.getElementById('idea-2');
+
+    if (none_2 != null) {
+      none_2.style.display = 'none';
+    }
+    return (
+      <>
+      <div className="box-item" style={{ justifyContent: 'center', backgroundImage: 'none', background: 'rgba(0, 0, 0, 0.5)' }}>
+        <h1 style={{ color: 'grey', fontFamily: 'Smooch Sans, sans-serif', textAlign: 'center', fontSize: '4vw', marginTop: '15%' }}>You've blocked this user.</h1>
+      </div>
+      </>
+    )
+  }
+
+
   return (
     <>
       <Navigation />
@@ -651,13 +681,14 @@ function Account() {
         {contextData.username !== user_id ?
           <div className="request">
             <div>
-              <h1 style={{ textAlign: 'center', padding: '3%', fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.2rem', fontSize: '2.5vw', color: '#fff' }}>Friendship</h1>
+              <h1 className="friendship-title">Friendship</h1>
               <Block_b />
               {user_id === contextData.username ? '' :
-                friendship === 'pending' ?
-                  <Pending_b /> : friendship === 'toReply' ?
-                    <SendNotification /> : friendship === 'friends' ?
-                      <Remove_b /> : <Add_b />}
+              blocked === true ? <DisplayNone /> :
+              friendship === 'pending' ?
+              <Pending_b /> : friendship === 'toReply' ?
+              <SendNotification /> : friendship === 'friends' ?
+              <Remove_b /> : <Add_b />}
             </div>
           </div>
           : <My_Wrap />}
@@ -669,7 +700,8 @@ function Account() {
             <div style={{ float: 'right', width: '70%', alignItems: 'center', justifyContent: 'center' }}>
               <img className="account_decor_top" src="/account_decoration_top.svg" alt="img_account" />
               <div className="txt_container_account">
-                <h1 className="txt-account">Player<strong className="txt-account-strong"> {client.username}</strong>
+                <h1 className="txt-account">Player<strong className="txt-account-strong"> {client.nickname}</strong>
+                <p className="p-nickname">@{client.username}</p>
                   <h2 className="score__txt">Score {client.points}</h2></h1>
                 <h2 className="rank-txt">RANK <br /><h1 className="no-rank">No. 6</h1></h2>
               </div>
@@ -677,13 +709,14 @@ function Account() {
             </div>
           </div>
         </div>
-
-
-        <div className="box-item">
+{
+  blocked === false ?
+  <div className="box-item">
           {/* <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: 224 }}> */}
           {/* MATCHES */}
 
           <Tabs
+          id="idea-2"
             orientation="vertical"
             variant="scrollable"
             value={value}
@@ -693,23 +726,21 @@ function Account() {
           >
             <Tab sx={{ fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.1rem', fontWeight: '600', fontSize: '1.5vw', color: '#fff' }} label="Matches" {...a11yProps(0)} />
             <Tab sx={{ fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.1rem', fontWeight: '600', fontSize: '1.5vw', color: '#fff' }} label="Friends" {...a11yProps(1)} />
-            <Tab sx={{ fontFamily: 'Smooch Sans, sans-serif', letterSpacing: '0.1rem', fontWeight: '600', fontSize: '1.5vw', color: '#fff' }} label="Award" {...a11yProps(2)} />
-
           </Tabs>
           <TabPanel value={value} index={0}>
-            <div >
+            <div>
               <Scoreboard client={client} />
             </div>
-          </TabPanel>
+          </TabPanel >
           <TabPanel value={value} index={1}>
             <div>
               <Friends_b />
             </div>
           </TabPanel>
-          <TabPanel value={value} index={2}>
-            Item Three
-          </TabPanel>
         </div>
+        : <DisplayBlock />
+}
+        
       </div>
       <div className='_prv_'></div>
     </>

@@ -16,10 +16,6 @@
   border-radius: 5vw;
 }
 
-/* Handle on hover 
-.table_dashboard::-webkit-scrollbar-thumb:hover {
-  background: #838383; 
-} */
 
 .wrap {
   position: relative;
@@ -34,7 +30,6 @@
   grid-template-areas:
     "main request"
     "box-item box-item";
-
 }
 
 .request {
@@ -80,6 +75,16 @@
   justify-content: space-between;
 }
 
+.css-83ijpv-MuiTypography-root {
+  color: #fff !important;
+}
+
+.p-nickname {
+  font-size: 1.5vw;
+  position: relative;
+  left: 15%;
+}
+
 /***** ACCOUNT DECORATION *****/
 
 .account_decoration {
@@ -91,22 +96,17 @@
   align-items: center;
 }
 
-/* .account_decor_top {
-  background-size: cover;
-  background-repeat: no-repeat;
-  width: 90%;
-  height: auto;
-  position: relative;
-  z-index: 0;
+@media screen and (max-width: 1700px) {
+  .css-1p7a5wk-MuiButtonBase-root-MuiFab-root {
+    width: 45px !important;
+    height: 45px !important;
+  }
+
+  .css-tzssek-MuiSvgIcon-root {
+    width: 0.8em !important;
+    height: 0.8em !important;
+  }
 }
- .account_decor_down {
-  background-size: cover;
-  background-repeat: no-repeat;
-  width: 90%;
-  height: auto;
-  position: relative;
-  z-index: 0;
-} */
 
 .account_decor_down_ {
   background-size: cover;
@@ -201,11 +201,6 @@
   object-fit: cover;
   border-radius: 50%;
   border: 2px solid rgb(255, 85, 94);
-  /* border: 4px solid transparent;
-  background: linear-gradient(45deg, #781C9C, #B830F0);
-  transform: translateY(10%);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;  */
 }
 
 .table-tabs {
@@ -270,101 +265,19 @@
   padding: 0 5%;
 }
 
+.block-button-txt {
+  color: #fff;
+  font-family: 'Odibee Sans', sans-serif;
+  letter-spacing: 0.2rem;
+  font-weight: 500;
+  padding-top: 10px;
+}
+
 /******* buttons *******/
 
 .css-kznubb-MuiButtonBase-root-MuiFab-root {
   background: rgba(102, 38, 238, 1) !important;
 }
-
-/* .noselect {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  margin-bottom: 10%;
-
-}
-
-.noselect {
-  width: 4vw;
-  height: 5vh;
-  cursor: pointer;
-  background-color: linear-gradient(90deg, rgba(255,85,94,1) 0%, rgba(102,38,238,1) 100%);
-  background-image: linear-gradient(90deg, rgba(255,85,94,1) 0%, rgba(102,38,238,1) 100%);
-  border: none;
-  border-radius: 50%;
-  transition: 200ms;
-  box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.363);
-}
-
-.noselect svg {
-  fill: white;
-  width: 2rem;
-  height: 2rem;
-  position: absolute;
-  transform: translateX(-50%) translateY(-50%);
-}
-
-.noselect:before {
-  position: absolute;
-  display: block;
-  transform: translateX(-50%) translateY(45px);
-  font-size: 15px;
-  transition: 200ms;
-  color: transparent;
-  font-weight: bold;
-}
-
-.noselect:active {
-  animation: press 0.2s 1 linear;
-}
-
-@keyframes press {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(0.88);
-  }
-
-  to {
-    transform: scale(1);
-  }
-}
-
-.noselect:hover::before {
-  color: #fff;
-}
-
-.noselect:hover svg {
-  animation: bounce 2s infinite linear;
-}
-
-@keyframes bounce {
-  0% {
-    transform: translateX(-50%) translateY(-50%)
-  }
-
-  25% {
-    transform: translateX(-50%) translateY(-65%)
-  }
-
-  50% {
-    transform: translateX(-50%) translateY(-50%)
-  }
-
-  75% {
-    transform: translateX(-50%) translateY(-35%)
-  }
-
-  100% {
-    transform: translateX(-50%) translateY(-50%)
-  }
-} */
 
 h3 {
   color: #fff;
@@ -374,186 +287,14 @@ h3 {
   outline: none;
 }
 
-/***** Friend request ****/
-
-/* .friend-request {
-  position: absolute;
-  left: 10%;
-  bottom: -1%;
-}
-
-.column {
-  width: 35%;
-  float: left;
-  padding: 2.3rem 2.3rem;
-
-}
-
-.txt-request {
-  font-family: 'Smooch Sans', sans-serif;
-  color: #000000;
-  font-size: 1.2vw;
-  letter-spacing: 0.1rem;
-  font-weight: 500;
-  text-align: left;
-  margin-bottom: -5px;
-} */
-
-/* LIST HOVER  */
-/* .css-1b46qz1-MuiList-root:hover {
-  transform: scale(1.03);
-} */
-
-/* .table-prv {
-  display: flex;
-  align-content: center;
-  justify-items: center;
-  align-items: center;
-  justify-content: center;
-} */
-
-
-/* .profile-card {
-  box-sizing: border-box;
-  width: 100vw;
-  height: 100vh;
-  max-width: 50%;
-  max-height: 55%;
-  margin: auto;
-  background-color: #fff;
-  position: relative;
-  display: block;
-  align-items: center;
-  align-content: center;
-  -webkit-box-shadow: 5px 5px 15px 5px #000000, 43px 50px 23px -25px #000000;
-  box-shadow: 5px 5px 15px 5px #000000, 43px 50px 23px -25px #000000;
-}
-
-.container-account {
-  width: 100vw;
-  max-height: 30vh;
-  height: auto;
-}
-
-
-
-.box-item {
-  position: absolute;
-  bottom: 5%;
-  width: 100%;
+.friendship-title {
+  color: #fff;
+  font-size: 2.5vw;
+  letter-spacing: 0.2rem;
+  font-family: 'Smooch Sans, sans-serif';
+  padding: 3%;
   text-align: center;
-  right: 7%;
 }
-
-.inf-account {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: flex-end;
-}
-
-.profile-card-inf__title {
-  font-family: 'Odibee Sans', sans-serif;
-  font-size: 1.3vw;
-  letter-spacing: 0.1rem;
-}
-
-.profile-card-inf__txt {
-  font-family: 'Smooch Sans', sans-serif;
-  font-size: 1.5vw;
-  font-weight: 500;
-  letter-spacing: 0.1rem;
-}
-
-.profile-card-inf__item {
-  padding: 2.3rem 2.3rem;
-} */
-
-
-
-/****************** MODAL ***********************/
-/* .b_account {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: 'Smooch Sans', sans-serif;
-  letter-spacing: 0.1rem;
-  font-size: 1.3rem;
-  color: #781C9C;
-  object-fit: contain;
-}
-
-.modal-overlay {
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  animation: fadein 0.5s;
-}
-
-.modal-box {
-  display: block;
-  background: white;
-  width: 50%;
-  height: 50%;
-  padding: 1rem;
-  border-radius: 1rem;
-}
-
-.modal_close_button {
-  transition: opacity 0.4s ease 0.1s, color 0.2s, transform 0.2s;
-  border: none;
-  color: #781C9C;
-  background: none;
-  font-size: 2rem;
-  cursor: pointer;
-  position: fixed;
-  right: 25%;
-  margin-right: 3%;
-  margin-top: 1%;
-}
-
-.close-modal {
-  animation: fadeout 0.5s;
-}
-
-@keyframes fadein {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fadeout {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
- */
-
-/************* *****************/
-
-/* .css-1c0y7i7 {
-  flex-wrap: nowrap !important;
-  flex-direction: row !important;
-} */
-
-
 
 /****************** RESPONSIVE **************/
 
@@ -612,20 +353,91 @@ h3 {
   }
 }
 
-/**** LAPTOP MAC ****/
+/**** LAPTOP****/
 
-/* @media screen and (min-width: 2570px) {
+/* RESPOSIVE CONTAINER */
+
+@media (max-width: 900px) {
+  .wrap {
+    position: absolute;
+    grid-template-columns: 0.8fr 0.9fr 0.8fr;
+    grid-template-rows: 0.9fr 1fr 1fr;
+    gap: 10px;  
+    grid-template-areas:
+    'main main main'
+    'request request request'
+    'box-item box-item box-item';
+  }
+
+  .main {
+    width: 90vw;
+    height: auto;
+  }
+
   .avatar__img-account {
-    width: 430px;
-    height: 430px;
+    width: 120px;
+    height: 120px;
   }
 
-  .avatar__img-request {
-    width: 150px;
-    height: 150px;
-  }
-} */
+  .account_decor_down {
+  display: none;
+}
 
+.account_decor_top {
+  display: none;
+}
+
+.txt-account {
+  font-size: 4vw !important;
+}
+
+.txt-account-strong {
+  font-size: 3vw;
+}
+
+.p-nickname {
+  font-size: 3vw !important;
+  position: relative;
+  left: 15%;
+}
+
+.score__txt {
+  font-size: 5vw;
+}
+
+.rank-txt {
+  font-size: 5vw;
+}
+
+.no-rank {
+  font-size: 4vw;
+}
+  
+.friendship-title {
+  font-size: 2rem;
+  font-family: 'Smooch Sans', sans-serif;
+  padding-bottom: 0 !important;
+}
+
+.block-button-txt {
+  padding-top: -1%;
+  padding-bottom: 1%;
+}
+
+.css-1p7a5wk-MuiButtonBase-root-MuiFab-root {
+  margin-top: 2% !important;
+  margin-bottom: 2% !important;
+}
+
+.css-1my7ety-MuiTabs-root {
+  width: 20% !important;
+}
+
+.css-13imhw-MuiButtonBase-root-MuiTab-root {
+  font-size: 1.5rem !important;
+}
+
+}
 
 /**** LAPTOP ****/
 
@@ -641,49 +453,11 @@ h3 {
 
 }
 
-@media screen and (max-width: 855px) {
-
-  .wrap {
-    position: absolute;
-    width: 90%;
-    align-items: center;
-  }
-
-  .box-item {
-    position: absolute;
-    width: 100%;
-    height: 90%;
-    top: -10%
-  }
-
-  .main {
-    height: 15vh;
-  }
-
-  .request {
-    height: 15vh;
-  }
-
+/*** TABLET ***/
+@media screen and (max-width: 480px) {
   .avatar__img-account {
     width: 100px;
     height: 100px;
-  }
-
-  .account_decor_down {
-  display: none;
-}
-
-.account_decor_top {
-  display: none;
-}
-}
-
-
-
-/*** TABLET ***/
-@media screen and (max-width: 480px) {
-  .wrap {
-    top: 10vh;
   }
 
 }
