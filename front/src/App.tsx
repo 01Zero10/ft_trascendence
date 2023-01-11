@@ -14,6 +14,8 @@ import PageNotFound from './PageNotFound';
 import { io, Socket } from 'socket.io-client';
 import Account from './Account';
 import LeaderBoard from './LeaderBoard';
+import { Dialog, Modal } from '@mui/material';
+import TwoFactorLogin from './TwoFactorLogin';
 
 export interface Rooms {
   name: string;
@@ -120,15 +122,23 @@ function App() {
   }, [])
   
 
-  const ProtectedRoute = ({contextData} : {contextData: student}) => {
+  function ProtectedRoute ({contextData} : {contextData: student}){
     if (!contextData.id || contextData.id === 0 || contextData.id === null) {
       return <Navigate to={"/"} replace />;
     }
     else if (contextData.two_fa_auth && !contextData.tfa_checked)
-      return <Navigate to={"*"} replace/>
+      return <Navigate to={"/googleAuth"} replace/>
     return <Outlet />;
   };
+
+  function ProtectedAuthRoute ({contextData} : {contextData: student}){
+    if ((contextData.two_fa_auth && contextData.tfa_checked) || !contextData.two_fa_auth)
+      return <Navigate to={"/home"} replace/>
+    return <Outlet />;
+  };
+
   console.log(contextData)
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -148,6 +158,9 @@ function App() {
                   <Route path="/game" element={<Game />} />
                   <Route path="/users/settings" element={<Settings />} />
                   <Route path="/chat" element={<Chat />} />
+                </Route>
+                <Route element={<ProtectedAuthRoute contextData={contextData} />}>
+                  <Route path="/googleAuth" element={<TwoFactorLogin setcontextData={setcontextData} />} />
                 </Route>
                 <Route path='*' element={<PageNotFound />}/>
               </Routes>

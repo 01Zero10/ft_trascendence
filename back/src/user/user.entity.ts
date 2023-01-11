@@ -28,6 +28,9 @@ export class User {
 
   @Column()
   two_fa_auth: boolean;
+
+  @Column({default: false})
+  tfa_checked: boolean;
   
   @Column({ nullable: true }) //inserire default
   public twoFaAuthSecret?: string;

@@ -1,0 +1,79 @@
+.twoFactorAuth_container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	width: 100%;
+	color: white;
+}
+
+.twoFactorAuthText {
+	font-family: 'Tomorrow', sans-serif;
+	font-size: 5rem;
+}
+
+.twoFactorAuth404 {
+	font-size: 10rem;
+}
+
+.twoFactorAuth_backHomeButton {
+	width: 20%;
+	height: 100px;
+	border: 0;
+	outline: none;
+	background-color: var(--purple-color);
+	cursor: pointer;
+	position: relative;
+	color: var(--white-color);
+	clip-path: polygon(92% 0, 100% 25%, 100% 100%, 8% 100%, 0% 75%, 0 0);
+	z-index: 1;
+	margin: 2% auto 0;
+}
+
+.twoFactorAuth_backHomeButton_content {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	font-family: 'Tomorrow', sans-serif;
+	font-size: 2.5rem;
+	text-transform: uppercase;
+	top: 2px;
+	left: 2px;
+	right: 2px;
+	bottom: 2px;
+	background-color: black;
+	clip-path: polygon(92% 0, 100% 25%, 100% 100%, 8% 100%, 0% 75%, 0 0);
+	z-index: 2;
+}
+
+.twoFactorAuth_backHomeButton:hover {
+	background-color: var(--white-color);
+  }
+  
+  .twoFactorAuth_backHomeButton:hover .twoFactorAuth_backHomeButton_content {
+	background-color: var(--black-light-color);
+	color: var(--white-color);
+  }
+
+.twoFactorAuth_input {
+	font-family: 'Tomorrow', sans-serif;
+	width: 15%;
+	margin: 2% auto 0;
+	padding: 1%;
+	height: 5%;
+	font-size: 2.5rem;
+	border: none;
+	outline: none;
+	border-radius: 15px;
+}
+
+.twoFactorAuth_input:focus {
+	outline: none;
+}
+
+.twoFactorAuth_input[type=number]::-webkit-inner-spin-button,
+.twoFactorAuth_input[type=number]::-webkit-outer-spin-button { 
+	-webkit-appearance: none;
+} 
