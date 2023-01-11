@@ -129,6 +129,7 @@ function Settings() {
   }
   const handleClose = () => setOpen(false);
 
+  console.log("tf: ", contextData.two_fa_auth)
 
   const qrcode = (
     <div>
@@ -144,7 +145,7 @@ function Settings() {
       >
         <Box sx={style}>
           <button className="close_button" type="button" onClick={handleClose}>X</button>
-          <img id="qrcode" className="qrcode_" src={qrCode}></img>
+          {!contextData.two_fa_auth && <img id="qrcode" className="qrcode_" src={qrCode}></img>}
           <PinComponent setOpen={setOpen} checked={checked} setChecked={setChecked} />
         </Box>
       </Modal>
