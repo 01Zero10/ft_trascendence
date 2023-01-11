@@ -1,5 +1,6 @@
 import { Rooms } from "src/chat/rooms.entity";
 import { RoomMessages } from "src/chat/roomsMessages.entity";
+import { Leaderboard } from "src/game/leaderboard.entity";
 import { Match } from "src/game/match.entity";
 import {
   Column,
@@ -50,6 +51,9 @@ export class User {
 
   @OneToOne(() => Online, (online) => online.user)
   status: Online;
+
+  @OneToOne(() => Leaderboard, (leaderboard) => leaderboard.user)
+  position: Leaderboard;
 
   @Column({ nullable: true })
   socket_id: string;

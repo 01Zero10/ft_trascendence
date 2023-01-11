@@ -17,6 +17,12 @@ export class UsersController {
     return res;
   }
 
+  @Get('accountInfo/:username')
+  async GetAccountInfo(@Param('username') username: string): Promise <User> {
+    const res = await this.userService.getAccountInfo(username);
+    return res;
+  }
+
   @Post('changeNickname') //quii
   async changeUsername(@Body('username') username: string, @Body('newNickname') newNickname: string) {
     await this.userService.changeNickname(username, newNickname);
@@ -118,10 +124,11 @@ export class UsersController {
   async getUserFromId(@Param("id") id: number) {
     const user: User = await this.userService.findOne(id);
     return user;
-  }
-
-  @Get("prova")
-  async paginaProva(){
-    return "hai fatto l'accesso";
   }*/
+
+  // @Get("prova/:username")
+  // async paginaProva(@Param('username') username: string){
+  //   //console.log("ciao");
+  //   return this.userService.getUserForAccountPage(username);
+  // }
 }

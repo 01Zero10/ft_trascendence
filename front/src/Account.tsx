@@ -1,6 +1,6 @@
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 import './Account.css'
-import { student, Student } from "./App";
+import { Rooms, student, Student } from "./App";
 
 import { Avatar, Badge, Fab, Grid, IconButton, List, ListItem, ListItemText, styled, Tab } from "@mui/material";
 import { useParams } from "react-router-dom";
@@ -11,6 +11,19 @@ import { red } from "@mui/material/colors";
 import { FocusTrap } from "@mantine/core";
 import Navigation from "./Navigation";
 
+export interface AccountInfo {
+  id: number;
+  username: string;
+  nickname: string;
+  avatar: string;
+  two_fa_auth: boolean;
+  tfa_checked?: boolean;
+  blockedUsers?: string[];
+  rooms?: Rooms[] | null;
+  twoFaAuthSecret?: string;
+  socket_id?: string;
+  position: {points: number, position: number} | null
+}
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -156,17 +169,16 @@ function Account() {
   const [friendship, setFriendship] = useState("nope");
   const [blocked, setBlocked] = useState<boolean>(false);
 
-  const [client, setClient] = useState<student>({
+  const [client, setClient] = useState<AccountInfo>({
     id: 0,
     username: "",
     nickname: "",
     avatar: "",
     two_fa_auth: false,
     twoFaAuthSecret: undefined,
-    points: 0,
-    wins: 0,
-    losses: 0,
+    position: null
   });
+
 
   const { user_id } = useParams();
 
@@ -174,29 +186,26 @@ function Account() {
     //console.log('user_id: ', user_id);
   }, [user_id])
 
+  async function getUserInfo() {
+    const API_URL = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/accountInfo/${user_id}`
+    const resp = await fetch(API_URL, {
+      credentials: "include",
+    }).then()
+      const result = await resp.json()
+      console.log("result", result);
+    setClient({
+      id: result.id,
+      username: result.username,
+      nickname: result.nickname,
+      avatar: result.avatar,
+      two_fa_auth: result.two_fa_auth,
+      position: result.position ? {points: result.position.points, position: result.position.position} : null
+    });
+      setShowLoader(false);
+      
+  }
+
   useEffect(() => {
-    const API_URL = `http://${process.env.REACT_APP_IP_ADDR}:3001/users/${user_id}`
-    const getUserInfo = async () => {
-      await fetch(API_URL, {
-        credentials: "include",
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          //console.log(result);
-          setClient({
-            id: result.id,
-            username: result.username,
-            nickname: result.nickname,
-            avatar: result.avatar,
-            two_fa_auth: result.two_fa_auth,
-            points: result.points,
-            wins: result.wins,
-            losses: result.losses,
-          });
-          setShowLoader(false);
-        })
-        .catch((error) => console.log(error));
-    }
     getUserInfo();
   }, [user_id])
 
@@ -358,7 +367,8 @@ function Account() {
         }))
         setMatches(fetchMatches);
       }
-      getMatches();
+      if (client.username)
+        getMatches();
     }, [props.client])
     //console.log(matches);
 
@@ -673,7 +683,7 @@ function Account() {
     )
   }
 
-
+  console.log("client", client)
   return (
     <>
       <Navigation />
@@ -684,10 +694,10 @@ function Account() {
               <h1 className="friendship-title">Friendship</h1>
               <Block_b />
               {user_id === contextData.username ? '' :
-              blocked === true ? <DisplayNone /> :
-              friendship === 'pending' ?
-              <Pending_b /> : friendship === 'toReply' ?
-              <SendNotification /> : friendship === 'friends' ?
+                blocked === true ? <DisplayNone /> :
+                  friendship === 'pending' ? <Pending_b /> : 
+                  friendship === 'toReply' ?
+                  <SendNotification /> : friendship === 'friends' ?
               <Remove_b /> : <Add_b />}
             </div>
           </div>
@@ -702,8 +712,8 @@ function Account() {
               <div className="txt_container_account">
                 <h1 className="txt-account">Player<strong className="txt-account-strong"> {client.nickname}</strong>
                 <p className="p-nickname">@{client.username}</p>
-                  <h2 className="score__txt">Score {client.points}</h2></h1>
-                <h2 className="rank-txt">RANK <br /><h1 className="no-rank">No. 6</h1></h2>
+                  <h2 className="score__txt">Score {client.position ? client.position.points : "ND"}</h2></h1>
+                <h2 className="rank-txt">RANK <br /><h1 className="no-rank">{client.position ? client.position.position : "ND"}</h1></h2>
               </div>
               <img className="account_decor_down" src="/account_decoration_down.svg" alt="img_account" />
             </div>

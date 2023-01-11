@@ -38,6 +38,16 @@ export class UserService {
     return this.userRepository.findOne({ where: { username: login } });
   }
 
+  async getAccountInfo(username: string): Promise<User> {
+    const ret = this.userRepository
+    .createQueryBuilder("user")
+    .leftJoinAndSelect("user.position", "position")
+    .where({username: username})
+    .getOne()
+
+    return ret;
+  }
+
   async changeNickname(username: string, newNickname: string) {
     if (newNickname !== "")
     {
