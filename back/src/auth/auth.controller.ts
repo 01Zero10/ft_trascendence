@@ -33,6 +33,16 @@ export class AuthController {
     return ({res: (await (this.user.getById(Number(id)))).two_fa_auth});
   }
 
+    //@UseGuards(AuthGuard)
+    @Post('isFAValid')
+    @HttpCode(200)
+    async isFAValid(@Body('pin') code: string, @Body('id') id: string): Promise<any>{
+      const user42 = (await this.user.getById(Number(id))).twoFaAuthSecret;
+      const isCodeValid = this.twoFaAuthService.check2FACode(code, user42);
+      return ({'ret': isCodeValid});
+    }
+  
+
   @Post('auth2fa') //??? la usiamo?
   @HttpCode(200)
   async auth2fa(@Req() request: Request, @Body() data: { twoFaAuthCode: string }) {
