@@ -124,12 +124,28 @@ export class GameService{
 
     async handleLeaveQueue(client: string){
         const string = 'invited'
+        const player2 = ''
         let playRoom = await this.runningMatches
         .createQueryBuilder('match')
         .where({player1: client})
-        .andWhere("match.invited != :string_n", {string_n: string})
-        //.andWhere({player2: ''})
+        .andWhere({player2: ''})
         .getOne()
+        
+        console.log("primo await")
+        console.log(playRoom);
+        
+        if (!playRoom)
+        {
+            console.log("secondo await");
+            playRoom = await this.runningMatches
+        .createQueryBuilder('match')
+        .where("match.player1 = :client_n", {client_n: client})
+        .andWhere("match.player2 != :player2_n", {player2_n: player2})
+        .andWhere("match.invited = :string_n", {string_n: string})
+        .getOne()
+        }
+        
+        console.log("leaveque ", playRoom);
         if (playRoom !== null)
         {
             await this.runningMatches.remove(playRoom);
@@ -144,14 +160,20 @@ export class GameService{
         .createQueryBuilder('playroom')
         .where("playroom.player1 = :client_n", { client_n: client })
         .orWhere("playroom.player2 = :client_n", { client_n: client })
-        //.andWhere("match.invited != :string_n", {string_n: string})
+        .andWhere("playroom.invited != :string_n", {string_n: string})
         //da capire come concatenare or and and
         .getOne()
+
+        if (!playRoom) {
+
+        }
         
+        console.log("handleLeavePlay ", playRoom);
         if (playRoom)
         {
             const player1 = await this.userRepository.findOne({ where: { username: playRoom.player1 } })
             const player2 = await this.userRepository.findOne({ where: { username: playRoom.player2 } })
+            console.log("players ", player1, " ", player2);
             if (this.mapPlRoom.get(playRoom.playRoom).idInterval)
                 clearInterval(this.mapPlRoom.get(playRoom.playRoom).idInterval)
             await this.gameGateway.handleLeftGame(playRoom.playRoom)
@@ -162,9 +184,10 @@ export class GameService{
                 // avatar2: playRoom.avatar2,
                 player1: player1,
                 player2: player2,
-                points1: (playRoom.player1 === client ? this.mapPlRoom.get(playRoom.playRoom).leftPoint : -42),
-                points2: (playRoom.player2 === client ? this.mapPlRoom.get(playRoom.playRoom).rightPoint : -42),
+                points1: (playRoom.player1 === client ? -42 : this.mapPlRoom.get(playRoom.playRoom).leftPoint),
+                points2: (playRoom.player2 === client ? -42 : this.mapPlRoom.get(playRoom.playRoom).rightPoint),
             })
+            await this.updatePosition(client === playRoom.player1 ? playRoom.player2 : playRoom.player1);
             await this.runningMatches.remove(playRoom);
         }
     }
