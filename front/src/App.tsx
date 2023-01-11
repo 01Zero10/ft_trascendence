@@ -27,6 +27,7 @@ export interface student {
   nickname: string;
   avatar: string;
   two_fa_auth: boolean;
+  tfa_checked?: boolean;
   blockedUsers?: string[];
   rooms?: Rooms[] | null;
   twoFaAuthSecret?: string;
@@ -44,6 +45,7 @@ export const Student = createContext<student>({
   socket_id: undefined, //
   rooms: undefined, //
   two_fa_auth: false,
+  tfa_checked: false,
   twoFaAuthSecret: undefined, //poi vediamo
   blockedUsers: undefined,
   points: 0,
@@ -60,6 +62,7 @@ function App() {
     nickname: "",
     avatar: "",
     two_fa_auth: false,
+    tfa_checked: false,
     twoFaAuthSecret: undefined,
     blockedUsers: undefined,
     points: 0,
@@ -84,6 +87,7 @@ function App() {
             nickname: result.nickname,
             avatar: result.avatar,
             two_fa_auth: result.two_fa_auth,
+            tfa_checked: result.tfa_checked,
             blockedUsers: result.blockedUsers,
             points: result.points,
             wins: result.wins,
@@ -120,9 +124,11 @@ function App() {
     if (!contextData.id || contextData.id === 0 || contextData.id === null) {
       return <Navigate to={"/"} replace />;
     }
+    else if (contextData.two_fa_auth && !contextData.tfa_checked)
+      return <Navigate to={"*"} replace/>
     return <Outlet />;
   };
-
+  console.log(contextData)
   return (
     <div className="App">
       <BrowserRouter>
